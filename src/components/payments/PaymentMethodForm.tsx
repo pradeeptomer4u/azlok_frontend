@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Box,
+import { 
   TextField,
   Button,
   FormControl,
@@ -11,11 +10,31 @@ import {
   Checkbox,
   FormControlLabel,
   CircularProgress,
-  Alert
+  Alert,
+  Box,
+  Grid,
+  SelectChangeEvent
 } from '@mui/material';
-import Grid from '@mui/material/Grid';
 import { PaymentMethod, PaymentMethodType, PaymentMethodCreate, PaymentMethodUpdate } from '../../types/payment';
 import { createPaymentMethod, updatePaymentMethod } from '../../services/paymentService';
+
+// Combined type for form data that includes all possible fields from both types
+type PaymentMethodFormData = {
+  method_type: PaymentMethodType;
+  provider: string;
+  is_default: boolean;
+  card_last_four?: string;
+  card_expiry_month?: string;
+  card_expiry_year?: string;
+  card_holder_name?: string;
+  upi_id?: string;
+  bank_name?: string;
+  account_last_four?: string;
+  account_holder_name?: string;
+  wallet_provider?: string;
+  wallet_id?: string;
+  is_active?: boolean;
+};
 
 interface PaymentMethodFormProps {
   paymentMethod?: PaymentMethod | null;
@@ -24,7 +43,7 @@ interface PaymentMethodFormProps {
 }
 
 const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, onSave, onCancel }) => {
-  const [formData, setFormData] = useState<PaymentMethodCreate | PaymentMethodUpdate>({
+  const [formData, setFormData] = useState<PaymentMethodFormData>({
     method_type: PaymentMethodType.CREDIT_CARD,
     provider: '',
     is_default: false
@@ -53,7 +72,9 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
     }
   }, [paymentMethod]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | { name?: string; value: unknown; target: { name?: string; value: unknown } }) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent
+  ) => {
     const { name, value } = e.target;
     if (name) {
       setFormData({
@@ -323,15 +344,19 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
 
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
       
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <FormControl fullWidth error={!!errors.method_type}>
-            <InputLabel id="method-type-label">Payment Method Type</InputLabel>
+            <InputLabel id="payment-method-type-label">Payment Method Type</InputLabel>
             <Select
-              labelId="method-type-label"
-              id="method-type"
+              labelId="payment-method-type-label"
+              id="payment-method-type"
               name="method_type"
               value={formData.method_type}
               label="Payment Method Type"
@@ -341,7 +366,6 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
               <MenuItem value={PaymentMethodType.CREDIT_CARD}>Credit Card</MenuItem>
               <MenuItem value={PaymentMethodType.DEBIT_CARD}>Debit Card</MenuItem>
               <MenuItem value={PaymentMethodType.UPI}>UPI</MenuItem>
-              <MenuItem value={PaymentMethodType.NET_BANKING}>Net Banking</MenuItem>
               <MenuItem value={PaymentMethodType.WALLET}>Wallet</MenuItem>
               <MenuItem value={PaymentMethodType.BANK_TRANSFER}>Bank Transfer</MenuItem>
             </Select>

@@ -3,7 +3,6 @@ import {
   Box,
   Typography,
   Paper,
-  Grid,
   Card,
   CardContent,
   CardHeader,
@@ -15,8 +14,12 @@ import {
   CircularProgress,
   Alert,
   Button,
-  Stack
+  Stack,
+  Grid as MuiGrid
 } from '@mui/material';
+
+// Create a Grid component that works with MUI v7
+const Grid = MuiGrid;
 import {
   AttachMoney as MoneyIcon,
   AccountBalance as AccountIcon,
@@ -49,7 +52,7 @@ const PaymentSummary: React.FC = () => {
       const data = await getPaymentSummary(startDateStr, endDateStr);
       setSummary(data);
       setError(null);
-    } catch (err) {
+    } catch (err: unknown) {
       setError('Failed to load payment summary');
       console.error(err);
     } finally {
@@ -121,12 +124,12 @@ const PaymentSummary: React.FC = () => {
             <DatePicker
               label="Start Date"
               value={startDate}
-              onChange={(date) => setStartDate(date)}
+              onChange={(date: Date | null) => setStartDate(date)}
             />
             <DatePicker
               label="End Date"
               value={endDate}
-              onChange={(date) => setEndDate(date)}
+              onChange={(date: Date | null) => setEndDate(date)}
             />
             <Button variant="contained" onClick={handleDateChange}>
               Apply
@@ -135,10 +138,10 @@ const PaymentSummary: React.FC = () => {
         </LocalizationProvider>
       </Box>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} md={3}>
+      <Grid container spacing={3} component="div">
+        <Grid item xs={12} md={8} component="div">
+          <Grid container spacing={3} component="div">
+            <Grid item xs={12} sm={6} md={3} component="div">
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" mb={1}>
@@ -216,9 +219,9 @@ const PaymentSummary: React.FC = () => {
             <Typography variant="h6" gutterBottom>
               Payment Status Breakdown
             </Typography>
-            <Grid container spacing={2}>
-              {Object.entries(summary.payment_status_counts).map(([status, count]) => (
-                <Grid item key={status} xs={6} sm={4} md={3}>
+            <Grid container spacing={2} component="div">
+              {Object.entries(summary.payment_status_counts).map(([status, count]: [string, number]) => (
+                <Grid item key={status} xs={6} sm={4} md={3} component="div">
                   <Box display="flex" alignItems="center" justifyContent="space-between">
                     <Chip
                       label={status.replace('_', ' ')}
@@ -234,7 +237,7 @@ const PaymentSummary: React.FC = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={4} component="div">
           <Card>
             <CardHeader title="Recent Payments" />
             <Divider />

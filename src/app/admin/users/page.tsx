@@ -437,7 +437,7 @@ export default function UsersPage() {
                     </div>
                     <div className="text-xs text-gray-500">
                       {user.role === 'buyer' ? (
-                        <span>Total: {formatCurrency(user.totalSpent)}</span>
+                        <span>Total: {formatCurrency(user.totalSpent || 0)}</span>
                       ) : (
                         <span>Sales: {user.salesCount}</span>
                       )}

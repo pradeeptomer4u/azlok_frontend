@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { calculateOrderTax, OrderTaxCalculationRequest, OrderTaxCalculationResponse } from '../utils/taxService';
+import { calculateOrderTax, OrderTaxCalculationRequest } from '../utils/taxService';
 
 export interface CartItem {
   id: number;

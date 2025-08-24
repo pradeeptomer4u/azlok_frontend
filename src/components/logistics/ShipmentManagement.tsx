@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -12,6 +12,7 @@ import { useAuth } from '../../context/AuthContext';
 import ShipmentList from './ShipmentList';
 import ShipmentDetail from './ShipmentDetail';
 import ShipmentForm from './ShipmentForm';
+import { Shipment } from '../../types/shipment';
 
 enum ViewMode {
   LIST,
@@ -24,6 +25,7 @@ const ShipmentManagement: React.FC = () => {
   const { userRole } = useAuth();
   const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.LIST);
   const [selectedShipmentId, setSelectedShipmentId] = useState<number | null>(null);
+  const [selectedShipment, setSelectedShipment] = useState<Shipment | null>(null);
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
@@ -33,6 +35,33 @@ const ShipmentManagement: React.FC = () => {
     message: '',
     severity: 'success',
   });
+  
+  useEffect(() => {
+    if (selectedShipmentId) {
+      fetchShipmentDetails(selectedShipmentId);
+    }
+  }, [selectedShipmentId]);
+  
+  const fetchShipmentDetails = async (shipmentId: number) => {
+    try {
+      // In a real app, this would be an API call
+      // For now, we'll simulate it with a mock fetch
+      const response = await fetch(`/api/shipments/${shipmentId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedShipment(data);
+      } else {
+        throw new Error('Failed to fetch shipment details');
+      }
+    } catch (error) {
+      console.error('Error fetching shipment details:', error);
+      setSnackbar({
+        open: true,
+        message: 'Failed to load shipment details',
+        severity: 'error',
+      });
+    }
+  };
 
   const handleViewShipment = (shipmentId: number) => {
     setSelectedShipmentId(shipmentId);
@@ -75,11 +104,16 @@ const ShipmentManagement: React.FC = () => {
   const renderContent = () => {
     switch (viewMode) {
       case ViewMode.DETAIL:
-        return (
+        return selectedShipment ? (
           <ShipmentDetail
-            shipmentId={selectedShipmentId!}
+            shipment={selectedShipment}
             onBack={handleBackToList}
+            userRole={userRole || 'customer'}
           />
+        ) : (
+          <Box sx={{ p: 3, textAlign: 'center' }}>
+            <Typography>Loading shipment details...</Typography>
+          </Box>
         );
       case ViewMode.CREATE:
       case ViewMode.EDIT:

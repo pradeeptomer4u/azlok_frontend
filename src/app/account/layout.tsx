@@ -27,7 +27,7 @@ const AccountLayout = ({ children }: { children: React.ReactNode }) => {
             <nav className="px-4 py-2">
               <ul>
                 {navItems.map((item) => {
-                  const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  const isActive = pathname === item.href || (pathname && pathname.startsWith(`${item.href}/`));
                   return (
                     <li key={item.name} className="py-1">
                       <Link

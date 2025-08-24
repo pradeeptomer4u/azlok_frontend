@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { apiRequest } from '../utils/apiRequest';
 import { 
   Payment, 
   PaymentCreate, 
@@ -7,7 +7,6 @@ import {
   PaymentMethodCreate, 
   PaymentMethodUpdate,
   Transaction,
-  TransactionCreate,
   InstallmentPlan,
   InstallmentPlanCreate,
   PaymentListResponse,
@@ -16,134 +15,226 @@ import {
   TransactionFilters
 } from '../types/payment';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
-
-// Helper function to get auth header
-const getAuthHeader = () => {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('token');
-    return token ? { Authorization: `Bearer ${token}` } : {};
-  }
-  return {};
-};
-
 // Payment Methods API
 export const getPaymentMethods = async (activeOnly: boolean = true): Promise<PaymentMethod[]> => {
-  const response = await axios.get(`${API_URL}/payments/methods`, {
-    headers: getAuthHeader(),
-    params: { active_only: activeOnly }
-  });
-  return response.data;
+  try {
+    const response = await apiRequest<PaymentMethod[]>(`/api/payments/methods?active_only=${activeOnly}`);
+    return response || [];
+  } catch (error) {
+    console.error('Error fetching payment methods:', error);
+    return [];
+  }
 };
 
-export const getPaymentMethod = async (id: number): Promise<PaymentMethod> => {
-  const response = await axios.get(`${API_URL}/payments/methods/${id}`, {
-    headers: getAuthHeader()
-  });
-  return response.data;
+export const getPaymentMethod = async (id: number): Promise<PaymentMethod | null> => {
+  try {
+    const response = await apiRequest<PaymentMethod>(`/api/payments/methods/${id}`);
+    return response || null;
+  } catch (error) {
+    console.error(`Error fetching payment method with ID ${id}:`, error);
+    return null;
+  }
 };
 
-export const createPaymentMethod = async (paymentMethod: PaymentMethodCreate): Promise<PaymentMethod> => {
-  const response = await axios.post(`${API_URL}/payments/methods`, paymentMethod, {
-    headers: getAuthHeader()
-  });
-  return response.data;
+export const createPaymentMethod = async (paymentMethod: PaymentMethodCreate): Promise<PaymentMethod | null> => {
+  try {
+    const response = await apiRequest<PaymentMethod>('/api/payments/methods', {
+      method: 'POST',
+      body: JSON.stringify(paymentMethod)
+    });
+    return response || null;
+  } catch (error) {
+    console.error('Error creating payment method:', error);
+    return null;
+  }
 };
 
-export const updatePaymentMethod = async (id: number, paymentMethod: PaymentMethodUpdate): Promise<PaymentMethod> => {
-  const response = await axios.put(`${API_URL}/payments/methods/${id}`, paymentMethod, {
-    headers: getAuthHeader()
-  });
-  return response.data;
+export const updatePaymentMethod = async (id: number, paymentMethod: PaymentMethodUpdate): Promise<PaymentMethod | null> => {
+  try {
+    const response = await apiRequest<PaymentMethod>(`/api/payments/methods/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(paymentMethod)
+    });
+    return response || null;
+  } catch (error) {
+    console.error(`Error updating payment method with ID ${id}:`, error);
+    return null;
+  }
 };
 
-export const deletePaymentMethod = async (id: number): Promise<void> => {
-  await axios.delete(`${API_URL}/payments/methods/${id}`, {
-    headers: getAuthHeader()
-  });
+export const deletePaymentMethod = async (id: number): Promise<boolean> => {
+  try {
+    await apiRequest(`/api/payments/methods/${id}`, {
+      method: 'DELETE'
+    });
+    return true;
+  } catch (error) {
+    console.error(`Error deleting payment method with ID ${id}:`, error);
+    return false;
+  }
 };
 
 // Payments API
 export const getPayments = async (filters: PaymentFilters = {}): Promise<PaymentListResponse> => {
-  const response = await axios.get(`${API_URL}/payments`, {
-    headers: getAuthHeader(),
-    params: filters
-  });
-  return response.data;
+  try {
+    // Convert filters to query string
+    const queryParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value.toString());
+      }
+    });
+    
+    const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+    const response = await apiRequest<PaymentListResponse>(`/api/payments${queryString}`);
+    
+    return response || { 
+      payments: [], 
+      total: 0, 
+      page: filters.page || 1, 
+      size: filters.size || 10, 
+      pages: 0 
+    };
+  } catch (error) {
+    console.error('Error fetching payments:', error);
+    return { 
+      payments: [], 
+      total: 0, 
+      page: filters.page || 1, 
+      size: filters.size || 10, 
+      pages: 0 
+    };
+  }
 };
 
-export const getPayment = async (id: number): Promise<Payment> => {
-  const response = await axios.get(`${API_URL}/payments/${id}`, {
-    headers: getAuthHeader()
-  });
-  return response.data;
+export const getPayment = async (id: number): Promise<Payment | null> => {
+  try {
+    const response = await apiRequest<Payment>(`/api/payments/${id}`);
+    return response || null;
+  } catch (error) {
+    console.error(`Error fetching payment with ID ${id}:`, error);
+    return null;
+  }
 };
 
-export const createPayment = async (payment: PaymentCreate): Promise<Payment> => {
-  const response = await axios.post(`${API_URL}/payments`, payment, {
-    headers: getAuthHeader()
-  });
-  return response.data;
+export const createPayment = async (payment: PaymentCreate): Promise<Payment | null> => {
+  try {
+    const response = await apiRequest<Payment>('/api/payments', {
+      method: 'POST',
+      body: JSON.stringify(payment)
+    });
+    return response || null;
+  } catch (error) {
+    console.error('Error creating payment:', error);
+    return null;
+  }
 };
 
-export const updatePayment = async (id: number, payment: PaymentUpdate): Promise<Payment> => {
-  const response = await axios.put(`${API_URL}/payments/${id}`, payment, {
-    headers: getAuthHeader()
-  });
-  return response.data;
+export const updatePayment = async (id: number, payment: PaymentUpdate): Promise<Payment | null> => {
+  try {
+    const response = await apiRequest<Payment>(`/api/payments/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payment)
+    });
+    return response || null;
+  } catch (error) {
+    console.error(`Error updating payment with ID ${id}:`, error);
+    return null;
+  }
 };
 
-export const refundPayment = async (id: number, amount: number, reason?: string): Promise<Payment> => {
-  const response = await axios.post(`${API_URL}/payments/${id}/refund`, null, {
-    headers: getAuthHeader(),
-    params: { amount, reason }
-  });
-  return response.data;
+export const refundPayment = async (id: number, amount: number, reason?: string): Promise<Payment | null> => {
+  try {
+    const queryParams = new URLSearchParams();
+    queryParams.append('amount', amount.toString());
+    if (reason) queryParams.append('reason', reason);
+    
+    const response = await apiRequest<Payment>(`/api/payments/${id}/refund?${queryParams.toString()}`, {
+      method: 'POST'
+    });
+    return response || null;
+  } catch (error) {
+    console.error(`Error refunding payment with ID ${id}:`, error);
+    return null;
+  }
 };
 
-export const getPaymentSummary = async (startDate?: string, endDate?: string): Promise<PaymentSummary> => {
-  const response = await axios.get(`${API_URL}/payments/summary`, {
-    headers: getAuthHeader(),
-    params: { start_date: startDate, end_date: endDate }
-  });
-  return response.data;
+export const getPaymentSummary = async (startDate?: string, endDate?: string): Promise<PaymentSummary | null> => {
+  try {
+    const queryParams = new URLSearchParams();
+    if (startDate) queryParams.append('start_date', startDate);
+    if (endDate) queryParams.append('end_date', endDate);
+    
+    const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+    const response = await apiRequest<PaymentSummary>(`/api/payments/summary${queryString}`);
+    return response || null;
+  } catch (error) {
+    console.error('Error fetching payment summary:', error);
+    return null;
+  }
 };
 
 // Transactions API
 export const getTransactions = async (filters: TransactionFilters = {}): Promise<Transaction[]> => {
-  const response = await axios.get(`${API_URL}/payments/transactions`, {
-    headers: getAuthHeader(),
-    params: filters
-  });
-  return response.data;
+  try {
+    // Convert filters to query string
+    const queryParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value.toString());
+      }
+    });
+    
+    const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+    const response = await apiRequest<Transaction[]>(`/api/payments/transactions${queryString}`);
+    return response || [];
+  } catch (error) {
+    console.error('Error fetching transactions:', error);
+    return [];
+  }
 };
 
-export const getTransaction = async (id: number): Promise<Transaction> => {
-  const response = await axios.get(`${API_URL}/payments/transactions/${id}`, {
-    headers: getAuthHeader()
-  });
-  return response.data;
+export const getTransaction = async (id: number): Promise<Transaction | null> => {
+  try {
+    const response = await apiRequest<Transaction>(`/api/payments/transactions/${id}`);
+    return response || null;
+  } catch (error) {
+    console.error(`Error fetching transaction with ID ${id}:`, error);
+    return null;
+  }
 };
 
 // Installment Plans API
 export const getInstallmentPlans = async (status?: string): Promise<InstallmentPlan[]> => {
-  const response = await axios.get(`${API_URL}/payments/installment-plans`, {
-    headers: getAuthHeader(),
-    params: { status }
-  });
-  return response.data;
+  try {
+    const queryString = status ? `?status=${status}` : '';
+    const response = await apiRequest<InstallmentPlan[]>(`/api/payments/installment-plans${queryString}`);
+    return response || [];
+  } catch (error) {
+    console.error('Error fetching installment plans:', error);
+    return [];
+  }
 };
 
-export const getInstallmentPlan = async (id: number): Promise<InstallmentPlan> => {
-  const response = await axios.get(`${API_URL}/payments/installment-plans/${id}`, {
-    headers: getAuthHeader()
-  });
-  return response.data;
+export const getInstallmentPlan = async (id: number): Promise<InstallmentPlan | null> => {
+  try {
+    const response = await apiRequest<InstallmentPlan>(`/api/payments/installment-plans/${id}`);
+    return response || null;
+  } catch (error) {
+    console.error(`Error fetching installment plan with ID ${id}:`, error);
+    return null;
+  }
 };
 
-export const createInstallmentPlan = async (plan: InstallmentPlanCreate): Promise<InstallmentPlan> => {
-  const response = await axios.post(`${API_URL}/payments/installment-plans`, plan, {
-    headers: getAuthHeader()
-  });
-  return response.data;
+export const createInstallmentPlan = async (plan: InstallmentPlanCreate): Promise<InstallmentPlan | null> => {
+  try {
+    const response = await apiRequest<InstallmentPlan>('/api/payments/installment-plans', {
+      method: 'POST',
+      body: JSON.stringify(plan)
+    });
+    return response || null;
+  } catch (error) {
+    console.error('Error creating installment plan:', error);
+    return null;
+  }
 };

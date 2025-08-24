@@ -14,12 +14,8 @@ import {
   CircularProgress,
   Alert,
   Button,
-  Stack,
-  Grid as MuiGrid
+  Stack
 } from '@mui/material';
-
-// Create a Grid component that works with MUI v7
-const Grid = MuiGrid;
 import {
   AttachMoney as MoneyIcon,
   AccountBalance as AccountIcon,
@@ -138,10 +134,10 @@ const PaymentSummary: React.FC = () => {
         </LocalizationProvider>
       </Box>
 
-      <Grid container spacing={3} component="div">
-        <Grid item xs={12} md={8} component="div">
-          <Grid container spacing={3} component="div">
-            <Grid item xs={12} sm={6} md={3} component="div">
+      <Stack spacing={3} direction="row" sx={{ flexWrap: 'wrap' }}>
+        <Stack sx={{ width: { xs: '100%', md: '66.67%' } }} spacing={3}>
+          <Stack spacing={3} direction="row" sx={{ flexWrap: 'wrap' }}>
+            <Stack sx={{ width: { xs: '100%', sm: '50%', md: '25%' } }}>
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" mb={1}>
@@ -158,8 +154,8 @@ const PaymentSummary: React.FC = () => {
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%', md: '25%' } }}>
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" mb={1}>
@@ -176,8 +172,8 @@ const PaymentSummary: React.FC = () => {
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%', md: '25%' } }}>
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" mb={1}>
@@ -194,8 +190,8 @@ const PaymentSummary: React.FC = () => {
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%', md: '25%' } }}>
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" mb={1}>
@@ -212,16 +208,16 @@ const PaymentSummary: React.FC = () => {
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
-          </Grid>
+            </Stack>
+          </Stack>
 
           <Paper sx={{ mt: 3, p: 2 }}>
             <Typography variant="h6" gutterBottom>
               Payment Status Breakdown
             </Typography>
-            <Grid container spacing={2} component="div">
+            <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap' }}>
               {Object.entries(summary.payment_status_counts).map(([status, count]: [string, number]) => (
-                <Grid item key={status} xs={6} sm={4} md={3} component="div">
+                <Stack key={status} sx={{ width: { xs: '50%', sm: '33.33%', md: '25%' } }}>
                   <Box display="flex" alignItems="center" justifyContent="space-between">
                     <Chip
                       label={status.replace('_', ' ')}
@@ -231,13 +227,13 @@ const PaymentSummary: React.FC = () => {
                     />
                     <Typography variant="body1">{count}</Typography>
                   </Box>
-                </Grid>
+                </Stack>
               ))}
-            </Grid>
+            </Stack>
           </Paper>
-        </Grid>
+        </Stack>
 
-        <Grid item xs={12} md={4} component="div">
+        <Stack sx={{ width: { xs: '100%', md: '33.33%' } }}>
           <Card>
             <CardHeader title="Recent Payments" />
             <Divider />
@@ -308,8 +304,8 @@ const PaymentSummary: React.FC = () => {
               </Button>
             </Box>
           </Card>
-        </Grid>
-      </Grid>
+        </Stack>
+      </Stack>
     </Box>
   );
 };

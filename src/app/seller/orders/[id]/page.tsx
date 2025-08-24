@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import OrderTimeline from '../../../components/OrderTimeline';
 import { downloadInvoice } from '../../../utils/invoiceGenerator';
 import Image from 'next/image';
+import Link from 'next/link';
 
 // Types for API responses
 interface OrderItem {
@@ -45,7 +46,7 @@ interface Order {
   items_count: number;
   payment_status: string;
   payment_method: string;
-  payment_details: any;
+  payment_details: Record<string, unknown>;
   payment_date?: string;
   shipping_address: {
     street: string;
@@ -67,86 +68,7 @@ interface OrderStatusUpdate {
   notes?: string;
 }
 
-// Mock order data for fallback
-const mockOrderDetails = {
-  id: 'ORD-10045',
-  date: '2023-11-15T08:30:00',
-  customer: {
-    name: 'Tata Motors Ltd.',
-    email: 'procurement@tatamotors.com',
-    phone: '+91 22 6665 8282',
-    avatar: '/logo.png',
-    address: {
-      street: '24, Homi Mody Street',
-      city: 'Mumbai',
-      state: 'Maharashtra',
-      postalCode: '400001',
-      country: 'India'
-    }
-  },
-  status_history: [
-    {
-      status: 'pending',
-      date: '2023-11-15T08:30:00',
-      description: 'Order placed'
-    },
-    {
-      status: 'processing',
-      date: '2023-11-15T10:45:00',
-      description: 'Payment confirmed'
-    },
-    {
-      status: 'shipped',
-      date: '2023-11-16T14:20:00',
-      description: 'Order shipped via Express Delivery',
-      tracking_number: 'DLEX1234567890IN'
-    },
-    {
-      status: 'delivered',
-      date: '2023-11-18T11:05:00',
-      description: 'Order delivered and signed for by recipient'
-    }
-  ],
-  items: [
-    {
-      id: 1,
-      name: 'Industrial Machinery Part XYZ',
-      sku: 'IMP-001',
-      image: '/logo.png',
-      price: 12500,
-      quantity: 2,
-      total: 25000
-    },
-    {
-      id: 2,
-      name: 'Hydraulic Pressure Valve',
-      sku: 'HPV-102',
-      image: '/logo.png',
-      price: 8500,
-      quantity: 1,
-      total: 8500
-    },
-    {
-      id: 3,
-      name: 'Electric Motor Controller',
-      sku: 'EMC-305',
-      image: '/logo.png',
-      price: 11500,
-      quantity: 1,
-      total: 11500
-    }
-  ],
-  subtotal: 45000,
-  tax: 8100,
-  shipping: 1500,
-  total: 54600,
-  paymentMethod: 'Bank Transfer',
-  paymentStatus: 'paid',
-  paymentDate: '2023-11-15T10:15:00',
-  shippingMethod: 'Express Delivery',
-  trackingNumber: 'DLEX1234567890IN',
-  status: 'delivered'
-};
+// No mock data - using real API integration
 
 // Status badge component
 const StatusBadge = ({ status }: { status: string }) => {
@@ -244,7 +166,7 @@ export default function OrderDetailPage() {
         return;
       }
       
-      const orderId = params.id;
+      const orderId = params?.id;
       if (!orderId) {
         setUpdateError('Order ID is missing');
         setIsUpdating(false);
@@ -269,29 +191,7 @@ export default function OrderDetailPage() {
       }
       
       const data = await response.json();
-      
-      // If we're in development mode and using mock data, manually update the status history
-      if (process.env.NODE_ENV === 'development' && !data.status_history) {
-        // Create a new status history entry
-        const newHistoryItem = {
-          status: statusUpdate.status,
-          date: new Date().toISOString(),
-          description: statusUpdate.notes || `Order status updated to ${statusUpdate.status}`,
-          tracking_number: statusUpdate.tracking_number
-        };
-        
-        // Update the order with the new status history
-        const updatedOrder = {
-          ...data,
-          status_history: order?.status_history 
-            ? [...order.status_history, newHistoryItem]
-            : [newHistoryItem]
-        };
-        
-        setOrder(updatedOrder);
-      } else {
-        setOrder(data);
-      }
+      setOrder(data);
       
       setIsUpdating(false);
       setUpdateSuccess(true);
@@ -301,8 +201,9 @@ export default function OrderDetailPage() {
       setTimeout(() => {
         setUpdateSuccess(false);
       }, 3000);
-    } catch (err) {
-      setUpdateError('Failed to update order status');
+    } catch (error) {
+      console.error('Failed to update order status:', error);
+      setUpdateError('Failed to update order status. Please try again later.');
       setIsUpdating(false);
     }
   };
@@ -330,7 +231,7 @@ export default function OrderDetailPage() {
           setIsLoading(false);
           return;
         }
-        const orderId = params.id;
+        const orderId = params?.id;
         if (!orderId) {
           setError('Order ID is missing');
           setIsLoading(false);
@@ -352,61 +253,15 @@ export default function OrderDetailPage() {
         const data = await response.json();
         setOrder(data);
         setIsLoading(false);
-      } catch (err) {
-        setError('Failed to load order details');
-        if (process.env.NODE_ENV === 'development') {
-          // In development, use mock data as fallback
-          console.warn('Using mock data as fallback');
-          setOrder({
-            id: params.id as string,
-            order_number: `ORD-${params.id}`,
-            user_id: '1',
-            user: {
-              id: '1',
-              name: mockOrderDetails.customer.name,
-              email: mockOrderDetails.customer.email,
-              phone: mockOrderDetails.customer.phone,
-              company_name: mockOrderDetails.customer.name,
-            },
-            order_date: mockOrderDetails.date,
-            status: mockOrderDetails.status,
-            subtotal: mockOrderDetails.subtotal,
-            tax: mockOrderDetails.tax,
-            shipping_cost: mockOrderDetails.shipping,
-            total_amount: mockOrderDetails.total,
-            items_count: mockOrderDetails.items.length,
-            payment_status: mockOrderDetails.paymentStatus,
-            payment_method: mockOrderDetails.paymentMethod,
-            payment_details: {},
-            payment_date: mockOrderDetails.paymentDate,
-            shipping_address: {
-              street: mockOrderDetails.customer.address.street,
-              city: mockOrderDetails.customer.address.city,
-              state: mockOrderDetails.customer.address.state,
-              postal_code: mockOrderDetails.customer.address.postalCode,
-              country: mockOrderDetails.customer.address.country,
-            },
-            shipping_method: mockOrderDetails.shippingMethod,
-            tracking_number: mockOrderDetails.trackingNumber,
-            notes: '',
-            status_history: mockOrderDetails.status_history,
-            order_items: mockOrderDetails.items.map((item, index) => ({
-              id: `${index + 1}`,
-              product_id: `${index + 1}`,
-              product_name: item.name,
-              product_image: item.image,
-              quantity: item.quantity,
-              unit_price: item.price,
-              subtotal: item.total
-            }))
-          });
-        }
+      } catch (error) {
+        console.error('Failed to load order details:', error);
+        setError('Failed to load order details. Please try again later.');
         setIsLoading(false);
       }
     };
 
     fetchOrderDetails();
-  }, [params.id]);
+  }, [params?.id]);
 
   
   if (isLoading) {

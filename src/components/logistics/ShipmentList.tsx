@@ -5,13 +5,13 @@ import {
   Card,
   CardContent,
   FormControl,
-  Grid,
   IconButton,
   InputLabel,
   MenuItem,
   Paper,
   Select,
   SelectChangeEvent,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -217,8 +217,8 @@ const ShipmentList: React.FC<ShipmentListProps> = ({ onViewShipment, onEditShipm
           <Typography variant="h6" gutterBottom>
             Filter Shipments
           </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={3}>
+          <Stack direction="row" flexWrap="wrap" spacing={2}>
+            <Stack sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: 1 }}>
               <TextField
                 label="Order ID"
                 type="number"
@@ -227,8 +227,8 @@ const ShipmentList: React.FC<ShipmentListProps> = ({ onViewShipment, onEditShipm
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFilterChange('order_id', e.target.value ? parseInt(e.target.value) : undefined)}
                 size="small"
               />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: 1 }}>
               <FormControl fullWidth size="small">
                 <InputLabel>Logistics Provider</InputLabel>
                 <Select
@@ -246,8 +246,8 @@ const ShipmentList: React.FC<ShipmentListProps> = ({ onViewShipment, onEditShipm
                   ))}
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: 1 }}>
               <FormControl fullWidth size="small">
                 <InputLabel>Status</InputLabel>
                 <Select
@@ -267,8 +267,8 @@ const ShipmentList: React.FC<ShipmentListProps> = ({ onViewShipment, onEditShipm
                   <MenuItem value="cancelled">Cancelled</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: 1 }}>
               <TextField
                 label="Tracking Number"
                 fullWidth
@@ -276,8 +276,8 @@ const ShipmentList: React.FC<ShipmentListProps> = ({ onViewShipment, onEditShipm
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFilterChange('tracking_number', e.target.value || undefined)}
                 size="small"
               />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: 1 }}>
               <TextField
                 label="Waybill Number"
                 fullWidth
@@ -285,8 +285,8 @@ const ShipmentList: React.FC<ShipmentListProps> = ({ onViewShipment, onEditShipm
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFilterChange('waybill_number', e.target.value || undefined)}
                 size="small"
               />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: 1 }}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label="From Date"
@@ -295,8 +295,8 @@ const ShipmentList: React.FC<ShipmentListProps> = ({ onViewShipment, onEditShipm
                   slotProps={{ textField: { size: 'small', fullWidth: true } }}
                 />
               </LocalizationProvider>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: 1 }}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label="To Date"
@@ -305,8 +305,8 @@ const ShipmentList: React.FC<ShipmentListProps> = ({ onViewShipment, onEditShipm
                   slotProps={{ textField: { size: 'small', fullWidth: true } }}
                 />
               </LocalizationProvider>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: 1 }}>
               <Box sx={{ display: 'flex', gap: 1 }}>
                 <Button
                   variant="contained"
@@ -325,8 +325,8 @@ const ShipmentList: React.FC<ShipmentListProps> = ({ onViewShipment, onEditShipm
                   Clear
                 </Button>
               </Box>
-            </Grid>
-          </Grid>
+            </Stack>
+          </Stack>
         </CardContent>
       </Card>
 

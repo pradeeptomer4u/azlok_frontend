@@ -7,14 +7,15 @@ import invoiceService from '@/services/invoiceService';
 import { formatDate, formatCurrency } from '@/utils/formatters';
 import { Breadcrumb, Pagination, Spinner, Badge, Button } from '@/components/ui';
 
-const statusColors = {
+const statusColors: Record<InvoiceStatus | string, string> = {
   draft: 'bg-gray-200 text-gray-800',
-  issued: 'bg-blue-100 text-blue-800',
+  pending: 'bg-blue-100 text-blue-800',
   paid: 'bg-green-100 text-green-800',
   partially_paid: 'bg-yellow-100 text-yellow-800',
   overdue: 'bg-red-100 text-red-800',
   cancelled: 'bg-gray-500 text-white',
   refunded: 'bg-teal-100 text-teal-800',
+  issued: 'bg-blue-100 text-blue-800',
 };
 
 const InvoicesPage = () => {
@@ -45,13 +46,13 @@ const InvoicesPage = () => {
     }
   };
 
-  const handleViewInvoice = (id: number) => {
+  const handleViewInvoice = (id: string) => {
     router.push(`/account/invoices/${id}`);
   };
 
-  const handleDownloadInvoice = async (id: number, invoiceNumber: string) => {
+  const handleDownloadInvoice = async (id: string, invoiceNumber: string) => {
     try {
-      await invoiceService.saveInvoicePdf(id, `invoice_${invoiceNumber}.pdf`);
+      await invoiceService.saveInvoicePdf(Number(id), `invoice_${invoiceNumber}.pdf`);
     } catch (err) {
       console.error('Error downloading invoice:', err);
       alert('Failed to download invoice. Please try again later.');
@@ -176,7 +177,7 @@ const InvoicesPage = () => {
                         {invoice.due_date ? formatDate(invoice.due_date) : '-'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {formatCurrency(invoice.total_amount)}
+                        {formatCurrency(invoice.amount)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <Badge
@@ -189,14 +190,14 @@ const InvoicesPage = () => {
                         <Button
                           variant="link"
                           className="text-blue-600 hover:text-blue-900 mr-4"
-                          onClick={() => handleViewInvoice(invoice.id)}
+                          onClick={() => handleViewInvoice(invoice.id.toString())}
                         >
                           View
                         </Button>
                         <Button
                           variant="link"
                           className="text-blue-600 hover:text-blue-900"
-                          onClick={() => handleDownloadInvoice(invoice.id, invoice.invoice_number)}
+                          onClick={() => handleDownloadInvoice(invoice.id.toString(), invoice.invoice_number)}
                         >
                           Download
                         </Button>

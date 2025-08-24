@@ -25,14 +25,14 @@ const ProductFilters = () => {
   const searchParams = useSearchParams();
   
   const [categories, setCategories] = useState(mockCategories);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(searchParams.get('category'));
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(searchParams?.get('category') || null);
   const [priceRange, setPriceRange] = useState({
-    min: searchParams.get('minPrice') || '',
-    max: searchParams.get('maxPrice') || ''
+    min: searchParams?.get('minPrice') || '',
+    max: searchParams?.get('maxPrice') || ''
   });
-  const [verifiedOnly, setVerifiedOnly] = useState(searchParams.get('verified') === 'true');
-  const [taxInclusiveOnly, setTaxInclusiveOnly] = useState(searchParams.get('taxInclusive') === 'true');
-  const [maxTaxRate, setMaxTaxRate] = useState(searchParams.get('maxTaxRate') || '');
+  const [verifiedOnly, setVerifiedOnly] = useState(searchParams?.get('verified') === 'true');
+  const [taxInclusiveOnly, setTaxInclusiveOnly] = useState(searchParams?.get('taxInclusive') === 'true');
+  const [maxTaxRate, setMaxTaxRate] = useState(searchParams?.get('maxTaxRate') || '');
   const [isLoading, setIsLoading] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
@@ -62,7 +62,7 @@ const ProductFilters = () => {
 
   // Update URL with filters
   const updateFilters = (filters: Record<string, string | null>) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() || '');
     
     // Update or remove each filter parameter
     Object.entries(filters).forEach(([key, value]) => {
@@ -124,7 +124,7 @@ const ProductFilters = () => {
     setVerifiedOnly(false);
     setTaxInclusiveOnly(false);
     setMaxTaxRate('');
-    router.push(pathname);
+    router.push(pathname || '/');
   };
 
   const toggleMobileFilters = () => {

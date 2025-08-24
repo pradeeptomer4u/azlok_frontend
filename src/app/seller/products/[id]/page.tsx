@@ -5,6 +5,49 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 
+interface ProductSpecifications {
+  material: string;
+  dimensions: string;
+  weight: string;
+  tolerance: string;
+  operatingTemp: string;
+  warranty: string;
+  [key: string]: string;
+}
+
+interface Order {
+  id: string;
+  customer: string;
+  date: string;
+  quantity: number;
+  amount: number;
+}
+
+interface SalesData {
+  month: string;
+  sales: number;
+}
+
+interface Product {
+  id: number;
+  name: string;
+  sku: string;
+  price: number;
+  stock: number;
+  category: string;
+  status: string;
+  description: string;
+  features: string[];
+  specifications: ProductSpecifications;
+  images: string[];
+  sales: number;
+  revenue: number;
+  createdAt: string;
+  updatedAt: string;
+  recentOrders: Order[];
+  salesHistory: SalesData[];
+}
+
 // Mock product data
 const mockProduct = {
   id: 1,
@@ -56,9 +99,9 @@ const mockProduct = {
 };
 
 export default function ProductDetailPage() {
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const router = useRouter();
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('details');
@@ -73,7 +116,7 @@ export default function ProductDetailPage() {
         await new Promise(resolve => setTimeout(resolve, 500));
         
         // For demo purposes, we'll just use the mock data
-        setProduct(mockProduct);
+        setProduct(mockProduct as Product);
         setIsLoading(false);
       } catch (err) {
         setError('Failed to load product details');
@@ -82,7 +125,7 @@ export default function ProductDetailPage() {
     };
     
     fetchProduct();
-  }, [params.id]);
+  }, [params?.id]);
   
   // Format currency
   const formatCurrency = (amount: number) => {
@@ -105,7 +148,7 @@ export default function ProductDetailPage() {
   // Handle delete product
   const handleDeleteProduct = () => {
     // In a real app, this would be an API call
-    alert(`Product ${params.id} deleted`);
+    alert(`Product ${params?.id || ''} deleted`);
     setShowDeleteModal(false);
     router.push('/seller/products');
   };
@@ -165,7 +208,7 @@ export default function ProductDetailPage() {
         </div>
         <div className="mt-4 md:mt-0 flex space-x-2">
           <Link
-            href={`/seller/products/edit/${params.id}`}
+            href={`/seller/products/edit/${params?.id || ''}`}
             className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -341,11 +384,11 @@ export default function ProductDetailPage() {
                   <h3 className="text-lg font-medium text-gray-900 mb-4">Sales Performance</h3>
                   <div className="h-64 bg-gray-50 rounded-md flex items-center justify-center">
                     <div className="flex items-end space-x-2 h-48 px-4">
-                      {product.salesHistory.map((item: any) => (
+                      {product.salesHistory.map((item: SalesData) => (
                         <div key={item.month} className="flex flex-col items-center">
                           <div 
                             className="w-8 bg-primary rounded-t" 
-                            style={{ height: `${(item.sales / Math.max(...product.salesHistory.map((i: any) => i.sales))) * 100}%` }}
+                            style={{ height: `${(item.sales / Math.max(...product.salesHistory.map((i: SalesData) => i.sales))) * 100}%` }}
                           ></div>
                           <div className="text-xs text-gray-500 mt-2">{item.month}</div>
                           <div className="text-xs font-medium">{item.sales}</div>
@@ -387,7 +430,7 @@ export default function ProductDetailPage() {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {product.recentOrders.map((order: any) => (
+                        {product.recentOrders.map((order: Order) => (
                           <tr key={order.id}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary hover:text-primary-dark">
                               <Link href={`/seller/orders/${order.id}`}>{order.id}</Link>

@@ -30,146 +30,19 @@ interface Order {
   items_count: number;
   payment_status: string;
   payment_method: string;
-  payment_details: any;
-  shipping_address: any;
+  payment_details: Record<string, unknown>;
+  shipping_address: {
+    street: string;
+    city: string;
+    state: string;
+    postal_code: string;
+    country: string;
+  };
   tracking_number?: string;
   notes?: string;
   order_items?: OrderItem[];
 }
 
-// Mock order data for fallback
-const mockOrders = [
-  {
-    id: 'ORD-10045',
-    customer: {
-      name: 'Tata Motors Ltd.',
-      avatar: '/logo.png'
-    },
-    date: '2023-11-15T08:30:00',
-    total: 45000,
-    status: 'delivered',
-    items: 3,
-    paymentStatus: 'paid',
-    paymentMethod: 'bank_transfer'
-  },
-  {
-    id: 'ORD-10044',
-    customer: {
-      name: 'Bharat Heavy Electricals',
-      avatar: '/logo.png'
-    },
-    date: '2023-11-14T14:20:00',
-    total: 28500,
-    status: 'shipped',
-    items: 2,
-    paymentStatus: 'paid',
-    paymentMethod: 'credit_card'
-  },
-  {
-    id: 'ORD-10043',
-    customer: {
-      name: 'Larsen & Toubro',
-      avatar: '/logo.png'
-    },
-    date: '2023-11-12T11:45:00',
-    total: 67800,
-    status: 'processing',
-    items: 5,
-    paymentStatus: 'pending',
-    paymentMethod: 'bank_transfer'
-  },
-  {
-    id: 'ORD-10042',
-    customer: {
-      name: 'Mahindra & Mahindra',
-      avatar: '/logo.png'
-    },
-    date: '2023-11-10T09:15:00',
-    total: 12500,
-    status: 'delivered',
-    items: 1,
-    paymentStatus: 'paid',
-    paymentMethod: 'upi'
-  },
-  {
-    id: 'ORD-10041',
-    customer: {
-      name: 'Ashok Leyland',
-      avatar: '/logo.png'
-    },
-    date: '2023-11-08T16:30:00',
-    total: 34200,
-    status: 'cancelled',
-    items: 3,
-    paymentStatus: 'refunded',
-    paymentMethod: 'credit_card'
-  },
-  {
-    id: 'ORD-10040',
-    customer: {
-      name: 'Jindal Steel & Power',
-      avatar: '/logo.png'
-    },
-    date: '2023-11-05T10:20:00',
-    total: 89500,
-    status: 'delivered',
-    items: 7,
-    paymentStatus: 'paid',
-    paymentMethod: 'bank_transfer'
-  },
-  {
-    id: 'ORD-10039',
-    customer: {
-      name: 'Reliance Industries',
-      avatar: '/logo.png'
-    },
-    date: '2023-11-03T13:45:00',
-    total: 54300,
-    status: 'delivered',
-    items: 4,
-    paymentStatus: 'paid',
-    paymentMethod: 'credit_card'
-  },
-  {
-    id: 'ORD-10038',
-    customer: {
-      name: 'Godrej Industries',
-      avatar: '/logo.png'
-    },
-    date: '2023-11-01T09:10:00',
-    total: 18700,
-    status: 'delivered',
-    items: 2,
-    paymentStatus: 'paid',
-    paymentMethod: 'upi'
-  },
-  {
-    id: 'ORD-10037',
-    customer: {
-      name: 'Tata Steel',
-      avatar: '/logo.png'
-    },
-    date: '2023-10-28T15:30:00',
-    total: 76500,
-    status: 'delivered',
-    items: 6,
-    paymentStatus: 'paid',
-    paymentMethod: 'bank_transfer'
-  },
-  {
-    id: 'ORD-10036',
-    customer: {
-      name: 'Adani Enterprises',
-      avatar: '/logo.png'
-    },
-    date: '2023-10-25T11:20:00',
-    total: 42800,
-    status: 'delivered',
-    items: 3,
-    paymentStatus: 'paid',
-    paymentMethod: 'credit_card'
-  }
-];
 
 // Status badge component
 const StatusBadge = ({ status }: { status: string }) => {
@@ -302,30 +175,7 @@ export default function OrdersPage() {
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching orders:', error);
-        // Fallback to mock data in development
-        if (process.env.NODE_ENV === 'development') {
-          // Convert mock data to match Order interface
-          const convertedMockOrders: Order[] = mockOrders.map(order => ({
-            id: order.id,
-            order_number: order.id,
-            user_id: '1',
-            user: {
-              id: '1',
-              name: order.customer.name,
-              email: 'customer@example.com',
-              company_name: order.customer.name
-            },
-            order_date: order.date,
-            status: order.status,
-            total_amount: order.total,
-            items_count: order.items,
-            payment_status: order.paymentStatus,
-            payment_method: order.paymentMethod,
-            payment_details: {},
-            shipping_address: {}
-          }));
-          setOrders(convertedMockOrders);
-        }
+        setOrders([]);
         setIsLoading(false);
       }
     };

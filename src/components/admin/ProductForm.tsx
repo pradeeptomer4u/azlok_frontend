@@ -18,9 +18,22 @@ const mockCategories = [
   { id: 10, name: 'Robotics' }
 ];
 
+interface ProductData {
+  name?: string;
+  sku?: string;
+  price?: number;
+  stock?: number;
+  category?: string;
+  description?: string;
+  features?: string[];
+  specifications?: Array<{ name: string; value: string }>;
+  images?: string[];
+  status?: 'active' | 'inactive' | 'pending';
+}
+
 interface ProductFormProps {
   productId?: number; // Optional for edit mode
-  initialData?: any; // Product data for edit mode
+  initialData?: ProductData; // Product data for edit mode
 }
 
 export default function ProductForm({ productId, initialData }: ProductFormProps) {

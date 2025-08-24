@@ -1,30 +1,14 @@
-// Base API configuration
-const API_BASE_URL = 'http://localhost:8000/api';
+/**
+ * This file is deprecated. Please use the apiRequest utility from '../utils/apiRequest' instead.
+ * This file is kept for backward compatibility but will be removed in future versions.
+ */
 
-// Helper function for handling API responses
-const handleResponse = async (response: Response) => {
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.detail || `API error: ${response.status}`);
-  }
-  return response.json();
-};
+import { apiRequest as request } from '../utils/apiRequest';
 
-// API request helper with default options
-const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
-  const defaultOptions: RequestInit = {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  };
-
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...defaultOptions,
-    ...options,
-  });
-
-  return handleResponse(response);
+// Re-export the apiRequest function for backward compatibility
+const apiRequest = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
+  console.warn('Warning: Using deprecated api.ts. Please update imports to use utils/apiRequest instead.');
+  return request<T>(endpoint, options);
 };
 
 export default apiRequest;

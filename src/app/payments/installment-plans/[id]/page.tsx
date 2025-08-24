@@ -50,15 +50,15 @@ const InstallmentPlanDetailPage: React.FC<InstallmentPlanDetailPageProps> = ({ p
         setPlan(planData);
         
         // Fetch payments related to this installment plan
-        const paymentsResponse = await getPayments({ 
+        const paymentsResponse = planData ? await getPayments({ 
           order_id: planData.order_id,
           size: 100 // Get all payments for this order
-        });
+        }) : null;
         
         // Filter payments that are part of this installment plan
-        const installmentPayments = paymentsResponse.payments.filter(
+        const installmentPayments = paymentsResponse?.payments?.filter(
           payment => payment.installment_plan_id === planId
-        );
+        ) || [];
         
         setPayments(installmentPayments);
         setError(null);

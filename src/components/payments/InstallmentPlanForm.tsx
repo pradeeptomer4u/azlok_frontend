@@ -7,7 +7,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Grid,
+  Stack,
   CircularProgress,
   Alert,
   Typography,
@@ -86,13 +86,22 @@ const InstallmentPlanForm: React.FC<InstallmentPlanFormProps> = ({
   };
 
   const updateInstallmentPreview = (startDateValue: Date = startDate) => {
-    const numberOfInstallments = Number(formData.number_of_installments);
-    const interestRate = Number(formData.interest_rate) / 100; // Convert to decimal
-    const processingFee = Number(formData.processing_fee);
-    
-    // Calculate total amount with interest
-    const totalWithInterest = totalAmount * (1 + interestRate) + processingFee;
-    const installmentAmount = totalWithInterest / numberOfInstallments;
+    const calculateInstallmentAmount = () => {
+      const principal = totalAmount;
+      const numberOfInstallments = parseInt(String(formData.number_of_installments || '1'), 10);
+      const interestRate = parseFloat(String(formData.interest_rate || '0')) / 100;
+      const processingFee = parseFloat(String(formData.processing_fee || '0')) || 0;
+      
+      // Simple interest calculation
+      const totalInterest = principal * interestRate;
+      const totalWithInterest = principal + totalInterest + processingFee;
+      const installmentAmount = totalWithInterest / numberOfInstallments;
+      
+      return installmentAmount;
+    };
+
+    const numberOfInstallments = parseInt(String(formData.number_of_installments || '1'), 10);
+    const installmentAmount = calculateInstallmentAmount();
     
     const preview: Array<{date: Date, amount: number}> = [];
     
@@ -127,11 +136,11 @@ const InstallmentPlanForm: React.FC<InstallmentPlanFormProps> = ({
       newErrors.installment_frequency = 'Frequency is required';
     }
     
-    if (formData.interest_rate < 0) {
+    if ((formData.interest_rate || 0) < 0) {
       newErrors.interest_rate = 'Interest rate cannot be negative';
     }
     
-    if (formData.processing_fee < 0) {
+    if ((formData.processing_fee || 0) < 0) {
       newErrors.processing_fee = 'Processing fee cannot be negative';
     }
     
@@ -156,8 +165,10 @@ const InstallmentPlanForm: React.FC<InstallmentPlanFormProps> = ({
       
       await createInstallmentPlan(formData);
       onSuccess();
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to create installment plan');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create installment plan';
+      const apiError = (err as { response?: { data?: { detail?: string } } });
+      setError(apiError.response?.data?.detail || errorMessage);
       console.error(err);
     } finally {
       setLoading(false);
@@ -174,20 +185,23 @@ const InstallmentPlanForm: React.FC<InstallmentPlanFormProps> = ({
   // Initialize installment preview on component mount
   React.useEffect(() => {
     updateInstallmentPreview();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // We're using an empty dependency array with eslint-disable comment because we only want to run this once on mount
+  // Adding updateInstallmentPreview to dependencies would cause an infinite loop as it's recreated on each render
 
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
+      <Stack spacing={3}>
+        <Stack width="100%">
           <Typography variant="subtitle1">
             Order #{orderId} - Total Amount: {formatCurrency(totalAmount)}
           </Typography>
-        </Grid>
+        </Stack>
         
-        <Grid item xs={12} sm={6}>
+        <Stack width="100%" sx={{ maxWidth: { sm: '50%' } }}>
           <TextField
             fullWidth
             label="Number of Installments"
@@ -199,9 +213,9 @@ const InstallmentPlanForm: React.FC<InstallmentPlanFormProps> = ({
             helperText={errors.number_of_installments}
             InputProps={{ inputProps: { min: 2, max: 24 } }}
           />
-        </Grid>
+        </Stack>
         
-        <Grid item xs={12} sm={6}>
+        <Stack width="100%" sx={{ maxWidth: { sm: '50%' } }}>
           <FormControl fullWidth error={!!errors.installment_frequency}>
             <InputLabel id="frequency-label">Installment Frequency</InputLabel>
             <Select
@@ -210,16 +224,16 @@ const InstallmentPlanForm: React.FC<InstallmentPlanFormProps> = ({
               name="installment_frequency"
               value={formData.installment_frequency}
               label="Installment Frequency"
-              onChange={handleChange}
+              onChange={(e) => handleChange(e as React.ChangeEvent<HTMLInputElement>)}
             >
               <MenuItem value="weekly">Weekly</MenuItem>
               <MenuItem value="biweekly">Bi-weekly</MenuItem>
               <MenuItem value="monthly">Monthly</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
+        </Stack>
         
-        <Grid item xs={12} sm={6}>
+        <Stack width="100%" sx={{ maxWidth: { sm: '50%' } }}>
           <TextField
             fullWidth
             label="Interest Rate (%)"
@@ -231,9 +245,9 @@ const InstallmentPlanForm: React.FC<InstallmentPlanFormProps> = ({
             helperText={errors.interest_rate}
             InputProps={{ inputProps: { min: 0, step: 0.01 } }}
           />
-        </Grid>
+        </Stack>
         
-        <Grid item xs={12} sm={6}>
+        <Stack width="100%" sx={{ maxWidth: { sm: '50%' } }}>
           <TextField
             fullWidth
             label="Processing Fee"
@@ -245,9 +259,9 @@ const InstallmentPlanForm: React.FC<InstallmentPlanFormProps> = ({
             helperText={errors.processing_fee}
             InputProps={{ inputProps: { min: 0, step: 0.01 } }}
           />
-        </Grid>
+        </Stack>
         
-        <Grid item xs={12} sm={6}>
+        <Stack width="100%" sx={{ maxWidth: { sm: '50%' } }}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="Start Date"
@@ -262,8 +276,8 @@ const InstallmentPlanForm: React.FC<InstallmentPlanFormProps> = ({
               }}
             />
           </LocalizationProvider>
-        </Grid>
-      </Grid>
+        </Stack>
+      </Stack>
       
       {/* Installment Preview */}
       <Paper sx={{ mt: 4, p: 2 }}>
@@ -271,46 +285,53 @@ const InstallmentPlanForm: React.FC<InstallmentPlanFormProps> = ({
           Installment Preview
         </Typography>
         
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <Typography variant="subtitle2" color="text.secondary">
-              Due Date
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant="subtitle2" color="text.secondary">
-              Amount
-            </Typography>
-          </Grid>
+        <Stack spacing={2}>
+          <Stack direction="row" spacing={2}>
+            <Stack width="50%">
+              <Typography variant="subtitle2" color="text.secondary">
+                Due Date
+              </Typography>
+            </Stack>
+            
+            <Stack width="50%">
+              <Typography variant="subtitle2" color="text.secondary">
+                Amount
+              </Typography>
+            </Stack>
+          </Stack>
           
           {installmentPreview.map((installment, index) => (
-            <React.Fragment key={index}>
-              <Grid item xs={6}>
+            <Stack key={index} direction="row" spacing={2}>
+              <Stack width="50%">
                 <Typography>
                   {format(installment.date, 'PP')}
                 </Typography>
-              </Grid>
-              <Grid item xs={6}>
+              </Stack>
+              
+              <Stack width="50%">
                 <Typography>
                   {formatCurrency(installment.amount)}
                 </Typography>
-              </Grid>
-            </React.Fragment>
+              </Stack>
+            </Stack>
           ))}
           
-          <Grid item xs={6}>
-            <Typography variant="subtitle1" fontWeight="bold">
-              Total
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant="subtitle1" fontWeight="bold">
-              {formatCurrency(
-                installmentPreview.reduce((sum, item) => sum + item.amount, 0)
-              )}
-            </Typography>
-          </Grid>
-        </Grid>
+          <Stack direction="row" spacing={2}>
+            <Stack width="50%">
+              <Typography variant="subtitle1" fontWeight="bold">
+                Total
+              </Typography>
+            </Stack>
+            
+            <Stack width="50%">
+              <Typography variant="subtitle1" fontWeight="bold">
+                {formatCurrency(
+                  installmentPreview.reduce((sum, item) => sum + item.amount, 0)
+                )}
+              </Typography>
+            </Stack>
+          </Stack>
+        </Stack>
       </Paper>
       
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, gap: 1 }}>

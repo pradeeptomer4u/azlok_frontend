@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import Link from 'next/link';
 import CartItems from '../../components/cart/CartItems';
 import CartSummary from '../../components/cart/CartSummary';
@@ -20,7 +19,7 @@ export default function CartPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
             <h2 className="text-xl font-semibold mt-4">Your cart is empty</h2>
-            <p className="text-gray-600 mt-2">Looks like you haven't added any products to your cart yet.</p>
+            <p className="text-gray-600 mt-2">Looks like you haven&apos;t added any products to your cart yet.</p>
             <Link href="/products" className="mt-6 inline-block bg-primary text-white px-6 py-3 rounded-md hover:bg-primary-dark transition-colors">
               Browse Products
             </Link>

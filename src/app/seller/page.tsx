@@ -59,7 +59,7 @@ export default function SellerDashboard() {
       {/* Welcome Message */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Welcome back, {user?.name || 'Seller'}</h1>
-        <p className="text-gray-600">Here's what's happening with your products today</p>
+        <p className="text-gray-600">Here&apos;s what&apos;s happening with your products today</p>
       </div>
       
       {/* Date Range Filter */}

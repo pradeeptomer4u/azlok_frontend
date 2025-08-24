@@ -83,7 +83,7 @@ export default function EditProductPage() {
     };
     
     fetchProduct();
-  }, [params.id]);
+  }, [params?.id]);
   
   // Handle form field changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -166,17 +166,19 @@ export default function EditProductPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+    setError(null);
+
     try {
-      // In a real app, this would be an API call
-      // Simulate API delay
+      // In a real app, you would send this data to your API
+      console.log('Submitting product update:', formData);
+      
+      // Mock successful API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Success message
-      alert('Product updated successfully!');
-      
       // Redirect to product detail page
-      router.push(`/seller/products/${params.id}`);
+      if (params?.id) {
+        router.push(`/seller/products/${params.id}`);
+      }
     } catch (error) {
       alert('Failed to update product. Please try again.');
       setIsSubmitting(false);
@@ -223,7 +225,7 @@ export default function EditProductPage() {
       {/* Header */}
       <div className="mb-6 flex items-center">
         <Link
-          href={`/seller/products/${params.id}`}
+          href={`/seller/products/${params?.id || ''}`}
           className="mr-4 text-gray-500 hover:text-gray-700"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -542,7 +544,7 @@ export default function EditProductPage() {
                 
                 <div className="mt-4">
                   <Link
-                    href={`/seller/products/${params.id}`}
+                    href={`/seller/products/${params?.id || ''}`}
                     className="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                   >
                     Cancel

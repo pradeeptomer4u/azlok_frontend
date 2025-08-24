@@ -87,8 +87,11 @@ const PaymentList: React.FC = () => {
     router.push(`/payments/${id}`);
   };
 
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
-    const { name, value } = e.target;
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<{ name?: string; value: unknown }>) => {
+    const target = e.target as { name?: string; value: unknown };
+    const name = target.name;
+    const value = target.value;
+    
     if (name) {
       setFilters({
         ...filters,
@@ -182,9 +185,20 @@ const PaymentList: React.FC = () => {
                 labelId="status-label"
                 id="status"
                 name="status"
-                value={filters.status || ''}
+                value={filters.status || ('' as any)}
                 label="Status"
-                onChange={handleFilterChange}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === '') {
+                    const { status, ...restFilters } = filters;
+                    setFilters(restFilters);
+                  } else {
+                    setFilters({
+                      ...filters,
+                      status: value as PaymentStatus
+                    });
+                  }
+                }}
                 size="small"
               >
                 <MenuItem value="">All</MenuItem>

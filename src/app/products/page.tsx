@@ -1,8 +1,8 @@
 'use client';
 
-import ProductListing from '../../components/products/ProductListing';
-import ProductFilters from '../../components/products/ProductFilters';
-import { Metadata } from 'next';
+import ProductListing from '@/components/products/ProductListing';
+import ProductFilters from '@/components/products/ProductFilters';
+import { Suspense } from 'react';
 
 // Metadata needs to be in a separate file for client components
 // This is just for reference, actual metadata should be in layout.tsx
@@ -38,12 +38,24 @@ export default function ProductsPage() {
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
           {/* Filters Sidebar */}
           <div id="product-filters" className="w-full lg:w-1/4 hidden lg:block">
-            <ProductFilters />
+            <Suspense fallback={<div className="animate-pulse space-y-2">
+              {[...Array(5)].map((_, index) => (
+                <div key={index} className="h-5 sm:h-6 bg-gray-200 rounded"></div>
+              ))}
+            </div>}>
+              <ProductFilters />
+            </Suspense>
           </div>
           
           {/* Product Grid */}
           <div className="w-full lg:w-3/4">
-            <ProductListing />
+            <Suspense fallback={<div className="animate-pulse grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[...Array(6)].map((_, index) => (
+                <div key={index} className="bg-gray-200 rounded-lg p-4 h-64"></div>
+              ))}
+            </div>}>
+              <ProductListing />
+            </Suspense>
           </div>
         </div>
       </div>

@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import ProductListing from '../../../components/products/ProductListing';
 import MetaTags from '../../../components/SEO/MetaTags';
 import { BreadcrumbStructuredData } from '../../../components/SEO/StructuredData';
-import axios from 'axios';
 
 // Mock categories data - will be replaced with API data
 const mockCategories = [
@@ -127,9 +127,9 @@ export default function CategoryPage() {
         <div className="bg-red-50 p-6 rounded-md text-red-600 text-center">
           <h1 className="text-2xl font-bold mb-2">Error</h1>
           <p>{error || 'Category not found'}</p>
-          <a href="/categories" className="text-primary hover:underline mt-4 inline-block">
+          <Link href="/categories" className="text-primary hover:underline mt-4 inline-block">
             Browse all categories
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -160,9 +160,9 @@ export default function CategoryPage() {
       <div className="container-custom mx-auto py-6">
         {/* Breadcrumb Navigation */}
         <nav className="flex mb-4 text-sm">
-          <a href="/" className="text-gray-500 hover:text-primary">Home</a>
+          <Link href="/" className="text-gray-500 hover:text-primary">Home</Link>
           <span className="mx-2 text-gray-500">/</span>
-          <a href="/categories" className="text-gray-500 hover:text-primary">Categories</a>
+          <Link href="/categories" className="text-gray-500 hover:text-primary">Categories</Link>
           <span className="mx-2 text-gray-500">/</span>
           <span className="text-primary">{category.name}</span>
         </nav>

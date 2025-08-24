@@ -4,85 +4,10 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-
-// Mock user data
-const mockUsers = {
-  1: {
-    id: 1,
-    name: 'John Smith',
-    email: 'john.smith@acmecorp.com',
-    phone: '+91 98765 43210',
-    company: 'Acme Corporation',
-    role: 'buyer',
-    status: 'active',
-    joinDate: '2023-08-15',
-    lastLogin: '2023-11-15',
-    avatar: '/globe.svg',
-    address: {
-      street: '123 Industrial Avenue',
-      city: 'Mumbai',
-      state: 'Maharashtra',
-      postalCode: '400001',
-      country: 'India'
-    },
-    billingInfo: {
-      gstin: 'GSTIN12345678901',
-      panNumber: 'ABCDE1234F',
-      bankName: 'HDFC Bank',
-      accountNumber: 'XXXX-XXXX-1234'
-    },
-    activity: {
-      ordersCount: 12,
-      totalSpent: 145000,
-      lastOrderDate: '2023-11-10',
-      averageOrderValue: 12083,
-      recentOrders: [
-        { id: 'ORD-9385', date: '2023-11-10', amount: 15000, status: 'completed' },
-        { id: 'ORD-9350', date: '2023-10-28', amount: 8500, status: 'completed' },
-        { id: 'ORD-9312', date: '2023-10-15', amount: 22000, status: 'completed' }
-      ]
-    }
-  },
-  2: {
-    id: 2,
-    name: 'Sarah Johnson',
-    email: 'sarah@xyzindustries.com',
-    phone: '+91 98765 12345',
-    company: 'XYZ Industries',
-    role: 'seller',
-    status: 'active',
-    joinDate: '2023-07-22',
-    lastLogin: '2023-11-14',
-    avatar: '/globe.svg',
-    address: {
-      street: '456 Manufacturing Hub',
-      city: 'Pune',
-      state: 'Maharashtra',
-      postalCode: '411001',
-      country: 'India'
-    },
-    billingInfo: {
-      gstin: 'GSTIN98765432109',
-      panNumber: 'FGHIJ5678K',
-      bankName: 'ICICI Bank',
-      accountNumber: 'XXXX-XXXX-5678'
-    },
-    activity: {
-      productsCount: 24,
-      salesCount: 156,
-      totalRevenue: 1850000,
-      lastSaleDate: '2023-11-12',
-      topProducts: [
-        { id: 1, name: 'Industrial Machinery Part XYZ', sales: 45, revenue: 562500 },
-        { id: 2, name: 'Heavy Duty Electric Motor', sales: 32, revenue: 320000 },
-        { id: 3, name: 'Precision Control Valve', sales: 28, revenue: 224000 }
-      ]
-    }
-  }
-};
+import { getUserById, deleteUser, updateUserStatus, User, BuyerActivity, SellerActivity } from '../../../../services/userService';
 
 export default function UserDetailPage({ params }: { params: { id: string } }) {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('profile');
@@ -107,16 +32,10 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
   };
   
   useEffect(() => {
-    // In a real app, this would be an API call
     const fetchUser = async () => {
       try {
         setIsLoading(true);
-        
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        const userId = parseInt(params.id);
-        const userData = mockUsers[userId as keyof typeof mockUsers];
+        const userData = await getUserById(params.id);
         
         if (!userData) {
           throw new Error('User not found');
@@ -135,11 +54,48 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
   }, [params.id]);
   
   // Handle delete user
-  const handleDeleteUser = () => {
+  const handleDeleteUser = async () => {
+    if (!user) return;
+    
     if (window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-      // In a real app, this would call an API
-      alert(`User ${user.name} deleted successfully!`);
-      router.push('/admin/users');
+      try {
+        setIsLoading(true);
+        const success = await deleteUser(user.id);
+        
+        if (success) {
+          alert(`User ${user.name} deleted successfully!`);
+          router.push('/admin/users');
+        } else {
+          throw new Error('Failed to delete user');
+        }
+      } catch (err) {
+        setError('Failed to delete user. Please try again.');
+        console.error('Error deleting user:', err);
+        setIsLoading(false);
+      }
+    }
+  };
+  
+  // Handle user status update
+  const handleStatusUpdate = async (newStatus: 'active' | 'inactive') => {
+    if (!user) return;
+    
+    try {
+      setIsLoading(true);
+      const success = await updateUserStatus(user.id, newStatus);
+      
+      if (success) {
+        // Update local state to reflect the change
+        setUser(prev => prev ? {...prev, status: newStatus} : null);
+        alert(`User status updated to ${newStatus}`);
+      } else {
+        throw new Error('Failed to update user status');
+      }
+    } catch (err) {
+      setError('Failed to update user status. Please try again.');
+      console.error('Error updating user status:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -238,22 +194,22 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
           <>
             <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-purple-500">
               <p className="text-sm font-medium text-gray-500">Total Orders</p>
-              <p className="text-xl font-bold mt-1">{user.activity.ordersCount}</p>
+              <p className="text-xl font-bold mt-1">{(user.activity as BuyerActivity).ordersCount}</p>
             </div>
             <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-yellow-500">
               <p className="text-sm font-medium text-gray-500">Total Spent</p>
-              <p className="text-xl font-bold mt-1">{formatCurrency(user.activity.totalSpent)}</p>
+              <p className="text-xl font-bold mt-1">{formatCurrency((user.activity as BuyerActivity).totalSpent)}</p>
             </div>
           </>
         ) : (
           <>
             <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-purple-500">
               <p className="text-sm font-medium text-gray-500">Products</p>
-              <p className="text-xl font-bold mt-1">{user.activity.productsCount}</p>
+              <p className="text-xl font-bold mt-1">{(user.activity as SellerActivity).productsCount}</p>
             </div>
             <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-yellow-500">
               <p className="text-sm font-medium text-gray-500">Total Sales</p>
-              <p className="text-xl font-bold mt-1">{user.activity.salesCount}</p>
+              <p className="text-xl font-bold mt-1">{(user.activity as SellerActivity).salesCount}</p>
             </div>
           </>
         )}
@@ -319,11 +275,17 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                       Message
                     </button>
                     {user.status === 'active' ? (
-                      <button className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700">
+                      <button 
+                        onClick={() => handleStatusUpdate('inactive')} 
+                        className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700"
+                      >
                         Deactivate
                       </button>
                     ) : (
-                      <button className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700">
+                      <button 
+                        onClick={() => handleStatusUpdate('active')} 
+                        className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700"
+                      >
                         Activate
                       </button>
                     )}
@@ -378,15 +340,15 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
                       <p className="text-sm font-medium text-gray-500">Total Orders</p>
-                      <p className="text-2xl font-bold mt-1">{user.activity.ordersCount}</p>
+                      <p className="text-2xl font-bold mt-1">{(user.activity as BuyerActivity).ordersCount}</p>
                     </div>
                     <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
                       <p className="text-sm font-medium text-gray-500">Total Spent</p>
-                      <p className="text-2xl font-bold mt-1">{formatCurrency(user.activity.totalSpent)}</p>
+                      <p className="text-2xl font-bold mt-1">{formatCurrency((user.activity as BuyerActivity).totalSpent)}</p>
                     </div>
                     <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
                       <p className="text-sm font-medium text-gray-500">Average Order Value</p>
-                      <p className="text-2xl font-bold mt-1">{formatCurrency(user.activity.averageOrderValue)}</p>
+                      <p className="text-2xl font-bold mt-1">{formatCurrency((user.activity as BuyerActivity).averageOrderValue)}</p>
                     </div>
                   </div>
                 </div>
@@ -413,7 +375,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {user.activity.recentOrders.map((order: any) => (
+                        {(user.activity as BuyerActivity).recentOrders?.map((order) => (
                           <tr key={order.id}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.id}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDate(order.date)}</td>
@@ -446,15 +408,15 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
                       <p className="text-sm font-medium text-gray-500">Total Products</p>
-                      <p className="text-2xl font-bold mt-1">{user.activity.productsCount}</p>
+                      <p className="text-2xl font-bold mt-1">{(user.activity as SellerActivity).productsCount}</p>
                     </div>
                     <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
                       <p className="text-sm font-medium text-gray-500">Total Sales</p>
-                      <p className="text-2xl font-bold mt-1">{user.activity.salesCount}</p>
+                      <p className="text-2xl font-bold mt-1">{(user.activity as SellerActivity).salesCount}</p>
                     </div>
                     <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
                       <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-                      <p className="text-2xl font-bold mt-1">{formatCurrency(user.activity.totalRevenue)}</p>
+                      <p className="text-2xl font-bold mt-1">{formatCurrency((user.activity as SellerActivity).totalRevenue)}</p>
                     </div>
                   </div>
                 </div>
@@ -480,7 +442,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {user.activity.topProducts.map((product: any) => (
+                        {(user.activity as SellerActivity).topProducts?.map((product) => (
                           <tr key={product.id}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{product.name}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.sales} units</td>

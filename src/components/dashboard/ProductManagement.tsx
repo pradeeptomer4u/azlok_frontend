@@ -136,12 +136,16 @@ const ProductManagement: React.FC<ProductManagementProps> = ({ sellerId }) => {
           ...formData
         };
         const updated = await productService.updateProduct(updateData);
-        setProducts(products.map(p => p.id === updated.id ? updated : p));
+        if (updated) {
+          setProducts(products.map(p => p.id === updated.id ? updated : p));
+        }
       } else {
         // Create new product
         const created = await productService.createProduct(formData);
-        setProducts([created, ...products]);
-        setTotalProducts(prev => prev + 1);
+        if (created) {
+          setProducts([created, ...products]);
+          setTotalProducts(prev => prev + 1);
+        }
       }
       setIsModalOpen(false);
     } catch (err) {
@@ -174,7 +178,7 @@ const ProductManagement: React.FC<ProductManagementProps> = ({ sellerId }) => {
         </div>
       ) : products.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
-          No products found. Click "Add New Product" to create one.
+          No products found. Click &quot;Add New Product&quot; to create one.
         </div>
       ) : (
         <>

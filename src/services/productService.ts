@@ -1,4 +1,4 @@
-import apiRequest from './api';
+import { apiRequest } from '../utils/apiRequest';
 
 export interface Product {
   id: number;
@@ -83,62 +83,122 @@ const productService = {
     });
     
     const queryString = queryParams.toString();
-    const endpoint = `/products${queryString ? `?${queryString}` : ''}`;
+    const endpoint = `/api/products${queryString ? `?${queryString}` : ''}`;
     
-    return apiRequest(endpoint);
+    try {
+      const response = await apiRequest<ProductsResponse>(endpoint);
+      return response || { items: [], total: 0, page: 1, size: 10, pages: 0 };
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return { items: [], total: 0, page: 1, size: 10, pages: 0 };
+    }
   },
   
   // Get a single product by ID
-  getProductById: async (id: number): Promise<Product> => {
-    return apiRequest(`/products/${id}`);
+  getProductById: async (id: number): Promise<Product | null> => {
+    try {
+      const response = await apiRequest<Product>(`/api/products/${id}`);
+      return response || null;
+    } catch (error) {
+      console.error(`Error fetching product with ID ${id}:`, error);
+      return null;
+    }
   },
   
   // Get featured products
   getFeaturedProducts: async (limit: number = 8): Promise<Product[]> => {
-    return apiRequest(`/products?is_featured=true&size=${limit}`).then(res => res.items);
+    try {
+      const response = await apiRequest<ProductsResponse>(`/api/products?is_featured=true&size=${limit}`);
+      return response?.items || [];
+    } catch (error) {
+      console.error('Error fetching featured products:', error);
+      return [];
+    }
   },
   
   // Get new arrivals
   getNewArrivals: async (limit: number = 8): Promise<Product[]> => {
-    return apiRequest(`/products?is_new=true&size=${limit}`).then(res => res.items);
+    try {
+      const response = await apiRequest<ProductsResponse>(`/api/products?is_new=true&size=${limit}`);
+      return response?.items || [];
+    } catch (error) {
+      console.error('Error fetching new arrivals:', error);
+      return [];
+    }
   },
   
   // Get bestsellers
   getBestsellers: async (limit: number = 8): Promise<Product[]> => {
-    return apiRequest(`/products?is_bestseller=true&size=${limit}`).then(res => res.items);
+    try {
+      const response = await apiRequest<ProductsResponse>(`/api/products?is_bestseller=true&size=${limit}`);
+      return response?.items || [];
+    } catch (error) {
+      console.error('Error fetching bestsellers:', error);
+      return [];
+    }
   },
   
   // Get products by category
   getProductsByCategory: async (categoryId: number, limit: number = 12): Promise<Product[]> => {
-    return apiRequest(`/products?category_id=${categoryId}&size=${limit}`).then(res => res.items);
+    try {
+      const response = await apiRequest<ProductsResponse>(`/api/products?category_id=${categoryId}&size=${limit}`);
+      return response?.items || [];
+    } catch (error) {
+      console.error(`Error fetching products for category ID ${categoryId}:`, error);
+      return [];
+    }
   },
   
   // Search products
   searchProducts: async (query: string, limit: number = 12): Promise<Product[]> => {
-    return apiRequest(`/products?search=${encodeURIComponent(query)}&size=${limit}`).then(res => res.items);
+    try {
+      const response = await apiRequest<ProductsResponse>(`/api/products?search=${encodeURIComponent(query)}&size=${limit}`);
+      return response?.items || [];
+    } catch (error) {
+      console.error(`Error searching products with query "${query}":`, error);
+      return [];
+    }
   },
   
   // Create a new product
-  createProduct: async (productData: CreateProductInput): Promise<Product> => {
-    return apiRequest('/products', {
-      method: 'POST',
-      body: JSON.stringify(productData)
-    });
+  createProduct: async (productData: CreateProductInput): Promise<Product | null> => {
+    try {
+      const response = await apiRequest<Product>('/api/products', {
+        method: 'POST',
+        body: JSON.stringify(productData)
+      });
+      return response || null;
+    } catch (error) {
+      console.error('Error creating product:', error);
+      return null;
+    }
   },
   
   // Update an existing product
-  updateProduct: async (productData: UpdateProductInput): Promise<Product> => {
-    return apiRequest(`/products/${productData.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(productData)
-    });
+  updateProduct: async (productData: UpdateProductInput): Promise<Product | null> => {
+    try {
+      const response = await apiRequest<Product>(`/api/products/${productData.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(productData)
+      });
+      return response || null;
+    } catch (error) {
+      console.error(`Error updating product with ID ${productData.id}:`, error);
+      return null;
+    }
   },
   
   // Delete a product
-  deleteProduct: async (id: number): Promise<void> => {
-    return apiRequest(`/products/${id}`, {
-      method: 'DELETE'
-    });
+  deleteProduct: async (id: number): Promise<boolean> => {
+    try {
+      await apiRequest(`/api/products/${id}`, {
+        method: 'DELETE'
+      });
+      return true;
+    } catch (error) {
+      console.error(`Error deleting product with ID ${id}:`, error);
+      return false;
+    }
   },
   
   // Get seller's products
@@ -152,9 +212,15 @@ const productService = {
     });
     
     const queryString = queryParams.toString();
-    const endpoint = `/sellers/${sellerId}/products${queryString ? `?${queryString}` : ''}`;
+    const endpoint = `/api/sellers/${sellerId}/products${queryString ? `?${queryString}` : ''}`;
     
-    return apiRequest(endpoint);
+    try {
+      const response = await apiRequest<ProductsResponse>(endpoint);
+      return response || { items: [], total: 0, page: 1, size: 10, pages: 0 };
+    } catch (error) {
+      console.error(`Error fetching products for seller ID ${sellerId}:`, error);
+      return { items: [], total: 0, page: 1, size: 10, pages: 0 };
+    }
   }
 };
 

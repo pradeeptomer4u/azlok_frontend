@@ -2,33 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import Image from 'next/image';
-import Link from 'next/link';
-// Using direct import with type assertion
-// @ts-expect-error - Temporary fix for module resolution
-import ProductCard from './ProductCard';
-import { calculateProductTax, TaxCalculationRequest, TaxCalculationResponse } from '../../utils/taxService';
+import ProductCard from '@/components/products/ProductCard';
+import type { Product as ProductCardProduct } from '@/components/products/ProductCard';
+import { calculateProductTax, TaxCalculationRequest } from '../../utils/taxService';
 import productService, { Product as ApiProduct, ProductFilters } from '../../services/productService';
 
 // Define the Product type that combines API data with UI-specific fields
-type Product = ApiProduct & {
-  image: string;
-  slug: string;
-  minOrder?: number;
-  seller?: string;
-  location?: string;
+type Product = ApiProduct & Omit<ProductCardProduct, 'id' | 'price' | 'rating'> & {
   category_name?: string;
-  isVerified?: boolean;
-  // Add tax-related fields that might be added later
-  tax_percentage?: number;
-  tax_amount?: number;
-  cgst_amount?: number;
-  sgst_amount?: number;
-  igst_amount?: number;
-  is_tax_inclusive?: boolean;
-  hsn_code?: string;
-  price_with_tax?: number;
-  price_without_tax?: number;
 };
 
 interface ProductListingProps {
@@ -52,15 +33,14 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
       setIsLoading(true);
       try {
         // Get filter parameters from URL
-        const category = searchParams.get('category');
-        const minPrice = searchParams.get('minPrice');
-        const maxPrice = searchParams.get('maxPrice');
-        const verifiedOnly = searchParams.get('verified') === 'true';
-        const taxInclusiveOnly = searchParams.get('taxInclusive') === 'true';
-        const maxTaxRate = searchParams.get('maxTaxRate');
-        const searchQuery = searchParams.get('q');
-        const sort = searchParams.get('sort') || sortBy;
-        const state = searchParams.get('state') || buyerState;
+        const category = searchParams?.get('category') ?? null;
+        const minPrice = searchParams?.get('minPrice') ?? null;
+        const maxPrice = searchParams?.get('maxPrice') ?? null;
+        const taxInclusiveOnly = searchParams?.get('taxInclusive') === 'true';
+        const maxTaxRate = searchParams?.get('maxTaxRate') ?? null;
+        const searchQuery = searchParams?.get('q') ?? null;
+        const sort = searchParams?.get('sort') ?? sortBy;
+        const state = searchParams?.get('state') ?? buyerState;
         
         // Build API filters
         const filters: ProductFilters = {
@@ -259,8 +239,8 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
               onChange={(e) => {
                 setBuyerState(e.target.value);
                 // Re-fetch tax information when state changes
-                const taxInclusiveParam = searchParams.get('taxInclusive') === 'true';
-                const maxTaxRateParam = searchParams.get('maxTaxRate') || undefined;
+                const taxInclusiveParam = searchParams?.get('taxInclusive') === 'true';
+                const maxTaxRateParam = searchParams?.get('maxTaxRate') ?? undefined;
                 fetchTaxInformation(products, e.target.value, taxInclusiveParam, maxTaxRateParam);
               }}
               className="border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary flex-grow sm:flex-grow-0"
@@ -335,7 +315,18 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
       ) : (
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
           {currentProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard 
+              key={product.id} 
+              product={{
+                ...product,
+                rating: product.rating || 0, // Ensure rating is always a number
+                minOrder: product.minOrder || 1,
+                seller: product.seller || 'Unknown',
+                location: product.location || 'Unknown',
+                isVerified: product.isVerified || false,
+                category: product.category_name || 'uncategorized'
+              }} 
+            />
           ))}
         </div>
       )}

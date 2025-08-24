@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
-  Card,
-  CardContent,
   Checkbox,
   Dialog,
   DialogActions,
@@ -12,7 +10,6 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
-  Grid,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -58,6 +55,13 @@ interface Address {
   contact_email?: string;
 }
 
+interface ShipmentDimensions {
+  length: number;
+  width: number;
+  height: number;
+  unit: string;
+}
+
 interface ShipmentFormData {
   order_id: number;
   logistics_provider_id: number;
@@ -67,12 +71,7 @@ interface ShipmentFormData {
   estimated_delivery_date?: Date | null;
   shipping_cost: number;
   weight?: number;
-  dimensions?: {
-    length: number;
-    width: number;
-    height: number;
-    unit: string;
-  };
+  dimensions?: ShipmentDimensions;
   pickup_address: Address;
   delivery_address: Address;
   special_instructions?: string;
@@ -255,7 +254,7 @@ const ShipmentForm: React.FC<ShipmentFormProps> = ({
     });
   };
 
-  const handleDimensionsChange = (field: keyof typeof formData.dimensions, value: string) => {
+  const handleDimensionsChange = (field: keyof ShipmentDimensions, value: string) => {
     const dimensions = formData.dimensions || {
       length: 0,
       width: 0,
@@ -371,234 +370,242 @@ const ShipmentForm: React.FC<ShipmentFormProps> = ({
               </Alert>
             )}
             
-            <Grid container spacing={3} sx={{ mt: 1 }}>
-              <Grid item xs={12}>
+            <div className="mt-4 space-y-6">
+              <div className="w-full">
                 <Typography variant="subtitle1" gutterBottom>
                   Basic Information
                 </Typography>
-              </Grid>
+              </div>
               
-              <Grid item xs={12} md={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Order</InputLabel>
-                  <Select
-                    name="order_id"
-                    value={formData.order_id.toString()}
-                    onChange={(e) => {
-                      handleSelectChange(e);
-                      handleOrderSelect(parseInt(e.target.value));
-                    }}
-                    label="Order"
-                    disabled={!!shipmentId} // Disable changing order for existing shipments
-                  >
-                    <MenuItem value="0">Select an order</MenuItem>
-                    {orders.map((order) => (
-                      <MenuItem key={order.id} value={order.id.toString()}>
-                        #{order.order_number} - {order.customer_name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              
-              <Grid item xs={12} md={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Logistics Provider</InputLabel>
-                  <Select
-                    name="logistics_provider_id"
-                    value={formData.logistics_provider_id.toString()}
-                    onChange={handleSelectChange}
-                    label="Logistics Provider"
-                  >
-                    <MenuItem value="0">Select a provider</MenuItem>
-                    {providers.map((provider) => (
-                      <MenuItem key={provider.id} value={provider.id.toString()}>
-                        {provider.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              
-              <Grid item xs={12} md={6}>
-                <TextField
-                  name="tracking_number"
-                  label="Tracking Number"
-                  value={formData.tracking_number || ''}
-                  onChange={handleChange}
-                  fullWidth
-                  disabled={!shipmentId} // Auto-generated for new shipments
-                  helperText={!shipmentId ? "Will be auto-generated" : ""}
-                />
-              </Grid>
-              
-              <Grid item xs={12} md={6}>
-                <TextField
-                  name="waybill_number"
-                  label="Waybill Number"
-                  value={formData.waybill_number || ''}
-                  onChange={handleChange}
-                  fullWidth
-                />
-              </Grid>
-              
-              <Grid item xs={12} md={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Status</InputLabel>
-                  <Select
-                    name="status"
-                    value={formData.status}
-                    onChange={handleSelectChange}
-                    label="Status"
-                  >
-                    <MenuItem value="pending">Pending</MenuItem>
-                    <MenuItem value="processing">Processing</MenuItem>
-                    <MenuItem value="picked_up">Picked Up</MenuItem>
-                    <MenuItem value="in_transit">In Transit</MenuItem>
-                    <MenuItem value="out_for_delivery">Out for Delivery</MenuItem>
-                    <MenuItem value="delivered">Delivered</MenuItem>
-                    <MenuItem value="failed">Failed</MenuItem>
-                    <MenuItem value="returned">Returned</MenuItem>
-                    <MenuItem value="cancelled">Cancelled</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              
-              <Grid item xs={12} md={6}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label="Estimated Delivery Date"
-                    value={formData.estimated_delivery_date}
-                    onChange={handleDateChange}
-                    slotProps={{ textField: { fullWidth: true } }}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="w-full">
+                  <FormControl fullWidth>
+                    <InputLabel>Order</InputLabel>
+                    <Select
+                      name="order_id"
+                      value={formData.order_id.toString()}
+                      onChange={(e) => {
+                        handleSelectChange(e);
+                        handleOrderSelect(parseInt(e.target.value));
+                      }}
+                      label="Order"
+                      disabled={!!shipmentId} // Disable changing order for existing shipments
+                    >
+                      <MenuItem value="0">Select an order</MenuItem>
+                      {orders.map((order) => (
+                        <MenuItem key={order.id} value={order.id.toString()}>
+                          #{order.order_number} - {order.customer_name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
+                
+                <div className="w-full">
+                  <FormControl fullWidth>
+                    <InputLabel>Logistics Provider</InputLabel>
+                    <Select
+                      name="logistics_provider_id"
+                      value={formData.logistics_provider_id.toString()}
+                      onChange={handleSelectChange}
+                      label="Logistics Provider"
+                    >
+                      <MenuItem value="0">Select a provider</MenuItem>
+                      {providers.map((provider) => (
+                        <MenuItem key={provider.id} value={provider.id.toString()}>
+                          {provider.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    name="tracking_number"
+                    label="Tracking Number"
+                    value={formData.tracking_number || ''}
+                    onChange={handleChange}
+                    fullWidth
+                    disabled={!shipmentId} // Auto-generated for new shipments
+                    helperText={!shipmentId ? "Will be auto-generated" : ""}
                   />
-                </LocalizationProvider>
-              </Grid>
-              
-              <Grid item xs={12} md={4}>
-                <TextField
-                  name="shipping_cost"
-                  label="Shipping Cost"
-                  type="number"
-                  value={formData.shipping_cost}
-                  onChange={handleChange}
-                  fullWidth
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">₹</InputAdornment>,
-                  }}
-                />
-              </Grid>
-              
-              <Grid item xs={12} md={4}>
-                <TextField
-                  name="weight"
-                  label="Weight (kg)"
-                  type="number"
-                  value={formData.weight || ''}
-                  onChange={handleChange}
-                  fullWidth
-                />
-              </Grid>
-              
-              <Grid item xs={12} md={4}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name="signature_required"
-                      checked={formData.signature_required}
-                      onChange={handleCheckboxChange}
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    name="waybill_number"
+                    label="Waybill Number"
+                    value={formData.waybill_number || ''}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <FormControl fullWidth>
+                    <InputLabel>Status</InputLabel>
+                    <Select
+                      name="status"
+                      value={formData.status}
+                      onChange={handleSelectChange}
+                      label="Status"
+                    >
+                      <MenuItem value="pending">Pending</MenuItem>
+                      <MenuItem value="processing">Processing</MenuItem>
+                      <MenuItem value="picked_up">Picked Up</MenuItem>
+                      <MenuItem value="in_transit">In Transit</MenuItem>
+                      <MenuItem value="out_for_delivery">Out for Delivery</MenuItem>
+                      <MenuItem value="delivered">Delivered</MenuItem>
+                      <MenuItem value="failed">Failed</MenuItem>
+                      <MenuItem value="returned">Returned</MenuItem>
+                      <MenuItem value="cancelled">Cancelled</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+                
+                <div className="w-full">
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      label="Estimated Delivery Date"
+                      value={formData.estimated_delivery_date}
+                      onChange={handleDateChange}
+                      slotProps={{ textField: { fullWidth: true } }}
                     />
-                  }
-                  label="Signature Required"
-                />
-              </Grid>
+                  </LocalizationProvider>
+                </div>
+              </div>
               
-              <Grid item xs={12}>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="w-full">
+                  <TextField
+                    name="shipping_cost"
+                    label="Shipping Cost"
+                    type="number"
+                    value={formData.shipping_cost}
+                    onChange={handleChange}
+                    fullWidth
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+                    }}
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    name="weight"
+                    label="Weight (kg)"
+                    type="number"
+                    value={formData.weight || ''}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name="signature_required"
+                        checked={formData.signature_required}
+                        onChange={handleCheckboxChange}
+                      />
+                    }
+                    label="Signature Required"
+                  />
+                </div>
+              </div>
+              
+              <div className="w-full">
                 <Typography variant="subtitle1" gutterBottom>
                   Dimensions
                 </Typography>
-              </Grid>
+              </div>
               
-              <Grid item xs={12} md={3}>
-                <TextField
-                  label="Length"
-                  type="number"
-                  value={formData.dimensions?.length || ''}
-                  onChange={(e) => handleDimensionsChange('length', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="w-full">
+                  <TextField
+                    label="Length"
+                    type="number"
+                    value={formData.dimensions?.length || ''}
+                    onChange={(e) => handleDimensionsChange('length', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    label="Width"
+                    type="number"
+                    value={formData.dimensions?.width || ''}
+                    onChange={(e) => handleDimensionsChange('width', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    label="Height"
+                    type="number"
+                    value={formData.dimensions?.height || ''}
+                    onChange={(e) => handleDimensionsChange('height', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <FormControl fullWidth>
+                    <InputLabel>Unit</InputLabel>
+                    <Select
+                      value={formData.dimensions?.unit || 'cm'}
+                      onChange={(e) => handleDimensionsChange('unit', e.target.value)}
+                      label="Unit"
+                    >
+                      <MenuItem value="cm">cm</MenuItem>
+                      <MenuItem value="in">in</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+              </div>
               
-              <Grid item xs={12} md={3}>
-                <TextField
-                  label="Width"
-                  type="number"
-                  value={formData.dimensions?.width || ''}
-                  onChange={(e) => handleDimensionsChange('width', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              
-              <Grid item xs={12} md={3}>
-                <TextField
-                  label="Height"
-                  type="number"
-                  value={formData.dimensions?.height || ''}
-                  onChange={(e) => handleDimensionsChange('height', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              
-              <Grid item xs={12} md={3}>
-                <FormControl fullWidth>
-                  <InputLabel>Unit</InputLabel>
-                  <Select
-                    value={formData.dimensions?.unit || 'cm'}
-                    onChange={(e) => handleDimensionsChange('unit', e.target.value)}
-                    label="Unit"
-                  >
-                    <MenuItem value="cm">cm</MenuItem>
-                    <MenuItem value="in">in</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              
-              <Grid item xs={12}>
+              <div className="w-full">
                 <Divider sx={{ my: 2 }} />
                 <Typography variant="subtitle1" gutterBottom>
                   Insurance
                 </Typography>
-              </Grid>
+              </div>
               
-              <Grid item xs={12} md={6}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name="is_insured"
-                      checked={formData.is_insured}
-                      onChange={handleCheckboxChange}
-                    />
-                  }
-                  label="Insure Shipment"
-                />
-              </Grid>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="w-full">
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name="is_insured"
+                        checked={formData.is_insured}
+                        onChange={handleCheckboxChange}
+                      />
+                    }
+                    label="Insure Shipment"
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    name="insurance_amount"
+                    label="Insurance Amount"
+                    type="number"
+                    value={formData.insurance_amount}
+                    onChange={handleChange}
+                    fullWidth
+                    disabled={!formData.is_insured}
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+                    }}
+                  />
+                </div>
+              </div>
               
-              <Grid item xs={12} md={6}>
-                <TextField
-                  name="insurance_amount"
-                  label="Insurance Amount"
-                  type="number"
-                  value={formData.insurance_amount}
-                  onChange={handleChange}
-                  fullWidth
-                  disabled={!formData.is_insured}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">₹</InputAdornment>,
-                  }}
-                />
-              </Grid>
-              
-              <Grid item xs={12}>
+              <div className="w-full">
                 <TextField
                   name="special_instructions"
                   label="Special Instructions"
@@ -608,166 +615,178 @@ const ShipmentForm: React.FC<ShipmentFormProps> = ({
                   multiline
                   rows={2}
                 />
-              </Grid>
+              </div>
               
-              <Grid item xs={12}>
+              <div className="w-full">
                 <Divider sx={{ my: 2 }} />
                 <Typography variant="subtitle1" gutterBottom>
                   Pickup Address
                 </Typography>
-              </Grid>
+              </div>
               
-              <Grid item xs={12} md={6}>
-                <TextField
-                  label="Contact Name"
-                  value={formData.pickup_address.contact_name}
-                  onChange={(e) => handleAddressChange('pickup_address', 'contact_name', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="w-full">
+                  <TextField
+                    label="Contact Name"
+                    value={formData.pickup_address.contact_name}
+                    onChange={(e) => handleAddressChange('pickup_address', 'contact_name', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    label="Contact Phone"
+                    value={formData.pickup_address.contact_phone || ''}
+                    onChange={(e) => handleAddressChange('pickup_address', 'contact_phone', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+              </div>
               
-              <Grid item xs={12} md={6}>
-                <TextField
-                  label="Contact Phone"
-                  value={formData.pickup_address.contact_phone || ''}
-                  onChange={(e) => handleAddressChange('pickup_address', 'contact_phone', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              
-              <Grid item xs={12}>
+              <div className="w-full">
                 <TextField
                   label="Street Address"
                   value={formData.pickup_address.street}
                   onChange={(e) => handleAddressChange('pickup_address', 'street', e.target.value)}
                   fullWidth
                 />
-              </Grid>
+              </div>
               
-              <Grid item xs={12} md={4}>
-                <TextField
-                  label="City"
-                  value={formData.pickup_address.city}
-                  onChange={(e) => handleAddressChange('pickup_address', 'city', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="w-full">
+                  <TextField
+                    label="City"
+                    value={formData.pickup_address.city}
+                    onChange={(e) => handleAddressChange('pickup_address', 'city', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    label="State"
+                    value={formData.pickup_address.state}
+                    onChange={(e) => handleAddressChange('pickup_address', 'state', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    label="Postal Code"
+                    value={formData.pickup_address.postal_code}
+                    onChange={(e) => handleAddressChange('pickup_address', 'postal_code', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+              </div>
               
-              <Grid item xs={12} md={4}>
-                <TextField
-                  label="State"
-                  value={formData.pickup_address.state}
-                  onChange={(e) => handleAddressChange('pickup_address', 'state', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="w-full">
+                  <TextField
+                    label="Country"
+                    value={formData.pickup_address.country}
+                    onChange={(e) => handleAddressChange('pickup_address', 'country', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    label="Contact Email"
+                    value={formData.pickup_address.contact_email || ''}
+                    onChange={(e) => handleAddressChange('pickup_address', 'contact_email', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+              </div>
               
-              <Grid item xs={12} md={4}>
-                <TextField
-                  label="Postal Code"
-                  value={formData.pickup_address.postal_code}
-                  onChange={(e) => handleAddressChange('pickup_address', 'postal_code', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              
-              <Grid item xs={12} md={6}>
-                <TextField
-                  label="Country"
-                  value={formData.pickup_address.country}
-                  onChange={(e) => handleAddressChange('pickup_address', 'country', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              
-              <Grid item xs={12} md={6}>
-                <TextField
-                  label="Contact Email"
-                  value={formData.pickup_address.contact_email || ''}
-                  onChange={(e) => handleAddressChange('pickup_address', 'contact_email', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              
-              <Grid item xs={12}>
+              <div className="w-full">
                 <Divider sx={{ my: 2 }} />
                 <Typography variant="subtitle1" gutterBottom>
                   Delivery Address
                 </Typography>
-              </Grid>
+              </div>
               
-              <Grid item xs={12} md={6}>
-                <TextField
-                  label="Contact Name"
-                  value={formData.delivery_address.contact_name}
-                  onChange={(e) => handleAddressChange('delivery_address', 'contact_name', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="w-full">
+                  <TextField
+                    label="Contact Name"
+                    value={formData.delivery_address.contact_name}
+                    onChange={(e) => handleAddressChange('delivery_address', 'contact_name', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    label="Contact Phone"
+                    value={formData.delivery_address.contact_phone || ''}
+                    onChange={(e) => handleAddressChange('delivery_address', 'contact_phone', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+              </div>
               
-              <Grid item xs={12} md={6}>
-                <TextField
-                  label="Contact Phone"
-                  value={formData.delivery_address.contact_phone || ''}
-                  onChange={(e) => handleAddressChange('delivery_address', 'contact_phone', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              
-              <Grid item xs={12}>
+              <div className="w-full">
                 <TextField
                   label="Street Address"
                   value={formData.delivery_address.street}
                   onChange={(e) => handleAddressChange('delivery_address', 'street', e.target.value)}
                   fullWidth
                 />
-              </Grid>
+              </div>
               
-              <Grid item xs={12} md={4}>
-                <TextField
-                  label="City"
-                  value={formData.delivery_address.city}
-                  onChange={(e) => handleAddressChange('delivery_address', 'city', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="w-full">
+                  <TextField
+                    label="City"
+                    value={formData.delivery_address.city}
+                    onChange={(e) => handleAddressChange('delivery_address', 'city', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    label="State"
+                    value={formData.delivery_address.state}
+                    onChange={(e) => handleAddressChange('delivery_address', 'state', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    label="Postal Code"
+                    value={formData.delivery_address.postal_code}
+                    onChange={(e) => handleAddressChange('delivery_address', 'postal_code', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+              </div>
               
-              <Grid item xs={12} md={4}>
-                <TextField
-                  label="State"
-                  value={formData.delivery_address.state}
-                  onChange={(e) => handleAddressChange('delivery_address', 'state', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              
-              <Grid item xs={12} md={4}>
-                <TextField
-                  label="Postal Code"
-                  value={formData.delivery_address.postal_code}
-                  onChange={(e) => handleAddressChange('delivery_address', 'postal_code', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              
-              <Grid item xs={12} md={6}>
-                <TextField
-                  label="Country"
-                  value={formData.delivery_address.country}
-                  onChange={(e) => handleAddressChange('delivery_address', 'country', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              
-              <Grid item xs={12} md={6}>
-                <TextField
-                  label="Contact Email"
-                  value={formData.delivery_address.contact_email || ''}
-                  onChange={(e) => handleAddressChange('delivery_address', 'contact_email', e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-            </Grid>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="w-full">
+                  <TextField
+                    label="Country"
+                    value={formData.delivery_address.country}
+                    onChange={(e) => handleAddressChange('delivery_address', 'country', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TextField
+                    label="Contact Email"
+                    value={formData.delivery_address.contact_email || ''}
+                    onChange={(e) => handleAddressChange('delivery_address', 'contact_email', e.target.value)}
+                    fullWidth
+                  />
+                </div>
+              </div>
+            </div>
           </>
         )}
       </DialogContent>

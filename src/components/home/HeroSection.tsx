@@ -21,7 +21,7 @@ const HeroSection = () => {
         <div className="grid md:grid-cols-2 gap-4 md:gap-8 items-center">
           <div className="order-2 md:order-1 text-center md:text-left">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 md:mb-4">
-              India's Leading B2C Marketplace
+              India&apos;s Leading B2C Marketplace
             </h1>
             <p className="text-lg sm:text-xl mb-4 md:mb-8">
               Connect with thousands of verified suppliers and buyers across India

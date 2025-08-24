@@ -1,47 +1,47 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { apiRequest } from '../../utils/apiRequest';
 
-// Mock data for the dashboard
-const mockStats = {
-  totalUsers: 1248,
-  totalProducts: 3567,
-  totalOrders: 892,
-  totalRevenue: 1245789,
-  pendingApprovals: 24,
-  activeUsers: 876,
-  recentOrders: [
-    { id: 'ORD-9385', customer: 'Acme Corp', date: '2023-11-15', total: 12500, status: 'completed' },
-    { id: 'ORD-9384', customer: 'XYZ Industries', date: '2023-11-15', total: 8750, status: 'processing' },
-    { id: 'ORD-9383', customer: 'Global Traders', date: '2023-11-14', total: 5200, status: 'processing' },
-    { id: 'ORD-9382', customer: 'Tech Solutions', date: '2023-11-14', total: 9300, status: 'completed' },
-    { id: 'ORD-9381', customer: 'Mega Distributors', date: '2023-11-13', total: 15800, status: 'pending' },
-  ],
-  topProducts: [
-    { id: 1, name: 'Industrial Machinery Part XYZ', sales: 145, revenue: 1812500 },
-    { id: 2, name: 'Heavy Duty Electric Motor', sales: 98, revenue: 980000 },
-    { id: 3, name: 'Precision Measuring Tool', sales: 87, revenue: 435000 },
-    { id: 4, name: 'Industrial Safety Equipment', sales: 76, revenue: 380000 },
-  ],
-  revenueByMonth: [
-    { month: 'Jan', revenue: 850000 },
-    { month: 'Feb', revenue: 920000 },
-    { month: 'Mar', revenue: 880000 },
-    { month: 'Apr', revenue: 950000 },
-    { month: 'May', revenue: 1050000 },
-    { month: 'Jun', revenue: 980000 },
-    { month: 'Jul', revenue: 1100000 },
-    { month: 'Aug', revenue: 1200000 },
-    { month: 'Sep', revenue: 1150000 },
-    { month: 'Oct', revenue: 1300000 },
-    { month: 'Nov', revenue: 1250000 },
-    { month: 'Dec', revenue: 0 }, // Current month
-  ]
-};
+// Define interfaces for dashboard data
+interface DashboardStats {
+  totalUsers: number;
+  totalProducts: number;
+  totalOrders: number;
+  totalRevenue: number;
+  pendingApprovals: number;
+  activeUsers: number;
+}
+
+interface Order {
+  id: string;
+  customer: string;
+  date: string;
+  total: number;
+  status: string;
+}
+
+interface Product {
+  id: number;
+  name: string;
+  sales: number;
+  revenue: number;
+}
+
+interface RevenueData {
+  month: string;
+  revenue: number;
+}
 
 export default function AdminDashboard() {
   const [timeRange, setTimeRange] = useState('month');
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
+  const [topProducts, setTopProducts] = useState<Product[]>([]);
+  const [revenueByMonth, setRevenueByMonth] = useState<RevenueData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
   // Format currency
   const formatCurrency = (amount: number) => {
@@ -51,6 +51,62 @@ export default function AdminDashboard() {
       maximumFractionDigits: 0
     }).format(amount);
   };
+
+  // Fetch dashboard data
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        // Fetch dashboard stats
+        const dashboardStats = await apiRequest<DashboardStats>('/api/admin/dashboard/stats');
+        setStats(dashboardStats);
+        
+        // Fetch recent orders
+        const orders = await apiRequest<Order[]>('/api/admin/orders/recent?limit=5');
+        setRecentOrders(orders || []);
+        
+        // Fetch top products
+        const products = await apiRequest<Product[]>('/api/admin/products/top?limit=4');
+        setTopProducts(products || []);
+        
+        // Fetch revenue data
+        const revenue = await apiRequest<RevenueData[]>(`/api/admin/revenue?timeRange=${timeRange}`);
+        setRevenueByMonth(revenue || []);
+      } catch (err) {
+        console.error('Error fetching dashboard data:', err);
+        setError('Failed to load dashboard data. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchDashboardData();
+  }, [timeRange]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error || !stats) {
+    return (
+      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong className="font-bold">Error!</strong>
+        <span className="block sm:inline"> {error || 'Failed to load dashboard data'}</span>
+        <button 
+          onClick={() => window.location.reload()}
+          className="mt-3 bg-red-100 hover:bg-red-200 text-red-800 font-bold py-2 px-4 rounded"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -65,7 +121,7 @@ export default function AdminDashboard() {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Users</p>
-              <h3 className="text-2xl font-bold mt-1">{mockStats.totalUsers}</h3>
+              <h3 className="text-2xl font-bold mt-1">{stats.totalUsers}</h3>
             </div>
             <div className="p-2 bg-blue-50 rounded-md">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,7 +144,7 @@ export default function AdminDashboard() {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Products</p>
-              <h3 className="text-2xl font-bold mt-1">{mockStats.totalProducts}</h3>
+              <h3 className="text-2xl font-bold mt-1">{stats.totalProducts}</h3>
             </div>
             <div className="p-2 bg-green-50 rounded-md">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -111,7 +167,7 @@ export default function AdminDashboard() {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Orders</p>
-              <h3 className="text-2xl font-bold mt-1">{mockStats.totalOrders}</h3>
+              <h3 className="text-2xl font-bold mt-1">{stats.totalOrders}</h3>
             </div>
             <div className="p-2 bg-purple-50 rounded-md">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -134,7 +190,7 @@ export default function AdminDashboard() {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-              <h3 className="text-2xl font-bold mt-1">{formatCurrency(mockStats.totalRevenue)}</h3>
+              <h3 className="text-2xl font-bold mt-1">{formatCurrency(stats.totalRevenue)}</h3>
             </div>
             <div className="p-2 bg-yellow-50 rounded-md">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -162,7 +218,7 @@ export default function AdminDashboard() {
               <h3 className="font-bold text-lg">Pending Approvals</h3>
               <p className="text-gray-500 text-sm">Products waiting for review</p>
             </div>
-            <span className="text-2xl font-bold text-yellow-500">{mockStats.pendingApprovals}</span>
+            <span className="text-2xl font-bold text-yellow-500">{stats.pendingApprovals}</span>
           </div>
           <div className="mt-4">
             <Link href="/admin/products/approvals" className="text-sm text-primary hover:text-primary-dark font-medium">
@@ -177,7 +233,7 @@ export default function AdminDashboard() {
               <h3 className="font-bold text-lg">Active Users</h3>
               <p className="text-gray-500 text-sm">Users active in last 30 days</p>
             </div>
-            <span className="text-2xl font-bold text-green-500">{mockStats.activeUsers}</span>
+            <span className="text-2xl font-bold text-green-500">{stats.activeUsers}</span>
           </div>
           <div className="mt-4">
             <Link href="/admin/users" className="text-sm text-primary hover:text-primary-dark font-medium">
@@ -236,27 +292,35 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {mockStats.recentOrders.map((order) => (
-                <tr key={order.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.customer}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.date}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(order.total)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${order.status === 'completed' ? 'bg-green-100 text-green-800' : 
-                        order.status === 'processing' ? 'bg-blue-100 text-blue-800' : 
-                        'bg-yellow-100 text-yellow-800'}`}>
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <Link href={`/admin/orders/${order.id}`} className="text-primary hover:text-primary-dark">
-                      View
-                    </Link>
+              {recentOrders.length > 0 ? (
+                recentOrders.map((order) => (
+                  <tr key={order.id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.id}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.customer}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.date}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(order.total)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                        ${order.status === 'completed' ? 'bg-green-100 text-green-800' : 
+                          order.status === 'processing' ? 'bg-blue-100 text-blue-800' : 
+                          'bg-yellow-100 text-yellow-800'}`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <Link href={`/admin/orders/${order.id}`} className="text-primary hover:text-primary-dark">
+                        View
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">
+                    No recent orders found
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -283,18 +347,26 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {mockStats.topProducts.map((product) => (
-                <tr key={product.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{product.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.sales} units</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(product.revenue)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <Link href={`/admin/products/${product.id}`} className="text-primary hover:text-primary-dark">
-                      View
-                    </Link>
+              {topProducts.length > 0 ? (
+                topProducts.map((product) => (
+                  <tr key={product.id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{product.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.sales} units</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(product.revenue)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <Link href={`/admin/products/${product.id}`} className="text-primary hover:text-primary-dark">
+                        View
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                    No top products found
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

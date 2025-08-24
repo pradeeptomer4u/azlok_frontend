@@ -114,27 +114,31 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
           // Found a product matching the slug
           const apiProduct = searchResponse[0];
           
-          // Transform API product to enhanced product with UI-specific fields
-          const enhancedProduct: EnhancedProduct = {
-            ...apiProduct,
-            // Generate multiple images or use placeholder if none available
-            images: apiProduct.image_url ? 
-              [apiProduct.image_url, apiProduct.image_url, apiProduct.image_url] : 
-              ['/globe.svg', '/globe.svg', '/globe.svg'],
+          // Transform API product to detailed product with UI-specific fields
+          const detailedProduct: DetailedProduct = {
+            id: apiProduct.id,
+            name: apiProduct.name,
+            image: apiProduct.image_url || '/globe.svg',
+            slug: slug, // Use the slug from props
+            price: apiProduct.price,
             minOrder: 1, // Default minimum order
             seller: {
+              id: 1,
               name: 'Azlok Enterprises',
               logo: '/logo.png',
               location: 'Mumbai, India',
               memberSince: '2020',
-              responseRate: '98%',
+              responseRate: 98, // Changed from string to number
               responseTime: '< 24 hours',
               verified: true,
-              rating: apiProduct.rating || 4.5,
-              id: 1
+              rating: apiProduct.rating || 4.5
             },
+            location: 'Mumbai, India',
             category: apiProduct.category_name || 'Uncategorized',
             subcategory: 'General',
+            rating: apiProduct.rating || 4.5,
+            isVerified: true,
+            description: apiProduct.description || 'No description available',
             // Generate specifications from available data
             specifications: [
               { name: 'SKU', value: apiProduct.sku || 'N/A' },
@@ -144,7 +148,10 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               { name: 'Country of Origin', value: 'India' },
               { name: 'Brand', value: apiProduct.brand || 'Azlok' }
             ],
-            // Default features and applications
+            // Generate multiple images or use placeholder if none available
+            images: apiProduct.image_url ? 
+              [apiProduct.image_url, apiProduct.image_url, apiProduct.image_url] : 
+              ['/globe.svg', '/globe.svg', '/globe.svg'],
             features: [
               'Premium quality',
               'Durable construction',
@@ -159,51 +166,48 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               'Institutional settings',
               'General purpose'
             ],
-            moq: 1,
-            leadTime: '7-10 days',
-            paymentTerms: 'T/T, L/C, Western Union, PayPal',
             packaging: 'Standard export packaging',
-            relatedProducts: []
+            leadTime: '7-10 days',
+            paymentTerms: 'T/T, L/C, Western Union, PayPal'
           };
           
-          setProduct(enhancedProduct);
+          setProduct(detailedProduct);
         } else {
           // If no product found, create a default product with the slug as name
-          const defaultProduct: EnhancedProduct = {
+          const defaultProduct: DetailedProduct = {
             id: 0,
             name: slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
             description: 'Product details not available.',
             price: 0,
-            stock_quantity: 0,
-            sku: 'N/A',
-            category_id: 0,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            images: ['/globe.svg', '/globe.svg', '/globe.svg'],
+            image: '/globe.svg',
+            slug: slug,
             minOrder: 1,
             seller: {
+              id: 0,
               name: 'Azlok Enterprises',
               logo: '/logo.png',
               location: 'Mumbai, India',
               memberSince: '2020',
-              responseRate: '98%',
+              responseRate: 98,
               responseTime: '< 24 hours',
               verified: true,
               rating: 4.5
             },
+            location: 'Mumbai, India',
             category: 'Uncategorized',
             subcategory: 'General',
+            rating: 4.5,
+            isVerified: true,
             specifications: [
               { name: 'SKU', value: 'N/A' },
               { name: 'Country of Origin', value: 'India' }
             ],
+            images: ['/globe.svg', '/globe.svg', '/globe.svg'],
             features: ['Information not available'],
             applications: ['Information not available'],
-            moq: 1,
-            leadTime: '7-10 days',
-            paymentTerms: 'T/T, L/C',
             packaging: 'Standard packaging',
-            relatedProducts: []
+            leadTime: '7-10 days',
+            paymentTerms: 'T/T, L/C'
           };
           
           setProduct(defaultProduct);
@@ -216,33 +220,32 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
           name: 'Product Not Found',
           description: 'Unable to load product details. Please try again later.',
           price: 0,
-          stock_quantity: 0,
-          sku: 'ERROR',
-          category_id: 0,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          images: ['/globe.svg'],
+          image: '/globe.svg',
+          slug: slug,
           minOrder: 1,
           seller: {
+            id: 0,
             name: 'Azlok Enterprises',
             logo: '/logo.png',
             location: 'Mumbai, India',
             memberSince: '2020',
-            responseRate: '98%',
+            responseRate: 98,
             responseTime: '< 24 hours',
             verified: true,
             rating: 4.5
           },
+          location: 'Error',
           category: 'Error',
           subcategory: 'Error',
+          rating: 0,
+          isVerified: false,
           specifications: [],
+          images: ['/globe.svg'],
           features: [],
           applications: [],
-          moq: 1,
-          leadTime: 'N/A',
-          paymentTerms: 'N/A',
           packaging: 'N/A',
-          relatedProducts: []
+          leadTime: 'N/A',
+          paymentTerms: 'N/A'
         });
       } finally {
         setIsLoading(false);
@@ -789,14 +792,14 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
             >
               <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Features</h3>
               <ul className="list-disc pl-4 sm:pl-5 mb-5 sm:mb-6 text-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2 text-sm sm:text-base">
-                {product.features.map((feature: string, index: number) => (
+                {product.features?.map((feature: string, index: number) => (
                   <li key={index} className="ml-1">{feature}</li>
                 ))}
               </ul>
 
               <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Applications</h3>
               <ul className="list-disc pl-4 sm:pl-5 text-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2 text-sm sm:text-base">
-                {product.applications.map((application: string, index: number) => (
+                {product.applications?.map((application: string, index: number) => (
                   <li key={index} className="ml-1">{application}</li>
                 ))}
               </ul>
@@ -835,7 +838,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
             <div className="flex items-center">
               <div className="relative h-12 w-12 sm:h-16 sm:w-16 bg-gray-100 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
                 <Image
-                  src={product.seller.logo}
+                  src={product.seller.logo || '/logo.png'}
                   alt={product.seller.name}
                   fill
                   className="object-contain p-2"

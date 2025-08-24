@@ -12,7 +12,7 @@ import {
   CircularProgress,
   Alert,
   Box,
-  Grid,
+  Stack,
   SelectChangeEvent
 } from '@mui/material';
 import { PaymentMethod, PaymentMethodType, PaymentMethodCreate, PaymentMethodUpdate } from '../../types/payment';
@@ -200,7 +200,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
       case PaymentMethodType.DEBIT_CARD:
         return (
           <>
-            <Grid item xs={12} sm={6}>
+            <Stack sx={{ width: { xs: '100%', sm: '50%' } }} spacing={2}>
               <TextField
                 fullWidth
                 label="Last 4 Digits"
@@ -212,8 +212,8 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
                 inputProps={{ maxLength: 4 }}
                 disabled={!!paymentMethod}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%' } }} spacing={2}>
               <TextField
                 fullWidth
                 label="Cardholder Name"
@@ -223,39 +223,41 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
                 error={!!errors.card_holder_name}
                 helperText={errors.card_holder_name}
               />
-            </Grid>
-            <Grid item xs={6} sm={3}>
-              <TextField
-                fullWidth
-                label="Expiry Month"
-                name="card_expiry_month"
-                placeholder="MM"
-                value={formData.card_expiry_month || ''}
-                onChange={handleChange}
-                error={!!errors.card_expiry_month}
-                helperText={errors.card_expiry_month}
-                inputProps={{ maxLength: 2 }}
-              />
-            </Grid>
-            <Grid item xs={6} sm={3}>
-              <TextField
-                fullWidth
-                label="Expiry Year"
-                name="card_expiry_year"
-                placeholder="YYYY"
-                value={formData.card_expiry_year || ''}
-                onChange={handleChange}
-                error={!!errors.card_expiry_year}
-                helperText={errors.card_expiry_year}
-                inputProps={{ maxLength: 4 }}
-              />
-            </Grid>
+            </Stack>
+            <Stack direction="row" spacing={2} sx={{ width: '100%' }}>
+              <Stack sx={{ width: { xs: '50%', sm: '25%' } }}>
+                <TextField
+                  fullWidth
+                  label="Expiry Month"
+                  name="card_expiry_month"
+                  placeholder="MM"
+                  value={formData.card_expiry_month || ''}
+                  onChange={handleChange}
+                  error={!!errors.card_expiry_month}
+                  helperText={errors.card_expiry_month}
+                  inputProps={{ maxLength: 2 }}
+                />
+              </Stack>
+              <Stack sx={{ width: { xs: '50%', sm: '25%' } }}>
+                <TextField
+                  fullWidth
+                  label="Expiry Year"
+                  name="card_expiry_year"
+                  placeholder="YYYY"
+                  value={formData.card_expiry_year || ''}
+                  onChange={handleChange}
+                  error={!!errors.card_expiry_year}
+                  helperText={errors.card_expiry_year}
+                  inputProps={{ maxLength: 4 }}
+                />
+              </Stack>
+            </Stack>
           </>
         );
       
       case PaymentMethodType.UPI:
         return (
-          <Grid item xs={12}>
+          <Stack sx={{ width: '100%' }} spacing={2}>
             <TextField
               fullWidth
               label="UPI ID"
@@ -265,13 +267,13 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
               error={!!errors.upi_id}
               helperText={errors.upi_id}
             />
-          </Grid>
+          </Stack>
         );
       
       case PaymentMethodType.BANK_TRANSFER:
         return (
           <>
-            <Grid item xs={12}>
+            <Stack sx={{ width: '100%' }} spacing={2}>
               <TextField
                 fullWidth
                 label="Bank Name"
@@ -281,8 +283,8 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
                 error={!!errors.bank_name}
                 helperText={errors.bank_name}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%' } }} spacing={2}>
               <TextField
                 fullWidth
                 label="Last 4 Digits of Account"
@@ -294,8 +296,8 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
                 inputProps={{ maxLength: 4 }}
                 disabled={!!paymentMethod}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%' } }} spacing={2}>
               <TextField
                 fullWidth
                 label="Account Holder Name"
@@ -305,14 +307,14 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
                 error={!!errors.account_holder_name}
                 helperText={errors.account_holder_name}
               />
-            </Grid>
+            </Stack>
           </>
         );
       
       case PaymentMethodType.WALLET:
         return (
           <>
-            <Grid item xs={12} sm={6}>
+            <Stack sx={{ width: { xs: '100%', sm: '50%' } }} spacing={2}>
               <TextField
                 fullWidth
                 label="Wallet Provider"
@@ -322,8 +324,8 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
                 error={!!errors.wallet_provider}
                 helperText={errors.wallet_provider}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Stack>
+            <Stack sx={{ width: { xs: '100%', sm: '50%' } }} spacing={2}>
               <TextField
                 fullWidth
                 label="Wallet ID"
@@ -333,7 +335,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
                 error={!!errors.wallet_id}
                 helperText={errors.wallet_id}
               />
-            </Grid>
+            </Stack>
           </>
         );
       
@@ -350,8 +352,8 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
         </Alert>
       )}
       
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+      <Stack spacing={2} width="100%">
+        <Stack sx={{ width: '100%' }}>
           <FormControl fullWidth error={!!errors.method_type}>
             <InputLabel id="payment-method-type-label">Payment Method Type</InputLabel>
             <Select
@@ -371,9 +373,9 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
             </Select>
             {errors.method_type && <FormHelperText>{errors.method_type}</FormHelperText>}
           </FormControl>
-        </Grid>
+        </Stack>
         
-        <Grid item xs={12}>
+        <Stack sx={{ width: '100%' }}>
           <TextField
             fullWidth
             label="Provider"
@@ -383,11 +385,11 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
             error={!!errors.provider}
             helperText={errors.provider || 'E.g., Visa, Mastercard, PayTM, PhonePe'}
           />
-        </Grid>
+        </Stack>
         
         {renderMethodSpecificFields()}
         
-        <Grid item xs={12}>
+        <Stack sx={{ width: '100%' }}>
           <FormControlLabel
             control={
               <Checkbox
@@ -399,8 +401,8 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
             }
             label="Set as default payment method"
           />
-        </Grid>
-      </Grid>
+        </Stack>
+      </Stack>
       
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, gap: 1 }}>
         <Button onClick={onCancel}>

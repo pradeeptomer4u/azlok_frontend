@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Order } from '@/types/order';
 import { Invoice } from '@/types/invoice';
 import { formatDate, formatCurrency } from '@/utils/formatters';
@@ -15,11 +14,11 @@ const fetchRecentOrders = async (): Promise<Order[]> => {
 
 const fetchRecentInvoices = async (): Promise<Invoice[]> => {
   // Placeholder for API call
+  // Mock data that matches the Invoice interface
   return [];
 };
 
 const AccountDashboard = () => {
-  const router = useRouter();
   const [recentOrders, setRecentOrders] = useState<Order[]>([]);
   const [recentInvoices, setRecentInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
@@ -105,7 +104,7 @@ const AccountDashboard = () => {
                       <p className="text-sm text-gray-500">{formatDate(invoice.created_at)}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium text-gray-900">{formatCurrency(invoice.total_amount)}</p>
+                      <p className="font-medium text-gray-900">{formatCurrency(invoice.amount)}</p>
                       <p className="text-sm text-gray-500">{invoice.status}</p>
                     </div>
                   </div>

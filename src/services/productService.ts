@@ -11,7 +11,7 @@ export interface Product {
   brand?: string;
   stock_quantity: number;
   image_url?: string;
-  image_urls?: string; // JSON string array of image URLs
+  image_urls?: string | string[]; // Can be JSON string array or actual string array
   rating?: number;
   is_featured?: boolean;
   is_new?: boolean;
@@ -84,7 +84,7 @@ const productService = {
     });
     
     const queryString = queryParams.toString();
-    const endpoint = `/api/products${queryString ? `?${queryString}` : ''}`;
+    const endpoint = `/api/products${queryString? `?${queryString}` : ''}`;
     
     try {
       const response = await apiRequest<ProductsResponse>(endpoint);
@@ -109,7 +109,13 @@ const productService = {
   // Get featured products
   getFeaturedProducts: async (limit: number = 8): Promise<Product[]> => {
     try {
+      console.log(`Requesting featured products: /api/products?is_featured=true&size=${limit}`);
       const response = await apiRequest<ProductsResponse>(`/api/products?is_featured=true&size=${limit}`);
+      console.log('Featured products API response:', response);
+      // Check if response is an array (direct data) or has items property
+      if (Array.isArray(response)) {
+        return response;
+      }
       return response?.items || [];
     } catch (error) {
       console.error('Error fetching featured products:', error);
@@ -131,7 +137,13 @@ const productService = {
   // Get bestsellers
   getBestsellers: async (limit: number = 8): Promise<Product[]> => {
     try {
+      console.log(`Requesting bestsellers: /api/products?is_bestseller=true&size=${limit}`);
       const response = await apiRequest<ProductsResponse>(`/api/products?is_bestseller=true&size=${limit}`);
+      console.log('Bestsellers API response:', response);
+      // Check if response is an array (direct data) or has items property
+      if (Array.isArray(response)) {
+        return response;
+      }
       return response?.items || [];
     } catch (error) {
       console.error('Error fetching bestsellers:', error);

@@ -30,11 +30,14 @@ export const apiRequest = async <T>(
   };
 
   try {
+    console.log(`API Request: ${url}`, requestOptions);
     const response = await fetch(url, requestOptions);
+    console.log(`API Response status: ${response.status} ${response.statusText}`);
 
     // Check if the response is ok (status in the range 200-299)
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      console.error(`API error response:`, errorData);
       throw new Error(
         errorData.detail || `API request failed with status ${response.status}`
       );
@@ -47,6 +50,7 @@ export const apiRequest = async <T>(
 
     // Parse JSON response
     const data = await response.json();
+    console.log(`API Response data for ${endpoint}:`, data);
     return data as T;
   } catch (error) {
     console.error(`API request error for ${endpoint}:`, error);

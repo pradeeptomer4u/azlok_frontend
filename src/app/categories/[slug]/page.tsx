@@ -6,80 +6,19 @@ import Link from 'next/link';
 import ProductListing from '../../../components/products/ProductListing';
 import MetaTags from '../../../components/SEO/MetaTags';
 import { BreadcrumbStructuredData } from '../../../components/SEO/StructuredData';
+import categoryService, { Category } from '../../../services/categoryService';
 
-// Mock categories data - will be replaced with API data
-const mockCategories = [
-  {
-    id: 1,
-    name: 'Electronics',
-    image: '/globe.svg',
-    slug: 'electronics',
-    productCount: 1245,
-    description: 'Browse our wide range of electronic products including smartphones, laptops, and home appliances.'
-  },
-  {
-    id: 2,
-    name: 'Clothing & Textiles',
-    image: '/globe.svg',
-    slug: 'clothing-textiles',
-    productCount: 876,
-    description: 'Discover the latest fashion trends and high-quality textiles for all your needs.'
-  },
-  {
-    id: 3,
-    name: 'Machinery',
-    image: '/globe.svg',
-    slug: 'machinery',
-    productCount: 543,
-    description: 'Find industrial machinery and equipment for manufacturing and production.'
-  },
-  {
-    id: 4,
-    name: 'Furniture',
-    image: '/globe.svg',
-    slug: 'furniture',
-    productCount: 321,
-    description: 'Explore our collection of furniture for home, office, and outdoor spaces.'
-  },
-  {
-    id: 5,
-    name: 'Food & Beverages',
-    image: '/globe.svg',
-    slug: 'food-beverages',
-    productCount: 654,
-    description: 'Quality food products and beverages from trusted brands and suppliers.'
-  },
-  {
-    id: 6,
-    name: 'Chemicals',
-    image: '/globe.svg',
-    slug: 'chemicals',
-    productCount: 432,
-    description: 'Industrial chemicals and compounds for various applications and industries.'
-  },
-  {
-    id: 7,
-    name: 'Construction',
-    image: '/globe.svg',
-    slug: 'construction',
-    productCount: 765,
-    description: 'Construction materials, tools, and equipment for building projects of all sizes.'
-  },
-  {
-    id: 8,
-    name: 'Automotive',
-    image: '/globe.svg',
-    slug: 'automotive',
-    productCount: 543,
-    description: 'Automotive parts, accessories, and tools for vehicles of all types.'
-  }
-];
+// Interface for category with additional UI properties
+interface UICategory extends Category {
+  productCount?: number;
+  image?: string;
+}
 
 export default function CategoryPage() {
   const params = useParams();
   const slug = params?.slug as string;
   
-  const [category, setCategory] = useState<any>(null);
+  const [category, setCategory] = useState<UICategory | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -87,23 +26,32 @@ export default function CategoryPage() {
     const fetchCategory = async () => {
       setIsLoading(true);
       try {
-        // In a real implementation, we would fetch from the API
-        // const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/${slug}`);
-        // setCategory(response.data);
+        console.log('Fetching category with slug:', slug);
         
-        // Using mock data for now
-        setTimeout(() => {
-          const foundCategory = mockCategories.find(cat => cat.slug === slug);
-          if (foundCategory) {
-            setCategory(foundCategory);
-          } else {
-            setError('Category not found');
-          }
-          setIsLoading(false);
-        }, 300);
+        // Get all categories and find the one with matching slug
+        const allCategories = await categoryService.getAllCategories();
+        console.log('All categories:', allCategories);
+        
+        const foundCategory = allCategories.find(cat => cat.slug === slug);
+        
+        if (foundCategory) {
+          // Transform to UICategory
+          const uiCategory: UICategory = {
+            ...foundCategory,
+            image: foundCategory.image_url || '/globe.svg',
+            productCount: 0 // We could fetch this separately if needed
+          };
+          
+          console.log('Found category:', uiCategory);
+          setCategory(uiCategory);
+        } else {
+          console.error('Category not found with slug:', slug);
+          setError('Category not found');
+        }
       } catch (err) {
         console.error('Error fetching category:', err);
         setError('Failed to load category. Please try again later.');
+      } finally {
         setIsLoading(false);
       }
     };
@@ -111,7 +59,7 @@ export default function CategoryPage() {
     if (slug) {
       fetchCategory();
     }
-  }, [slug]);
+  }, [slug, categoryService]);
 
   if (isLoading) {
     return (
@@ -171,7 +119,9 @@ export default function CategoryPage() {
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <h1 className="text-3xl font-bold text-gray-800">{category.name}</h1>
           <p className="text-gray-600 mt-2">{category.description}</p>
-          <p className="text-sm text-gray-500 mt-1">{category.productCount} products</p>
+          {category.productCount !== undefined && (
+            <p className="text-sm text-gray-500 mt-1">{category.productCount} products</p>
+          )}
         </div>
 
         {/* Product Listing */}

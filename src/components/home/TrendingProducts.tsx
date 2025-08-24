@@ -31,19 +31,33 @@ const TrendingProducts = () => {
       try {
         // Get bestseller products from the API service
         const bestsellers = await productService.getBestsellers();
+        console.log('API Response - Bestsellers:', bestsellers);
         
         // Transform API products to match our UI component needs
         const transformedProducts: UIProduct[] = bestsellers.map((product, index) => {
-          // Parse image_urls if it exists and is a string (JSON)
+          // Parse image_urls if it exists
           let imageUrl = '/globe.svg'; // Default fallback image
-          if (product.image_urls && typeof product.image_urls === 'string') {
-            try {
-              const imageUrls = JSON.parse(product.image_urls);
-              if (Array.isArray(imageUrls) && imageUrls.length > 0) {
-                imageUrl = imageUrls[0]; // Use the first image
+          
+          if (product.image_urls) {
+            // Handle both string and array formats
+            if (typeof product.image_urls === 'string') {
+              try {
+                // Try to parse as JSON string
+                const imageUrls = JSON.parse(product.image_urls);
+                if (Array.isArray(imageUrls) && imageUrls.length > 0) {
+                  imageUrl = imageUrls[0]; // Use the first image
+                } else if (typeof imageUrls === 'string') {
+                  // Handle case where it's a JSON string but not an array
+                  imageUrl = imageUrls;
+                }
+              } catch (e) {
+                // If parsing fails, use the string directly
+                console.log('Using image_urls directly as string:', product.image_urls);
+                imageUrl = product.image_urls;
               }
-            } catch (e) {
-              console.error('Error parsing image_urls:', e);
+            } else if (Array.isArray(product.image_urls) && product.image_urls.length > 0) {
+              // Handle case where it's already an array
+              imageUrl = product.image_urls[0];
             }
           } else if (product.image_url) {
             // Fallback to image_url if it exists
@@ -63,6 +77,7 @@ const TrendingProducts = () => {
           };
         });
         
+        console.log('Transformed Products:', transformedProducts);
         setProducts(transformedProducts);
       } catch (error) {
         console.error('Error fetching trending products:', error);
@@ -73,7 +88,7 @@ const TrendingProducts = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [productService]);
 
   if (isLoading) {
     return (

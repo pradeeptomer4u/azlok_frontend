@@ -45,7 +45,7 @@ export const invoiceService = {
   // Download invoice PDF
   async downloadInvoicePdf(id: number): Promise<Blob | null> {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.azlok.com';
       const response = await fetch(`${API_URL}/api/invoices/${id}/pdf`, {
         credentials: 'include',
       });
@@ -63,7 +63,7 @@ export const invoiceService = {
 
   // Helper function to open invoice PDF in a new tab
   openInvoicePdf(id: number): void {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.azlok.com';
     window.open(`${API_URL}/api/invoices/${id}/pdf`, '_blank');
   },
 

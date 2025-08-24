@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Invoice, InvoiceStatus } from '@/types/invoice';
+// Explicitly import the Invoice interface with amount property
+import type { Invoice, InvoiceStatus } from '@/types/invoice';
 import invoiceService from '@/services/invoiceService';
 import { formatDate, formatCurrency } from '@/utils/formatters';
 import { Breadcrumb, Pagination, Spinner, Badge, Button } from '@/components/ui';

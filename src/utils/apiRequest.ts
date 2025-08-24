@@ -3,7 +3,7 @@
  */
 
 // Base URL for API requests
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.azlok.com';
 
 /**
  * Generic API request function

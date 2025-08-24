@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Order } from '@/types/order';
-import { Invoice } from '@/types/invoice';
+import type { Invoice } from '@/types/invoice';
 import { formatDate, formatCurrency } from '@/utils/formatters';
 
 // This is a mock implementation - in a real app, you would fetch from your API

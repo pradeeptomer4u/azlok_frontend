@@ -8,12 +8,12 @@ import {
   Select,
   MenuItem,
   FormHelperText,
-  Grid,
   Checkbox,
   FormControlLabel,
   CircularProgress,
   Alert
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { PaymentMethod, PaymentMethodType, PaymentMethodCreate, PaymentMethodUpdate } from '../../types/payment';
 import { createPaymentMethod, updatePaymentMethod } from '../../services/paymentService';
 
@@ -53,7 +53,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
     }
   }, [paymentMethod]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | { name?: string; value: unknown; target: { name?: string; value: unknown } }) => {
     const { name, value } = e.target;
     if (name) {
       setFormData({

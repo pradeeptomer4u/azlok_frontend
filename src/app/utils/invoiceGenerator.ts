@@ -5,8 +5,33 @@ import { format } from 'date-fns';
 // Add the missing types for jsPDF-autotable
 declare module 'jspdf' {
   interface jsPDF {
-    autoTable: (options: any) => jsPDF;
+    autoTable: (options: AutoTableOptions) => jsPDF;
+    lastAutoTable: {
+      finalY: number;
+    };
   }
+}
+
+interface AutoTableOptions {
+  head: string[][];
+  body: (string | number)[][];
+  startY: number;
+  theme?: string;
+  headStyles?: {
+    fillColor?: number[];
+    textColor?: number[];
+    fontStyle?: string;
+  };
+  styles?: {
+    cellPadding?: number;
+    fontSize?: number;
+  };
+  columnStyles?: {
+    [key: number]: {
+      cellWidth?: string | number;
+      halign?: string;
+    };
+  };
 }
 
 interface OrderItem {
@@ -108,7 +133,7 @@ export const generateInvoicePDF = (order: Order): jsPDF => {
   
   // Add order items table
   const tableColumn = ["Item", "Quantity", "Unit Price", "Total"];
-  const tableRows: any[] = [];
+  const tableRows: (string | number)[][] = [];
   
   order.order_items.forEach(item => {
     const itemData = [
@@ -144,7 +169,7 @@ export const generateInvoicePDF = (order: Order): jsPDF => {
   });
   
   // Get the Y position after the table
-  const finalY = (doc as any).lastAutoTable.finalY + 10;
+  const finalY = doc.lastAutoTable.finalY + 10;
   
   // Add summary
   doc.setFontSize(10);

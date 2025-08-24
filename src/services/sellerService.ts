@@ -1,4 +1,13 @@
 import apiRequest from './api';
+import { Product } from '../types/product';
+
+export interface SellerProductsResponse {
+  products: Product[];
+  total: number;
+  page: number;
+  limit: number;
+  pages: number;
+}
 
 export interface Seller {
   id: number;
@@ -35,7 +44,7 @@ const sellerService = {
   },
   
   // Get seller products
-  getSellerProducts: async (sellerId: number, page: number = 1, limit: number = 10): Promise<any> => {
+  getSellerProducts: async (sellerId: number, page: number = 1, limit: number = 10): Promise<SellerProductsResponse> => {
     return apiRequest(`/sellers/${sellerId}/products?page=${page}&limit=${limit}`);
   }
 };

@@ -51,15 +51,15 @@ export interface Invoice {
   amount_due: number;
   
   // Address details
-  billing_address: Record<string, any>;
-  shipping_address?: Record<string, any>;
+  billing_address: Record<string, string | number | boolean | null>;
+  shipping_address?: Record<string, string | number | boolean | null>;
   
   // Additional details
   notes?: string;
   terms?: string;
   payment_instructions?: string;
   file_url?: string;
-  invoice_metadata?: Record<string, any>;
+  invoice_metadata?: Record<string, unknown>;
   
   created_at: string;
   updated_at?: string;

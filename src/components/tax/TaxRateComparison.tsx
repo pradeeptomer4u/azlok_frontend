@@ -22,7 +22,20 @@ const TaxRateComparison = ({ initialCategories = [], initialRegions = [] }: TaxR
     price: 10000,
     quantity: 1
   });
-  const [comparisonResults, setComparisonResults] = useState<any[]>([]);
+  interface ComparisonResult {
+    category: string;
+    region: string;
+    hsn_code: string;
+    tax_percentage: number;
+    base_price: number;
+    tax_amount: number;
+    cgst: number;
+    sgst: number;
+    igst: number;
+    total_price: number;
+  }
+
+  const [comparisonResults, setComparisonResults] = useState<ComparisonResult[]>([]);
 
   // Tax rates are now fetched from taxService
 
@@ -63,7 +76,7 @@ const TaxRateComparison = ({ initialCategories = [], initialRegions = [] }: TaxR
       return;
     }
 
-    const results: any[] = [];
+    const results: ComparisonResult[] = [];
 
     // For each selected category
     selectedCategories.forEach(categoryId => {

@@ -39,7 +39,47 @@ interface ProductDetailProps {
 }
 
 const ProductDetail = ({ slug }: ProductDetailProps) => {
-  const [product, setProduct] = useState<any>(null);
+  interface DetailedProduct {
+    id: number;
+    name: string;
+    image: string;
+    slug: string;
+    price: number;
+    minOrder: number;
+    seller: {
+      id: number;
+      name: string;
+      rating: number;
+      verified: boolean;
+      logo?: string;
+      location?: string;
+      memberSince?: string;
+      responseRate?: number;
+      responseTime?: string;
+    };
+    location: string;
+    category: string;
+    subcategory?: string;
+    rating: number;
+    isVerified: boolean;
+    description: string;
+    specifications: { name: string; value: string }[];
+    images: string[];
+    features?: string[];
+    applications?: string[];
+    packaging: string;
+    leadTime: string;
+    paymentTerms: string;
+    tax_info?: {
+      tax_percentage: number;
+      tax_amount: number;
+      total_price: number;
+      is_tax_inclusive: boolean;
+      hsn_code?: string;
+    };
+  }
+
+  const [product, setProduct] = useState<DetailedProduct | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('description');
   const [selectedImage, setSelectedImage] = useState(0);

@@ -163,8 +163,10 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ paymentMethod, on
       }
       
       onSave();
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to save payment method');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to save payment method';
+      const apiError = err as { response?: { data?: { detail?: string } } };
+      setError(apiError.response?.data?.detail || errorMessage);
       console.error(err);
     } finally {
       setLoading(false);

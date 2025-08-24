@@ -28,7 +28,18 @@ interface ProductListingProps {
 const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
-  const [productsWithTax, setProductsWithTax] = useState<any[]>([]);
+  interface ProductWithTax extends Product {
+    tax_amount?: number;
+    tax_percentage?: number;
+    total_price?: number;
+    is_tax_inclusive?: boolean;
+    cgst_amount?: number;
+    sgst_amount?: number;
+    igst_amount?: number;
+    hsn_code?: string;
+  }
+
+  const [productsWithTax, setProductsWithTax] = useState<ProductWithTax[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isTaxLoading, setIsTaxLoading] = useState(false);
   const [sortBy, setSortBy] = useState('relevance');
@@ -117,7 +128,7 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
   }, [searchParams, categorySlug]);
   
   // Function to fetch tax information for products
-  const fetchTaxInformation = async (productsList: any[], state: string, taxInclusiveOnly?: boolean, maxTaxRate?: string) => {
+  const fetchTaxInformation = async (productsList: Product[], state: string, taxInclusiveOnly?: boolean, maxTaxRate?: string) => {
     setIsTaxLoading(true);
     try {
       // Create a copy of products to add tax information

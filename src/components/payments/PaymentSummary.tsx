@@ -222,7 +222,7 @@ const PaymentSummary: React.FC = () => {
                   <Box display="flex" alignItems="center" justifyContent="space-between">
                     <Chip
                       label={status.replace('_', ' ')}
-                      color={getStatusColor(status as PaymentStatus) as any}
+                      color={getStatusColor(status as PaymentStatus)}
                       size="small"
                       sx={{ mr: 1 }}
                     />
@@ -278,7 +278,7 @@ const PaymentSummary: React.FC = () => {
                               </Typography>
                               <Chip
                                 label={payment.status.replace('_', ' ')}
-                                color={getStatusColor(payment.status) as any}
+                                color={getStatusColor(payment.status)}
                                 size="small"
                               />
                             </Box>

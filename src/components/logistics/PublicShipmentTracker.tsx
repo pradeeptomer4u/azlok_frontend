@@ -6,7 +6,6 @@ import {
   CardContent,
   Container,
   Divider,
-  Grid,
   Paper,
   TextField,
   Typography,
@@ -14,6 +13,7 @@ import {
   CircularProgress,
   Chip,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import {
   Timeline,
   TimelineItem,
@@ -97,7 +97,11 @@ const PublicShipmentTracker: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
+  // Define separate color types for Chip and TimelineDot components
+  type ChipColorType = 'success' | 'info' | 'primary' | 'warning' | 'error' | 'secondary' | 'default';
+  type TimelineDotColorType = 'success' | 'info' | 'primary' | 'warning' | 'error' | 'secondary' | 'grey';
+
+  const getChipColor = (status: string): ChipColorType => {
     switch (status) {
       case 'delivered':
         return 'success';
@@ -116,6 +120,28 @@ const PublicShipmentTracker: React.FC = () => {
         return 'secondary';
       default:
         return 'default';
+    }
+  };
+  
+  const getTimelineDotColor = (status: string): TimelineDotColorType => {
+    switch (status) {
+      case 'delivered':
+        return 'success';
+      case 'in_transit':
+      case 'picked_up':
+      case 'processing':
+        return 'info';
+      case 'out_for_delivery':
+        return 'primary';
+      case 'pending':
+        return 'warning';
+      case 'failed':
+      case 'cancelled':
+        return 'error';
+      case 'returned':
+        return 'secondary';
+      default:
+        return 'grey';
     }
   };
 
@@ -178,34 +204,34 @@ const PublicShipmentTracker: React.FC = () => {
         <Card>
           <CardContent>
             <Box sx={{ mb: 3 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: '240px' }}>
                   <Typography variant="subtitle2" color="text.secondary">
                     Tracking Number
                   </Typography>
                   <Typography variant="h6">
                     {shipment.tracking_number}
                   </Typography>
-                </Grid>
-                <Grid item xs={12} sm={6}>
+                </Box>
+                <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: '240px' }}>
                   <Typography variant="subtitle2" color="text.secondary">
                     Status
                   </Typography>
                   <Chip
                     label={formatStatus(shipment.status)}
-                    color={getStatusColor(shipment.status) as any}
+                    color={getChipColor(shipment.status)}
                     sx={{ mt: 0.5 }}
                   />
-                </Grid>
-                <Grid item xs={12} sm={6}>
+                </Box>
+                <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: '240px' }}>
                   <Typography variant="subtitle2" color="text.secondary">
                     Logistics Provider
                   </Typography>
                   <Typography variant="body1">
                     {shipment.logistics_provider.name}
                   </Typography>
-                </Grid>
-                <Grid item xs={12} sm={6}>
+                </Box>
+                <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: '240px' }}>
                   <Typography variant="subtitle2" color="text.secondary">
                     Estimated Delivery
                   </Typography>
@@ -214,8 +240,8 @@ const PublicShipmentTracker: React.FC = () => {
                       ? format(new Date(shipment.estimated_delivery_date), 'MMM dd, yyyy')
                       : 'Not available'}
                   </Typography>
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
             </Box>
 
             <Divider sx={{ my: 3 }} />
@@ -238,7 +264,7 @@ const PublicShipmentTracker: React.FC = () => {
                         {format(new Date(update.timestamp), 'MMM dd, yyyy HH:mm')}
                       </TimelineOppositeContent>
                       <TimelineSeparator>
-                        <TimelineDot color={getStatusColor(update.status) as any}>
+                        <TimelineDot color={getTimelineDotColor(update.status)}>
                           {getStatusIcon(update.status)}
                         </TimelineDot>
                         {index < shipment.tracking_updates.length - 1 && <TimelineConnector />}

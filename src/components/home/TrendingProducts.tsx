@@ -33,17 +33,35 @@ const TrendingProducts = () => {
         const bestsellers = await productService.getBestsellers();
         
         // Transform API products to match our UI component needs
-        const transformedProducts: UIProduct[] = bestsellers.map((product, index) => ({
-          id: product.id,
-          name: product.name,
-          image: product.image_url || '/globe.svg', // Use image or fallback
-          slug: product.sku.toLowerCase().replace(/\s+/g, '-'), // Generate slug from SKU
-          price: product.price,
-          minOrder: 1, // Default min order
-          seller: product.brand || 'Unknown Seller',
-          location: 'India', // Default location
-          views: 1000 - (index * 100) // Simulate view count based on position
-        }));
+        const transformedProducts: UIProduct[] = bestsellers.map((product, index) => {
+          // Parse image_urls if it exists and is a string (JSON)
+          let imageUrl = '/globe.svg'; // Default fallback image
+          if (product.image_urls && typeof product.image_urls === 'string') {
+            try {
+              const imageUrls = JSON.parse(product.image_urls);
+              if (Array.isArray(imageUrls) && imageUrls.length > 0) {
+                imageUrl = imageUrls[0]; // Use the first image
+              }
+            } catch (e) {
+              console.error('Error parsing image_urls:', e);
+            }
+          } else if (product.image_url) {
+            // Fallback to image_url if it exists
+            imageUrl = product.image_url;
+          }
+          
+          return {
+            id: product.id,
+            name: product.name,
+            image: imageUrl,
+            slug: product.sku.toLowerCase().replace(/\s+/g, '-'), // Generate slug from SKU
+            price: product.price,
+            minOrder: 1, // Default min order
+            seller: product.brand || 'Unknown Seller',
+            location: 'India', // Default location
+            views: 1000 - (index * 100) // Simulate view count based on position
+          };
+        });
         
         setProducts(transformedProducts);
       } catch (error) {

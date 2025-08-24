@@ -11,6 +11,7 @@ export interface Product {
   brand?: string;
   stock_quantity: number;
   image_url?: string;
+  image_urls?: string; // JSON string array of image URLs
   rating?: number;
   is_featured?: boolean;
   is_new?: boolean;

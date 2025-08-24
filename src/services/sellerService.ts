@@ -37,7 +37,7 @@ const sellerService = {
   // Get top sellers
   getTopSellers: async (limit: number = 4): Promise<Seller[]> => {
     try {
-      const response = await apiRequest<Seller[]>(`/api/sellers/top?size=${limit}`);
+      const response = await apiRequest<Seller[]>(`/api/seller/top?size=${limit}`);
       return response || [];
     } catch (error) {
       console.error('Error fetching top sellers:', error);

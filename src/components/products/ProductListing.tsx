@@ -19,6 +19,16 @@ type Product = ApiProduct & {
   location?: string;
   category_name?: string;
   isVerified?: boolean;
+  // Add tax-related fields that might be added later
+  tax_percentage?: number;
+  tax_amount?: number;
+  cgst_amount?: number;
+  sgst_amount?: number;
+  igst_amount?: number;
+  is_tax_inclusive?: boolean;
+  hsn_code?: string;
+  price_with_tax?: number;
+  price_without_tax?: number;
 };
 
 interface ProductListingProps {
@@ -28,18 +38,7 @@ interface ProductListingProps {
 const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
-  interface ProductWithTax extends Product {
-    tax_amount?: number;
-    tax_percentage?: number;
-    total_price?: number;
-    is_tax_inclusive?: boolean;
-    cgst_amount?: number;
-    sgst_amount?: number;
-    igst_amount?: number;
-    hsn_code?: string;
-  }
-
-  const [productsWithTax, setProductsWithTax] = useState<ProductWithTax[]>([]);
+  const [productsWithTax, setProductsWithTax] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isTaxLoading, setIsTaxLoading] = useState(false);
   const [sortBy, setSortBy] = useState('relevance');

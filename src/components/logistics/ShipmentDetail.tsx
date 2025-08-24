@@ -65,8 +65,8 @@ interface Shipment {
     height: number;
     unit: string;
   };
-  pickup_address: any;
-  delivery_address: any;
+  pickup_address: Address;
+  delivery_address: Address;
   special_instructions?: string;
   signature_required: boolean;
   is_insured: boolean;
@@ -104,6 +104,16 @@ interface DeliveryAttempt {
   signature_image_url?: string;
   proof_of_delivery_url?: string;
   created_at: string;
+}
+
+interface Address {
+  contact_name?: string;
+  street: string;
+  city: string;
+  state: string;
+  postal_code: string;
+  country: string;
+  contact_phone?: string;
 }
 
 interface TrackingUpdateFormData {
@@ -146,7 +156,7 @@ const ShipmentDetail: React.FC<ShipmentDetailProps> = ({ shipmentId, onBack }) =
       
       const data = await response.json();
       setShipment(data);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching shipment details:', error);
       setError('Failed to load shipment details. Please try again.');
     } finally {
@@ -186,7 +196,7 @@ const ShipmentDetail: React.FC<ShipmentDetailProps> = ({ shipmentId, onBack }) =
         description: '',
         timestamp: new Date().toISOString().slice(0, 16),
       });
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error adding tracking update:', error);
       setError('Failed to add tracking update. Please try again.');
     }
@@ -200,7 +210,7 @@ const ShipmentDetail: React.FC<ShipmentDetailProps> = ({ shipmentId, onBack }) =
     });
   };
 
-  const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: any }>) => {
+  const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: string }>) => {
     setTrackingFormData({
       ...trackingFormData,
       status: e.target.value,
@@ -269,7 +279,7 @@ const ShipmentDetail: React.FC<ShipmentDetailProps> = ({ shipmentId, onBack }) =
     return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
-  const formatAddress = (address: any) => {
+  const formatAddress = (address: Address | null) => {
     if (!address) return 'N/A';
     
     return (

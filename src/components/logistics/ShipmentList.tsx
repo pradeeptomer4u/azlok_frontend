@@ -108,7 +108,7 @@ const ShipmentList: React.FC<ShipmentListProps> = ({ onViewShipment, onEditShipm
       
       const data = await response.json();
       setProviders(data);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching logistics providers:', error);
     }
   };
@@ -143,7 +143,7 @@ const ShipmentList: React.FC<ShipmentListProps> = ({ onViewShipment, onEditShipm
       const data = await response.json();
       setShipments(data);
       setTotalShipments(data.length); // In a real API, this would come from the response metadata
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching shipments:', error);
     } finally {
       setLoading(false);
@@ -165,7 +165,7 @@ const ShipmentList: React.FC<ShipmentListProps> = ({ onViewShipment, onEditShipm
     });
   };
 
-  const handleFilterChange = (name: keyof ShipmentFilter, value: any) => {
+  const handleFilterChange = (name: keyof ShipmentFilter, value: string | number | Date | null | undefined) => {
     setFilter({
       ...filter,
       [name]: value,

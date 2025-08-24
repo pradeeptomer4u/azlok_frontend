@@ -82,7 +82,7 @@ const PublicShipmentTracker: React.FC = () => {
       
       const data = await response.json();
       setShipment(data);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error tracking shipment:', error);
       setError(error instanceof Error ? error.message : 'Failed to track shipment');
       setShipment(null);

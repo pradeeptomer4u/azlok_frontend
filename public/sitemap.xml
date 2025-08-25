@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Home Page -->
+  <url>
+    <loc>https://azlok.com/</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- Main Pages -->
+  <url>
+    <loc>https://azlok.com/categories</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://azlok.com/products</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://azlok.com/deals</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Account Pages -->
+  <url>
+    <loc>https://azlok.com/login</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://azlok.com/register</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://azlok.com/account</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  
+  <!-- Shopping Pages -->
+  <url>
+    <loc>https://azlok.com/cart</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://azlok.com/payments</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://azlok.com/track</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  
+  <!-- Seller Pages -->
+  <url>
+    <loc>https://azlok.com/seller</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://azlok.com/seller/products</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- Dashboard -->
+  <url>
+    <loc>https://azlok.com/dashboard</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <!-- Logistics and Tax -->
+  <url>
+    <loc>https://azlok.com/logistics</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://azlok.com/tax</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+</urlset>

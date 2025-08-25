@@ -1,0 +1,29 @@
+# robots.txt for Azlok
+
+User-agent: *
+Allow: /
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /dashboard/admin/
+
+# Disallow account-specific pages
+Disallow: /account/settings/
+Disallow: /account/orders/
+Disallow: /account/payments/
+
+# Disallow API endpoints
+Disallow: /api/
+
+# Disallow cart and checkout process
+Disallow: /cart/checkout/
+Disallow: /payments/process/
+
+# Allow important pages
+Allow: /products/
+Allow: /categories/
+Allow: /seller/
+Allow: /deals/
+
+# Sitemap location
+Sitemap: https://azlok.com/sitemap.xml

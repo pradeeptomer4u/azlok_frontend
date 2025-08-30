@@ -52,7 +52,7 @@ export default function AdminCategoriesPage() {
         }
         
         // Fetch categories from API
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/categories`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -86,7 +86,7 @@ export default function AdminCategoriesPage() {
         throw new Error('Authentication required');
       }
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/categories`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ export default function AdminCategoriesPage() {
         throw new Error('Authentication required');
       }
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/categories/${editingCategory.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/${editingCategory.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ export default function AdminCategoriesPage() {
         throw new Error('Authentication required');
       }
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/categories/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`

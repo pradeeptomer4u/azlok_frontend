@@ -1,11 +1,7 @@
 'use client';
 
-import { useParams } from 'next/navigation';
 import InvoiceDetailClient from './InvoiceDetailClient';
 
-export default function InvoiceDetailWrapper() {
-  const params = useParams();
-  const id = params?.id as string;
-  
+export default function InvoiceDetailWrapper({ id }: { id: string }) {
   return <InvoiceDetailClient id={id} />;
 }

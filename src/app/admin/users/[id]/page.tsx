@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { getUserById, deleteUser, updateUserStatus, User, BuyerActivity, SellerActivity } from '../../../../services/userService';
 
-export default function UserDetailPage({ params }: { params: { id: string } }) {
+export default function UserDetailPage() {
+  const params = useParams();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +36,13 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
     const fetchUser = async () => {
       try {
         setIsLoading(true);
-        const userData = await getUserById(params.id);
+        
+        if (!params?.id) {
+          throw new Error('User ID not found');
+        }
+        
+        const userId = Array.isArray(params.id) ? params.id[0] : params.id;
+        const userData = await getUserById(userId);
         
         if (!userData) {
           throw new Error('User not found');
@@ -51,7 +58,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
     };
     
     fetchUser();
-  }, [params.id]);
+  }, [params?.id]);
   
   // Handle delete user
   const handleDeleteUser = async () => {

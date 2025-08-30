@@ -19,23 +19,20 @@ import {
   CardHeader
 } from '@mui/material';
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { format } from 'date-fns';
 import { InstallmentPlan, Payment } from '@/types/payment';
 import { getInstallmentPlan, getPayments } from '@/services/paymentService';
 import { useAuth } from '@/context/AuthContext';
 import AccessDenied from '@/components/common/AccessDenied';
 
-interface InstallmentPlanDetailPageProps {
-  params: {
-    id: string;
-  };
-}
-
-const InstallmentPlanDetailPage: React.FC<InstallmentPlanDetailPageProps> = ({ params }) => {
+const InstallmentPlanDetailPage: React.FC = () => {
   const router = useRouter();
+  const params = useParams();
   const { isAuthenticated } = useAuth();
-  const planId = parseInt(params.id, 10);
+  
+  const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
+  const planId = id ? parseInt(id, 10) : 0;
   
   const [plan, setPlan] = useState<InstallmentPlan | null>(null);
   const [payments, setPayments] = useState<Payment[]>([]);

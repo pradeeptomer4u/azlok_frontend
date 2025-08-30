@@ -1,14 +1,15 @@
 import ProductDetail from '../../../components/products/ProductDetail';
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: ProductPageProps) {
+  const { slug } = await params;
   // In a real app, fetch product data from API
-  // const product = await fetch(`/api/products/${params.slug}`).then(res => res.json());
+  // const product = await fetch(`/api/products/${slug}`).then(res => res.json());
   
   // For now, using a placeholder title
   return {
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: ProductPageProps) {
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   
   return (
     <div className="min-h-screen py-8">

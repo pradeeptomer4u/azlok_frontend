@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import ProductForm from '../../../../../components/admin/ProductForm';
 import Link from 'next/link';
 
@@ -58,7 +59,8 @@ const mockProductData = {
   }
 };
 
-export default function EditProductPage({ params }: { params: { id: string } }) {
+export default function EditProductPage() {
+  const params = useParams();
   const [product, setProduct] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -69,10 +71,14 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
       try {
         setIsLoading(true);
         
+        if (!params?.id) {
+          throw new Error('Product ID not found');
+        }
+        
         // Simulate API delay
         await new Promise(resolve => setTimeout(resolve, 500));
         
-        const productId = parseInt(params.id);
+        const productId = parseInt(params.id as string);
         const productData = mockProductData[productId as keyof typeof mockProductData];
         
         if (!productData) {
@@ -89,7 +95,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     };
     
     fetchProduct();
-  }, [params.id]);
+  }, [params?.id]);
 
   if (isLoading) {
     return (

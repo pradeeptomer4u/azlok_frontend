@@ -1,9 +1,5 @@
-import InvoiceDetailClient from "./InvoiceDetailClient";
+import InvoiceDetailWrapper from './InvoiceDetailWrapper';
 
-type Props = {
-  params: { id: string };
-}
-
-export default function Page(props: Props) {
-  return <InvoiceDetailClient id={props.params.id} />;
+export default function Page() {
+  return <InvoiceDetailWrapper />;
 }

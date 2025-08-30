@@ -4,95 +4,16 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-
-// Mock product data for demo
-const mockProductData = {
-  1: {
-    id: 1,
-    name: 'Industrial Machinery Part XYZ',
-    sku: 'IMP-001',
-    price: 12500,
-    stock: 45,
-    category: 'Machinery Parts',
-    status: 'active',
-    seller: 'ABC Manufacturing',
-    sellerInfo: {
-      id: 101,
-      name: 'ABC Manufacturing',
-      email: 'contact@abcmanufacturing.com',
-      phone: '+91 98765 43210',
-      joinDate: '2022-05-15'
-    },
-    description: 'High-quality industrial machinery part designed for heavy-duty applications. This component is built to withstand extreme conditions and provide reliable performance in industrial settings.',
-    features: [
-      'Durable construction with premium materials',
-      'Precision engineered for perfect fit',
-      'Heat and corrosion resistant',
-      'Extended lifespan compared to standard parts'
-    ],
-    specifications: [
-      { name: 'Material', value: 'Hardened Steel' },
-      { name: 'Dimensions', value: '15cm x 8cm x 5cm' },
-      { name: 'Weight', value: '2.5 kg' },
-      { name: 'Operating Temperature', value: '-20°C to 180°C' }
-    ],
-    images: ['/logo.png', '/logo.png', '/logo.png'],
-    createdAt: '2023-10-05',
-    updatedAt: '2023-11-10',
-    salesData: {
-      totalSales: 128,
-      totalRevenue: 1600000,
-      lastMonthSales: 15,
-      lastMonthRevenue: 187500
-    }
-  },
-  2: {
-    id: 2,
-    name: 'Heavy Duty Electric Motor',
-    sku: 'HDM-002',
-    price: 10000,
-    stock: 23,
-    category: 'Electric Motors',
-    status: 'active',
-    seller: 'XYZ Industries',
-    sellerInfo: {
-      id: 102,
-      name: 'XYZ Industries',
-      email: 'info@xyzindustries.com',
-      phone: '+91 98765 12345',
-      joinDate: '2022-03-22'
-    },
-    description: 'Powerful electric motor designed for industrial applications requiring high torque and continuous operation. Energy efficient design with advanced cooling system.',
-    features: [
-      'High efficiency design',
-      'Low noise operation',
-      'Integrated cooling system',
-      'Variable speed control compatibility'
-    ],
-    specifications: [
-      { name: 'Power', value: '7.5 kW' },
-      { name: 'Voltage', value: '380-415V, 3-phase' },
-      { name: 'RPM', value: '1450' },
-      { name: 'Protection Class', value: 'IP55' }
-    ],
-    images: ['/logo.png', '/logo.png'],
-    createdAt: '2023-09-18',
-    updatedAt: '2023-11-05',
-    salesData: {
-      totalSales: 98,
-      totalRevenue: 980000,
-      lastMonthSales: 12,
-      lastMonthRevenue: 120000
-    }
-  }
-};
+import productService, { Product } from '../../../../services/productService';
 
 export default function ProductDetailClient({ id }: { id: string }) {
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('details');
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [salesData, setSalesData] = useState<any>(null);
+  const [sellerInfo, setSellerInfo] = useState<any>(null);
   const router = useRouter();
   
   // Format currency
@@ -114,22 +35,57 @@ export default function ProductDetailClient({ id }: { id: string }) {
   };
   
   useEffect(() => {
-    // In a real app, this would be an API call
     const fetchProduct = async () => {
       try {
         setIsLoading(true);
         
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
         const productId = parseInt(id);
-        const productData = mockProductData[productId as keyof typeof mockProductData];
+        const productData = await productService.getProductById(productId);
         
         if (!productData) {
           throw new Error('Product not found');
         }
         
         setProduct(productData);
+        
+        // Fetch sales data if available
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.azlok.com'}/api/products/${productId}/sales`);
+          if (response.ok) {
+            const data = await response.json();
+            setSalesData(data);
+          }
+        } catch (err) {
+          console.error('Error fetching sales data:', err);
+          // Set default sales data if API fails
+          setSalesData({
+            totalSales: 0,
+            totalRevenue: 0,
+            lastMonthSales: 0,
+            lastMonthRevenue: 0
+          });
+        }
+        
+        // Fetch seller info if available
+        if (productData.seller?.id) {
+          try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.azlok.com'}/api/sellers/${productData.seller.id}`);
+            if (response.ok) {
+              const data = await response.json();
+              setSellerInfo(data);
+            }
+          } catch (err) {
+            console.error('Error fetching seller info:', err);
+            // Set default seller info if API fails
+            setSellerInfo({
+              id: productData.seller.id,
+              name: productData.seller.business_name || productData.seller.full_name || 'Unknown Seller',
+              email: 'Not available',
+              phone: 'Not available',
+              joinDate: 'Not available'
+            });
+          }
+        }
       } catch (err) {
         setError('Failed to load product. Please try again.');
         console.error('Error fetching product:', err);
@@ -142,11 +98,22 @@ export default function ProductDetailClient({ id }: { id: string }) {
   }, [id]);
   
   // Handle delete product
-  const handleDeleteProduct = () => {
+  const handleDeleteProduct = async () => {
     if (window.confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
-      // In a real app, this would call an API
-      alert(`Product ${product.name} deleted successfully!`);
-      router.push('/admin/products');
+      try {
+        if (product) {
+          const success = await productService.deleteProduct(product.id);
+          if (success) {
+            alert(`Product ${product.name} deleted successfully!`);
+            router.push('/admin/products');
+          } else {
+            throw new Error('Failed to delete product');
+          }
+        }
+      } catch (err) {
+        console.error('Error deleting product:', err);
+        alert('Failed to delete product. Please try again.');
+      }
     }
   };
 
@@ -173,6 +140,30 @@ export default function ProductDetailClient({ id }: { id: string }) {
         </div>
       </div>
     );
+  }
+
+  // Parse image URLs if they're stored as a JSON string
+  let imageUrls: string[] = [];
+  if (product.image_urls) {
+    if (typeof product.image_urls === 'string') {
+      try {
+        imageUrls = JSON.parse(product.image_urls);
+      } catch (e) {
+        imageUrls = [product.image_urls];
+      }
+    } else if (Array.isArray(product.image_urls)) {
+      imageUrls = product.image_urls;
+    }
+  }
+  
+  // Add main image if available and not already in the array
+  if (product.image_url && !imageUrls.includes(product.image_url)) {
+    imageUrls.unshift(product.image_url);
+  }
+  
+  // If no images are available, use a placeholder
+  if (imageUrls.length === 0) {
+    imageUrls = ['/logo.png'];
   }
 
   return (
@@ -218,11 +209,19 @@ export default function ProductDetailClient({ id }: { id: string }) {
       {/* Product Status Badge */}
       <div className="mb-6">
         <span className={`px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full 
-          ${product.status === 'active' ? 'bg-green-100 text-green-800' : 
-            product.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-            'bg-gray-100 text-gray-800'}`}>
-          {product.status.charAt(0).toUpperCase() + product.status.slice(1)}
+          ${product.is_featured ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+          {product.is_featured ? 'Featured' : 'Standard'}
         </span>
+        {product.is_new && (
+          <span className="ml-2 px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+            New
+          </span>
+        )}
+        {product.is_bestseller && (
+          <span className="ml-2 px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+            Bestseller
+          </span>
+        )}
       </div>
       
       {/* Quick Stats */}
@@ -233,15 +232,15 @@ export default function ProductDetailClient({ id }: { id: string }) {
         </div>
         <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-green-500">
           <p className="text-sm font-medium text-gray-500">Stock</p>
-          <p className="text-xl font-bold mt-1">{product.stock} units</p>
+          <p className="text-xl font-bold mt-1">{product.stock_quantity} units</p>
         </div>
         <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-purple-500">
           <p className="text-sm font-medium text-gray-500">Total Sales</p>
-          <p className="text-xl font-bold mt-1">{product.salesData.totalSales} units</p>
+          <p className="text-xl font-bold mt-1">{salesData?.totalSales || 0} units</p>
         </div>
         <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-yellow-500">
           <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-          <p className="text-xl font-bold mt-1">{formatCurrency(product.salesData.totalRevenue)}</p>
+          <p className="text-xl font-bold mt-1">{formatCurrency(salesData?.totalRevenue || 0)}</p>
         </div>
       </div>
       
@@ -292,14 +291,14 @@ export default function ProductDetailClient({ id }: { id: string }) {
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Product Images</h3>
                 <div className="mb-4 h-64 bg-gray-100 rounded-md relative overflow-hidden">
                   <Image
-                    src={product.images[activeImageIndex]}
+                    src={imageUrls[activeImageIndex]}
                     alt={product.name}
                     fill
                     className="object-contain"
                   />
                 </div>
                 <div className="grid grid-cols-4 gap-2">
-                  {product.images.map((image: string, index: number) => (
+                  {imageUrls.map((image: string, index: number) => (
                     <div 
                       key={index}
                       onClick={() => setActiveImageIndex(index)}
@@ -325,19 +324,19 @@ export default function ProductDetailClient({ id }: { id: string }) {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <p className="text-sm font-medium text-gray-500">Category</p>
-                      <p className="mt-1">{product.category}</p>
+                      <p className="mt-1">{product.category_name}</p>
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-500">Created On</p>
-                      <p className="mt-1">{formatDate(product.createdAt)}</p>
+                      <p className="mt-1">{formatDate(product.created_at)}</p>
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-500">Last Updated</p>
-                      <p className="mt-1">{formatDate(product.updatedAt)}</p>
+                      <p className="mt-1">{formatDate(product.updated_at)}</p>
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-500">Seller</p>
-                      <p className="mt-1">{product.seller}</p>
+                      <p className="mt-1">{product.seller?.business_name || product.seller?.full_name || 'Not specified'}</p>
                     </div>
                   </div>
                 </div>
@@ -348,25 +347,26 @@ export default function ProductDetailClient({ id }: { id: string }) {
                 </div>
                 
                 <div className="mb-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Key Features</h3>
-                  <ul className="list-disc pl-5 space-y-1">
-                    {product.features.map((feature: string, index: number) => (
-                      <li key={index} className="text-gray-700">{feature}</li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <div>
                   <h3 className="text-lg font-medium text-gray-900 mb-2">Specifications</h3>
                   <div className="bg-gray-50 rounded-md overflow-hidden">
                     <table className="min-w-full divide-y divide-gray-200">
                       <tbody className="divide-y divide-gray-200">
-                        {product.specifications.map((spec: { name: string, value: string }, index: number) => (
-                          <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                            <td className="px-4 py-2 text-sm font-medium text-gray-900">{spec.name}</td>
-                            <td className="px-4 py-2 text-sm text-gray-700">{spec.value}</td>
-                          </tr>
-                        ))}
+                        <tr className="bg-gray-50">
+                          <td className="px-4 py-2 text-sm font-medium text-gray-900">Brand</td>
+                          <td className="px-4 py-2 text-sm text-gray-700">{product.brand || 'Not specified'}</td>
+                        </tr>
+                        <tr className="bg-white">
+                          <td className="px-4 py-2 text-sm font-medium text-gray-900">Weight</td>
+                          <td className="px-4 py-2 text-sm text-gray-700">{product.weight ? `${product.weight} kg` : 'Not specified'}</td>
+                        </tr>
+                        <tr className="bg-gray-50">
+                          <td className="px-4 py-2 text-sm font-medium text-gray-900">Dimensions</td>
+                          <td className="px-4 py-2 text-sm text-gray-700">{product.dimensions || 'Not specified'}</td>
+                        </tr>
+                        <tr className="bg-white">
+                          <td className="px-4 py-2 text-sm font-medium text-gray-900">HSN Code</td>
+                          <td className="px-4 py-2 text-sm text-gray-700">{product.hsn_code || 'Not specified'}</td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -385,40 +385,29 @@ export default function ProductDetailClient({ id }: { id: string }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm font-medium text-gray-500">Seller Name</p>
-                    <p className="mt-1 text-lg font-medium">{product.sellerInfo.name}</p>
+                    <p className="mt-1 text-lg font-medium">{sellerInfo?.name || product.seller?.business_name || product.seller?.full_name || 'Not available'}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Seller ID</p>
-                    <p className="mt-1">{product.sellerInfo.id}</p>
+                    <p className="mt-1">{sellerInfo?.id || product.seller?.id || 'Not available'}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Email</p>
-                    <p className="mt-1">{product.sellerInfo.email}</p>
+                    <p className="mt-1">{sellerInfo?.email || 'Not available'}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Phone</p>
-                    <p className="mt-1">{product.sellerInfo.phone}</p>
+                    <p className="mt-1">{sellerInfo?.phone || 'Not available'}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Joined On</p>
-                    <p className="mt-1">{formatDate(product.sellerInfo.joinDate)}</p>
+                    <p className="text-sm font-medium text-gray-500">Region</p>
+                    <p className="mt-1">{product.seller?.region || sellerInfo?.region || 'Not available'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Join Date</p>
+                    <p className="mt-1">{sellerInfo?.joinDate ? formatDate(sellerInfo.joinDate) : 'Not available'}</p>
                   </div>
                 </div>
-              </div>
-              
-              <div className="flex space-x-2">
-                <Link 
-                  href={`/admin/sellers/${product.sellerInfo.id}`}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                >
-                  View Seller Profile
-                </Link>
-                <Link 
-                  href={`/admin/sellers/${product.sellerInfo.id}/products`}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                >
-                  View All Products by Seller
-                </Link>
               </div>
             </div>
           </div>
@@ -427,101 +416,34 @@ export default function ProductDetailClient({ id }: { id: string }) {
         {/* Sales Data Tab */}
         {activeTab === 'sales' && (
           <div className="p-6">
-            <div className="mb-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Sales Overview</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-                  <p className="text-sm font-medium text-gray-500">Total Sales</p>
-                  <p className="text-2xl font-bold mt-1">{product.salesData.totalSales} units</p>
-                  <p className="text-sm text-gray-500 mt-1">Lifetime</p>
-                </div>
-                <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-                  <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-                  <p className="text-2xl font-bold mt-1">{formatCurrency(product.salesData.totalRevenue)}</p>
-                  <p className="text-sm text-gray-500 mt-1">Lifetime</p>
-                </div>
-                <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-                  <p className="text-sm font-medium text-gray-500">Last Month Sales</p>
-                  <p className="text-2xl font-bold mt-1">{product.salesData.lastMonthSales} units</p>
-                  <p className="text-sm text-gray-500 mt-1">Previous 30 days</p>
-                </div>
-                <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-                  <p className="text-sm font-medium text-gray-500">Last Month Revenue</p>
-                  <p className="text-2xl font-bold mt-1">{formatCurrency(product.salesData.lastMonthRevenue)}</p>
-                  <p className="text-sm text-gray-500 mt-1">Previous 30 days</p>
+            <div className="bg-white rounded-lg">
+              <div className="mb-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Sales Overview</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Total Units Sold</p>
+                    <p className="mt-1 text-2xl font-bold">{salesData?.totalSales || 0}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Total Revenue</p>
+                    <p className="mt-1 text-2xl font-bold">{formatCurrency(salesData?.totalRevenue || 0)}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Last Month Sales</p>
+                    <p className="mt-1 text-xl">{salesData?.lastMonthSales || 0} units</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Last Month Revenue</p>
+                    <p className="mt-1 text-xl">{formatCurrency(salesData?.lastMonthRevenue || 0)}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            <div className="mb-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Sales Performance</h3>
-              <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-                <p className="text-center text-gray-500 py-8">Sales chart would be displayed here</p>
-              </div>
-            </div>
-            
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium text-gray-900">Recent Orders</h3>
-                <Link 
-                  href={`/admin/products/${product.id}/orders`}
-                  className="text-sm text-primary hover:text-primary-dark font-medium"
-                >
-                  View All Orders
-                </Link>
-              </div>
-              <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ORD-9385</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Acme Corp</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Nov 15, 2023</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(product.price * 2)}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Completed
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ORD-9382</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Tech Solutions</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Nov 14, 2023</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(product.price)}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                          Processing
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ORD-9378</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Global Traders</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Nov 12, 2023</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(product.price * 3)}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Completed
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              
+              {!salesData && (
+                <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+                  <p>No sales data available for this product yet.</p>
+                </div>
+              )}
             </div>
           </div>
         )}

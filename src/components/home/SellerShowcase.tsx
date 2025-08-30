@@ -33,16 +33,16 @@ const SellerShowcase = () => {
         const apiSellers = await sellerService.getTopSellers(4);
         
         // Transform API sellers to match our UI component needs
-        const transformedSellers: UISeller[] = apiSellers.map((seller, index) => ({
+        const transformedSellers: UISeller[] = apiSellers.map((seller) => ({
           id: seller.id,
-          name: seller.name,
+          name: seller.name || seller.business_name || seller.full_name,
           image: seller.image_url || '/globe.svg', // Use image or fallback
-          slug: seller.slug,
-          location: seller.location || `City ${index + 1}, India`, // Use location or fallback
-          productCount: 40 + (index * 20), // Simulate product count
-          rating: seller.rating || 4.5 + (Math.random() * 0.5), // Use rating or generate one
-          verified: seller.verified !== undefined ? seller.verified : true, // Use verified status or default to true
-          memberSince: seller.member_since || (2018 + index).toString() // Use member since or generate one
+          slug: seller.slug || seller.username?.replace('_', '-'),
+          location: seller.location || seller.region || 'India',
+          productCount: seller.product_count || 0,
+          rating: seller.rating || 4.5,
+          verified: seller.verified !== undefined ? seller.verified : true,
+          memberSince: seller.member_since || (seller.joined_date ? new Date(seller.joined_date).getFullYear().toString() : '2023')
         }));
         
         setSellers(transformedSellers);

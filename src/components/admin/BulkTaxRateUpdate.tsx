@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { formatTaxPercentage } from '../../utils/taxService';
+import axios from 'axios';
 
 // Define types for tax rate data
 interface TaxRate {
@@ -37,132 +38,57 @@ const BulkTaxRateUpdate = () => {
   const [categories, setCategories] = useState<{id: number, name: string}[]>([]);
   const [regions, setRegions] = useState<{code: string, name: string}[]>([]);
 
-  // Mock tax rates data
-  const mockTaxRates: TaxRate[] = [
-    {
-      id: 1,
-      category_id: 1,
-      category_name: 'Electronics',
-      hsn_code: '8517',
-      region_code: 'ALL',
-      region_name: 'All India',
-      tax_percentage: 18,
-      is_default: true,
-      effective_from: '2023-01-01'
-    },
-    {
-      id: 2,
-      category_id: 2,
-      category_name: 'Textiles',
-      hsn_code: '5208',
-      region_code: 'ALL',
-      region_name: 'All India',
-      tax_percentage: 5,
-      is_default: true,
-      effective_from: '2023-01-01'
-    },
-    {
-      id: 3,
-      category_id: 3,
-      category_name: 'Machinery',
-      hsn_code: '8422',
-      region_code: 'ALL',
-      region_name: 'All India',
-      tax_percentage: 12,
-      is_default: true,
-      effective_from: '2023-01-01'
-    },
-    {
-      id: 4,
-      category_id: 1,
-      category_name: 'Electronics',
-      hsn_code: '8517',
-      region_code: 'MH',
-      region_name: 'Maharashtra',
-      tax_percentage: 18,
-      is_default: false,
-      effective_from: '2023-01-01'
-    },
-    {
-      id: 5,
-      category_id: 2,
-      category_name: 'Textiles',
-      hsn_code: '5208',
-      region_code: 'MH',
-      region_name: 'Maharashtra',
-      tax_percentage: 5,
-      is_default: false,
-      effective_from: '2023-01-01'
-    },
-    {
-      id: 6,
-      category_id: 4,
-      category_name: 'Furniture',
-      hsn_code: '9403',
-      region_code: 'ALL',
-      region_name: 'All India',
-      tax_percentage: 18,
-      is_default: true,
-      effective_from: '2023-01-01'
-    },
-    {
-      id: 7,
-      category_id: 5,
-      category_name: 'Pharmaceuticals',
-      hsn_code: '3004',
-      region_code: 'ALL',
-      region_name: 'All India',
-      tax_percentage: 12,
-      is_default: true,
-      effective_from: '2023-01-01'
-    },
-    {
-      id: 8,
-      category_id: 6,
-      category_name: 'Food Products',
-      hsn_code: '2106',
-      region_code: 'ALL',
-      region_name: 'All India',
-      tax_percentage: 5,
-      is_default: true,
-      effective_from: '2023-01-01'
-    }
-  ];
-
-  // In a real app, we would fetch tax rates from an API
+  // Fetch tax rates from API
   useEffect(() => {
     const fetchTaxRates = async () => {
       setIsLoading(true);
       try {
-        // Simulate API call
-        setTimeout(() => {
-          setTaxRates(mockTaxRates);
+        // Get token from localStorage
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+          throw new Error('Authentication required');
+        }
+        
+        // Fetch tax rates from API
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/tax/rates`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        
+        if (response.data) {
+          setTaxRates(response.data);
           
           // Extract unique categories and regions for filters
           const uniqueCategories = Array.from(
-            new Set(mockTaxRates.map(rate => JSON.stringify({ id: rate.category_id, name: rate.category_name })))
-          ).map(str => JSON.parse(str));
+            new Set(response.data.map((rate: TaxRate) => 
+              JSON.stringify({ id: rate.category_id, name: rate.category_name }))
+            )
+          ).map(str => JSON.parse(str as string) as {id: number, name: string});
           
           const uniqueRegions = Array.from(
-            new Set(mockTaxRates.map(rate => JSON.stringify({ code: rate.region_code, name: rate.region_name })))
-          ).map(str => JSON.parse(str));
+            new Set(response.data.map((rate: TaxRate) => 
+              JSON.stringify({ code: rate.region_code, name: rate.region_name }))
+            )
+          ).map(str => JSON.parse(str as string) as {code: string, name: string});
           
           setCategories(uniqueCategories);
           setRegions(uniqueRegions);
           
           // Initialize bulk update items
-          const items = mockTaxRates.map(rate => ({
+          const items = response.data.map((rate: TaxRate) => ({
             id: rate.id,
             selected: false,
             originalRate: rate.tax_percentage,
             newRate: rate.tax_percentage
           }));
           setBulkItems(items);
-          
-          setIsLoading(false);
-        }, 500);
+        }
       } catch (error) {
         console.error('Error fetching tax rates:', error);
+        setUpdateError('Failed to load tax rates. Please try again.');
+      } finally {
         setIsLoading(false);
       }
     };
@@ -262,37 +188,58 @@ const BulkTaxRateUpdate = () => {
     }
     
     try {
-      // In a real app, we would send this to an API
-      console.log('Updating tax rates:', itemsToUpdate);
+      // Get token from localStorage
+      const token = localStorage.getItem('token');
       
-      // Simulate API call
-      setTimeout(() => {
-        // Update the tax rates in our state
-        const updatedTaxRates = taxRates.map(rate => {
-          const updateItem = itemsToUpdate.find(item => item.id === rate.id);
-          if (updateItem) {
-            return { ...rate, tax_percentage: updateItem.newRate };
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+      
+      // Prepare data for API
+      const updateData = itemsToUpdate.map(item => {
+        const taxRate = taxRates.find(rate => rate.id === item.id);
+        return {
+          id: item.id,
+          tax_percentage: item.newRate
+        };
+      });
+      
+      // Send update to API
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/tax/rates/bulk-update`, 
+        { rates: updateData },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
           }
-          return rate;
-        });
-        
-        setTaxRates(updatedTaxRates);
-        
-        // Reset bulk items with new original rates
-        const newBulkItems = bulkItems.map(item => {
-          const updateItem = itemsToUpdate.find(i => i.id === item.id);
-          if (updateItem) {
-            return { ...item, originalRate: updateItem.newRate, newRate: updateItem.newRate, selected: false };
-          }
-          return { ...item, selected: false };
-        });
-        
-        setBulkItems(newBulkItems);
-        setUpdateSuccess(true);
-        
-        // Clear success message after 3 seconds
-        setTimeout(() => setUpdateSuccess(false), 3000);
-      }, 1000);
+        }
+      );
+      
+      // Update the tax rates in our state
+      const updatedTaxRates = taxRates.map(rate => {
+        const updateItem = itemsToUpdate.find(item => item.id === rate.id);
+        if (updateItem) {
+          return { ...rate, tax_percentage: updateItem.newRate };
+        }
+        return rate;
+      });
+      
+      setTaxRates(updatedTaxRates);
+      
+      // Reset bulk items with new original rates
+      const newBulkItems = bulkItems.map(item => {
+        const updateItem = itemsToUpdate.find(i => i.id === item.id);
+        if (updateItem) {
+          return { ...item, originalRate: updateItem.newRate, newRate: updateItem.newRate, selected: false };
+        }
+        return { ...item, selected: false };
+      });
+      
+      setBulkItems(newBulkItems);
+      setUpdateSuccess(true);
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => setUpdateSuccess(false), 3000);
     } catch (error) {
       console.error('Error updating tax rates:', error);
       setUpdateError('Failed to update tax rates. Please try again.');

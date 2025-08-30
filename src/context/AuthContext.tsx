@@ -124,7 +124,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (userData.role === 'seller') {
         router.push('/seller/dashboard');
       } else if (userData.role === 'admin') {
-        router.push('/admin/dashboard');
+        router.push('/admin');
       } else {
         router.push('/dashboard');
       }

@@ -1,19 +1,76 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import searchService, { AutocompleteResult } from '../../services/searchService';
 
 const HeroSection = () => {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('all');
+  const [suggestions, setSuggestions] = useState<AutocompleteResult[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
 
+  // Handle search form submission
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real implementation, this would navigate to search results
-    console.log('Searching for:', searchQuery, 'in category:', category);
-    // window.location.href = `/search?q=${encodeURIComponent(searchQuery)}&category=${category}`;
+    if (searchQuery.trim()) {
+      const categoryParam = category !== 'all' ? `&category=${category}` : '';
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}${categoryParam}`);
+    }
   };
+  
+  // Handle suggestion click
+  const handleSuggestionClick = (suggestion: AutocompleteResult) => {
+    setSearchQuery(suggestion.name);
+    setSuggestions([]);
+    setShowSuggestions(false);
+    router.push(`/products/${suggestion.id}`);
+  };
+
+  // Fetch suggestions when search query changes
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchQuery.trim().length < 2) {
+        setSuggestions([]);
+        return;
+      }
+      
+      setIsLoading(true);
+      setShowSuggestions(true); // Always show suggestions when fetching
+      console.log('Fetching suggestions for query:', searchQuery);
+      try {
+        const results = await searchService.getAutocompleteSuggestions(searchQuery);
+        console.log('Received suggestions:', results);
+        setSuggestions(results);
+        // Force show suggestions even if results are empty
+        setShowSuggestions(true);
+      } catch (error) {
+        console.error('Error fetching suggestions:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    const debounceTimer = setTimeout(fetchSuggestions, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [searchQuery]);
+  
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <section className="relative bg-gradient-to-br from-blue-50 via-white to-blue-50 py-12 md:py-20 overflow-hidden">
@@ -28,17 +85,57 @@ const HeroSection = () => {
             </p>
             
             {/* Search Bar */}
-            <div className="bg-white rounded-2xl p-4 shadow-xl border border-gray-100 max-w-2xl mx-auto lg:mx-0">
+            <div className="bg-white rounded-2xl p-4 shadow-xl border border-gray-100 max-w-2xl mx-auto lg:mx-0" ref={searchContainerRef}>
               <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
-                <div className="flex-1">
+                <div className="flex-1 relative">
                   <input
                     type="text"
                     placeholder="What are you looking for?"
                     className="w-full px-4 py-3 text-gray-800 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setShowSuggestions(true)}
                     aria-label="Search products"
+                    autoComplete="off"
                   />
+                  
+                  {/* Autocomplete suggestions */}
+                  {searchQuery.trim().length >= 2 && (
+                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                      {isLoading ? (
+                        <div className="p-3 text-center text-gray-500">
+                          <div className="inline-block animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-blue-500 mr-2"></div>
+                          Loading...
+                        </div>
+                      ) : suggestions.length > 0 ? (
+                        suggestions.map((suggestion) => (
+                          <div 
+                            key={suggestion.id}
+                            className="flex items-center p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                            onClick={() => handleSuggestionClick(suggestion)}
+                          >
+                            <div className="flex-shrink-0 w-10 h-10 relative bg-gray-50 rounded overflow-hidden">
+                              <Image 
+                                src={suggestion.image || '/globe.svg'}
+                                alt={suggestion.name}
+                                fill
+                                className="object-contain p-1"
+                                sizes="40px"
+                                unoptimized
+                              />
+                            </div>
+                            <div className="ml-3 flex-1">
+                              <p className="text-sm font-medium text-gray-900 line-clamp-1">{suggestion.name}</p>
+                              <p className="text-xs text-gray-500">{suggestion.category || 'Product'}</p>
+                            </div>
+                            <div className="text-sm font-semibold text-gray-900">₹{suggestion.price.toLocaleString()}</div>
+                          </div>
+                        ))
+                      ) : searchQuery.trim().length >= 2 ? (
+                        <div className="p-3 text-center text-gray-500">No products found</div>
+                      ) : null}
+                    </div>
+                  )}
                 </div>
                 <div className="sm:w-48">
                   <select

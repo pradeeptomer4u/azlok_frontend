@@ -1,146 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import productService, { Product, ProductFilters } from '../../../services/productService';
 
-// Mock product data
-const mockProducts = [
-  {
-    id: 1,
-    name: 'Industrial Machinery Part XYZ',
-    sku: 'IMP-001',
-    price: 12500,
-    stock: 45,
-    category: 'Machinery Parts',
-    status: 'active',
-    seller: 'ABC Manufacturing',
-    image: '/logo.png'
-  },
-  {
-    id: 2,
-    name: 'Heavy Duty Electric Motor',
-    sku: 'HDM-002',
-    price: 10000,
-    stock: 23,
-    category: 'Electric Motors',
-    status: 'active',
-    seller: 'XYZ Industries',
-    image: '/logo.png'
-  },
-  {
-    id: 3,
-    name: 'Precision Measuring Tool',
-    sku: 'PMT-003',
-    price: 5000,
-    stock: 67,
-    category: 'Measuring Tools',
-    status: 'active',
-    seller: 'Precision Tools Inc',
-    image: '/logo.png'
-  },
-  {
-    id: 4,
-    name: 'Industrial Safety Equipment',
-    sku: 'ISE-004',
-    price: 5000,
-    stock: 89,
-    category: 'Safety Equipment',
-    status: 'active',
-    seller: 'SafetyFirst Ltd',
-    image: '/logo.png'
-  },
-  {
-    id: 5,
-    name: 'Hydraulic Pump System',
-    sku: 'HPS-005',
-    price: 18500,
-    stock: 12,
-    category: 'Hydraulic Systems',
-    status: 'pending',
-    seller: 'FluidTech Solutions',
-    image: '/logo.png'
-  },
-  {
-    id: 6,
-    name: 'Industrial Control Panel',
-    sku: 'ICP-006',
-    price: 8500,
-    stock: 34,
-    category: 'Control Systems',
-    status: 'pending',
-    seller: 'Control Systems Inc',
-    image: '/logo.png'
-  },
-  {
-    id: 7,
-    name: 'Conveyor Belt System',
-    sku: 'CBS-007',
-    price: 22000,
-    stock: 8,
-    category: 'Material Handling',
-    status: 'inactive',
-    seller: 'ConveyTech Ltd',
-    image: '/logo.png'
-  },
-  {
-    id: 8,
-    name: 'Industrial Air Compressor',
-    sku: 'IAC-008',
-    price: 15000,
-    stock: 15,
-    category: 'Pneumatic Systems',
-    status: 'active',
-    seller: 'AirPower Solutions',
-    image: '/logo.png'
-  },
-  {
-    id: 9,
-    name: 'Welding Machine Pro',
-    sku: 'WMP-009',
-    price: 7500,
-    stock: 28,
-    category: 'Welding Equipment',
-    status: 'active',
-    seller: 'WeldTech Industries',
-    image: '/logo.png'
-  },
-  {
-    id: 10,
-    name: 'Industrial Robotic Arm',
-    sku: 'IRA-010',
-    price: 85000,
-    stock: 5,
-    category: 'Robotics',
-    status: 'pending',
-    seller: 'RoboSystems Inc',
-    image: '/logo.png'
-  }
-];
-
-// Mock categories for filter
-const mockCategories = [
-  'All Categories',
-  'Machinery Parts',
-  'Electric Motors',
-  'Measuring Tools',
-  'Safety Equipment',
-  'Hydraulic Systems',
-  'Control Systems',
-  'Material Handling',
-  'Pneumatic Systems',
-  'Welding Equipment',
-  'Robotics'
-];
+// Categories will be fetched from API
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+}
 
 export default function ProductsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [sortBy, setSortBy] = useState('name');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
   const [isSelectAll, setIsSelectAll] = useState(false);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   
   const itemsPerPage = 10;
   
@@ -153,38 +39,70 @@ export default function ProductsPage() {
     }).format(amount);
   };
   
-  // Filter and sort products
-  const filteredProducts = mockProducts.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          product.sku.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'All Categories' || product.category === selectedCategory;
-    const matchesStatus = selectedStatus === 'all' || product.status === selectedStatus;
+  // Fetch products and categories
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        // Fetch categories
+        const categoriesResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.azlok.com'}/api/categories`);
+        if (!categoriesResponse.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+        const categoriesData = await categoriesResponse.json();
+        setCategories(categoriesData);
+        
+        // Prepare filters for products
+        const filters: ProductFilters = {
+          page: currentPage,
+          size: itemsPerPage
+        };
+        
+        if (searchTerm) {
+          filters.search = searchTerm;
+        }
+        
+        if (selectedCategory) {
+          filters.category_id = selectedCategory;
+        }
+        
+        // Map sort options to API parameters
+        if (sortBy === 'name') {
+          filters.sort_by = 'name';
+          filters.sort_order = 'asc';
+        } else if (sortBy === 'price_asc') {
+          filters.sort_by = 'price';
+          filters.sort_order = 'asc';
+        } else if (sortBy === 'price_desc') {
+          filters.sort_by = 'price';
+          filters.sort_order = 'desc';
+        } else if (sortBy === 'stock') {
+          filters.sort_by = 'stock_quantity';
+          filters.sort_order = 'desc';
+        }
+        
+        // Fetch products with filters
+        const response = await productService.getProducts(filters, currentPage, itemsPerPage);
+        setProducts(response.items);
+        setTotalItems(response.total);
+        setTotalPages(response.pages);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setError('Failed to load products. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
     
-    return matchesSearch && matchesCategory && matchesStatus;
-  }).sort((a, b) => {
-    if (sortBy === 'name') {
-      return a.name.localeCompare(b.name);
-    } else if (sortBy === 'price_asc') {
-      return a.price - b.price;
-    } else if (sortBy === 'price_desc') {
-      return b.price - a.price;
-    } else if (sortBy === 'stock') {
-      return b.stock - a.stock;
-    }
-    return 0;
-  });
-  
-  // Pagination
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
+    fetchData();
+  }, [searchTerm, selectedCategory, selectedStatus, sortBy, currentPage]);
   
   // Handle select all
   const handleSelectAll = () => {
     if (isSelectAll) {
       setSelectedProducts([]);
     } else {
-      setSelectedProducts(paginatedProducts.map(product => product.id));
+      setSelectedProducts(products.map(product => product.id));
     }
     setIsSelectAll(!isSelectAll);
   };
@@ -199,16 +117,53 @@ export default function ProductsPage() {
   };
   
   // Handle bulk actions
-  const handleBulkAction = (action: string) => {
+  const handleBulkAction = async (action: string) => {
     if (selectedProducts.length === 0) return;
     
-    // In a real app, this would call an API
-    alert(`${action} action on products: ${selectedProducts.join(', ')}`);
-    
-    // Reset selection
-    setSelectedProducts([]);
-    setIsSelectAll(false);
+    try {
+      if (action === 'delete') {
+        if (window.confirm(`Are you sure you want to delete ${selectedProducts.length} products? This action cannot be undone.`)) {
+          // Delete each selected product
+          for (const id of selectedProducts) {
+            await productService.deleteProduct(id);
+          }
+          
+          // Refresh products list
+          const filters: ProductFilters = { page: currentPage, size: itemsPerPage };
+          const response = await productService.getProducts(filters, currentPage, itemsPerPage);
+          setProducts(response.items);
+          setTotalItems(response.total);
+          setTotalPages(response.pages);
+          
+          // Reset selection
+          setSelectedProducts([]);
+          setIsSelectAll(false);
+        }
+      }
+    } catch (err) {
+      console.error('Error performing bulk action:', err);
+      alert('Failed to perform action. Please try again.');
+    }
   };
+
+  // Loading state
+  if (isLoading && products.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+  
+  // Error state
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong className="font-bold">Error!</strong>
+        <span className="block sm:inline"> {error}</span>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -250,11 +205,12 @@ export default function ProductsPage() {
             <select
               id="category"
               className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-gray-300 rounded-md"
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              value={selectedCategory || ''}
+              onChange={(e) => setSelectedCategory(e.target.value ? Number(e.target.value) : null)}
             >
-              {mockCategories.map((category) => (
-                <option key={category} value={category}>{category}</option>
+              <option value="">All Categories</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>{category.name}</option>
               ))}
             </select>
           </div>
@@ -299,18 +255,6 @@ export default function ProductsPage() {
           </div>
           <div className="flex space-x-2">
             <button 
-              onClick={() => handleBulkAction('activate')}
-              className="px-3 py-1 bg-green-100 text-green-700 rounded-md text-sm hover:bg-green-200"
-            >
-              Activate
-            </button>
-            <button 
-              onClick={() => handleBulkAction('deactivate')}
-              className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-md text-sm hover:bg-yellow-200"
-            >
-              Deactivate
-            </button>
-            <button 
               onClick={() => handleBulkAction('delete')}
               className="px-3 py-1 bg-red-100 text-red-700 rounded-md text-sm hover:bg-red-200"
             >
@@ -351,19 +295,13 @@ export default function ProductsPage() {
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Category
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Seller
-                </th>
                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {paginatedProducts.map((product) => (
+              {products.map((product) => (
                 <tr key={product.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -379,7 +317,7 @@ export default function ProductsPage() {
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10 relative">
                         <Image
-                          src={product.image}
+                          src={product.image_url || '/logo.png'}
                           alt={product.name}
                           fill
                           className="object-cover rounded-md"
@@ -397,34 +335,24 @@ export default function ProductsPage() {
                     <div className="text-sm text-gray-900">{formatCurrency(product.price)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{product.stock}</div>
+                    <div className="text-sm text-gray-900">{product.stock_quantity}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{product.category}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${product.status === 'active' ? 'bg-green-100 text-green-800' : 
-                        product.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                        'bg-gray-100 text-gray-800'}`}>
-                      {product.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{product.seller}</div>
+                    <div className="text-sm text-gray-500">{product.category_name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex justify-end space-x-2">
-                      <Link href={`/admin/products/${product.id}`} className="text-primary hover:text-primary-dark">
-                        View
-                      </Link>
-                      <Link href={`/admin/products/edit/${product.id}`} className="text-indigo-600 hover:text-indigo-900">
-                        Edit
-                      </Link>
-                      <button className="text-red-600 hover:text-red-900">
-                        Delete
-                      </button>
-                    </div>
+                    <Link 
+                      href={`/admin/products/${product.id}`}
+                      className="text-primary hover:text-primary-dark mr-4"
+                    >
+                      View
+                    </Link>
+                    <Link 
+                      href={`/admin/products/edit/${product.id}`}
+                      className="text-indigo-600 hover:text-indigo-900"
+                    >
+                      Edit
+                    </Link>
                   </td>
                 </tr>
               ))}
@@ -434,13 +362,13 @@ export default function ProductsPage() {
         
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+          <div className="px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
             <div className="flex-1 flex justify-between sm:hidden">
               <button
                 onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
                 className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
-                  currentPage === 1 ? 'bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-gray-50'
+                  currentPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50'
                 }`}
               >
                 Previous
@@ -449,7 +377,7 @@ export default function ProductsPage() {
                 onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
                 className={`ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
-                  currentPage === totalPages ? 'bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-gray-50'
+                  currentPage === totalPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50'
                 }`}
               >
                 Next
@@ -458,11 +386,9 @@ export default function ProductsPage() {
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm text-gray-700">
-                  Showing <span className="font-medium">{startIndex + 1}</span> to{' '}
-                  <span className="font-medium">
-                    {Math.min(startIndex + itemsPerPage, filteredProducts.length)}
-                  </span>{' '}
-                  of <span className="font-medium">{filteredProducts.length}</span> results
+                  Showing <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> to{' '}
+                  <span className="font-medium">{Math.min(currentPage * itemsPerPage, totalItems)}</span> of{' '}
+                  <span className="font-medium">{totalItems}</span> results
                 </p>
               </div>
               <div>
@@ -471,7 +397,7 @@ export default function ProductsPage() {
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
                     className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${
-                      currentPage === 1 ? 'text-gray-300' : 'text-gray-500 hover:bg-gray-50'
+                      currentPage === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:bg-gray-50'
                     }`}
                   >
                     <span className="sr-only">Previous</span>
@@ -480,17 +406,18 @@ export default function ProductsPage() {
                     </svg>
                   </button>
                   
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  {/* Page numbers */}
+                  {[...Array(totalPages)].map((_, i) => (
                     <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
+                      key={i}
+                      onClick={() => setCurrentPage(i + 1)}
                       className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                        page === currentPage
+                        currentPage === i + 1
                           ? 'z-10 bg-primary border-primary text-white'
                           : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
                       }`}
                     >
-                      {page}
+                      {i + 1}
                     </button>
                   ))}
                   
@@ -498,7 +425,7 @@ export default function ProductsPage() {
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
                     className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${
-                      currentPage === totalPages ? 'text-gray-300' : 'text-gray-500 hover:bg-gray-50'
+                      currentPage === totalPages ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:bg-gray-50'
                     }`}
                   >
                     <span className="sr-only">Next</span>

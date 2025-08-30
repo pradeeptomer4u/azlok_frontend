@@ -4,60 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import ProductForm from '../../../../../components/admin/ProductForm';
 import Link from 'next/link';
-
-// Mock product data for demo
-const mockProductData = {
-  1: {
-    id: 1,
-    name: 'Industrial Machinery Part XYZ',
-    sku: 'IMP-001',
-    price: 12500,
-    stock: 45,
-    category: 'Machinery Parts',
-    status: 'active',
-    seller: 'ABC Manufacturing',
-    image: '/logo.png',
-    description: 'High-quality industrial machinery part designed for heavy-duty applications. This component is built to withstand extreme conditions and provide reliable performance in industrial settings.',
-    features: [
-      'Durable construction with premium materials',
-      'Precision engineered for perfect fit',
-      'Heat and corrosion resistant',
-      'Extended lifespan compared to standard parts'
-    ],
-    specifications: [
-      { name: 'Material', value: 'Hardened Steel' },
-      { name: 'Dimensions', value: '15cm x 8cm x 5cm' },
-      { name: 'Weight', value: '2.5 kg' },
-      { name: 'Operating Temperature', value: '-20°C to 180°C' }
-    ],
-    images: ['/logo.png', '/logo.png', '/logo.png']
-  },
-  2: {
-    id: 2,
-    name: 'Heavy Duty Electric Motor',
-    sku: 'HDM-002',
-    price: 10000,
-    stock: 23,
-    category: 'Electric Motors',
-    status: 'active',
-    seller: 'XYZ Industries',
-    image: '/logo.png',
-    description: 'Powerful electric motor designed for industrial applications requiring high torque and continuous operation. Energy efficient design with advanced cooling system.',
-    features: [
-      'High efficiency design',
-      'Low noise operation',
-      'Integrated cooling system',
-      'Variable speed control compatibility'
-    ],
-    specifications: [
-      { name: 'Power', value: '7.5 kW' },
-      { name: 'Voltage', value: '380-415V, 3-phase' },
-      { name: 'RPM', value: '1450' },
-      { name: 'Protection Class', value: 'IP55' }
-    ],
-    images: ['/logo.png', '/logo.png']
-  }
-};
+import axios from 'axios';
 
 export default function EditProductPage() {
   const params = useParams();
@@ -66,7 +13,6 @@ export default function EditProductPage() {
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
-    // In a real app, this would be an API call
     const fetchProduct = async () => {
       try {
         setIsLoading(true);
@@ -75,19 +21,56 @@ export default function EditProductPage() {
           throw new Error('Product ID not found');
         }
         
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
         const productId = parseInt(params.id as string);
-        const productData = mockProductData[productId as keyof typeof mockProductData];
         
-        if (!productData) {
+        // Get token from localStorage
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+          throw new Error('Authentication required');
+        }
+        
+        // Fetch product from API
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        
+        if (!response.data) {
           throw new Error('Product not found');
         }
         
+        // Process image_urls if it's a string
+        if (response.data.image_urls && typeof response.data.image_urls === 'string') {
+          try {
+            response.data.image_urls = JSON.parse(response.data.image_urls);
+          } catch (e) {
+            response.data.image_urls = [];
+          }
+        }
+        
+        // Format product data for the form
+        const productData = {
+          id: response.data.id,
+          name: response.data.name,
+          sku: response.data.sku,
+          price: response.data.price,
+          stock: response.data.stock_quantity,
+          category: response.data.categories?.length > 0 ? response.data.categories[0].name : '',
+          category_ids: response.data.categories?.map((cat: any) => cat.id) || [],
+          status: response.data.approval_status,
+          seller: response.data.seller?.full_name || 'Unknown',
+          image: response.data.image_urls?.[0] || '/logo.png',
+          description: response.data.description,
+          features: response.data.features || [],
+          specifications: response.data.specifications || [],
+          images: response.data.image_urls || []
+        };
+        
         setProduct(productData);
-      } catch (err) {
-        setError('Failed to load product. Please try again.');
+      } catch (err: any) {
+        setError(err.message || 'Failed to load product. Please try again.');
         console.error('Error fetching product:', err);
       } finally {
         setIsLoading(false);

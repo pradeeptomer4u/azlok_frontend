@@ -1,144 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import axios from 'axios';
 
-// Mock user data
-const mockUsers = [
-  {
-    id: 1,
-    name: 'John Smith',
-    email: 'john.smith@acmecorp.com',
-    company: 'Acme Corporation',
-    role: 'buyer',
-    status: 'active',
-    joinDate: '2023-08-15',
-    lastLogin: '2023-11-15',
-    avatar: '/globe.svg',
-    ordersCount: 12,
-    totalSpent: 145000
-  },
-  {
-    id: 2,
-    name: 'Sarah Johnson',
-    email: 'sarah@xyzindustries.com',
-    company: 'XYZ Industries',
-    role: 'seller',
-    status: 'active',
-    joinDate: '2023-07-22',
-    lastLogin: '2023-11-14',
-    avatar: '/globe.svg',
-    productsCount: 24,
-    salesCount: 156
-  },
-  {
-    id: 3,
-    name: 'Michael Brown',
-    email: 'michael@techsolutions.com',
-    company: 'Tech Solutions',
-    role: 'buyer',
-    status: 'inactive',
-    joinDate: '2023-06-10',
-    lastLogin: '2023-10-05',
-    avatar: '/globe.svg',
-    ordersCount: 5,
-    totalSpent: 37500
-  },
-  {
-    id: 4,
-    name: 'Emily Davis',
-    email: 'emily@globaltraders.com',
-    company: 'Global Traders',
-    role: 'buyer',
-    status: 'active',
-    joinDate: '2023-09-03',
-    lastLogin: '2023-11-12',
-    avatar: '/globe.svg',
-    ordersCount: 8,
-    totalSpent: 92000
-  },
-  {
-    id: 5,
-    name: 'Robert Wilson',
-    email: 'robert@precisiontools.com',
-    company: 'Precision Tools Inc',
-    role: 'seller',
-    status: 'active',
-    joinDate: '2023-05-18',
-    lastLogin: '2023-11-10',
-    avatar: '/globe.svg',
-    productsCount: 18,
-    salesCount: 87
-  },
-  {
-    id: 6,
-    name: 'Jennifer Lee',
-    email: 'jennifer@safetyfirst.com',
-    company: 'SafetyFirst Ltd',
-    role: 'seller',
-    status: 'pending',
-    joinDate: '2023-10-25',
-    lastLogin: '2023-10-25',
-    avatar: '/globe.svg',
-    productsCount: 5,
-    salesCount: 0
-  },
-  {
-    id: 7,
-    name: 'David Miller',
-    email: 'david@fluidtech.com',
-    company: 'FluidTech Solutions',
-    role: 'seller',
-    status: 'active',
-    joinDate: '2023-04-12',
-    lastLogin: '2023-11-08',
-    avatar: '/globe.svg',
-    productsCount: 12,
-    salesCount: 45
-  },
-  {
-    id: 8,
-    name: 'Lisa Anderson',
-    email: 'lisa@controlsystems.com',
-    company: 'Control Systems Inc',
-    role: 'buyer',
-    status: 'active',
-    joinDate: '2023-08-30',
-    lastLogin: '2023-11-13',
-    avatar: '/globe.svg',
-    ordersCount: 3,
-    totalSpent: 28500
-  },
-  {
-    id: 9,
-    name: 'James Taylor',
-    email: 'james@conveytech.com',
-    company: 'ConveyTech Ltd',
-    role: 'seller',
-    status: 'inactive',
-    joinDate: '2023-03-05',
-    lastLogin: '2023-09-22',
-    avatar: '/globe.svg',
-    productsCount: 8,
-    salesCount: 32
-  },
-  {
-    id: 10,
-    name: 'Patricia Martinez',
-    email: 'patricia@airpower.com',
-    company: 'AirPower Solutions',
-    role: 'buyer',
-    status: 'active',
-    joinDate: '2023-07-08',
-    lastLogin: '2023-11-11',
-    avatar: '/globe.svg',
-    ordersCount: 7,
-    totalSpent: 63500
-  }
-];
+// User interface
+interface User {
+  id: number;
+  full_name: string;
+  email: string;
+  company_name?: string;
+  role: string;
+  status: string;
+  created_at: string;
+  last_login?: string;
+  avatar?: string;
+  orders_count?: number;
+  total_spent?: number;
+  products_count?: number;
+  sales_count?: number;
+}
 
 export default function UsersPage() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
@@ -149,6 +36,56 @@ export default function UsersPage() {
   
   const itemsPerPage = 10;
   
+  // Fetch users from API
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setIsLoading(true);
+        
+        // Get token from localStorage
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+          throw new Error('Authentication required');
+        }
+        
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        
+        if (response.data) {
+          // Transform API data to match our interface
+          const transformedUsers = response.data.map((user: any) => ({
+            id: user.id,
+            full_name: user.full_name || 'Unknown',
+            email: user.email,
+            company_name: user.company_name || 'N/A',
+            role: user.role || 'buyer',
+            status: user.is_active ? 'active' : 'inactive',
+            created_at: user.created_at,
+            last_login: user.last_login || user.created_at,
+            avatar: user.avatar || '/globe.svg',
+            orders_count: user.orders_count || 0,
+            total_spent: user.total_spent || 0,
+            products_count: user.products_count || 0,
+            sales_count: user.sales_count || 0
+          }));
+          
+          setUsers(transformedUsers);
+        }
+      } catch (err: any) {
+        console.error('Error fetching users:', err);
+        setError(err.message || 'Failed to load users');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchUsers();
+  }, []);
+
   // Format currency
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -168,23 +105,26 @@ export default function UsersPage() {
   };
   
   // Filter and sort users
-  const filteredUsers = mockUsers.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          user.company.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = 
+      user.full_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.company_name && user.company_name.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesRole = selectedRole === 'all' || user.role === selectedRole;
     const matchesStatus = selectedStatus === 'all' || user.status === selectedStatus;
     
     return matchesSearch && matchesRole && matchesStatus;
   }).sort((a, b) => {
     if (sortBy === 'name') {
-      return a.name.localeCompare(b.name);
+      return a.full_name.localeCompare(b.full_name);
     } else if (sortBy === 'company') {
-      return a.company.localeCompare(b.company);
+      return (a.company_name || '').localeCompare(b.company_name || '');
     } else if (sortBy === 'joinDate') {
-      return new Date(b.joinDate).getTime() - new Date(a.joinDate).getTime();
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     } else if (sortBy === 'lastLogin') {
-      return new Date(b.lastLogin).getTime() - new Date(a.lastLogin).getTime();
+      const bLogin = b.last_login || b.created_at;
+      const aLogin = a.last_login || a.created_at;
+      return new Date(bLogin).getTime() - new Date(aLogin).getTime();
     }
     return 0;
   });
@@ -213,17 +153,47 @@ export default function UsersPage() {
     }
   };
   
-  // Handle bulk actions
-  const handleBulkAction = (action: string) => {
+  // Handle bulk action
+  const handleBulkAction = async (action: string) => {
     if (selectedUsers.length === 0) return;
     
-    // In a real app, this would call an API
-    alert(`${action} action on users: ${selectedUsers.join(', ')}`);
-    
-    // Reset selection
-    setSelectedUsers([]);
-    setIsSelectAll(false);
+    try {
+      // Get token from localStorage
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+      
+      // In a real implementation, we would call the API to perform the bulk action
+      // For now, we'll just show an alert
+      alert(`${action} action on users: ${selectedUsers.join(', ')}`);
+      
+      // Reset selection
+      setSelectedUsers([]);
+      setIsSelectAll(false);
+    } catch (err: any) {
+      console.error(`Error performing ${action}:`, err);
+      alert(`Failed to ${action} users: ${err.message}`);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+  
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong className="font-bold">Error!</strong>
+        <span className="block sm:inline"> {error}</span>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -392,16 +362,16 @@ export default function UsersPage() {
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10 relative">
                         <Image
-                          src={user.avatar}
-                          alt={user.name}
+                          src={user.avatar || '/globe.svg'}
+                          alt={user.full_name}
                           fill
                           className="object-cover rounded-full"
                         />
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                        <div className="text-sm font-medium text-gray-900">{user.full_name}</div>
                         <div className="text-sm text-gray-500">{user.email}</div>
-                        <div className="text-xs text-gray-500">{user.company}</div>
+                        <div className="text-xs text-gray-500">{user.company_name || 'N/A'}</div>
                       </div>
                     </div>
                   </td>
@@ -422,24 +392,24 @@ export default function UsersPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{formatDate(user.joinDate)}</div>
+                    <div className="text-sm text-gray-500">{formatDate(user.created_at)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{formatDate(user.lastLogin)}</div>
+                    <div className="text-sm text-gray-500">{formatDate(user.last_login || user.created_at)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
                       {user.role === 'buyer' ? (
-                        <span>{user.ordersCount} orders</span>
+                        <span>{user.orders_count} orders</span>
                       ) : (
-                        <span>{user.productsCount} products</span>
+                        <span>{user.products_count} products</span>
                       )}
                     </div>
                     <div className="text-xs text-gray-500">
                       {user.role === 'buyer' ? (
-                        <span>Total: {formatCurrency(user.totalSpent || 0)}</span>
+                        <span>Total: {formatCurrency(user.total_spent || 0)}</span>
                       ) : (
-                        <span>Sales: {user.salesCount}</span>
+                        <span>Sales: {user.sales_count}</span>
                       )}
                     </div>
                   </td>

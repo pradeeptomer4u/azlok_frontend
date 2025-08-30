@@ -3,7 +3,7 @@
  */
 
 // Base URL for API requests
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.azlok.com';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 /**
  * Generic API request function
@@ -15,11 +15,19 @@ export const apiRequest = async <T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> => {
-  const url = `${API_BASE_URL}${endpoint}`;
+  // If endpoint is a full URL, use it directly, otherwise prepend the base URL
+  const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
+  
+  // Get JWT token from localStorage
+  let token = null;
+  if (typeof window !== 'undefined') {
+    token = localStorage.getItem('azlok-token');
+  }
   
   // Default headers
   const headers = {
     'Content-Type': 'application/json',
+    ...(token && { 'Authorization': `Bearer ${token}` }),
     ...options.headers,
   };
 

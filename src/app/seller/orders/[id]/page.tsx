@@ -159,7 +159,7 @@ export default function OrderDetailPage() {
       setIsUpdating(true);
       setUpdateError(null);
       
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('azlok-token');
       if (!token) {
         setUpdateError('Authentication required');
         setIsUpdating(false);
@@ -225,7 +225,7 @@ export default function OrderDetailPage() {
     const fetchOrderDetails = async () => {
       try {
         setIsLoading(true);
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('azlok-token');
         if (!token) {
           setError('Authentication required');
           setIsLoading(false);

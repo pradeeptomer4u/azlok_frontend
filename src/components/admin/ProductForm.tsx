@@ -61,7 +61,7 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
         setIsLoadingCategories(true);
         
         // Get token from localStorage
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('azlok-token');
         
         if (!token) {
           console.error('Authentication required to fetch categories');
@@ -285,7 +285,7 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
     
     try {
       // Get token from localStorage
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('azlok-token');
       
       if (!token) {
         throw new Error('Authentication required');

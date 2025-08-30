@@ -91,31 +91,31 @@ const Header = () => {
                         <p className="text-sm font-medium text-gray-900">{user?.name}</p>
                         <p className="text-xs text-gray-500">{user?.email}</p>
                       </div>
-                      <Link href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <Link href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setIsUserMenuOpen(false)}>
                         Dashboard
                       </Link>
-                      <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setIsUserMenuOpen(false)}>
                         Profile
                       </Link>
                       {user?.role === 'seller' && (
                         <>
-                          <Link href="/seller/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          <Link href="/seller/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setIsUserMenuOpen(false)}>
                             My Products
                           </Link>
-                          <Link href="/logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          <Link href="/logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setIsUserMenuOpen(false)}>
                             Logistics
                           </Link>
-                          <Link href="/payments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          <Link href="/payments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setIsUserMenuOpen(false)}>
                             Payments
                           </Link>
                         </>
                       )}
                       {user?.role === 'admin' && (
                         <>
-                          <Link href="/logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          <Link href="/logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setIsUserMenuOpen(false)}>
                             Logistics Management
                           </Link>
-                          <Link href="/payments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          <Link href="/payments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setIsUserMenuOpen(false)}>
                             Payment Management
                           </Link>
                         </>
@@ -133,10 +133,10 @@ const Header = () => {
                     </>
                   ) : (
                     <>
-                      <Link href="/login" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <Link href="/login" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setIsUserMenuOpen(false)}>
                         Login
                       </Link>
-                      <Link href="/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <Link href="/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setIsUserMenuOpen(false)}>
                         Register
                       </Link>
                     </>
@@ -191,38 +191,41 @@ const Header = () => {
         <div className="md:hidden bg-white border-t border-gray-200">
           <div className="container-custom mx-auto py-3">
             <nav className="flex flex-col space-y-3">
-              <Link href="/products" className="text-gray-700 hover:text-primary py-2">
+              <Link href="/products" className="text-gray-700 hover:text-primary py-2" onClick={() => setIsMenuOpen(false)}>
                 Products
               </Link>
-              <Link href="/categories" className="text-gray-700 hover:text-primary py-2">
+              <Link href="/categories" className="text-gray-700 hover:text-primary py-2" onClick={() => setIsMenuOpen(false)}>
                 Categories
               </Link>
-              <Link href="/deals" className="text-gray-700 hover:text-primary py-2">
+              <Link href="/deals" className="text-gray-700 hover:text-primary py-2" onClick={() => setIsMenuOpen(false)}>
                 Deals
               </Link>
-              <Link href="/track" className="text-gray-700 hover:text-primary py-2">
+              <Link href="/track" className="text-gray-700 hover:text-primary py-2" onClick={() => setIsMenuOpen(false)}>
                 Track Order
               </Link>
               {isAuthenticated ? (
                 <>
-                  <Link href="/dashboard" className="text-gray-700 hover:text-primary py-2">
+                  <Link href="/dashboard" className="text-gray-700 hover:text-primary py-2" onClick={() => setIsMenuOpen(false)}>
                     Dashboard
                   </Link>
-                  <Link href="/profile" className="text-gray-700 hover:text-primary py-2">
+                  <Link href="/profile" className="text-gray-700 hover:text-primary py-2" onClick={() => setIsMenuOpen(false)}>
                     Profile
                   </Link>
                   {(user?.role === 'admin' || user?.role === 'seller') && (
                     <>
-                      <Link href="/logistics" className="text-gray-700 hover:text-primary py-2">
+                      <Link href="/logistics" className="text-gray-700 hover:text-primary py-2" onClick={() => setIsMenuOpen(false)}>
                         Logistics
                       </Link>
-                      <Link href="/payments" className="text-gray-700 hover:text-primary py-2">
+                      <Link href="/payments" className="text-gray-700 hover:text-primary py-2" onClick={() => setIsMenuOpen(false)}>
                         Payments
                       </Link>
                     </>
                   )}
                   <button 
-                    onClick={logout}
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      logout();
+                    }}
                     className="text-red-600 hover:text-red-800 py-2 text-left w-full"
                   >
                     Logout
@@ -230,15 +233,15 @@ const Header = () => {
                 </>
               ) : (
                 <>
-                  <Link href="/login" className="text-gray-700 hover:text-primary py-2">
+                  <Link href="/login" className="text-gray-700 hover:text-primary py-2" onClick={() => setIsMenuOpen(false)}>
                     Login
                   </Link>
-                  <Link href="/register" className="text-gray-700 hover:text-primary py-2">
+                  <Link href="/register" className="text-gray-700 hover:text-primary py-2" onClick={() => setIsMenuOpen(false)}>
                     Register
                   </Link>
                 </>
               )}
-              <Link href="/cart" className="text-gray-700 hover:text-primary py-2 flex items-center">
+              <Link href="/cart" className="text-gray-700 hover:text-primary py-2 flex items-center" onClick={() => setIsMenuOpen(false)}>
                 Cart
                 {itemCount > 0 && (
                   <span className="ml-2 bg-secondary text-gray-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">

@@ -44,7 +44,7 @@ const BulkTaxRateUpdate = () => {
       setIsLoading(true);
       try {
         // Get token from localStorage
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('azlok-token');
         
         if (!token) {
           throw new Error('Authentication required');
@@ -189,7 +189,7 @@ const BulkTaxRateUpdate = () => {
     
     try {
       // Get token from localStorage
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('azlok-token');
       
       if (!token) {
         throw new Error('Authentication required');

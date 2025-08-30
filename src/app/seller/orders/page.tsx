@@ -107,7 +107,7 @@ export default function OrdersPage() {
         setIsLoading(true);
         
         // Get auth token from localStorage
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('azlok-token');
         
         if (!token) {
           console.error('No authentication token found');

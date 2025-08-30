@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   
   useEffect(() => {
     // Load auth state from localStorage on component mount
-    const storedToken = localStorage.getItem('token');
+    const storedToken = localStorage.getItem('azlok-token');
     const storedUser = localStorage.getItem('user');
     
     if (storedToken) {

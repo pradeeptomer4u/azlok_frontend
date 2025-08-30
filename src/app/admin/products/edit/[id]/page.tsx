@@ -24,7 +24,7 @@ export default function EditProductPage() {
         const productId = parseInt(params.id as string);
         
         // Get token from localStorage
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('azlok-token');
         
         if (!token) {
           throw new Error('Authentication required');

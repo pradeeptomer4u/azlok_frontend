@@ -43,7 +43,7 @@ export default function UsersPage() {
         setIsLoading(true);
         
         // Get token from localStorage
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('azlok-token');
         
         if (!token) {
           throw new Error('Authentication required');
@@ -159,7 +159,7 @@ export default function UsersPage() {
     
     try {
       // Get token from localStorage
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('azlok-token');
       
       if (!token) {
         throw new Error('Authentication required');

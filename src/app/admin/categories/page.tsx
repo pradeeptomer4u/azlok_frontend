@@ -86,7 +86,7 @@ export default function AdminCategoriesPage() {
         throw new Error('Authentication required');
       }
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

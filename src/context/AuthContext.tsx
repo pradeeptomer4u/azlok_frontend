@@ -74,45 +74,59 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setError(null);
     
     try {
-      // In a real app, we would make an API call to authenticate
-      // const response = await fetch('/api/auth/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password }),
-      // });
-      // const data = await response.json();
-      // if (!response.ok) throw new Error(data.message || 'Login failed');
+      // Make an API call to authenticate with the backend
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          username: email, // FastAPI OAuth2 expects username field
+          password: password,
+        }).toString(),
+      });
       
-      // Mock authentication for now
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const data = await response.json();
       
-      // Check credentials (mock)
-      if (email === 'buyer@example.com' && password === 'password') {
-        const userData: User = {
-          id: 1,
-          name: 'John Buyer',
-          email: 'buyer@example.com',
-          role: 'buyer',
-          company: 'ABC Corp',
-          avatar: '/globe.svg'
-        };
-        setUser(userData);
-        localStorage.setItem('azlok-user', JSON.stringify(userData));
-        router.push('/dashboard');
-      } else if (email === 'seller@example.com' && password === 'password') {
-        const userData: User = {
-          id: 2,
-          name: 'Jane Seller',
-          email: 'seller@example.com',
-          role: 'seller',
-          company: 'XYZ Manufacturing',
-          avatar: '/globe.svg'
-        };
-        setUser(userData);
-        localStorage.setItem('azlok-user', JSON.stringify(userData));
-        router.push('/dashboard');
+      if (!response.ok) {
+        throw new Error(data.detail || 'Invalid email or password');
+      }
+      
+      // Get user details with the token
+      const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/users/me`, {
+        headers: {
+          'Authorization': `Bearer ${data.access_token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!userResponse.ok) {
+        throw new Error('Failed to fetch user details');
+      }
+      
+      const userDetails = await userResponse.json();
+      
+      // Transform backend user to frontend user format
+      const userData: User = {
+        id: userDetails.id,
+        name: userDetails.full_name,
+        email: userDetails.email,
+        role: userDetails.role.toLowerCase(),
+        company: userDetails.business_name || '',
+        avatar: '/globe.svg' // Default avatar
+      };
+      
+      // Store user data and token
+      setUser(userData);
+      setToken(data.access_token);
+      localStorage.setItem('azlok-user', JSON.stringify(userData));
+      localStorage.setItem('azlok-token', data.access_token);
+      
+      // Redirect based on role
+      if (userData.role === 'seller') {
+        router.push('/seller/dashboard');
+      } else if (userData.role === 'admin') {
+        router.push('/admin/dashboard');
       } else {
-        throw new Error('Invalid email or password');
+        router.push('/dashboard');
       }
     } catch (err: Error | unknown) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred during login';

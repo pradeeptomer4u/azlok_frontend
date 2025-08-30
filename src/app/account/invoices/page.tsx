@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import type { Invoice, InvoiceStatus } from '@/types/invoice';
 import invoiceService from '@/services/invoiceService';
 import { formatDate, formatCurrency } from '@/utils/formatters';
-import { Breadcrumb, Pagination, Spinner, Badge, Button } from '@/components/ui';
+import { Breadcrumb, PaginationWrapper, Spinner, Badge, Button } from '@/components/ui';
 
 const statusColors: Record<InvoiceStatus | string, string> = {
   draft: 'bg-gray-200 text-gray-800',
@@ -211,7 +211,7 @@ const InvoicesPage = () => {
           </div>
 
           <div className="mt-6">
-            <Pagination
+            <PaginationWrapper
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={handlePageChange}

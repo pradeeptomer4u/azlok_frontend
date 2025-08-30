@@ -60,7 +60,7 @@ export default function AdminDashboard() {
       
       try {
         // Fetch dashboard stats
-        const dashboardStats = await apiRequest<DashboardStats>('/api/admin/dashboard/stats');
+        const dashboardStats = await apiRequest<DashboardStats>('/api/admin/dashboard');
         setStats(dashboardStats);
         
         // Fetch recent orders

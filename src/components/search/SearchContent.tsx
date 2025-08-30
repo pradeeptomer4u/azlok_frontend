@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import searchService, { SearchResults } from '../../services/searchService';
+import { SearchResults } from '../../services/searchService';
 import { Product } from '../../types/product';
 import MetaTags from '../../components/SEO/MetaTags';
 

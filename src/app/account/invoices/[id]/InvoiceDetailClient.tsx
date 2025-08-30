@@ -1,8 +1,89 @@
-import InvoiceDetailClient from './InvoiceDetailClient';
+'use client';
 
-export default function Page({ params }: { params: { id: string } }) {
-  return <InvoiceDetailClient id={params.id} />;
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { InvoiceDetail, InvoiceStatus } from '@/types/invoice';
+import invoiceService from '@/services/invoiceService';
+import { formatDate, formatCurrency } from '@/utils/formatters';
+import { Breadcrumb, Spinner, Badge, Button } from '@/components/ui';
+
+const statusColors: Record<InvoiceStatus | string, string> = {
+  draft: 'bg-gray-200 text-gray-800',
+  pending: 'bg-blue-100 text-blue-800',
+  paid: 'bg-green-100 text-green-800',
+  partially_paid: 'bg-yellow-100 text-yellow-800',
+  overdue: 'bg-red-100 text-red-800',
+  cancelled: 'bg-gray-500 text-white',
+  refunded: 'bg-teal-100 text-teal-800',
+  issued: 'bg-blue-100 text-blue-800',
+};
+
+interface InvoiceDetailClientProps {
+  id: string;
 }
+
+const InvoiceDetailClient = ({ id }: InvoiceDetailClientProps) => {
+  const router = useRouter();
+  const [invoice, setInvoice] = useState<InvoiceDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [downloading, setDownloading] = useState(false);
+
+  useEffect(() => {
+    fetchInvoiceDetails();
+  }, [id]);
+
+  const fetchInvoiceDetails = async () => {
+    try {
+      setLoading(true);
+      const data = await invoiceService.getInvoiceById(parseInt(id));
+      setInvoice(data);
+      setLoading(false);
+    } catch (err) {
+      setError('Failed to load invoice details. Please try again later.');
+      setLoading(false);
+      console.error('Error fetching invoice details:', err);
+    }
+  };
+
+  const handleDownloadInvoice = async () => {
+    if (!invoice) return;
+    
+    try {
+      setDownloading(true);
+      await invoiceService.saveInvoicePdf(Number(invoice.id), `invoice_${invoice.invoice_number}.pdf`);
+      setDownloading(false);
+    } catch (err) {
+      console.error('Error downloading invoice:', err);
+      alert('Failed to download invoice. Please try again later.');
+      setDownloading(false);
+    }
+  };
+
+  const handleBackToInvoices = () => {
+    router.push('/account/invoices');
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-center items-center h-64">
+          <Spinner size="lg" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !invoice) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="bg-red-50 border border-red-200 text-red-800 rounded-lg p-4 mb-6">
+          {error || 'Invoice not found'}
+        </div>
+        <Button onClick={handleBackToInvoices}>Back to Invoices</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -89,7 +170,6 @@ export default function Page({ params }: { params: { id: string } }) {
                   {invoice.due_date ? formatDate(invoice.due_date) : '-'}
                 </span>
               </div>
-              {/* Order information removed as it's not in the InvoiceDetail type */}
             </div>
           </div>
 
@@ -234,4 +314,4 @@ export default function Page({ params }: { params: { id: string } }) {
   );
 };
 
-// Component is exported directly above
+export default InvoiceDetailClient;

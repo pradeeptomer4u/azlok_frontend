@@ -26,16 +26,16 @@ const CategoryCarousel = () => {
       setIsLoading(true);
       setError(null);
       try {
-        // Get categories from the API service
-        const apiCategories = await categoryService.getTopCategories();
+        // Get categories with product count from the API service
+        const apiCategories = await categoryService.getCategoriesWithProductCount();
         
         // Transform API categories to match our UI component needs
-        const transformedCategories: UICategory[] = apiCategories.map((category, index) => ({
+        const transformedCategories: UICategory[] = apiCategories.map((category) => ({
           id: category.id,
           name: category.name,
           image: category.image_url || '/globe.svg', // Use image or fallback
           slug: category.slug,
-          productCount: 100 + (index * 50) // Simulate product count since we don't have this data yet
+          productCount: category.product_count || 0 // Use actual product count from API
         }));
         
         setCategories(transformedCategories);

@@ -101,7 +101,7 @@ const SellerShowcase = () => {
             <div className="relative h-24 w-24">
               <Image
                 src={seller.image}
-                alt={seller.name}
+                alt={`${seller.name} - Verified seller logo`}
                 fill
                 className="object-contain"
               />

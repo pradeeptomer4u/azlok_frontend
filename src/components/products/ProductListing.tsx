@@ -77,6 +77,14 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
         // Fetch products from API
         const response = await productService.getAllProducts(filters);
         
+        // Check if response has items property and handle undefined
+        if (!response || !response.items || !Array.isArray(response.items)) {
+          console.warn('API response does not contain items array:', response);
+          setProducts([]);
+          setIsLoading(false);
+          return;
+        }
+
         // Transform API products to match our UI component needs
         const transformedProducts = response.items.map(product => ({
           ...product,

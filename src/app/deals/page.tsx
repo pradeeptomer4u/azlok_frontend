@@ -30,7 +30,7 @@ export default function DealsPage() {
     const fetchDeals = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('https://api.azlok.com/api/deals');
+        const response = await axios.get('/api/deals');
         setDeals(response.data);
         setLoading(false);
       } catch (err) {

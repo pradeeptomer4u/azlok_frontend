@@ -7,6 +7,7 @@ import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import { CartProvider } from "../context/CartContext";
 import { AuthProvider } from "../context/AuthContext";
+import KeepAliveInitializer from "../components/utils/KeepAliveInitializer";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -45,6 +46,8 @@ export default function RootLayout({
               <main className="flex-grow">{children}</main>
               <Footer />
             </div>
+            {/* Keep-alive service to prevent Render from spinning down due to inactivity */}
+            <KeepAliveInitializer />
           </CartProvider>
         </AuthProvider>
       </body>

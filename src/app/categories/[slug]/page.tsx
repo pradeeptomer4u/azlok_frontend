@@ -7,6 +7,7 @@ import ProductListing from '../../../components/products/ProductListing';
 import MetaTags from '../../../components/SEO/MetaTags';
 import { BreadcrumbStructuredData } from '../../../components/SEO/StructuredData';
 import categoryService, { Category } from '../../../services/categoryService';
+import productService from '../../../services/productService';
 
 // Interface for category with additional UI properties
 interface UICategory extends Category {
@@ -35,11 +36,14 @@ export default function CategoryPage() {
         const foundCategory = allCategories.find(cat => cat.slug === slug);
         
         if (foundCategory) {
+          // Get product count for this category
+          const categoryProducts = await productService.getProductsByCategorySlug(foundCategory.slug, 100);
+          
           // Transform to UICategory
           const uiCategory: UICategory = {
             ...foundCategory,
             image: foundCategory.image_url || '/globe.svg',
-            productCount: 0 // We could fetch this separately if needed
+            productCount: categoryProducts.length
           };
           
           console.log('Found category:', uiCategory);

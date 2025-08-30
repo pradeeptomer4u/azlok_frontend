@@ -8,22 +8,30 @@ import { calculateProductTax, TaxCalculationRequest, TaxCalculationResponse, for
 import productService, { Product as ApiProduct } from '../../services/productService';
 
 // Define the enhanced product type for UI with additional fields
-interface EnhancedProduct extends ApiProduct {
+interface EnhancedProduct {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  subcategory: string;
+  rating: number;
+  isVerified: boolean;
+  slug: string;
+  image: string;
   images: string[];
   minOrder: number;
   seller: {
+    id: number;
     name: string;
     logo: string;
     location: string;
     memberSince: string;
-    responseRate: string;
+    responseRate: number;
     responseTime: string;
     verified: boolean;
     rating: number;
-    id?: number;
   };
-  category: string;
-  subcategory: string;
   specifications: Array<{ name: string; value: string }>;
   features: string[];
   applications: string[];
@@ -107,34 +115,56 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
     const fetchProduct = async () => {
       setIsLoading(true);
       try {
-        // Try to find the product by searching for the slug
-        const searchResponse = await productService.searchProducts(slug, 1);
+        // Get all products and find the one matching the slug
+        let apiProduct = null;
         
-        if (searchResponse && searchResponse.length > 0) {
-          // Found a product matching the slug
-          const apiProduct = searchResponse[0];
+        // First try to get all products and find by slug or ID
+        const productsResponse = await productService.getProducts({}, 1, 100);
+        const allProducts = productsResponse.items || [];
+        
+        // Check if slug is numeric (product ID)
+        const productId = parseInt(slug);
+        if (!isNaN(productId)) {
+          apiProduct = allProducts.find(p => p.id === productId);
+        }
+        
+        // If not found by ID, search by slug or name
+        if (!apiProduct) {
+          apiProduct = allProducts.find(p => 
+            p.slug === slug || 
+            p.name.toLowerCase().replace(/\s+/g, '-') === slug.toLowerCase() ||
+            p.sku === slug.toUpperCase()
+          );
+        }
+        
+        if (apiProduct) {
           
           // Transform API product to detailed product with UI-specific fields
           const detailedProduct: DetailedProduct = {
             id: apiProduct.id,
             name: apiProduct.name,
-            image: apiProduct.image_url || '/globe.svg',
+            image: apiProduct.image_urls && Array.isArray(apiProduct.image_urls) ? 
+              apiProduct.image_urls[0] : 
+              apiProduct.image_urls ? 
+                JSON.parse(apiProduct.image_urls)[0] : 
+                apiProduct.image_url || '/globe.svg',
             slug: slug, // Use the slug from props
             price: apiProduct.price,
             minOrder: 1, // Default minimum order
             seller: {
-              id: 1,
-              name: 'Azlok Enterprises',
+              id: apiProduct.seller?.id || 1,
+              name: apiProduct.seller?.business_name || apiProduct.seller?.full_name || 'Azlok Enterprises',
               logo: '/logo.png',
-              location: 'Mumbai, India',
+              location: apiProduct.seller?.region || 'Mumbai, India',
               memberSince: '2020',
-              responseRate: 98, // Changed from string to number
+              responseRate: 98,
               responseTime: '< 24 hours',
               verified: true,
               rating: apiProduct.rating || 4.5
             },
-            location: 'Mumbai, India',
-            category: apiProduct.category_name || 'Uncategorized',
+            location: apiProduct.seller?.region || 'Mumbai, India',
+            category: apiProduct.categories && apiProduct.categories.length > 0 ? 
+              apiProduct.categories[0].name : 'Uncategorized',
             subcategory: 'General',
             rating: apiProduct.rating || 4.5,
             isVerified: true,
@@ -148,10 +178,12 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               { name: 'Country of Origin', value: 'India' },
               { name: 'Brand', value: apiProduct.brand || 'Azlok' }
             ],
-            // Generate multiple images or use placeholder if none available
-            images: apiProduct.image_url ? 
-              [apiProduct.image_url, apiProduct.image_url, apiProduct.image_url] : 
-              ['/globe.svg', '/globe.svg', '/globe.svg'],
+            // Parse image URLs from API response
+            images: apiProduct.image_urls && Array.isArray(apiProduct.image_urls) ? 
+              apiProduct.image_urls : 
+              apiProduct.image_urls ? 
+                JSON.parse(apiProduct.image_urls) : 
+                ['/globe.svg', '/globe.svg', '/globe.svg'],
             features: [
               'Premium quality',
               'Durable construction',

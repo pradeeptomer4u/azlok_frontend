@@ -21,7 +21,7 @@ const HeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[500px]">
           <div className="space-y-6 lg:space-y-8 text-center lg:text-left">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-              India&apos;s Leading <span className="text-blue-600">B2B Marketplace</span>
+              India&apos;s Leading <span className="text-blue-600">B2c Marketplace</span>
             </h1>
             <p className="text-xl sm:text-2xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
               Connect with thousands of verified suppliers and buyers across India
@@ -85,7 +85,7 @@ const HeroSection = () => {
           <div className="flex justify-center lg:justify-end">
             <div className="relative w-80 h-80 lg:w-96 lg:h-96">
               <Image
-                src="/globe.svg"
+                src="/home_page_banner.png"
                 alt="Global B2B Marketplace"
                 fill
                 className="object-contain drop-shadow-lg"

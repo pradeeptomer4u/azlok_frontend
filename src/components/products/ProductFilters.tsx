@@ -2,29 +2,21 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import categoryService from '../../services/categoryService';
 
-// Mock data for categories - in a real app, this would come from an API
-const mockCategories = [
-  { id: 1, name: 'Machinery', slug: 'machinery', count: 156 },
-  { id: 2, name: 'Textiles', slug: 'textiles', count: 89 },
-  { id: 3, name: 'Electronics', slug: 'electronics', count: 124 },
-  { id: 4, name: 'Appliances', slug: 'appliances', count: 67 },
-  { id: 5, name: 'Food', slug: 'food', count: 45 },
-  { id: 6, name: 'Furniture', slug: 'furniture', count: 38 },
-  { id: 7, name: 'Safety', slug: 'safety', count: 29 },
-  { id: 8, name: 'Chemicals', slug: 'chemicals', count: 52 },
-  { id: 9, name: 'Energy', slug: 'energy', count: 31 },
-  { id: 10, name: 'Automotive', slug: 'automotive', count: 78 },
-  { id: 11, name: 'Construction', slug: 'construction', count: 63 },
-  { id: 12, name: 'Packaging', slug: 'packaging', count: 42 }
-];
+interface FilterCategory {
+  id: number;
+  name: string;
+  slug: string;
+  count: number;
+}
 
 const ProductFilters = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   
-  const [categories, setCategories] = useState(mockCategories);
+  const [categories, setCategories] = useState<FilterCategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(searchParams?.get('category') || null);
   const [priceRange, setPriceRange] = useState({
     min: searchParams?.get('minPrice') || '',
@@ -36,23 +28,27 @@ const ProductFilters = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  // In a real implementation, we would fetch categories from the API
+  // Fetch categories from API
   useEffect(() => {
     const fetchCategories = async () => {
       setIsLoading(true);
       try {
-        // Simulating API call
-        // const response = await fetch('/api/categories');
-        // const data = await response.json();
-        // setCategories(data);
+        // Fetch categories with product counts from API
+        const apiCategories = await categoryService.getCategoriesWithProductCount();
         
-        // Using mock data for now
-        setTimeout(() => {
-          setCategories(mockCategories);
-          setIsLoading(false);
-        }, 300);
+        // Transform API categories to match filter interface
+        const transformedCategories: FilterCategory[] = apiCategories.map((category) => ({
+          id: category.id,
+          name: category.name,
+          slug: category.slug,
+          count: category.product_count || 0
+        }));
+        
+        setCategories(transformedCategories);
       } catch (error) {
         console.error('Error fetching categories:', error);
+        setCategories([]);
+      } finally {
         setIsLoading(false);
       }
     };

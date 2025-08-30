@@ -5,7 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import MetaTags from '../../components/SEO/MetaTags';
 import { OrganizationStructuredData } from '../../components/SEO/StructuredData';
-import axios from 'axios';
+import categoryService from '../../services/categoryService';
+import productService from '../../services/productService';
 
 // Define Category type
 interface Category {
@@ -16,65 +17,6 @@ interface Category {
   productCount: number;
 }
 
-// Mock data for categories - will be replaced with API data
-const mockCategories = [
-  {
-    id: 1,
-    name: 'Electronics',
-    image: '/globe.svg',
-    slug: 'electronics',
-    productCount: 1245
-  },
-  {
-    id: 2,
-    name: 'Clothing & Textiles',
-    image: '/globe.svg',
-    slug: 'clothing-textiles',
-    productCount: 876
-  },
-  {
-    id: 3,
-    name: 'Machinery',
-    image: '/globe.svg',
-    slug: 'machinery',
-    productCount: 543
-  },
-  {
-    id: 4,
-    name: 'Furniture',
-    image: '/globe.svg',
-    slug: 'furniture',
-    productCount: 321
-  },
-  {
-    id: 5,
-    name: 'Food & Beverages',
-    image: '/globe.svg',
-    slug: 'food-beverages',
-    productCount: 654
-  },
-  {
-    id: 6,
-    name: 'Chemicals',
-    image: '/globe.svg',
-    slug: 'chemicals',
-    productCount: 432
-  },
-  {
-    id: 7,
-    name: 'Construction',
-    image: '/globe.svg',
-    slug: 'construction',
-    productCount: 765
-  },
-  {
-    id: 8,
-    name: 'Automotive',
-    image: '/globe.svg',
-    slug: 'automotive',
-    productCount: 543
-  }
-];
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -84,19 +26,25 @@ export default function CategoriesPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       setIsLoading(true);
+      setError(null);
       try {
-        // In a real implementation, we would fetch from the API
-        // const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`);
-        // setCategories(response.data);
+        // Fetch categories with product counts from API
+        const apiCategories = await categoryService.getCategoriesWithProductCount();
         
-        // Using mock data for now
-        setTimeout(() => {
-          setCategories(mockCategories);
-          setIsLoading(false);
-        }, 500);
+        // Transform API categories to match UI interface
+        const transformedCategories: Category[] = apiCategories.map((category) => ({
+          id: category.id,
+          name: category.name,
+          image: category.image_url || '/globe.svg',
+          slug: category.slug,
+          productCount: category.product_count || 0
+        }));
+        
+        setCategories(transformedCategories);
       } catch (err) {
         console.error('Error fetching categories:', err);
         setError('Failed to load categories. Please try again later.');
+      } finally {
         setIsLoading(false);
       }
     };

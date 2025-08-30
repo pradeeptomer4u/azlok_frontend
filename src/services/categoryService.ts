@@ -49,6 +49,38 @@ const categoryService = {
     }
   },
   
+  // Get categories with product count
+  getCategoriesWithProductCount: async (): Promise<Category[]> => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/categories/`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const apiCategories: Category[] = await response.json();
+      
+      // Get all products to calculate counts
+      const productsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/products/`);
+      const products = productsResponse.ok ? await productsResponse.json() : [];
+      
+      // Transform to categories with actual product count
+      const transformedCategories = apiCategories.map((category) => {
+        const productCount = products.filter((product: any) => 
+          product.categories && product.categories.some((cat: any) => cat.slug === category.slug)
+        ).length;
+        
+        return {
+          ...category,
+          product_count: productCount
+        };
+      });
+      
+      return transformedCategories;
+    } catch (error) {
+      console.error('Error fetching categories with product count:', error);
+      return [];
+    }
+  },
+  
   // Get a single category by ID
   getCategoryById: async (id: number): Promise<Category | null> => {
     try {
@@ -57,22 +89,6 @@ const categoryService = {
     } catch (error) {
       console.error(`Error fetching category with ID ${id}:`, error);
       return null;
-    }
-  },
-  
-  // Get category with product count
-  getCategoriesWithProductCount: async (): Promise<Category[]> => {
-    try {
-      // Use the external API endpoint
-      const response = await fetch('https://api.azlok.com/api/categories/');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      return data || [];
-    } catch (error) {
-      console.error('Error fetching categories with product count:', error);
-      return [];
     }
   }
 };

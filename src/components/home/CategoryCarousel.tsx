@@ -33,9 +33,9 @@ const CategoryCarousel = () => {
         const transformedCategories: UICategory[] = apiCategories.map((category) => ({
           id: category.id,
           name: category.name,
-          image: category.image_url || '/globe.svg', // Use image or fallback
+          image: category.image_url || '/globe.svg',
           slug: category.slug,
-          productCount: category.product_count || 0 // Use actual product count from API
+          productCount: category.product_count || 0
         }));
         
         setCategories(transformedCategories);

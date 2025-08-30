@@ -63,39 +63,47 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
           filters.sort_order = 'desc';
         }
         
+        let fetchedProducts: any[] = [];
+        
         // Apply category filter from props (for category pages)
         if (categorySlug) {
-          // We need to find the category_id from the slug
-          // For now, we'll pass the slug as search term
-          filters.search = categorySlug;
+          // Use the new category slug filtering method
+          fetchedProducts = await productService.getProductsByCategorySlug(categorySlug, 50);
         }
         // Apply category filter from URL params
         else if (category) {
-          filters.search = category;
+          // Use category slug filtering method for URL category filter
+          fetchedProducts = await productService.getProductsByCategorySlug(category, 50);
+        }
+        else {
+          // Fetch all products
+          const response = await productService.getProducts(filters);
+          fetchedProducts = response.items || [];
         }
         
-        // Fetch products from API
-        const response = await productService.getAllProducts(filters);
-        
-        // Check if response has items property and handle undefined
-        if (!response || !response.items || !Array.isArray(response.items)) {
-          console.warn('API response does not contain items array:', response);
+        // Check if we have products and handle undefined
+        if (!fetchedProducts || !Array.isArray(fetchedProducts)) {
+          console.warn('No products fetched or invalid format:', fetchedProducts);
           setProducts([]);
           setIsLoading(false);
           return;
         }
 
         // Transform API products to match our UI component needs
-        const transformedProducts = response.items.map(product => ({
+        const transformedProducts = fetchedProducts.map((product: ApiProduct) => ({
           ...product,
-          image: product.image_url || '/globe.svg', // Fallback to placeholder
-          slug: product.name.toLowerCase().replace(/\s+/g, '-'),
-          category: product.category_name || 'uncategorized',
-          isVerified: true, // Default all API products to verified
+          image: Array.isArray(product.image_urls) ? product.image_urls[0] : 
+                 typeof product.image_urls === 'string' ? JSON.parse(product.image_urls)[0] : 
+                 product.image_url || '/globe.svg',
+          slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-'),
+          category: product.categories && product.categories.length > 0 ? 
+                   product.categories[0].name : 'uncategorized',
+          rating: product.rating || 0,
+          isVerified: true,
           minOrder: 1,
-          seller: 'Azlok Enterprises',
-          location: 'Mumbai, India'
-        }));
+          seller: product.seller?.business_name || product.seller?.full_name || 'Azlok Enterprises',
+          location: product.seller?.region || 'Mumbai, India'
+        })) as Product[];
         
         setSortBy(sort);
         setBuyerState(state);
@@ -112,7 +120,7 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
     };
 
     fetchProducts();
-  }, [searchParams, categorySlug]);
+  }, [searchParams, categorySlug, sortBy]);
   
   // Function to fetch tax information for products
   const fetchTaxInformation = async (productsList: Product[], state: string, taxInclusiveOnly?: boolean, maxTaxRate?: string) => {

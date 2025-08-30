@@ -44,51 +44,27 @@ export default function AdminCategoriesPage() {
     const fetchCategories = async () => {
       setIsLoading(true);
       try {
-        // For now, use mock data
-        const mockCategories: Category[] = [
-          {
-            id: 1,
-            name: 'Electronics',
-            slug: 'electronics',
-            description: 'Electronic devices and accessories',
-            parent_id: null,
-            image_url: '/globe.svg',
-            created_at: '2023-01-01T00:00:00Z',
-            updated_at: '2023-01-01T00:00:00Z',
-          },
-          {
-            id: 2,
-            name: 'Clothing',
-            slug: 'clothing',
-            description: 'Apparel and fashion items',
-            parent_id: null,
-            image_url: '/globe.svg',
-            created_at: '2023-01-01T00:00:00Z',
-            updated_at: '2023-01-01T00:00:00Z',
-          },
-          {
-            id: 3,
-            name: 'Furniture',
-            slug: 'furniture',
-            description: 'Home and office furniture',
-            parent_id: null,
-            image_url: '/globe.svg',
-            created_at: '2023-01-01T00:00:00Z',
-            updated_at: '2023-01-01T00:00:00Z',
-          },
-        ];
+        // Get token from localStorage
+        const token = localStorage.getItem('azlok-token');
         
-        setCategories(mockCategories);
+        if (!token) {
+          throw new Error('Authentication required');
+        }
         
-        // When API is ready, uncomment this
-        /*
-        const response = await fetch('/api/admin/categories');
+        // Fetch categories from API
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/categories`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
         if (!response.ok) {
           throw new Error('Failed to fetch categories');
         }
+        
         const data = await response.json();
         setCategories(data);
-        */
       } catch (err) {
         setError('Failed to load categories. Please try again.');
         console.error('Error fetching categories:', err);
@@ -103,25 +79,18 @@ export default function AdminCategoriesPage() {
   const handleCreateCategory = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Mock create - in real app, this would be an API call
-      const newCategoryWithId = {
-        ...newCategory,
-        id: categories.length + 1,
-        slug: newCategory.name.toLowerCase().replace(/\s+/g, '-'),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
+      // Get token from localStorage
+      const token = localStorage.getItem('azlok-token');
       
-      setCategories([...categories, newCategoryWithId as Category]);
-      setNewCategory({ name: '', description: '', parent_id: null, image_url: '' });
-      setIsModalOpen(false);
+      if (!token) {
+        throw new Error('Authentication required');
+      }
       
-      // When API is ready, uncomment this
-      /*
-      const response = await fetch('/api/admin/categories', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(newCategory),
       });
@@ -134,7 +103,6 @@ export default function AdminCategoriesPage() {
       setCategories([...categories, createdCategory]);
       setNewCategory({ name: '', description: '', parent_id: null, image_url: '' });
       setIsModalOpen(false);
-      */
     } catch (err) {
       console.error('Error creating category:', err);
       alert('Failed to create category. Please try again.');
@@ -146,21 +114,18 @@ export default function AdminCategoriesPage() {
     if (!editingCategory) return;
     
     try {
-      // Mock update - in real app, this would be an API call
-      const updatedCategories = categories.map(cat => 
-        cat.id === editingCategory.id ? { ...editingCategory, updated_at: new Date().toISOString() } : cat
-      );
+      // Get token from localStorage
+      const token = localStorage.getItem('azlok-token');
       
-      setCategories(updatedCategories);
-      setEditingCategory(null);
-      setIsModalOpen(false);
+      if (!token) {
+        throw new Error('Authentication required');
+      }
       
-      // When API is ready, uncomment this
-      /*
-      const response = await fetch(`/api/admin/categories/${editingCategory.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/categories/${editingCategory.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(editingCategory),
       });
@@ -173,7 +138,6 @@ export default function AdminCategoriesPage() {
       setCategories(categories.map(cat => cat.id === updatedCategory.id ? updatedCategory : cat));
       setEditingCategory(null);
       setIsModalOpen(false);
-      */
     } catch (err) {
       console.error('Error updating category:', err);
       alert('Failed to update category. Please try again.');
@@ -184,13 +148,18 @@ export default function AdminCategoriesPage() {
     if (!confirm('Are you sure you want to delete this category?')) return;
     
     try {
-      // Mock delete - in real app, this would be an API call
-      setCategories(categories.filter(cat => cat.id !== id));
+      // Get token from localStorage
+      const token = localStorage.getItem('azlok-token');
       
-      // When API is ready, uncomment this
-      /*
-      const response = await fetch(`/api/admin/categories/${id}`, {
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+      
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/categories/${id}`, {
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
       
       if (!response.ok) {
@@ -198,7 +167,6 @@ export default function AdminCategoriesPage() {
       }
       
       setCategories(categories.filter(cat => cat.id !== id));
-      */
     } catch (err) {
       console.error('Error deleting category:', err);
       alert('Failed to delete category. Please try again.');

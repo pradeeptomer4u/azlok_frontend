@@ -6,12 +6,22 @@ import { apiRequest } from '../../utils/apiRequest';
 
 // Define interfaces for dashboard data
 interface DashboardStats {
-  totalUsers: number;
-  totalProducts: number;
-  totalOrders: number;
-  totalRevenue: number;
-  pendingApprovals: number;
-  activeUsers: number;
+  total_users: number;
+  total_products: number;
+  total_categories: number;
+  totalOrders?: number;
+  totalRevenue?: number;
+  pendingApprovals?: number;
+  pending_products: number;
+  activeUsers?: number;
+  user_stats: UserStats
+}
+
+interface UserStats {
+  buyers: number;
+  sellers: number;
+  company: number;
+  admins: number;
 }
 
 interface Order {
@@ -121,7 +131,7 @@ export default function AdminDashboard() {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Users</p>
-              <h3 className="text-2xl font-bold mt-1">{stats.totalUsers}</h3>
+              <h3 className="text-2xl font-bold mt-1">{stats.total_users}</h3>
             </div>
             <div className="p-2 bg-blue-50 rounded-md">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -144,7 +154,7 @@ export default function AdminDashboard() {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Products</p>
-              <h3 className="text-2xl font-bold mt-1">{stats.totalProducts}</h3>
+              <h3 className="text-2xl font-bold mt-1">{stats.total_products}</h3>
             </div>
             <div className="p-2 bg-green-50 rounded-md">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -190,7 +200,7 @@ export default function AdminDashboard() {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-              <h3 className="text-2xl font-bold mt-1">{formatCurrency(stats.totalRevenue)}</h3>
+              <h3 className="text-2xl font-bold mt-1">{stats?.totalRevenue && formatCurrency(stats.totalRevenue)}</h3>
             </div>
             <div className="p-2 bg-yellow-50 rounded-md">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">

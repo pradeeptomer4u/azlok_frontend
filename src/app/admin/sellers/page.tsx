@@ -42,70 +42,38 @@ export default function AdminSellersPage() {
     const fetchSellers = async () => {
       setIsLoading(true);
       try {
-        // For now, use mock data
-        const mockSellers: Seller[] = [
-          {
-            id: 1,
-            name: 'Tech Gadgets Inc',
-            slug: 'tech-gadgets-inc',
-            email: 'contact@techgadgets.com',
-            phone: '+1-555-123-4567',
-            logo_url: '/globe.svg',
-            banner_url: '/home_page_banner.png',
-            description: 'Leading provider of cutting-edge technology products',
-            status: 'active',
-            created_at: '2023-01-01T00:00:00Z',
-            updated_at: '2023-01-01T00:00:00Z',
-          },
-          {
-            id: 2,
-            name: 'Fashion Forward',
-            slug: 'fashion-forward',
-            email: 'info@fashionforward.com',
-            phone: '+1-555-987-6543',
-            logo_url: '/globe.svg',
-            banner_url: '/home_page_banner.png',
-            description: 'Trendy clothing and accessories for all seasons',
-            status: 'active',
-            created_at: '2023-01-15T00:00:00Z',
-            updated_at: '2023-01-15T00:00:00Z',
-          },
-          {
-            id: 3,
-            name: 'Home Essentials',
-            slug: 'home-essentials',
-            email: 'support@homeessentials.com',
-            phone: '+1-555-456-7890',
-            logo_url: '/globe.svg',
-            banner_url: '/home_page_banner.png',
-            description: 'Quality furniture and home decor items',
-            status: 'pending',
-            created_at: '2023-02-01T00:00:00Z',
-            updated_at: '2023-02-01T00:00:00Z',
-          },
-        ];
+        // Get authentication token
+        const token = localStorage.getItem('azlok-token');
+        if (!token) {
+          throw new Error('Authentication required');
+        }
         
-        setSellers(mockSellers);
+        // Fetch sellers from API
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users?role=SELLER`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
         
-        // When API is ready, uncomment this
-        /*
-        const response = await fetch('/api/admin/sellers');
         if (!response.ok) {
           throw new Error('Failed to fetch sellers');
         }
+        
         const data = await response.json();
         setSellers(data);
-        */
       } catch (err) {
         setError('Failed to load sellers. Please try again.');
-        console.error('Error fetching sellers:', err);
+        console.error(err);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchSellers();
-  }, []);
+    if (isAuthenticated && user?.role === 'admin') {
+      fetchSellers();
+    }
+  }, [isAuthenticated, user]);
 
   const handleStatusChange = async (id: number, newStatus: 'active' | 'pending' | 'suspended') => {
     try {

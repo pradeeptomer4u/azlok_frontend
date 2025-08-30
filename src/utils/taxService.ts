@@ -93,7 +93,7 @@ export const calculateProductTax = async (
   request: TaxCalculationRequest
 ): Promise<TaxCalculationResponse> => {
   try {
-    const response = await axios.post(`${API_URL}/tax/calculate-tax`, request);
+    const response = await axios.post(`${API_URL}/api/tax/calculate-tax`, request);
     return response.data;
   } catch (error) {
     console.error('Error calculating product tax:', error);
@@ -106,7 +106,7 @@ export const calculateOrderTax = async (
   request: OrderTaxCalculationRequest
 ): Promise<OrderTaxCalculationResponse> => {
   try {
-    const response = await axios.post(`${API_URL}/tax/calculate-order-tax`, request);
+    const response = await axios.post(`${API_URL}/api/tax/calculate-order-tax`, request);
     return response.data;
   } catch (error) {
     console.error('Error calculating order tax:', error);
@@ -122,7 +122,7 @@ export const getTaxRates = async (
   isActive: boolean = true
 ): Promise<TaxRate[]> => {
   try {
-    let url = `${API_URL}/tax/tax-rates?is_active=${isActive}`;
+    let url = `${API_URL}/api/tax/tax-rates?is_active=${isActive}`;
     
     if (taxType) url += `&tax_type=${taxType}`;
     if (region) url += `&region=${region}`;
@@ -145,7 +145,7 @@ export const getMarginSettings = async (
   isActive: boolean = true
 ): Promise<MarginSetting[]> => {
   try {
-    let url = `${API_URL}/tax/margin-settings?is_active=${isActive}`;
+    let url = `${API_URL}/api/tax/margin-settings?is_active=${isActive}`;
     
     if (productId) url += `&product_id=${productId}`;
     if (categoryId) url += `&category_id=${categoryId}`;

@@ -41,7 +41,7 @@ export interface TaxCalculationResponse {
  */
 export const getTaxRates = async (): Promise<TaxRate[]> => {
   try {
-    return await apiRequest<TaxRate[]>('/api/tax/rates');
+    return await apiRequest<TaxRate[]>('/api/tax/tax-rates');
   } catch (error) {
     console.error('Error fetching tax rates:', error);
     // Return empty array instead of throwing to handle null case gracefully
@@ -61,7 +61,7 @@ export const getTaxRatesByCategory = async (categoryId: number): Promise<TaxRate
   }
   
   try {
-    return await apiRequest<TaxRate[]>(`/api/tax/rates?category=${categoryId}`);
+    return await apiRequest<TaxRate[]>(`/api/tax/tax-rates?category=${categoryId}`);
   } catch (error) {
     console.error(`Error fetching tax rates for category ${categoryId}:`, error);
     return [];
@@ -80,7 +80,7 @@ export const getTaxRatesByRegion = async (regionCode: string): Promise<TaxRate[]
   }
   
   try {
-    return await apiRequest<TaxRate[]>(`/api/tax/rates?region=${regionCode}`);
+    return await apiRequest<TaxRate[]>(`/api/tax/tax-rates?region=${regionCode}`);
   } catch (error) {
     console.error(`Error fetching tax rates for region ${regionCode}:`, error);
     return [];

@@ -51,7 +51,7 @@ const BulkTaxRateUpdate = () => {
         }
         
         // Fetch tax rates from API
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/tax/rates`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/tax/tax-rates`, {
           headers: {
             Authorization: `Bearer ${token}`
           }

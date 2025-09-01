@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
 
             <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4">1. Introduction</h2>
             <p className="text-gray-700 mb-4">
-              Welcome to Azlok ("we," "our," or "us"). We are committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website azlok.com, including any other media form, media channel, mobile website, or mobile application related or connected to it (collectively, the "Site").
+              Welcome to Azlok (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We are committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website azlok.com, including any other media form, media channel, mobile website, or mobile application related or connected to it (collectively, the &quot;Site&quot;).
             </p>
             <p className="text-gray-700 mb-4">
               Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site.
@@ -115,14 +115,14 @@ export default function PrivacyPolicyPage() {
               <li className="mb-2">The right to lodge a complaint with a supervisory authority</li>
             </ul>
 
-            <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4">8. Children's Privacy</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4">8. Children&quot;s Privacy</h2>
             <p className="text-gray-700 mb-4">
               Our Site is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact us.
             </p>
 
             <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4">9. Changes to This Privacy Policy</h2>
             <p className="text-gray-700 mb-4">
-              We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date at the top of this Privacy Policy.
+              We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last Updated&quot; date at the top of this Privacy Policy.
             </p>
             <p className="text-gray-700 mb-4">
               You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.

@@ -203,16 +203,12 @@ export default function BlogDetailPage() {
                       className="flex items-center p-3 bg-white rounded-md hover:shadow-md transition-shadow"
                     >
                       <div className="relative h-16 w-16 flex-shrink-0 rounded-md overflow-hidden bg-gray-100">
-                        {product.image_url ? (
+                        {!!product.image_urls ? (
                           <Image
-                            src={product.image_url}
+                            src={Array.isArray(product.image_urls) ? product.image_urls[0] : product.image_urls}
                             alt={product.name}
                             fill
                             style={{ objectFit: 'cover' }}
-                            onError={(e) => {
-                              // @ts-expect-error - fallback for image error
-                              e.target.src = '/placeholder-product.png';
-                            }}
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-gray-200">

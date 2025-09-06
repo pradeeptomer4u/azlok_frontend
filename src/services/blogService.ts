@@ -24,6 +24,7 @@ export interface Blog {
     name: string;
     price: number;
     image_url?: string;
+    image_urls?: string; // Can be JSON string array or actual string array
     slug?: string;
   }>;
   created_at: string;

@@ -73,17 +73,32 @@ export default function AdminDashboard() {
         const dashboardStats = await apiRequest<DashboardStats>('/api/admin/dashboard');
         setStats(dashboardStats);
         
-        // Fetch recent orders
-        const orders = await apiRequest<Order[]>('/api/admin/orders/recent?limit=5');
-        setRecentOrders(orders || []);
+        // Set default values for data that might not be available yet
+        setRecentOrders([]);
+        setTopProducts([]);
+        setRevenueByMonth([]);
         
-        // Fetch top products
-        const products = await apiRequest<Product[]>('/api/admin/products/top?limit=4');
-        setTopProducts(products || []);
+        // Try to fetch additional data if available
+        try {
+          const orders = await apiRequest<Order[]>('/api/admin/orders/recent?limit=5');
+          if (orders) setRecentOrders(orders);
+        } catch (orderErr) {
+          console.log('Orders API not implemented yet:', orderErr);
+        }
         
-        // Fetch revenue data
-        const revenue = await apiRequest<RevenueData[]>(`/api/admin/revenue?timeRange=${timeRange}`);
-        setRevenueByMonth(revenue || []);
+        try {
+          const products = await apiRequest<Product[]>('/api/admin/products/top?limit=4');
+          if (products) setTopProducts(products);
+        } catch (productErr) {
+          console.log('Top products API not implemented yet:', productErr);
+        }
+        
+        try {
+          const revenue = await apiRequest<RevenueData[]>(`/api/admin/revenue?timeRange=${timeRange}`);
+          if (revenue) setRevenueByMonth(revenue);
+        } catch (revenueErr) {
+          console.log('Revenue API not implemented yet:', revenueErr);
+        }
       } catch (err) {
         console.error('Error fetching dashboard data:', err);
         setError('Failed to load dashboard data. Please try again.');

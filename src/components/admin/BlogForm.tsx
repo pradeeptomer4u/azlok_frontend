@@ -1,17 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import blogService, { Blog } from '../../services/blogService';
 import productService, { Product } from '../../services/productService';
 import Spinner from '../ui/Spinner';
 import { ErrorAlert } from '../ui/ErrorAlert';
-
-// Import React Quill dynamically to avoid SSR issues
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
-import 'react-quill/dist/quill.snow.css';
+import RichTextEditor from '../ui/RichTextEditor';
 
 interface BlogFormProps {
   blogId?: number; // Optional for edit mode
@@ -278,32 +274,7 @@ export default function BlogForm({ blogId, initialData }: BlogFormProps) {
     }
   };
 
-  // Quill editor modules and formats
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'script': 'sub'}, { 'script': 'super' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],
-      [{ 'direction': 'rtl' }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'align': [] }],
-      ['link', 'image', 'video'],
-      ['clean']
-    ],
-  };
-
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
-    'script',
-    'indent', 'direction',
-    'color', 'background',
-    'align',
-    'link', 'image', 'video'
-  ];
+  // No modules or formats needed for simple textarea
 
   return (
     <div className="bg-white rounded-lg shadow-sm">
@@ -393,13 +364,11 @@ export default function BlogForm({ blogId, initialData }: BlogFormProps) {
                   Content <span className="text-red-500">*</span>
                 </label>
                 <div className={`${errors.content ? 'border border-red-300 rounded-md' : ''}`}>
-                  <ReactQuill
-                    theme="snow"
-                    value={formData.content}
+                  <RichTextEditor
+                    content={formData.content}
                     onChange={handleEditorChange}
-                    modules={modules}
-                    formats={formats}
-                    className="h-64 mb-12"
+                    placeholder="Enter blog content here..."
+                    className="min-h-[300px]"
                   />
                 </div>
                 {errors.content && <p className="mt-1 text-sm text-red-600">{errors.content}</p>}

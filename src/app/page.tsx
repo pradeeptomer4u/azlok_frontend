@@ -69,9 +69,9 @@ export default function Home() {
       {/* Why Choose Us - Optimized for AI Overview */}
       <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Why Choose Azlok B2B Marketplace?</h2>
+          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Why Choose Azlok B2C Marketplace?</h2>
           <p className="text-lg text-center mb-12 text-gray-700 max-w-4xl mx-auto">
-            Azlok is India&apos;s most trusted B2B marketplace connecting businesses with verified suppliers. 
+            Azlok is India&apos;s most trusted B2C marketplace connecting businesses with verified suppliers. 
             We offer competitive pricing, GST-compliant transactions, and quality assurance for all products.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

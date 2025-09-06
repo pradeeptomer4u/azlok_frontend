@@ -104,6 +104,14 @@
     <priority>0.4</priority>
   </url>
   
+  <!-- Blog Pages -->
+  <url>
+    <loc>https://azlok.com/blog</loc>
+    <lastmod>2025-09-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
   <!-- Information Pages -->
   <url>
     <loc>https://azlok.com/about</loc>

@@ -1,0 +1,97 @@
+# llms.txt - Information for Large Language Models
+
+## Project Overview
+Azlok is a premium e-commerce platform built with Next.js 15, React 19, and TypeScript. It provides a modern online shopping experience with features like product browsing, secure transactions, and customer management.
+
+## Technology Stack
+- **Framework**: Next.js 15.5.0 with App Router
+- **Frontend**: React 19.1.0, TypeScript 5
+- **Styling**: Tailwind CSS 4, Material-UI 7.3.1, Radix UI components
+- **State Management**: Zustand 4.4.7
+- **Forms**: React Hook Form 7.48.2
+- **HTTP Client**: Axios 1.6.2
+- **SEO**: Next-SEO 6.4.0, Next-Sitemap 4.2.3
+- **PDF Generation**: jsPDF 3.0.1 with AutoTable
+- **UI Components**: Shadcn/UI, Lucide React icons, Heroicons
+- **Date Handling**: Date-fns 4.1.0, MUI X Date Pickers
+
+## Project Structure
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── account/           # User account management
+│   ├── admin/             # Admin dashboard
+│   ├── api/               # API routes
+│   └── page.tsx           # Homepage
+├── components/            # Reusable UI components
+│   ├── SEO/              # SEO components (MetaTags, StructuredData)
+│   ├── admin/            # Admin-specific components
+│   ├── cart/             # Shopping cart components
+│   └── home/             # Homepage sections
+├── context/              # React Context providers
+│   ├── AuthContext.tsx   # Authentication state
+│   └── CartContext.tsx   # Shopping cart state
+└── hooks/                # Custom React hooks
+    └── useSEO.ts         # SEO utilities
+```
+
+## Key Features
+- **E-commerce Functionality**: Product catalog, shopping cart, secure checkout
+- **User Management**: Account creation, authentication, user profiles
+- **Admin Dashboard**: Product management, order tracking, analytics
+- **SEO Optimized**: Meta tags, structured data, sitemap generation
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+- **Performance**: Next.js optimizations, image optimization, font loading
+
+## Development Guidelines
+- Uses TypeScript for type safety
+- Follows Next.js App Router conventions
+- Implements SEO best practices with structured data
+- Uses modern React patterns (hooks, context)
+- Styled with Tailwind CSS utility classes
+- Component-based architecture with reusable UI elements
+
+## API Structure
+The project includes API routes in `src/app/api/` for:
+- User authentication and management
+- Product catalog operations
+- Shopping cart functionality
+- Order processing
+- Admin operations
+
+## Build & Development
+- **Development**: `npm run dev` (uses Turbopack)
+- **Build**: `npm run build`
+- **Start**: `npm start`
+- **Lint**: `eslint`
+
+## Business Context
+Azlok is positioned as a premium online shopping platform offering:
+- Wide range of quality products
+- Fast delivery services
+- Secure payment processing
+- 24/7 customer support
+- Quality assurance for all products
+
+## Important URLs
+- **Website**: https://azlok.com
+- **Sample Products**: 
+  - https://azlok.com/products/azl01008
+  - https://azlok.com/products/azl05008
+- **Legal & Information Pages**:
+  - Privacy Policy: https://azlok.com/privacy
+  - Terms of Service: https://azlok.com/terms
+  - FAQ: https://azlok.com/faq
+  - Shipping Information: https://azlok.com/shipping
+  - Returns & Refunds: https://azlok.com/returns
+  - About Us: https://azlok.com/about
+
+## Code Patterns
+- Client components marked with 'use client'
+- Server components by default
+- Context providers for global state
+- Custom hooks for reusable logic
+- SEO components for metadata management
+- Structured data for search engine optimization
+
+This project follows modern web development best practices and is designed for scalability and maintainability.

@@ -46,9 +46,9 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
         const filters: ProductFilters = {
           page: 1,
           size: 50, // Fetch more products to allow for client-side filtering
-          search: searchQuery || undefined,
-          min_price: minPrice ? Number(minPrice) : undefined,
-          max_price: maxPrice ? Number(maxPrice) : undefined
+          search: searchQuery || '',
+          min_price: minPrice ? Number(minPrice) : 0,
+          max_price: maxPrice ? Number(maxPrice) : 99999999
         };
         
         // Handle sorting

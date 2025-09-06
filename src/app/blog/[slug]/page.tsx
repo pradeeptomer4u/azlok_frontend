@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import Spinner from '../../../components/ui/Spinner';
@@ -11,7 +11,6 @@ import productService, { Product } from '../../../services/productService';
 
 export default function BlogDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -211,7 +210,7 @@ export default function BlogDetailPage() {
                             fill
                             style={{ objectFit: 'cover' }}
                             onError={(e) => {
-                              // @ts-ignore - fallback for image error
+                              // @ts-expect-error - fallback for image error
                               e.target.src = '/placeholder-product.png';
                             }}
                           />

@@ -28,6 +28,8 @@ export interface Product {
   weight?: number;
   dimensions?: string;
   hsn_code?: string;
+  features?: string[];
+  specifications?: Array<{ name: string; value: string }>;
   created_at: string;
   updated_at: string;
 }
@@ -48,10 +50,14 @@ export interface CreateProductInput {
   weight?: number;
   dimensions?: string;
   hsn_code?: string;
+  features?: string[];
+  specifications?: Array<{ name: string; value: string }>;
 }
 
 export interface UpdateProductInput extends Partial<CreateProductInput> {
   id: number;
+  features?: string[];
+  specifications?: Array<{ name: string; value: string }>;
 }
 
 

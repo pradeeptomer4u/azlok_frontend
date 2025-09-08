@@ -183,7 +183,7 @@ const HeroSection = () => {
             <div className="relative w-80 h-80 lg:w-96 lg:h-96">
               <Image
                 src="/home_page_banner.png"
-                alt="Global B2B Marketplace"
+                alt="Global B2C Marketplace"
                 fill
                 className="object-contain drop-shadow-lg"
                 priority

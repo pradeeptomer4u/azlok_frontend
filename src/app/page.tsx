@@ -17,9 +17,9 @@ export default function Home() {
     <div className="min-h-screen">
       {/* SEO Meta Tags */}
       <MetaTags
-        title="Azlok - India's Leading B2B Marketplace for Verified Suppliers"
-        description="Connect with verified suppliers across India. Shop organic compounds, industrial chemicals, spices, and more. GST compliant, competitive pricing, fast delivery. India's trusted B2B marketplace."
-        keywords="B2B marketplace India, verified suppliers, organic compounds, industrial chemicals, spices wholesale, GST compliant, bulk orders, manufacturer direct, chemical suppliers India"
+        title="Azlok - India's Leading B2C Marketplace for Verified Suppliers"
+        description="Connect with verified suppliers across India. Shop organic compounds, industrial chemicals, spices, and more. GST compliant, competitive pricing, fast delivery. India's trusted B2C marketplace."
+        keywords="B2C marketplace India, verified suppliers, organic compounds, industrial chemicals, spices wholesale, GST compliant, bulk orders, manufacturer direct, chemical suppliers India"
         ogType="website"
         ogUrl="/"
         ogImage="/home_page_banner.png"
@@ -151,8 +151,8 @@ export default function Home() {
 
       {/* AI Overview Optimized Content */}
       <AIOverviewOptimized
-        title="What is Azlok B2B Marketplace?"
-        description="Azlok is India&apos;s premier B2B marketplace that connects businesses with verified suppliers across various industries. We specialize in organic compounds, industrial chemicals, spices, and other wholesale products with GST-compliant transactions and competitive pricing."
+        title="What is Azlok B2C Marketplace?"
+        description="Azlok is India&apos;s premier B2C marketplace that connects businesses with verified suppliers across various industries. We specialize in organic compounds, industrial chemicals, spices, and other wholesale products with GST-compliant transactions and competitive pricing."
         keyPoints={[
           "Verified suppliers with proper GST registration and business credentials",
           "Competitive wholesale pricing directly from manufacturers",
@@ -170,7 +170,7 @@ export default function Home() {
           },
           {
             question: "What types of products are available on Azlok?",
-            answer: "Azlok specializes in B2B products including organic compounds, industrial chemicals, spices, food products, and various industrial supplies from verified manufacturers and distributors."
+            answer: "Azlok specializes in B2C products including organic compounds, industrial chemicals, spices, food products, and various industrial supplies from verified manufacturers and distributors."
           },
           {
             question: "Is Azlok GST compliant?",
@@ -191,7 +191,7 @@ export default function Home() {
         },
         {
           question: "What types of products are available on Azlok?",
-          answer: "Azlok specializes in B2B products including organic compounds, industrial chemicals, spices, food products, and various industrial supplies from verified manufacturers and distributors."
+          answer: "Azlok specializes in B2C products including organic compounds, industrial chemicals, spices, food products, and various industrial supplies from verified manufacturers and distributors."
         },
         {
           question: "Is Azlok GST compliant?",
@@ -206,7 +206,7 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-700">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
-          <h2 className="text-4xl font-bold mb-6 text-white">Start Your B2B Journey Today!</h2>
+          <h2 className="text-4xl font-bold mb-6 text-white">Start Your B2C Journey Today!</h2>
           <p className="text-xl mb-10 text-blue-100 leading-relaxed">Join thousands of businesses who trust Azlok for their wholesale procurement needs.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register" className="bg-white text-blue-600 font-semibold py-4 px-8 rounded-xl hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">

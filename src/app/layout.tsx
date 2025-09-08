@@ -20,14 +20,14 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Azlok - Premium B2B Marketplace & E-commerce Platform in India",
-  description: "Azlok is India's leading B2B marketplace connecting verified suppliers with businesses. Shop quality products including organic compounds, spices, chemicals, and industrial supplies with competitive pricing and fast delivery across India.",
+  title: "Azlok - Premium B2C Marketplace & E-commerce Platform in India",
+  description: "Azlok is India's leading B2C marketplace connecting verified suppliers with businesses. Shop quality products including organic compounds, spices, chemicals, and industrial supplies with competitive pricing and fast delivery across India.",
   keywords: [
-    "B2B marketplace India", "wholesale suppliers", "bulk products", "organic compounds", 
+    "B2C marketplace India", "wholesale suppliers", "bulk products", "organic compounds", 
     "industrial chemicals", "spices wholesale", "verified suppliers", "business procurement",
     "GST compliant", "tax inclusive pricing", "bulk orders", "manufacturer direct",
     "chemical suppliers India", "organic compounds supplier", "industrial supplies",
-    "wholesale marketplace", "B2B e-commerce", "supplier network India"
+    "wholesale marketplace", "B2C e-commerce", "supplier network India"
   ],
   authors: [{ name: "Azlok Team" }],
   creator: "Azlok Enterprises",
@@ -42,8 +42,8 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "Azlok - Premium B2B Marketplace & E-commerce Platform in India",
-    description: "India's leading B2B marketplace connecting verified suppliers with businesses. Quality products, competitive pricing, fast delivery.",
+    title: "Azlok - Premium B2C Marketplace & E-commerce Platform in India",
+    description: "India's leading B2C marketplace connecting verified suppliers with businesses. Quality products, competitive pricing, fast delivery.",
     url: 'https://azlok.com',
     siteName: 'Azlok',
     images: [
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
         url: '/home_page_banner.png',
         width: 1200,
         height: 630,
-        alt: 'Azlok B2B Marketplace',
+        alt: 'Azlok B2C Marketplace',
       }
     ],
     locale: 'en_IN',
@@ -59,8 +59,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Azlok - Premium B2B Marketplace India",
-    description: "India's leading B2B marketplace for verified suppliers and quality products.",
+    title: "Azlok - Premium B2C Marketplace India",
+    description: "India's leading B2C marketplace for verified suppliers and quality products.",
     images: ['/home_page_banner.png'],
   },
   robots: {
@@ -99,7 +99,7 @@ export default function RootLayout({
               "alternateName": "Azlok Enterprises",
               "url": "https://azlok.com",
               "logo": "https://azlok.com/logo.png",
-              "description": "India's leading B2B marketplace connecting verified suppliers with businesses",
+              "description": "India's leading B2C marketplace connecting verified suppliers with businesses",
               "foundingDate": "2024",
               "founders": [
                 {

@@ -164,17 +164,17 @@ const HeroSection = () => {
             
             <div className="flex flex-wrap justify-center lg:justify-start gap-3 items-center">
               <span className="text-gray-500 font-medium">Popular:</span>
-              <Link href="/search?q=electronics" className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors text-sm font-medium">
-                Electronics
+              <Link href="/search?q=chemicals" className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors text-sm font-medium">
+                Chemicals
               </Link>
-              <Link href="/search?q=textiles" className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors text-sm font-medium">
-                Textiles
+              <Link href="/search?q=essential+oils" className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors text-sm font-medium">
+                Essential Oils
               </Link>
-              <Link href="/search?q=machinery" className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors text-sm font-medium">
-                Machinery
+              <Link href="/search?q=powder" className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors text-sm font-medium">
+                Powder
               </Link>
-              <Link href="/search?q=furniture" className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors text-sm font-medium">
-                Furniture
+              <Link href="/search?q=spices" className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors text-sm font-medium">
+                Spices
               </Link>
             </div>
           </div>

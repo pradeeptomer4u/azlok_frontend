@@ -74,7 +74,12 @@ const categoryService = {
         };
       });
       
-      return transformedCategories;
+      // Sort categories by product count in descending order
+      const sortedCategories = transformedCategories.sort((a, b) => 
+        (b.product_count || 0) - (a.product_count || 0)
+      );
+      
+      return sortedCategories;
     } catch (error) {
       console.error('Error fetching categories with product count:', error);
       return [];

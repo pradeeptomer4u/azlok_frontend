@@ -123,7 +123,7 @@ export default function RootLayout({
                 "https://www.facebook.com/azlok",
                 "https://www.twitter.com/azlok",
                 "https://www.linkedin.com/company/azlok",
-                "https://www.instagram.com/azlok"
+                "https://www.instagram.com/azlok.pvt.ltd"
               ],
               "hasOfferCatalog": {
                 "@type": "OfferCatalog",

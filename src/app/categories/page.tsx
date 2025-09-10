@@ -71,9 +71,10 @@ export default function CategoriesPage() {
         url="https://azlok.com"
         logo="/logo.png"
         sameAs={[
-          "https://facebook.com/azlok",
-          "https://twitter.com/azlok",
-          "https://instagram.com/azlok"
+          "https://www.linkedin.com/in/azlok/",
+          "https://www.youtube.com/@Azlok_Pvt_Ltd",
+          "https://x.com/Azlok_Pvt_Ltd",
+          "https://www.instagram.com/azlok.pvt.ltd"
         ]}
       />
 

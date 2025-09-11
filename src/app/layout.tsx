@@ -8,6 +8,7 @@ import Footer from "../components/layout/Footer";
 import { CartProvider } from "../context/CartContext";
 import { AuthProvider } from "../context/AuthContext";
 import KeepAliveInitializer from "../components/utils/KeepAliveInitializer";
+import ErrorBoundary from "../components/utils/ErrorBoundary";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -153,17 +154,19 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
       >
-        <AuthProvider>
-          <CartProvider>
-            <div className="flex flex-col min-h-screen">
-              <Header />
-              <main className="flex-grow">{children}</main>
-              <Footer />
-            </div>
-            {/* Keep-alive service to prevent Render from spinning down due to inactivity */}
-            <KeepAliveInitializer />
-          </CartProvider>
-        </AuthProvider>
+        <ErrorBoundary>
+          <AuthProvider>
+            <CartProvider>
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-grow">{children}</main>
+                <Footer />
+              </div>
+              {/* Keep-alive service to prevent Render from spinning down due to inactivity */}
+              <KeepAliveInitializer />
+            </CartProvider>
+          </AuthProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

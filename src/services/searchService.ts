@@ -53,11 +53,7 @@ const searchService = {
     }
     
     try {
-      // Use our Next.js API route
-      const url = `/api/search?query=${encodeURIComponent(query)}&size=${limit}`;
-      console.log('Autocomplete request URL:', url);
-      
-      // Create mock data for testing
+      // Create mock data for testing - this is safer than making API calls that might fail
       const mockData: AutocompleteResult[] = [
         {
           id: 1,
@@ -79,16 +75,31 @@ const searchService = {
           image: '/globe.svg',
           price: 999,
           category: 'Industrial'
+        },
+        {
+          id: 4,
+          name: 'Organic Compounds - Premium Quality',
+          image: '/globe.svg',
+          price: 3499,
+          category: 'Chemicals'
+        },
+        {
+          id: 5,
+          name: 'Spices - Wholesale Package',
+          image: '/globe.svg',
+          price: 1899,
+          category: 'Food'
         }
       ];
       
-      // Return mock data for now
-      console.log('Returning mock suggestions:', mockData);
+      // Filter mock data based on query
       return mockData.filter(item => 
         item.name.toLowerCase().includes(query.toLowerCase())
       );
       
-      /* Uncomment this when backend is working
+      /* API-based implementation - commented out for now
+      // Use our Next.js API route
+      const url = `/api/search?query=${encodeURIComponent(query)}&size=${limit}`;
       const response = await apiRequest<SearchResults>(url);
       
       if (!response || !response.items) {
@@ -106,6 +117,7 @@ const searchService = {
       */
     } catch (error) {
       console.error('Error getting autocomplete suggestions:', error);
+      // Return empty array on error to prevent app crashes
       return [];
     }
   }

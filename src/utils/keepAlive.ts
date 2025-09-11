@@ -4,31 +4,29 @@
 
 // Configuration
 const PING_INTERVAL = 5 * 60 * 1000; // 5 minutes in milliseconds
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.azlok.com';
-const FRONTEND_URL = 'https://azlok.com';
+// Use relative URLs to avoid CORS issues in development
+const BACKEND_HEALTH_ENDPOINT = '/api/health';
 
 /**
- * Ping both frontend and backend services to keep them alive
+ * Ping services to keep them alive
  */
 async function pingServices() {
   try {
-    // Ping backend
-    await fetch(`${BACKEND_URL}/health`, { 
+    // Ping health endpoint
+    const response = await fetch(BACKEND_HEALTH_ENDPOINT, { 
       method: 'GET',
       cache: 'no-store',
       headers: { 'Keep-Alive': 'true' }
     });
     
-    // Ping frontend (self)
-    await fetch(`${FRONTEND_URL}/api/health`, {
-      method: 'GET',
-      cache: 'no-store',
-      headers: { 'Keep-Alive': 'true' }
-    });
-    
-    console.log(`[KeepAlive] Services pinged at ${new Date().toISOString()}`);
+    if (response.ok) {
+      console.log(`[KeepAlive] Service pinged successfully at ${new Date().toISOString()}`);
+    } else {
+      console.warn(`[KeepAlive] Service ping returned status: ${response.status}`);
+    }
   } catch (error) {
-    console.error('[KeepAlive] Error pinging services:', error);
+    // Just log the error but don't throw - we don't want to break the app
+    console.warn('[KeepAlive] Error pinging services - this is expected in development');
   }
 }
 

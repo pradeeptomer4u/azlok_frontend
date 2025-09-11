@@ -31,10 +31,6 @@ const nextConfig: NextConfig = {
         source: '/(.*)',
         headers: [
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
             key: 'X-Frame-Options',
             value: 'DENY',
           },
@@ -45,6 +41,16 @@ const nextConfig: NextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
+          },
+        ],
+      },
+      // Ensure JavaScript files are served with the correct MIME type
+      {
+        source: '/(.*)\\.(js|jsx|ts|tsx)',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/javascript; charset=utf-8',
           },
         ],
       },

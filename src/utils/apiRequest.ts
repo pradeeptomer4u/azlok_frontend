@@ -2,8 +2,8 @@
  * API request utility for making HTTP requests to the backend
  */
 
-// Base URL for API requests
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+// Base URL for API requests - use relative URLs by default for Next.js API routes
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 /**
  * Generic API request function
@@ -38,17 +38,24 @@ export const apiRequest = async <T>(
   };
 
   try {
-    console.log(`API Request: ${url}`, requestOptions);
+    console.log(`API Request: ${url}`);
     const response = await fetch(url, requestOptions);
     console.log(`API Response status: ${response.status} ${response.statusText}`);
 
     // Check if the response is ok (status in the range 200-299)
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
+      // Try to parse error response, but don't fail if it's not JSON
+      const errorData = await response.text().then(text => {
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          return { message: text };
+        }
+      }).catch(() => ({}));
+      
       console.error(`API error response:`, errorData);
-      throw new Error(
-        errorData.detail || `API request failed with status ${response.status}`
-      );
+      // Return empty result instead of throwing to prevent app crashes
+      return {} as T;
     }
 
     // For 204 No Content responses

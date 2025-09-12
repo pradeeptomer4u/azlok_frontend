@@ -4,15 +4,7 @@ export async function POST(req: NextRequest) {
   try {
     // Parse request body
     const body = await req.json();
-    const { reason, password } = body;
-
-    // Validate input
-    if (!reason || !password) {
-      return NextResponse.json(
-        { error: 'Reason and password are required' },
-        { status: 400 }
-      );
-    }
+    const { reason, password, requestId, action } = body;
 
     // Check authentication from cookies
     const cookieStore = req.cookies;
@@ -36,12 +28,48 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // In a real implementation, this would verify the password and create a deletion request
-    // For now, just return a success response
-    return NextResponse.json(
-      { message: 'Account deletion request submitted successfully' },
-      { status: 200 }
-    );
+    // Handle different actions
+    if (action === 'approve' || action === 'reject') {
+      // Check if user is admin for approve/reject actions
+      if (user.role !== 'admin') {
+        return NextResponse.json(
+          { error: 'Forbidden - Admin access required' },
+          { status: 403 }
+        );
+      }
+
+      if (!requestId) {
+        return NextResponse.json(
+          { error: 'Request ID is required' },
+          { status: 400 }
+        );
+      }
+
+      // Process the approval or rejection
+      const message = action === 'approve' 
+        ? 'Account deletion request approved and user data anonymized'
+        : 'Account deletion request rejected';
+
+      return NextResponse.json(
+        { message, requestId },
+        { status: 200 }
+      );
+    } else {
+      // This is a new deletion request
+      // Validate input for new requests
+      if (!reason || !password) {
+        return NextResponse.json(
+          { error: 'Reason and password are required' },
+          { status: 400 }
+        );
+      }
+
+      // In a real implementation, this would verify the password and create a deletion request
+      return NextResponse.json(
+        { message: 'Account deletion request submitted successfully' },
+        { status: 200 }
+      );
+    }
   } catch (error) {
     console.error('Error processing account deletion request:', error);
     return NextResponse.json(

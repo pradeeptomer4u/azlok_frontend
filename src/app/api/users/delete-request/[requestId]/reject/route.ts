@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { requestId: string } }
+  context: { params: { requestId: string } }
 ) {
   try {
-    const requestId = params.requestId;
+    const requestId = context.params.requestId;
     
     // Check authentication from cookies
     const cookieStore = req.cookies;

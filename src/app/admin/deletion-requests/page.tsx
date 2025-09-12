@@ -36,7 +36,7 @@ export default function AdminDeletionRequestsPage() {
   // Fetch deletion requests
   useEffect(() => {
     const fetchDeletionRequests = async () => {
-      if (!user || user.role !== 'ADMIN') {
+      if (!user || user.role !== 'admin') {
         router.push('/login?redirect=/admin/deletion-requests');
         return;
       }
@@ -79,9 +79,13 @@ export default function AdminDeletionRequestsPage() {
           req.id === requestId 
             ? { 
                 ...req, 
-                status: 'APPROVED', 
+                status: 'APPROVED' as const, 
                 processedAt: new Date().toISOString(),
-                processedBy: { id: user?.id || '', email: user?.email || '', name: user?.name || '' }
+                processedBy: { 
+                  id: String(user?.id || ''), 
+                  email: user?.email || '', 
+                  name: user?.name || '' 
+                }
               } 
             : req
         )
@@ -111,9 +115,13 @@ export default function AdminDeletionRequestsPage() {
           req.id === requestId 
             ? { 
                 ...req, 
-                status: 'REJECTED', 
+                status: 'REJECTED' as const, 
                 processedAt: new Date().toISOString(),
-                processedBy: { id: user?.id || '', email: user?.email || '', name: user?.name || '' }
+                processedBy: { 
+                  id: String(user?.id || ''), 
+                  email: user?.email || '', 
+                  name: user?.name || '' 
+                }
               } 
             : req
         )
@@ -137,7 +145,7 @@ export default function AdminDeletionRequestsPage() {
   };
 
   // Redirect if not admin
-  if (!user || user.role !== 'ADMIN') {
+  if (!user || user.role !== 'admin') {
     return <div className="min-h-screen flex items-center justify-center">Redirecting to login...</div>;
   }
 

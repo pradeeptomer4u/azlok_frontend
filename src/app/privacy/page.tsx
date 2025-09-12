@@ -115,6 +115,19 @@ export default function PrivacyPolicyPage() {
               <li className="mb-2">The right to data portability</li>
               <li className="mb-2">The right to lodge a complaint with a supervisory authority</li>
             </ul>
+            
+            <h3 className="text-xl font-semibold text-gray-800 mt-5 mb-3">7.1 Account Deletion</h3>
+            <p className="text-gray-700 mb-4">
+              You have the right to request deletion of your account and associated personal data. To exercise this right:
+            </p>
+            <ul className="list-disc pl-6 mb-4 text-gray-700">
+              <li className="mb-2"><strong>Mobile App:</strong> Go to Profile → Request Account Deletion, enter your reason and confirm with your password.</li>
+              <li className="mb-2"><strong>Website:</strong> Go to Account Settings → Privacy & Data → Delete Account, or visit our <a href="/account/delete" className="text-blue-600 hover:underline">Account Deletion page</a>.</li>
+              <li className="mb-2"><strong>Customer Support:</strong> Contact our support team at privacy@azlok.com with the subject "Account Deletion Request".</li>
+            </ul>
+            <p className="text-gray-700 mb-4">
+              Upon receiving your request, we will verify your identity and process your account deletion within 30 days. You will receive a confirmation email once the process is complete. Please note that some information may be retained as required by law or for legitimate business purposes.
+            </p>
 
             <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4">8. Children&quot;s Privacy</h2>
             <p className="text-gray-700 mb-4">

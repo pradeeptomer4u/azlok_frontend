@@ -62,8 +62,9 @@ export default function AccountDeletionPage() {
         router.push('/');
       }, 5000);
       
-    } catch (err: any) {
-      setError(err.message || 'An error occurred while submitting your request');
+    } catch (err: Error | unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred while submitting your request';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -110,7 +111,7 @@ export default function AccountDeletionPage() {
                   This action cannot be undone.
                 </p>
                 <p className="text-gray-700">
-                  If you're experiencing issues with our service, please consider <a href="/contact" className="text-blue-600 hover:underline">contacting our support team</a> before proceeding with account deletion.
+                  If you&apos;re experiencing issues with our service, please consider <a href="/contact" className="text-blue-600 hover:underline">contacting our support team</a> before proceeding with account deletion.
                 </p>
               </div>
 
@@ -126,7 +127,7 @@ export default function AccountDeletionPage() {
                 <form onSubmit={handleSubmit}>
                   <div className="mb-6">
                     <label htmlFor="reason" className="block text-gray-700 font-medium mb-2">
-                      Please tell us why you're leaving:
+                      Please tell us why you&apos;re leaving:
                     </label>
                     <textarea
                       id="reason"

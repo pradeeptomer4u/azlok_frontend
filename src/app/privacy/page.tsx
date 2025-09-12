@@ -123,7 +123,7 @@ export default function PrivacyPolicyPage() {
             <ul className="list-disc pl-6 mb-4 text-gray-700">
               <li className="mb-2"><strong>Mobile App:</strong> Go to Profile → Request Account Deletion, enter your reason and confirm with your password.</li>
               <li className="mb-2"><strong>Website:</strong> Go to Account Settings → Privacy & Data → Delete Account, or visit our <a href="/account/delete" className="text-blue-600 hover:underline">Account Deletion page</a>.</li>
-              <li className="mb-2"><strong>Customer Support:</strong> Contact our support team at privacy@azlok.com with the subject "Account Deletion Request".</li>
+              <li className="mb-2"><strong>Customer Support:</strong> Contact our support team at privacy@azlok.com with the subject &quot;Account Deletion Request&quot;.</li>
             </ul>
             <p className="text-gray-700 mb-4">
               Upon receiving your request, we will verify your identity and process your account deletion within 30 days. You will receive a confirmation email once the process is complete. Please note that some information may be retained as required by law or for legitimate business purposes.

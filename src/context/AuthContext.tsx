@@ -30,6 +30,7 @@ interface AuthProviderProps {
 
 interface RegisterData {
   name: string;
+  username: string;
   email: string;
   password: string;
   role: 'buyer' | 'seller';
@@ -162,6 +163,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         company: userData.company,
         avatar: '/globe.svg'
       };
+      
+      // In a real implementation, we would send the username to the backend
+      console.log(`Registering user with username: ${userData.username}`);
       
       setUser(newUser);
       setToken(`mock-jwt-token-${newUser.id}-${newUser.role}`);

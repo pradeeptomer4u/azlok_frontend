@@ -1,12 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../context/AuthContext';
+import { checkUsernameAvailability } from '../../services/authService';
+import { debounce } from 'lodash';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -14,7 +17,36 @@ export default function RegisterPage() {
     role: 'buyer' as 'buyer' | 'seller',
   });
   const [passwordError, setPasswordError] = useState('');
+  const [usernameChecking, setUsernameChecking] = useState(false);
+  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
+  const [usernameError, setUsernameError] = useState('');
   const { register, isLoading, error } = useAuth();
+
+  // Debounced username check
+  const checkUsername = useCallback(
+    debounce(async (username: string) => {
+      if (!username || username.length < 3) {
+        setUsernameAvailable(null);
+        return;
+      }
+
+      setUsernameChecking(true);
+      try {
+        const result = await checkUsernameAvailability(username);
+        setUsernameAvailable(result.available);
+        if (!result.available) {
+          setUsernameError('Username is already taken');
+        } else {
+          setUsernameError('');
+        }
+      } catch (error) {
+        console.error('Error checking username:', error);
+      } finally {
+        setUsernameChecking(false);
+      }
+    }, 500),
+    []
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -23,6 +55,12 @@ export default function RegisterPage() {
     // Clear password error when user types in password fields
     if (name === 'password' || name === 'confirmPassword') {
       setPasswordError('');
+    }
+
+    // Check username availability
+    if (name === 'username') {
+      setUsernameAvailable(null);
+      checkUsername(value);
     }
   };
 
@@ -40,9 +78,27 @@ export default function RegisterPage() {
       setPasswordError('Password must be at least 8 characters long');
       return;
     }
+
+    // Validate username
+    if (!formData.username) {
+      setUsernameError('Username is required');
+      return;
+    }
+
+    if (formData.username.length < 3) {
+      setUsernameError('Username must be at least 3 characters long');
+      return;
+    }
+
+    // Check if username is available
+    if (usernameAvailable === false) {
+      setUsernameError('Username is already taken');
+      return;
+    }
     
     await register({
       name: formData.name,
+      username: formData.username,
       email: formData.email,
       password: formData.password,
       role: formData.role,
@@ -135,6 +191,51 @@ export default function RegisterPage() {
                   placeholder="John Doe"
                   required
                 />
+              </div>
+              
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+                  Username
+                </label>
+                <div className="relative">
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    value={formData.username}
+                    onChange={handleChange}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${usernameError ? 'border-red-300' : 'border-gray-300'}`}
+                    placeholder="johndoe"
+                    required
+                  />
+                  {usernameChecking && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                      <svg className="animate-spin h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    </div>
+                  )}
+                  {!usernameChecking && usernameAvailable !== null && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                      {usernameAvailable ? (
+                        <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                      ) : (
+                        <svg className="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                  )}
+                </div>
+                {usernameError && (
+                  <p className="mt-1 text-sm text-red-600">{usernameError}</p>
+                )}
+                {!usernameError && usernameAvailable && (
+                  <p className="mt-1 text-sm text-green-600">Username is available</p>
+                )}
               </div>
               
               <div>

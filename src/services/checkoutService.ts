@@ -1,7 +1,6 @@
 'use client';
 
 import { fetchWithAuth } from '../utils/api';
-import { CartItem } from '../context/CartContext';
 
 export interface ShippingAddress {
   id: number;
@@ -70,7 +69,6 @@ const checkoutService = {
       const response = await fetchWithAuth('/api/users/addresses');
       
       if (!response.ok) {
-        const errorData = await response.json();
         let errorMessage = 'Unable to load your saved addresses.';
         
         if (response.status === 401) {
@@ -117,7 +115,7 @@ const checkoutService = {
       });
       
       if (!response.ok) {
-        const errorData = await response.json();
+        await response.json(); // Error details
         let errorMessage = 'Failed to add shipping address. Please try again.';
         
         if (response.status === 422) {
@@ -162,7 +160,7 @@ const checkoutService = {
       });
       
       if (!response.ok) {
-        const errorData = await response.json();
+        await response.json(); // Error details
         let errorMessage = 'Failed to update shipping address. Please try again.';
         
         if (response.status === 422) {
@@ -192,7 +190,7 @@ const checkoutService = {
       });
       
       if (!response.ok) {
-        const errorData = await response.json();
+        await response.json(); // Error details
         let errorMessage = 'Failed to delete shipping address. Please try again.';
         
         if (response.status === 404) {
@@ -219,7 +217,7 @@ const checkoutService = {
       const response = await fetchWithAuth('/api/checkout/payment-methods');
       
       if (!response.ok) {
-        const errorData = await response.json();
+        await response.json(); // Error details
         let errorMessage = 'Unable to load payment methods. Please try again.';
         
         if (response.status === 404) {
@@ -247,7 +245,7 @@ const checkoutService = {
       const response = await fetchWithAuth('/api/checkout/shipping');
       
       if (!response.ok) {
-        const errorData = await response.json();
+        await response.json(); // Error details
         let errorMessage = 'Unable to load shipping methods. Please try again.';
         
         if (response.status === 404) {
@@ -277,7 +275,7 @@ const checkoutService = {
       const response = await fetchWithAuth(`/api/checkout/summary?shipping_method_id=${shippingMethodId}`);
       
       if (!response.ok) {
-        const errorData = await response.json();
+        await response.json(); // Error details
         let errorMessage = 'Unable to load checkout summary. Please try again.';
         
         if (response.status === 404) {
@@ -309,7 +307,7 @@ const checkoutService = {
       });
       
       if (!response.ok) {
-        const errorData = await response.json();
+        await response.json(); // Error details
         let errorMessage = 'Failed to place order. Please try again.';
         
         if (response.status === 422) {

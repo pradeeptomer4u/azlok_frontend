@@ -214,7 +214,7 @@ const checkoutService = {
   // Get available payment methods
   getPaymentMethods: async (): Promise<{ data: PaymentMethod[], error: string | null }> => {
     try {
-      const response = await fetchWithAuth('/api/checkout/payment-methods');
+      const response = await fetchWithAuth('/api/payment-methods/');
       
       if (!response.ok) {
         await response.json(); // Error details
@@ -242,7 +242,7 @@ const checkoutService = {
   // Get available shipping methods
   getShippingMethods: async (): Promise<{ data: ShippingMethod[], error: string | null }> => {
     try {
-      const response = await fetchWithAuth('/api/checkout/shipping');
+      const response = await fetchWithAuth('/api/shipping/');
       
       if (!response.ok) {
         await response.json(); // Error details
@@ -272,7 +272,7 @@ const checkoutService = {
         return { data: null, error: 'Shipping method ID is required.' };
       }
       
-      const response = await fetchWithAuth(`/api/checkout/summary?shipping_method_id=${shippingMethodId}`);
+      const response = await fetchWithAuth(`/api/cart-summary/?shipping_method_id=${shippingMethodId}`);
       
       if (!response.ok) {
         await response.json(); // Error details

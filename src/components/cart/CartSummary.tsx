@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useCart } from '../../context/CartContext';
 import { formatCurrency } from '@/utils/taxService';
 
 const CartSummary = () => {
+  const router = useRouter();
   const { 
     items, 
     subtotal, 
@@ -79,11 +81,8 @@ const CartSummary = () => {
   const handleCheckout = () => {
     setIsProcessing(true);
     
-    // Simulate checkout process
-    setTimeout(() => {
-      alert('Checkout functionality will be implemented in the next phase!');
-      setIsProcessing(false);
-    }, 1500);
+    // Redirect to checkout page
+    router.push('/checkout');
   };
 
   return (

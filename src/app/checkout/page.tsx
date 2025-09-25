@@ -154,6 +154,7 @@ export default function CheckoutPage() {
     try {
       // Calculate subtotal from cart items
       const itemsSubtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
+      console.log('Calculated subtotal from items:', itemsSubtotal);
       
       const summaryResponse = await checkoutService.getCheckoutSummary(selectedShippingMethodId);
       
@@ -161,14 +162,20 @@ export default function CheckoutPage() {
         console.error('Error updating checkout summary:', summaryResponse.error);
         setSummaryError(summaryResponse.error);
       } else if (summaryResponse.data) {
+        // Calculate tax based on the correct subtotal (10% tax rate)
+        const taxRate = 0.1; // 10%
+        const calculatedTax = itemsSubtotal * taxRate;
+        
         // Make sure we're using the correct subtotal from cart items
         const correctedSummary: CheckoutSummary = {
           subtotal: itemsSubtotal,
           shipping: summaryResponse.data.shipping || 0,
-          tax: summaryResponse.data.tax || 0,
-          // Recalculate total based on the correct subtotal
-          total: itemsSubtotal + (summaryResponse.data.shipping || 0) + (summaryResponse.data.tax || 0)
+          tax: calculatedTax,
+          // Recalculate total based on the correct subtotal and tax
+          total: itemsSubtotal + (summaryResponse.data.shipping || 0) + calculatedTax
         };
+        
+        console.log('Corrected checkout summary:', correctedSummary);
         setSummary(correctedSummary);
         setSummaryError(null);
       }

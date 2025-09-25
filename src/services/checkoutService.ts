@@ -66,7 +66,8 @@ const checkoutService = {
   // Get user's saved shipping addresses
   getShippingAddresses: async (): Promise<{ data: ShippingAddress[], error: string | null }> => {
     try {
-      const response = await fetchWithAuth('/api/users/addresses');
+      // Make sure we're using the correct endpoint format with trailing slash
+      const response = await fetchWithAuth('/api/users/addresses/');
       
       if (!response.ok) {
         let errorMessage = 'Unable to load your saved addresses.';
@@ -74,16 +75,32 @@ const checkoutService = {
         if (response.status === 401) {
           errorMessage = 'Please log in to view your saved addresses.';
         } else if (response.status === 422) {
-          errorMessage = 'Invalid data format.';
+          // Try to parse the error response for more details
+          try {
+            const errorData = await response.json();
+            if (errorData && errorData.detail) {
+              const detail = errorData.detail;
+              if (Array.isArray(detail) && detail.length > 0) {
+                const firstError = detail[0];
+                errorMessage = `Validation error: ${firstError.msg || 'Invalid data format'}`;
+              } else if (typeof detail === 'string') {
+                errorMessage = `Error: ${detail}`;
+              }
+            }
+          } catch (parseError) {
+            errorMessage = 'Invalid data format.';
+          }
         } else if (response.status === 404) {
           errorMessage = 'Address service is not available. Please try again later.';
+        } else if (response.status === 405) {
+          errorMessage = 'Unable to load addresses due to server configuration.';
         }
         
         return { data: [], error: errorMessage };
       }
       
       const data = await response.json();
-      return { data, error: null };
+      return { data: data || [], error: null };
     } catch (error) {
       console.error('Error fetching shipping addresses:', error);
       return { data: [], error: 'Unable to load your saved addresses. Please try again later.' };
@@ -106,7 +123,8 @@ const checkoutService = {
         is_default: true
       };
       
-      const response = await fetchWithAuth('/api/users/addresses', {
+      // Make sure we're using the correct endpoint format with trailing slash
+      const response = await fetchWithAuth('/api/users/addresses/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -115,13 +133,31 @@ const checkoutService = {
       });
       
       if (!response.ok) {
-        await response.json(); // Error details
         let errorMessage = 'Failed to add shipping address. Please try again.';
         
-        if (response.status === 422) {
-          errorMessage = 'Invalid address information. Please check your inputs.';
-        } else if (response.status === 401) {
-          errorMessage = 'You need to be logged in to add an address.';
+        try {
+          const errorData = await response.json();
+          if (errorData && errorData.detail) {
+            const detail = errorData.detail;
+            if (Array.isArray(detail) && detail.length > 0) {
+              const firstError = detail[0];
+              errorMessage = `Validation error: ${firstError.msg || 'Invalid data format'}`;
+              console.log('Validation error details:', firstError);
+            } else if (typeof detail === 'string') {
+              errorMessage = `Error: ${detail}`;
+            }
+          }
+        } catch (parseError) {
+          // If we can't parse the error response, use default messages
+          if (response.status === 422) {
+            errorMessage = 'Invalid address information. Please check your inputs.';
+          } else if (response.status === 401) {
+            errorMessage = 'You need to be logged in to add an address.';
+          } else if (response.status === 404) {
+            errorMessage = 'Address service is not available. Please try again later.';
+          } else if (response.status === 405) {
+            errorMessage = 'Unable to add address due to server configuration.';
+          }
         }
         
         return { data: null, error: errorMessage };

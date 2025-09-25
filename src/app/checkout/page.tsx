@@ -152,13 +152,24 @@ export default function CheckoutPage() {
     if (!selectedShippingMethodId) return;
     
     try {
+      // Calculate subtotal from cart items
+      const itemsSubtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
+      
       const summaryResponse = await checkoutService.getCheckoutSummary(selectedShippingMethodId);
       
       if (summaryResponse.error) {
         console.error('Error updating checkout summary:', summaryResponse.error);
         setSummaryError(summaryResponse.error);
-      } else {
-        setSummary(summaryResponse.data);
+      } else if (summaryResponse.data) {
+        // Make sure we're using the correct subtotal from cart items
+        const correctedSummary: CheckoutSummary = {
+          subtotal: itemsSubtotal,
+          shipping: summaryResponse.data.shipping || 0,
+          tax: summaryResponse.data.tax || 0,
+          // Recalculate total based on the correct subtotal
+          total: itemsSubtotal + (summaryResponse.data.shipping || 0) + (summaryResponse.data.tax || 0)
+        };
+        setSummary(correctedSummary);
         setSummaryError(null);
       }
     } catch (err) {

@@ -32,6 +32,14 @@ export default function OrderSummarySection({
     }).format(price);
   };
 
+  // Calculate the actual subtotal from cart items
+  const calculatedSubtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
+  
+  // Calculate the actual total
+  const calculatedTotal = calculatedSubtotal + 
+    (summary ? summary.shipping : 0) + 
+    (summary ? summary.tax : 0);
+
   return (
     <div className="border rounded-lg shadow-sm overflow-hidden">
       <div className="p-4 border-b bg-gray-50">
@@ -71,7 +79,7 @@ export default function OrderSummarySection({
         <div className="border-t pt-4 space-y-2">
           <div className="flex justify-between text-sm">
             <span>Subtotal</span>
-            <span>{summary ? formatPrice(summary.subtotal) : '—'}</span>
+            <span>{formatPrice(calculatedSubtotal)}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span>Shipping</span>
@@ -83,7 +91,7 @@ export default function OrderSummarySection({
           </div>
           <div className="flex justify-between font-medium text-base pt-2 border-t">
             <span>Total</span>
-            <span>{summary ? formatPrice(summary.total) : '—'}</span>
+            <span>{formatPrice(calculatedTotal)}</span>
           </div>
         </div>
       </div>

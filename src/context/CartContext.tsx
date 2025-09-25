@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { calculateOrderTax, OrderTaxCalculationRequest } from '../utils/taxService';
+import { calculateOrderTaxPublic, OrderTaxCalculationRequest } from '../utils/taxService';
 
 export interface CartItem {
   id: number;
@@ -170,7 +170,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         apply_tax_to_shipping: true
       };
       
-      const response = await calculateOrderTax(request);
+      const response = await calculateOrderTaxPublic(request);
       
       // Update tax amounts
       setTaxAmount(response.total_tax_amount);
@@ -182,7 +182,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       // Update items with tax information
       setItems(prevItems => {
         return prevItems.map(item => {
-          const itemWithTax = response.items.find(i => i.product_id === item.id);
+          const itemWithTax = response.items.find((i: { product_id: number }) => i.product_id === item.id);
           if (itemWithTax) {
             return {
               ...item,
@@ -199,7 +199,20 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       
     } catch (error) {
       console.error('Error calculating taxes:', error);
-      setTaxCalculationError('Failed to calculate taxes. Please try again.');
+      
+      // Set a more specific error message if it's a 401 authentication error
+      if (error instanceof Error && error.message.includes('401')) {
+        setTaxCalculationError('Authentication required for tax calculation. Please log in to see accurate tax information.');
+      } else {
+        setTaxCalculationError('Failed to calculate taxes. Please try again later.');
+      }
+      
+      // Reset tax values when calculation fails
+      setTaxAmount(0);
+      setCgstAmount(0);
+      setSgstAmount(0);
+      setIgstAmount(0);
+      setShippingTaxAmount(0);
     } finally {
       setTaxCalculationLoading(false);
     }

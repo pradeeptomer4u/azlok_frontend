@@ -34,8 +34,14 @@ export async function fetchWithAuth(url: string, options: RequestInit = {}) {
  */
 export async function fetchApi(url: string, options: RequestInit = {}) {
   // Set up default headers
+  let token = null;
+  
+  if (typeof window !== 'undefined') {
+    token = localStorage.getItem('azlok-token');
+  }
   const headers = {
     'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
     ...options.headers,
   };
   

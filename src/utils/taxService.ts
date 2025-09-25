@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { fetchApi } from './api';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
@@ -110,6 +111,35 @@ export const calculateOrderTax = async (
     return response.data;
   } catch (error) {
     console.error('Error calculating order tax:', error);
+    throw error;
+  }
+};
+
+// Function to calculate tax for an entire order without authentication
+// This is used for cart page where user might not be logged in
+export const calculateOrderTaxPublic = async (
+  request: OrderTaxCalculationRequest
+): Promise<OrderTaxCalculationResponse> => {
+  try {
+    const response = await fetchApi('/api/tax/calculate-order-tax', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request),
+    });
+    
+    if (!response.ok) {
+      // If API returns error, throw it to be caught by the caller
+      const errorText = await response.text();
+      console.error('Tax calculation API error:', response.status, errorText);
+      throw new Error(`Tax calculation failed: ${response.status} ${errorText}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error calculating order tax (public):', error);
     throw error;
   }
 };

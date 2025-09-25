@@ -174,8 +174,17 @@ const checkoutService = {
   // Update an existing shipping address
   updateShippingAddress: async (id: number, address: ShippingAddress): Promise<{ data: ShippingAddress | null, error: string | null }> => {
     try {
+      // First get the user ID from the me endpoint
+      const userResponse = await fetchWithAuth('/api/users/me');
+      if (!userResponse.ok) {
+        return { data: null, error: 'Failed to get user information. Please try again.' };
+      }
+      const userData = await userResponse.json();
+      const userId = Number(userData.id);
+
       // Create a properly formatted address object that matches the backend schema
       const addressData = {
+        user_id: userId,
         full_name: address.full_name,
         address_line1: address.address_line1,
         address_line2: address.address_line2 || '',
@@ -196,15 +205,30 @@ const checkoutService = {
       });
       
       if (!response.ok) {
-        await response.json(); // Error details
         let errorMessage = 'Failed to update shipping address. Please try again.';
         
-        if (response.status === 422) {
-          errorMessage = 'Invalid address information. Please check your inputs.';
-        } else if (response.status === 404) {
-          errorMessage = 'Address not found or service unavailable.';
-        } else if (response.status === 401) {
-          errorMessage = 'You need to be logged in to update an address.';
+        try {
+          const errorData = await response.json();
+          if (errorData && errorData.detail) {
+            const detail = errorData.detail;
+            if (Array.isArray(detail) && detail.length > 0) {
+              const firstError = detail[0];
+              errorMessage = `Validation error: ${firstError.msg || 'Invalid data format'}`;
+            } else if (typeof detail === 'string') {
+              errorMessage = `Error: ${detail}`;
+            }
+          }
+        } catch (parseError) {
+          // If we can't parse the error response, use default messages
+          if (response.status === 422) {
+            errorMessage = 'Invalid address information. Please check your inputs.';
+          } else if (response.status === 404) {
+            errorMessage = 'Address not found or service unavailable.';
+          } else if (response.status === 401) {
+            errorMessage = 'You need to be logged in to update an address.';
+          } else if (response.status === 405) {
+            errorMessage = 'Unable to update address due to server configuration.';
+          }
         }
         
         return { data: null, error: errorMessage };
@@ -221,20 +245,46 @@ const checkoutService = {
   // Delete a shipping address
   deleteShippingAddress: async (id: number): Promise<{ success: boolean, error: string | null }> => {
     try {
+      // First get the user ID from the me endpoint
+      const userResponse = await fetchWithAuth('/api/users/me');
+      if (!userResponse.ok) {
+        return { success: false, error: 'Failed to get user information. Please try again.' };
+      }
+      const userData = await userResponse.json();
+      const userId = Number(userData.id);
+      
       const response = await fetchWithAuth(`/api/users/addresses/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
       
       if (!response.ok) {
-        await response.json(); // Error details
         let errorMessage = 'Failed to delete shipping address. Please try again.';
         
-        if (response.status === 404) {
-          errorMessage = 'Address not found or service unavailable.';
-        } else if (response.status === 401) {
-          errorMessage = 'You need to be logged in to delete an address.';
-        } else if (response.status === 403) {
-          errorMessage = 'You do not have permission to delete this address.';
+        try {
+          const errorData = await response.json();
+          if (errorData && errorData.detail) {
+            const detail = errorData.detail;
+            if (Array.isArray(detail) && detail.length > 0) {
+              const firstError = detail[0];
+              errorMessage = `Validation error: ${firstError.msg || 'Invalid data format'}`;
+            } else if (typeof detail === 'string') {
+              errorMessage = `Error: ${detail}`;
+            }
+          }
+        } catch (parseError) {
+          // If we can't parse the error response, use default messages
+          if (response.status === 404) {
+            errorMessage = 'Address not found or service unavailable.';
+          } else if (response.status === 401) {
+            errorMessage = 'You need to be logged in to delete an address.';
+          } else if (response.status === 403) {
+            errorMessage = 'You do not have permission to delete this address.';
+          } else if (response.status === 405) {
+            errorMessage = 'Unable to delete address due to server configuration.';
+          }
         }
         
         return { success: false, error: errorMessage };

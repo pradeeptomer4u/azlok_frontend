@@ -159,6 +159,15 @@ const Footer = () => {
         </div>
       </div>
 
+      {/* Billing Address */}
+      <div className="bg-gray-100 py-4 border-t border-gray-200">
+        <div className="container-custom mx-auto text-center text-gray-600">
+          <p className="font-medium">Billing Address:</p>
+          <p>Dr Tomar Enterprises</p>
+          <p>Shamli, Uttar Pradesh, India</p>
+        </div>
+      </div>
+
       {/* Copyright */}
       <div className="bg-gray-200 py-4">
         <div className="container-custom mx-auto text-center text-gray-600 text-sm">

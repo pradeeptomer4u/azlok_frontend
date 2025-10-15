@@ -13,7 +13,8 @@ interface TaxRate {
   hsn_code?: string;
   region_code?: string;
   region_name?: string;
-  tax_percentage: number;
+  tax_percentage?: number;
+  rate?: number;  // Added for compatibility with different API responses
   is_default: boolean;
   effective_from: string;
   effective_to?: string;
@@ -67,12 +68,17 @@ const BulkTaxRateUpdate = () => {
           setRegions(uniqueRegions);
           
           // Initialize bulk update items
-          const items = data.map((rate: TaxRate) => ({
-            id: rate.id,
-            selected: false,
-            originalRate: rate.tax_percentage,
-            newRate: rate.tax_percentage
-          }));
+          const items = data.map((rate: TaxRate) => {
+            // Use tax_percentage if available, otherwise use rate, or default to 0
+            const taxRate = rate.tax_percentage !== undefined ? rate.tax_percentage : 
+                           (rate.rate !== undefined ? rate.rate : 0);
+            return {
+              id: rate.id,
+              selected: false,
+              originalRate: taxRate,
+              newRate: taxRate
+            };
+          });
           setBulkItems(items);
         }
       } catch (error) {
@@ -188,9 +194,12 @@ const BulkTaxRateUpdate = () => {
       // Prepare data for API
       const updateData = itemsToUpdate.map(item => {
         const taxRate = taxRates.find(rate => rate.id === item.id);
+        // Check if the API uses tax_percentage or rate field
+        const useRateField = taxRate && taxRate.rate !== undefined;
+        
         return {
           id: item.id,
-          tax_percentage: item.newRate
+          [useRateField ? 'rate' : 'tax_percentage']: item.newRate
         };
       });
       
@@ -209,7 +218,12 @@ const BulkTaxRateUpdate = () => {
       const updatedTaxRates = taxRates.map(rate => {
         const updateItem = itemsToUpdate.find(item => item.id === rate.id);
         if (updateItem) {
-          return { ...rate, tax_percentage: updateItem.newRate };
+          // Update either tax_percentage or rate field based on which one exists
+          if (rate.tax_percentage !== undefined) {
+            return { ...rate, tax_percentage: updateItem.newRate };
+          } else if (rate.rate !== undefined) {
+            return { ...rate, rate: updateItem.newRate };
+          }
         }
         return rate;
       });
@@ -407,7 +421,7 @@ const BulkTaxRateUpdate = () => {
                       {rate.region_name}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                      {formatTaxPercentage(rate.tax_percentage)}
+                      {formatTaxPercentage(rate.tax_percentage || rate.rate || 0)}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <input

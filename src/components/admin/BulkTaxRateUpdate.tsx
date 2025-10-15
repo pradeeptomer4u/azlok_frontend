@@ -432,7 +432,7 @@ const BulkTaxRateUpdate = () => {
                         min="0"
                         max="100"
                         step="0.01"
-                        value={bulkItem?.newRate || rate.tax_percentage}
+                        value={bulkItem?.newRate || rate.tax_percentage || rate.rate || 0}
                         onChange={(e) => handleRateChange(rate.id, e.target.value)}
                         disabled={!bulkItem?.selected}
                       />

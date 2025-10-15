@@ -14,10 +14,19 @@ interface ProductData {
   name?: string;
   sku?: string;
   price?: number;
+  base_price?: number; // Added base price field
   stock?: number;
   category?: string;
   category_ids?: number[];
   description?: string;
+  hsn_code?: string; // Added HSN code field
+  gst_details?: {
+    hsn_code?: string;
+    cgst_rate?: number;
+    sgst_rate?: number;
+    igst_rate?: number;
+    cess_rate?: number;
+  }; // Added GST details
   features?: string[];
   specifications?: Array<{ name: string; value: string }>;
   images?: string[];
@@ -38,10 +47,19 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
     name: '',
     sku: '',
     price: '',
+    base_price: '',
     stock: '',
     category: '',
     category_ids: [] as number[],
     description: '',
+    hsn_code: '',
+    gst_details: {
+      hsn_code: '',
+      cgst_rate: '',
+      sgst_rate: '',
+      igst_rate: '',
+      cess_rate: ''
+    },
     features: [''],
     specifications: [{ name: '', value: '' }],
     images: [''],
@@ -94,10 +112,19 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
         name: initialData.name || '',
         sku: initialData.sku || '',
         price: initialData.price ? initialData.price.toString() : '',
+        base_price: initialData.base_price ? initialData.base_price.toString() : '',
         stock: initialData.stock ? initialData.stock.toString() : '',
         category: initialData.category || '',
         category_ids: initialData.category_ids || [],
         description: initialData.description || '',
+        hsn_code: initialData.hsn_code || '',
+        gst_details: {
+          hsn_code: initialData.gst_details?.hsn_code || '',
+          cgst_rate: initialData.gst_details?.cgst_rate ? initialData.gst_details.cgst_rate.toString() : '',
+          sgst_rate: initialData.gst_details?.sgst_rate ? initialData.gst_details.sgst_rate.toString() : '',
+          igst_rate: initialData.gst_details?.igst_rate ? initialData.gst_details.igst_rate.toString() : '',
+          cess_rate: initialData.gst_details?.cess_rate ? initialData.gst_details.cess_rate.toString() : ''
+        },
         features: initialData.features || [''],
         specifications: initialData.specifications || [{ name: '', value: '' }],
         images: initialData.images || [''],
@@ -296,9 +323,18 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
         name: formData.name,
         sku: formData.sku,
         price: parseFloat(formData.price),
+        base_price: formData.base_price ? parseFloat(formData.base_price) : undefined,
         stock_quantity: parseInt(formData.stock),
         category_ids: formData.category_ids,
         description: formData.description,
+        hsn_code: formData.hsn_code || undefined,
+        gst_details: {
+          hsn_code: formData.gst_details.hsn_code || undefined,
+          cgst_rate: formData.gst_details.cgst_rate ? parseFloat(formData.gst_details.cgst_rate) : undefined,
+          sgst_rate: formData.gst_details.sgst_rate ? parseFloat(formData.gst_details.sgst_rate) : undefined,
+          igst_rate: formData.gst_details.igst_rate ? parseFloat(formData.gst_details.igst_rate) : undefined,
+          cess_rate: formData.gst_details.cess_rate ? parseFloat(formData.gst_details.cess_rate) : undefined
+        },
         features: formData.features.filter(f => f.trim() !== ''),
         specifications: formData.specifications.filter(s => s.name.trim() !== '' && s.value.trim() !== ''),
         image_urls: formData.images.filter(img => img.trim() !== ''),
@@ -425,6 +461,22 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
             {errors.price && <p className="mt-1 text-sm text-red-600">{errors.price}</p>}
           </div>
           
+          {/* Base Price */}
+          <div>
+            <label htmlFor="base_price" className="block text-sm font-medium text-gray-700 mb-1">
+              Base Price (₹)
+            </label>
+            <input
+              type="text"
+              id="base_price"
+              name="base_price"
+              value={formData.base_price}
+              onChange={handleChange}
+              className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-gray-300 rounded-md"
+              placeholder="Enter base price (before tax/discount)"
+            />
+          </div>
+          
           {/* Stock */}
           <div>
             <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1">
@@ -472,6 +524,22 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
             {errors.category && <p className="mt-1 text-sm text-red-600">{errors.category}</p>}
           </div>
           
+          {/* HSN Code */}
+          <div>
+            <label htmlFor="hsn_code" className="block text-sm font-medium text-gray-700 mb-1">
+              HSN Code
+            </label>
+            <input
+              type="text"
+              id="hsn_code"
+              name="hsn_code"
+              value={formData.hsn_code}
+              onChange={handleChange}
+              className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-gray-300 rounded-md"
+              placeholder="Enter HSN code for tax calculation"
+            />
+          </div>
+          
           {/* Status */}
           <div>
             <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
@@ -507,6 +575,125 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
               placeholder="Enter product description"
             ></textarea>
             {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description}</p>}
+          </div>
+          
+          {/* GST Details */}
+          <div className="col-span-1 md:col-span-2">
+            <div className="mb-4">
+              <h3 className="text-md font-medium text-gray-900 mb-2">GST Details</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="hsn_code_gst" className="block text-sm font-medium text-gray-700 mb-1">
+                    HSN Code
+                  </label>
+                  <input
+                    type="text"
+                    id="hsn_code_gst"
+                    name="gst_details.hsn_code"
+                    value={formData.gst_details.hsn_code}
+                    onChange={(e) => {
+                      setFormData({
+                        ...formData,
+                        gst_details: {
+                          ...formData.gst_details,
+                          hsn_code: e.target.value
+                        }
+                      });
+                    }}
+                    className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-gray-300 rounded-md"
+                    placeholder="Enter HSN code"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="cgst_rate" className="block text-sm font-medium text-gray-700 mb-1">
+                    CGST Rate (%)
+                  </label>
+                  <input
+                    type="text"
+                    id="cgst_rate"
+                    name="gst_details.cgst_rate"
+                    value={formData.gst_details.cgst_rate}
+                    onChange={(e) => {
+                      setFormData({
+                        ...formData,
+                        gst_details: {
+                          ...formData.gst_details,
+                          cgst_rate: e.target.value
+                        }
+                      });
+                    }}
+                    className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-gray-300 rounded-md"
+                    placeholder="Enter CGST rate"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="sgst_rate" className="block text-sm font-medium text-gray-700 mb-1">
+                    SGST Rate (%)
+                  </label>
+                  <input
+                    type="text"
+                    id="sgst_rate"
+                    name="gst_details.sgst_rate"
+                    value={formData.gst_details.sgst_rate}
+                    onChange={(e) => {
+                      setFormData({
+                        ...formData,
+                        gst_details: {
+                          ...formData.gst_details,
+                          sgst_rate: e.target.value
+                        }
+                      });
+                    }}
+                    className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-gray-300 rounded-md"
+                    placeholder="Enter SGST rate"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="igst_rate" className="block text-sm font-medium text-gray-700 mb-1">
+                    IGST Rate (%)
+                  </label>
+                  <input
+                    type="text"
+                    id="igst_rate"
+                    name="gst_details.igst_rate"
+                    value={formData.gst_details.igst_rate}
+                    onChange={(e) => {
+                      setFormData({
+                        ...formData,
+                        gst_details: {
+                          ...formData.gst_details,
+                          igst_rate: e.target.value
+                        }
+                      });
+                    }}
+                    className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-gray-300 rounded-md"
+                    placeholder="Enter IGST rate"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="cess_rate" className="block text-sm font-medium text-gray-700 mb-1">
+                    Cess Rate (%)
+                  </label>
+                  <input
+                    type="text"
+                    id="cess_rate"
+                    name="gst_details.cess_rate"
+                    value={formData.gst_details.cess_rate}
+                    onChange={(e) => {
+                      setFormData({
+                        ...formData,
+                        gst_details: {
+                          ...formData.gst_details,
+                          cess_rate: e.target.value
+                        }
+                      });
+                    }}
+                    className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-gray-300 rounded-md"
+                    placeholder="Enter Cess rate"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
           
           {/* Features */}

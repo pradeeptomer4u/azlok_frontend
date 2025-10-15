@@ -5,6 +5,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
+  base_price?: number; // Added base price field
   discount_price?: number;
   category_id: number;
   category_name?: string;
@@ -27,7 +28,14 @@ export interface Product {
   slug?: string;
   weight?: number;
   dimensions?: string;
-  hsn_code?: string;
+  hsn_code?: string; // HSN code for tax calculation
+  gst_details?: {
+    hsn_code?: string;
+    cgst_rate?: number;
+    sgst_rate?: number;
+    igst_rate?: number;
+    cess_rate?: number;
+  }; // Added GST details
   features?: string[];
   specifications?: Array<{ name: string; value: string }>;
   created_at: string;
@@ -38,6 +46,7 @@ export interface CreateProductInput {
   name: string;
   description: string;
   price: number;
+  base_price?: number; // Added base price field
   discount_price?: number;
   category_id: number;
   brand?: string;
@@ -49,7 +58,14 @@ export interface CreateProductInput {
   sku: string;
   weight?: number;
   dimensions?: string;
-  hsn_code?: string;
+  hsn_code?: string; // HSN code for tax calculation
+  gst_details?: {
+    hsn_code?: string;
+    cgst_rate?: number;
+    sgst_rate?: number;
+    igst_rate?: number;
+    cess_rate?: number;
+  }; // Added GST details
   features?: string[];
   specifications?: Array<{ name: string; value: string }>;
 }

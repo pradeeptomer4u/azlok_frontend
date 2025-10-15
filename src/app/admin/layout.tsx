@@ -122,6 +122,15 @@ export default function AdminLayout({
           
           <p className="text-xs font-semibold text-gray-400 mt-6 mb-2">SETTINGS</p>
           <Link 
+            href="/admin/tax-rates" 
+            className="flex items-center py-2 px-3 mb-1 rounded-md hover:bg-gray-100"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            Tax Rates
+          </Link>
+          <Link 
             href="/admin/settings" 
             className="flex items-center py-2 px-3 mb-1 rounded-md hover:bg-gray-100"
           >
@@ -130,6 +139,15 @@ export default function AdminLayout({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
             Settings
+          </Link>
+          <Link 
+            href="/admin/tax-rates" 
+            className="flex items-center py-2 px-3 mb-1 rounded-md hover:bg-gray-100"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            Tax Rates
           </Link>
         </nav>
       </div>

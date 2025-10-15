@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { formatTaxPercentage } from '../../utils/taxService';
+import { getTaxRates } from '../../services/taxService';
 import axios from 'axios';
 
 // Define types for tax rate data
@@ -43,32 +44,21 @@ const BulkTaxRateUpdate = () => {
     const fetchTaxRates = async () => {
       setIsLoading(true);
       try {
-        // Get token from localStorage
-        const token = localStorage.getItem('azlok-token');
+        // Use the taxService function that's working elsewhere in the app
+        const data = await getTaxRates();
         
-        if (!token) {
-          throw new Error('Authentication required');
-        }
-        
-        // Fetch tax rates from API
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/tax/tax-rates`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        
-        if (response.data) {
-          setTaxRates(response.data);
+        if (data && data.length > 0) {
+          setTaxRates(data);
           
           // Extract unique categories and regions for filters
           const uniqueCategories = Array.from(
-            new Set(response.data.map((rate: TaxRate) => 
+            new Set(data.map((rate: TaxRate) => 
               JSON.stringify({ id: rate.category_id, name: rate.category_name }))
             )
           ).map(str => JSON.parse(str as string) as {id: number, name: string});
           
           const uniqueRegions = Array.from(
-            new Set(response.data.map((rate: TaxRate) => 
+            new Set(data.map((rate: TaxRate) => 
               JSON.stringify({ code: rate.region_code, name: rate.region_name }))
             )
           ).map(str => JSON.parse(str as string) as {code: string, name: string});
@@ -77,7 +67,7 @@ const BulkTaxRateUpdate = () => {
           setRegions(uniqueRegions);
           
           // Initialize bulk update items
-          const items = response.data.map((rate: TaxRate) => ({
+          const items = data.map((rate: TaxRate) => ({
             id: rate.id,
             selected: false,
             originalRate: rate.tax_percentage,

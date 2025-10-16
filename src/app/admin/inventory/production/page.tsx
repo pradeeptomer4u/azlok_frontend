@@ -279,9 +279,7 @@ export default function ProductionPage() {
                       {new Date(batch.start_date).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(batch.status)}`}>
-                        {batch.status.charAt(0).toUpperCase() + batch.status.slice(1)}
-                      </span>
+                      <StatusBadge status={batch.status} />
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">

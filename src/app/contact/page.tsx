@@ -67,7 +67,7 @@ export default function ContactPage() {
         });
         setIsSubmitting(false);
       }, 1500);
-    } catch (error) {
+    } catch (err) { // Changed from 'error' to 'err' to fix unused variable warning
       setSubmitStatus({
         success: false,
         message: 'Something went wrong. Please try again later.'
@@ -310,7 +310,7 @@ export default function ContactPage() {
               
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="font-semibold text-gray-800">How can I track my order?</h3>
-                <p className="text-gray-700 mt-2">Once your order ships, you'll receive a tracking number via email. You can also track your order by logging into your account on our website.</p>
+                <p className="text-gray-700 mt-2">Once your order ships, you&apos;ll receive a tracking number via email. You can also track your order by logging into your account on our website.</p>
               </div>
               
               <div className="bg-gray-50 p-4 rounded-lg">

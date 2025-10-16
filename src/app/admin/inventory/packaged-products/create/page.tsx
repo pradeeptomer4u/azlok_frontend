@@ -155,13 +155,11 @@ export default function CreatePackagedProductPage() {
           packaging_size: option.packaging_size,
           weight_value: option.weight_value,
           weight_unit: option.weight_unit,
+          items_per_package: 1, // Default value, adjust as needed
           barcode: option.barcode,
           min_stock_level: option.min_stock_level,
           reorder_level: option.reorder_level,
-          max_stock_level: option.max_stock_level,
-          current_stock: option.current_stock,
-          unit_cost: option.unit_cost,
-          selling_price: option.selling_price
+          is_active: true // Default to active
         };
         
         return inventoryService.createPackagedProduct(packagedProductData);

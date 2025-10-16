@@ -153,7 +153,7 @@ export default function CreateInvoicePage() {
     setInvoiceItems([...invoiceItems, newItem]);
   };
 
-  const updateInvoiceItem = (id: string, field: keyof InvoiceItem, value: any) => {
+  const updateInvoiceItem = (id: string, field: keyof InvoiceItem, value: string | number) => {
     setInvoiceItems(invoiceItems.map(item => {
       if (item.id === id) {
         const updatedItem = { ...item, [field]: value };
@@ -201,7 +201,7 @@ export default function CreateInvoicePage() {
         customer_id: selectedCustomer,
         invoice_date: invoiceDate,
         due_date: dueDate,
-        status: 'draft' as 'draft', // Using type assertion to match the literal type
+        status: 'draft' as const, // Using as const to create a literal type
         notes: notes,
         terms: termsAndConditions,
         items: invoiceItems.map(item => ({

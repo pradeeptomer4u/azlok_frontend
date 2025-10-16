@@ -53,7 +53,7 @@ const InvoicesPage = () => {
 
   const handleDownloadInvoice = async (id: string, invoiceNumber: string) => {
     try {
-      await invoiceService.saveInvoicePdf(Number(id), `invoice_${invoiceNumber}.pdf`);
+      await invoiceService.saveInvoicePdf(id, `invoice_${invoiceNumber}.pdf`);
     } catch (err) {
       console.error('Error downloading invoice:', err);
       alert('Failed to download invoice. Please try again later.');

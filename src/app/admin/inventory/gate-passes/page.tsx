@@ -8,8 +8,8 @@ import inventoryService, { GatePass } from '../../../../services/inventoryServic
 export default function GatePassesPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const statusFilter = searchParams.get('status');
-  const typeFilter = searchParams.get('type');
+  const statusFilter = searchParams?.get('status') || null;
+  const typeFilter = searchParams?.get('type') || null;
   
   const [isLoading, setIsLoading] = useState(true);
   const [gatePasses, setGatePasses] = useState<GatePass[]>([]);
@@ -51,7 +51,7 @@ export default function GatePassesPage() {
           params.end_date = dateRange.end;
         }
         
-        const response = await inventoryService.getGatePasses(params);
+        const response = await inventoryService.getGatePasses(params) as { data: GatePass[], meta: { total: number } };
         setGatePasses(response.data);
         setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
       } catch (err: any) {
@@ -92,7 +92,7 @@ export default function GatePassesPage() {
 
   const handlePrint = async (id: number) => {
     try {
-      const response = await inventoryService.printGatePass(id);
+      const response = await inventoryService.printGatePass(id) as { data: any };
       
       // Create a new window and print the gate pass
       const printWindow = window.open('', '_blank');
@@ -288,7 +288,7 @@ export default function GatePassesPage() {
               value={typeFilter || ''}
               onChange={(e) => {
                 const newType = e.target.value;
-                const params = new URLSearchParams(searchParams.toString());
+                const params = new URLSearchParams(searchParams?.toString() || '');
                 
                 if (newType) {
                   params.set('type', newType);
@@ -315,7 +315,7 @@ export default function GatePassesPage() {
               value={statusFilter || ''}
               onChange={(e) => {
                 const newStatus = e.target.value;
-                const params = new URLSearchParams(searchParams.toString());
+                const params = new URLSearchParams(searchParams?.toString() || '');
                 
                 if (newStatus) {
                   params.set('status', newStatus);

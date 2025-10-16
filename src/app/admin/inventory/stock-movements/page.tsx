@@ -44,12 +44,20 @@ export default function StockMovementsPage() {
     const fetchInventoryItems = async () => {
       try {
         const response = await inventoryService.getInventoryItems() as { data: any[] };
-        setInventoryItems(response.data.map((item: any) => ({
-          id: item.id,
-          name: item.name
-        })));
+        // Check if response and response.data exist before mapping
+        if (response && response.data) {
+          setInventoryItems(response.data.map((item: any) => ({
+            id: item.id,
+            name: item.name
+          })));
+        } else {
+          // Handle empty or invalid response
+          setInventoryItems([]);
+          console.error('Invalid response format from inventory items API');
+        }
       } catch (err) {
         console.error('Error fetching inventory items:', err);
+        setInventoryItems([]); // Set empty array on error
       }
     };
 
@@ -91,8 +99,20 @@ export default function StockMovementsPage() {
         }
         
         const response = await inventoryService.getStockMovements(params) as { data: StockMovement[], meta: { total: number } };
-        setStockMovements(response.data);
-        setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
+        // Check if response and its properties exist before using them
+        if (response && response.data) {
+          setStockMovements(response.data);
+          // Check if meta exists and has total property
+          if (response.meta && typeof response.meta.total === 'number') {
+            setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
+          } else {
+            setTotalPages(1); // Default to 1 page if meta data is missing
+          }
+        } else {
+          // Handle empty or invalid response
+          setStockMovements([]);
+          setTotalPages(1);
+        }
       } catch (err: any) {
         console.error('Error fetching stock movements:', err);
         setError(err.message || 'Failed to load stock movements');

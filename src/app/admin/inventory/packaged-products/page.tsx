@@ -33,8 +33,18 @@ export default function PackagedProductsPage() {
       try {
         // Assuming there's a products API endpoint
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`);
+        if (!response.ok) {
+          console.error('Failed to fetch products:', response.status);
+          setProducts([]); // Set empty array on error
+          return;
+        }
         const data = await response.json();
-        setProducts(data);
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else {
+          setProducts([]);
+          console.error('Invalid products data format');
+        }
       } catch (err) {
         console.error('Error fetching products:', err);
       }
@@ -72,8 +82,20 @@ export default function PackagedProductsPage() {
         }
         
         const response = await inventoryService.getPackagedProducts(params) as { data: PackagedProduct[], meta: { total: number } };
-        setPackagedProducts(response.data);
-        setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
+        // Check if response and its properties exist before using them
+        if (response && response.data) {
+          setPackagedProducts(response.data);
+          // Check if meta exists and has total property
+          if (response.meta && typeof response.meta.total === 'number') {
+            setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
+          } else {
+            setTotalPages(1); // Default to 1 page if meta data is missing
+          }
+        } else {
+          // Handle empty or invalid response
+          setPackagedProducts([]);
+          setTotalPages(1);
+        }
       } catch (err: any) {
         console.error('Error fetching packaged products:', err);
         setError(err.message || 'Failed to load packaged products');
@@ -93,8 +115,12 @@ export default function PackagedProductsPage() {
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this packaged product?')) {
       try {
-        await inventoryService.deletePackagedProduct(id);
-        setPackagedProducts(packagedProducts.filter(item => item.id !== id));
+        const response = await inventoryService.deletePackagedProduct(id) as { success?: boolean };
+        if (response && response.success) {
+          setPackagedProducts(packagedProducts.filter(item => item.id !== id));
+        } else {
+          throw new Error('Failed to delete packaged product');
+        }
       } catch (err: any) {
         console.error('Error deleting packaged product:', err);
         alert(err.message || 'Failed to delete packaged product');

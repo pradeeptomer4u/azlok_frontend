@@ -52,8 +52,20 @@ export default function GatePassesPage() {
         }
         
         const response = await inventoryService.getGatePasses(params) as { data: GatePass[], meta: { total: number } };
-        setGatePasses(response.data);
-        setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
+        // Check if response and its properties exist before using them
+        if (response && response.data) {
+          setGatePasses(response.data);
+          // Check if meta exists and has total property
+          if (response.meta && typeof response.meta.total === 'number') {
+            setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
+          } else {
+            setTotalPages(1); // Default to 1 page if meta data is missing
+          }
+        } else {
+          // Handle empty or invalid response
+          setGatePasses([]);
+          setTotalPages(1);
+        }
       } catch (err: any) {
         console.error('Error fetching gate passes:', err);
         setError(err.message || 'Failed to load gate passes');
@@ -93,6 +105,11 @@ export default function GatePassesPage() {
   const handlePrint = async (id: number) => {
     try {
       const response = await inventoryService.printGatePass(id) as { data: any };
+      
+      // Check if response and response.data exist before proceeding
+      if (!response || !response.data) {
+        throw new Error('Invalid response from server');
+      }
       
       // Create a new window and print the gate pass
       const printWindow = window.open('', '_blank');

@@ -26,7 +26,14 @@ export default function PurchaseOrdersPage() {
     const fetchSuppliers = async () => {
       try {
         const response = await inventoryService.getSuppliers() as { data: {id: number, name: string}[] };
-        setSuppliers(response.data);
+        // Check if response and response.data exist before using them
+        if (response && response.data) {
+          setSuppliers(response.data);
+        } else {
+          // Handle empty or invalid response
+          setSuppliers([]);
+          console.error('Invalid response format from suppliers API');
+        }
       } catch (err) {
         console.error('Error fetching suppliers:', err);
       }
@@ -66,8 +73,20 @@ export default function PurchaseOrdersPage() {
         }
         
         const response = await inventoryService.getPurchaseOrders(params) as { data: PurchaseOrder[], meta: { total: number } };
-        setPurchaseOrders(response.data);
-        setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
+        // Check if response and its properties exist before using them
+        if (response && response.data) {
+          setPurchaseOrders(response.data);
+          // Check if meta exists and has total property
+          if (response.meta && typeof response.meta.total === 'number') {
+            setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
+          } else {
+            setTotalPages(1); // Default to 1 page if meta data is missing
+          }
+        } else {
+          // Handle empty or invalid response
+          setPurchaseOrders([]);
+          setTotalPages(1);
+        }
       } catch (err: any) {
         console.error('Error fetching purchase orders:', err);
         setError(err.message || 'Failed to load purchase orders');
@@ -87,7 +106,12 @@ export default function PurchaseOrdersPage() {
   const handleApprove = async (id: number) => {
     if (window.confirm('Are you sure you want to approve this purchase order?')) {
       try {
-        await inventoryService.approvePurchaseOrder(id);
+        const response = await inventoryService.approvePurchaseOrder(id) as { success?: boolean };
+        
+        // Check if response indicates success
+        if (!response || !response.success) {
+          throw new Error('Failed to approve purchase order');
+        }
         
         // Update the status in the local state
         setPurchaseOrders(prevOrders => 

@@ -38,7 +38,7 @@ export default function CreateStockMovementPage() {
   const [error, setError] = useState<string | null>(null);
   const [rawMaterials, setRawMaterials] = useState<InventoryItem[]>([]);
   const [packagedProducts, setPackagedProducts] = useState<PackagedProduct[]>([]);
-  const [movementType, setMovementType] = useState<string>('adjustment');
+  const [movementType, setMovementType] = useState<'purchase' | 'production' | 'sales' | 'adjustment' | 'return' | 'transfer'>('adjustment');
   const [movementDate, setMovementDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [referenceNumber, setReferenceNumber] = useState<string>('');
   const [referenceType, setReferenceType] = useState<string>('');
@@ -172,7 +172,7 @@ export default function CreateStockMovementPage() {
         }))
       };
       
-      const response = await inventoryService.createStockMovement(stockMovementData) as { success: boolean, data?: any };
+      const response = await inventoryService.createBatchStockMovement(stockMovementData) as { success: boolean, data?: any };
       
       if (response && response.success) {
         router.push('/admin/inventory/stock-movements');
@@ -220,7 +220,7 @@ export default function CreateStockMovementPage() {
               <select
                 id="movement_type"
                 value={movementType}
-                onChange={(e) => setMovementType(e.target.value)}
+                onChange={(e) => setMovementType(e.target.value as 'purchase' | 'production' | 'sales' | 'adjustment' | 'return' | 'transfer')}
                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                 required
               >

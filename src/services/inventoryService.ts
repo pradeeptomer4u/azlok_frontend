@@ -102,6 +102,20 @@ export interface CreateStockMovementInput {
   notes?: string;
 }
 
+export interface BatchStockMovementInput {
+  movement_type: 'purchase' | 'production' | 'sales' | 'adjustment' | 'return' | 'transfer';
+  movement_date: string;
+  reference_number?: string;
+  reference_type?: string;
+  notes?: string;
+  items: {
+    item_id: number;
+    item_type: 'raw_material' | 'packaged_product';
+    quantity: number;
+    unit_of_measure: string;
+  }[];
+}
+
 // Packaged Product Movement
 export interface PackagedProductMovement {
   id: number;
@@ -615,6 +629,13 @@ const inventoryService = {
   // Stock Movements
   createStockMovement: async (data: CreateStockMovementInput) => {
     return await apiRequest('/api/inventory/stock-movements', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+  
+  createBatchStockMovement: async (data: BatchStockMovementInput) => {
+    return await apiRequest('/api/inventory/stock-movements/batch', {
       method: 'POST',
       body: JSON.stringify(data)
     });

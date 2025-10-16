@@ -23,7 +23,7 @@ Disallow: /payments/process/
 Allow: /products/
 Allow: /categories/
 Allow: /seller/
-Allow: /deals/
+
 
 # Sitemap location
 Sitemap: https://azlok.com/sitemap.xml

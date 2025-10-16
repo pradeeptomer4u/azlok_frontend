@@ -85,6 +85,7 @@ Azlok is positioned as a premium online shopping platform offering:
   - Shipping Information: https://azlok.com/shipping
   - Returns & Refunds: https://azlok.com/returns
   - About Us: https://azlok.com/about
+  - Contact Us: https://azlok.com/contact
 
 ## Code Patterns
 - Client components marked with 'use client'

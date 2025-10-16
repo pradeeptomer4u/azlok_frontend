@@ -8,7 +8,7 @@ import inventoryService, { StockMovement } from '../../../../services/inventoryS
 export default function StockMovementsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const typeFilter = searchParams.get('type');
+  const typeFilter = searchParams?.get('type') || null;
   
   const [isLoading, setIsLoading] = useState(true);
   const [stockMovements, setStockMovements] = useState<StockMovement[]>([]);
@@ -43,7 +43,7 @@ export default function StockMovementsPage() {
   useEffect(() => {
     const fetchInventoryItems = async () => {
       try {
-        const response = await inventoryService.getInventoryItems();
+        const response = await inventoryService.getInventoryItems() as { data: any[] };
         setInventoryItems(response.data.map((item: any) => ({
           id: item.id,
           name: item.name
@@ -90,7 +90,7 @@ export default function StockMovementsPage() {
           params.end_date = dateRange.end;
         }
         
-        const response = await inventoryService.getStockMovements(params);
+        const response = await inventoryService.getStockMovements(params) as { data: StockMovement[], meta: { total: number } };
         setStockMovements(response.data);
         setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
       } catch (err: any) {
@@ -213,7 +213,7 @@ export default function StockMovementsPage() {
               value={typeFilter || ''}
               onChange={(e) => {
                 const newType = e.target.value;
-                const params = new URLSearchParams(searchParams.toString());
+                const params = new URLSearchParams(searchParams?.toString() || '');
                 
                 if (newType) {
                   params.set('type', newType);

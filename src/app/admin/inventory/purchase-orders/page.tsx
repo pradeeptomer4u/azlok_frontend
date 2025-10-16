@@ -8,7 +8,7 @@ import inventoryService, { PurchaseOrder } from '../../../../services/inventoryS
 export default function PurchaseOrdersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const statusFilter = searchParams.get('status');
+  const statusFilter = searchParams?.get('status') || null;
   
   const [isLoading, setIsLoading] = useState(true);
   const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[]>([]);
@@ -25,7 +25,7 @@ export default function PurchaseOrdersPage() {
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
-        const response = await inventoryService.getSuppliers();
+        const response = await inventoryService.getSuppliers() as { data: {id: number, name: string}[] };
         setSuppliers(response.data);
       } catch (err) {
         console.error('Error fetching suppliers:', err);
@@ -65,7 +65,7 @@ export default function PurchaseOrdersPage() {
           params.end_date = dateRange.end;
         }
         
-        const response = await inventoryService.getPurchaseOrders(params);
+        const response = await inventoryService.getPurchaseOrders(params) as { data: PurchaseOrder[], meta: { total: number } };
         setPurchaseOrders(response.data);
         setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
       } catch (err: any) {
@@ -204,7 +204,7 @@ export default function PurchaseOrdersPage() {
               value={statusFilter || ''}
               onChange={(e) => {
                 const newStatus = e.target.value;
-                const params = new URLSearchParams(searchParams.toString());
+                const params = new URLSearchParams(searchParams?.toString() || '');
                 
                 if (newStatus) {
                   params.set('status', newStatus);

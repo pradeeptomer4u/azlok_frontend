@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { FaDownload, FaFilePdf, FaFileExcel, FaChartBar } from 'react-icons/fa';
+import { Download, FileText, FileSpreadsheet, BarChart3 } from 'lucide-react';
 import inventoryService from '../../../../services/inventoryService';
 
 interface ReportOption {
@@ -40,7 +40,7 @@ export default function ReportsPage() {
       id: 'inventory_status',
       name: 'Inventory Status Report',
       description: 'Current stock levels of all inventory items with status indicators',
-      icon: <FaChartBar className="h-8 w-8 text-blue-500" />,
+      icon: <BarChart3 className="h-8 w-8 text-blue-500" />,
       formats: ['pdf', 'excel', 'csv'],
       parameters: [
         {
@@ -82,7 +82,7 @@ export default function ReportsPage() {
       id: 'stock_movement',
       name: 'Stock Movement Report',
       description: 'Track all inventory movements within a specified date range',
-      icon: <FaChartBar className="h-8 w-8 text-green-500" />,
+      icon: <BarChart3 className="h-8 w-8 text-green-500" />,
       formats: ['pdf', 'excel', 'csv'],
       parameters: [
         {
@@ -129,7 +129,7 @@ export default function ReportsPage() {
       id: 'purchase_order',
       name: 'Purchase Order Report',
       description: 'Summary of purchase orders by supplier, status, or date range',
-      icon: <FaChartBar className="h-8 w-8 text-purple-500" />,
+      icon: <BarChart3 className="h-8 w-8 text-purple-500" />,
       formats: ['pdf', 'excel', 'csv'],
       parameters: [
         {
@@ -175,7 +175,7 @@ export default function ReportsPage() {
       id: 'production',
       name: 'Production Report',
       description: 'Production batches, yields, and efficiency metrics',
-      icon: <FaChartBar className="h-8 w-8 text-yellow-500" />,
+      icon: <BarChart3 className="h-8 w-8 text-yellow-500" />,
       formats: ['pdf', 'excel', 'csv'],
       parameters: [
         {
@@ -221,7 +221,7 @@ export default function ReportsPage() {
       id: 'sales_analysis',
       name: 'Sales Analysis Report',
       description: 'Sales trends, top-selling products, and revenue analysis',
-      icon: <FaChartBar className="h-8 w-8 text-red-500" />,
+      icon: <BarChart3 className="h-8 w-8 text-red-500" />,
       formats: ['pdf', 'excel', 'csv'],
       parameters: [
         {
@@ -484,8 +484,8 @@ export default function ReportsPage() {
                           />
                           <label htmlFor={`format-${format}`} className="ml-2 block text-sm text-gray-900">
                             {format.toUpperCase()}
-                            {format === 'pdf' && <FaFilePdf className="inline ml-1" />}
-                            {format === 'excel' && <FaFileExcel className="inline ml-1" />}
+                            {format === 'pdf' && <FileText className="inline ml-1" size={14} />}
+                            {format === 'excel' && <FileSpreadsheet className="inline ml-1" size={14} />}
                           </label>
                         </div>
                       ))}
@@ -507,7 +507,7 @@ export default function ReportsPage() {
                       </>
                     ) : (
                       <>
-                        <FaDownload className="mr-2" />
+                        <Download className="mr-2" size={16} />
                         Generate Report
                       </>
                     )}

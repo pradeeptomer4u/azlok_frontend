@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { FaPlus, FaEdit, FaTrash, FaEye, FaFilePdf, FaFileInvoice } from 'react-icons/fa';
+import { Plus, Edit, Trash, Eye, FileText, Receipt } from 'lucide-react';
 import inventoryService from '../../../../services/inventoryService';
 import Pagination from '../../../../components/admin/common/Pagination';
 import DeleteConfirmModal from '../../../../components/admin/common/DeleteConfirmModal';
@@ -190,7 +190,7 @@ export default function InvoicesPage() {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Invoices</h1>
         <Link href="/admin/inventory/invoices/create" className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md shadow-sm text-sm font-medium flex items-center">
-          <FaPlus className="mr-2" />
+          <Plus className="mr-2" size={16} />
           Create New Invoice
         </Link>
       </div>
@@ -335,8 +335,8 @@ export default function InvoicesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
-                        <Link href={`/admin/inventory/invoices/${invoice.id}`} className="text-blue-600 hover:text-blue-900">
-                          <FaEye className="inline" title="View Details" />
+                        <Link href={`/admin/inventory/invoices/${invoice.id}`} className="text-blue-600 hover:text-blue-900" title="View Details">
+                          <Eye className="inline" size={16} />
                         </Link>
                         
                         <button
@@ -344,13 +344,13 @@ export default function InvoicesPage() {
                           className="text-green-600 hover:text-green-900"
                           title="Print Invoice"
                         >
-                          <FaFilePdf className="inline" />
+                          <FileText className="inline" size={16} />
                         </button>
                         
                         {invoice.status === 'draft' && (
                           <>
-                            <Link href={`/admin/inventory/invoices/${invoice.id}/edit`} className="text-indigo-600 hover:text-indigo-900">
-                              <FaEdit className="inline" title="Edit" />
+                            <Link href={`/admin/inventory/invoices/${invoice.id}/edit`} className="text-indigo-600 hover:text-indigo-900" title="Edit">
+                              <Edit className="inline" size={16} />
                             </Link>
                             
                             <button
@@ -358,7 +358,7 @@ export default function InvoicesPage() {
                               className="text-red-600 hover:text-red-900"
                               title="Delete"
                             >
-                              <FaTrash className="inline" />
+                              <Trash className="inline" size={16} />
                             </button>
                           </>
                         )}
@@ -372,7 +372,7 @@ export default function InvoicesPage() {
                             className="text-green-600 hover:text-green-900"
                             title="Mark as Paid"
                           >
-                            <FaFileInvoice className="inline" />
+                            <Receipt className="inline" size={16} />
                           </button>
                         )}
                       </div>

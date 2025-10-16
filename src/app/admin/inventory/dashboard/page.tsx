@@ -44,50 +44,84 @@ export default function InventoryDashboardPage() {
         
         // Fetch raw materials stock status
         const rawMaterialsResponse = await inventoryService.getInventoryStockStatus({ is_raw_material: true }) as { data: any[], meta?: { total: number } };
-        const rawMaterials = rawMaterialsResponse.data.map((item: any) => ({
-          id: item.id,
-          name: item.name,
-          code: item.code,
-          current_stock: item.current_stock,
-          min_stock_level: item.min_stock_level,
-          reorder_level: item.reorder_level,
-          unit_of_measure: item.unit_of_measure,
-          status: (item.current_stock <= item.min_stock_level ? 'critical' : 
-                 item.current_stock <= item.reorder_level ? 'low' : 'normal') as 'critical' | 'low' | 'normal'
-        }));
-        setRawMaterialsStatus(rawMaterials);
+        
+        // Check if response and response.data exist before mapping
+        if (rawMaterialsResponse && rawMaterialsResponse.data && Array.isArray(rawMaterialsResponse.data)) {
+          const rawMaterials = rawMaterialsResponse.data.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            code: item.code,
+            current_stock: item.current_stock,
+            min_stock_level: item.min_stock_level,
+            reorder_level: item.reorder_level,
+            unit_of_measure: item.unit_of_measure,
+            status: (item.current_stock <= item.min_stock_level ? 'critical' : 
+                   item.current_stock <= item.reorder_level ? 'low' : 'normal') as 'critical' | 'low' | 'normal'
+          }));
+          setRawMaterialsStatus(rawMaterials);
+        } else {
+          console.error('Invalid response format from raw materials stock status API');
+          setRawMaterialsStatus([]);
+        }
         
         // Fetch packaged products stock status
         const packagedProductsResponse = await inventoryService.getPackagedProductStockStatus() as { data: any[], meta?: { total: number } };
-        const packagedProducts = packagedProductsResponse.data.map((item: any) => ({
-          id: item.id,
-          product_name: item.product_name,
-          packaging_size: item.packaging_size,
-          weight_value: item.weight_value,
-          weight_unit: item.weight_unit,
-          current_stock: item.current_stock,
-          min_stock_level: item.min_stock_level,
-          reorder_level: item.reorder_level,
-          status: (item.current_stock <= item.min_stock_level ? 'critical' : 
-                 item.current_stock <= item.reorder_level ? 'low' : 'normal') as 'critical' | 'low' | 'normal'
-        }));
-        setPackagedProductsStatus(packagedProducts);
+        
+        // Check if response and response.data exist before mapping
+        if (packagedProductsResponse && packagedProductsResponse.data && Array.isArray(packagedProductsResponse.data)) {
+          const packagedProducts = packagedProductsResponse.data.map((item: any) => ({
+            id: item.id,
+            product_name: item.product_name,
+            packaging_size: item.packaging_size,
+            weight_value: item.weight_value,
+            weight_unit: item.weight_unit,
+            current_stock: item.current_stock,
+            min_stock_level: item.min_stock_level,
+            reorder_level: item.reorder_level,
+            status: (item.current_stock <= item.min_stock_level ? 'critical' : 
+                   item.current_stock <= item.reorder_level ? 'low' : 'normal') as 'critical' | 'low' | 'normal'
+          }));
+          setPackagedProductsStatus(packagedProducts);
+        } else {
+          console.error('Invalid response format from packaged products stock status API');
+          setPackagedProductsStatus([]);
+        }
         
         // Fetch pending purchase orders count
-        const purchaseOrdersResponse = await inventoryService.getPurchaseOrders({ status: 'pending', limit: 1 }) as { data: any[], meta?: { total: number } };
-        setPendingPurchaseOrders(purchaseOrdersResponse.meta?.total || 0);
+        try {
+          const purchaseOrdersResponse = await inventoryService.getPurchaseOrders({ status: 'pending', limit: 1 }) as { data: any[], meta?: { total: number } };
+          setPendingPurchaseOrders(purchaseOrdersResponse?.meta?.total || 0);
+        } catch (err) {
+          console.error('Error fetching purchase orders count:', err);
+          setPendingPurchaseOrders(0);
+        }
         
         // Fetch pending purchase indents count
-        const indentsResponse = await inventoryService.getPurchaseIndents({ status: 'pending', limit: 1 }) as { data: any[], meta?: { total: number } };
-        setPendingIndents(indentsResponse.meta?.total || 0);
+        try {
+          const indentsResponse = await inventoryService.getPurchaseIndents({ status: 'pending', limit: 1 }) as { data: any[], meta?: { total: number } };
+          setPendingIndents(indentsResponse?.meta?.total || 0);
+        } catch (err) {
+          console.error('Error fetching purchase indents count:', err);
+          setPendingIndents(0);
+        }
         
         // Fetch pending gate passes count
-        const gatePassesResponse = await inventoryService.getGatePasses({ status: 'pending', limit: 1 }) as { data: any[], meta?: { total: number } };
-        setPendingGatePasses(gatePassesResponse.meta?.total || 0);
+        try {
+          const gatePassesResponse = await inventoryService.getGatePasses({ status: 'pending', limit: 1 }) as { data: any[], meta?: { total: number } };
+          setPendingGatePasses(gatePassesResponse?.meta?.total || 0);
+        } catch (err) {
+          console.error('Error fetching gate passes count:', err);
+          setPendingGatePasses(0);
+        }
         
         // Fetch planned production batches count
-        const productionResponse = await inventoryService.getProductionBatches({ status: 'planned', limit: 1 }) as { data: any[], meta?: { total: number } };
-        setPlannedProduction(productionResponse.meta?.total || 0);
+        try {
+          const productionResponse = await inventoryService.getProductionBatches({ status: 'planned', limit: 1 }) as { data: any[], meta?: { total: number } };
+          setPlannedProduction(productionResponse?.meta?.total || 0);
+        } catch (err) {
+          console.error('Error fetching production batches count:', err);
+          setPlannedProduction(0);
+        }
         
       } catch (err: any) {
         console.error('Error fetching dashboard data:', err);

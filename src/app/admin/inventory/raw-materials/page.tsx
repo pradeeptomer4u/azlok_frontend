@@ -28,8 +28,18 @@ export default function RawMaterialsPage() {
       try {
         // Assuming there's a categories API endpoint
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`);
-        const data = await response.json() as {id: number, name: string}[];
-        setCategories(data);
+        if (!response.ok) {
+          console.error('Failed to fetch categories:', response.status);
+          setCategories([]);
+          return;
+        }
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setCategories(data);
+        } else {
+          setCategories([]);
+          console.error('Invalid categories data format');
+        }
       } catch (err) {
         console.error('Error fetching categories:', err);
       }
@@ -66,8 +76,20 @@ export default function RawMaterialsPage() {
         }
         
         const response = await inventoryService.getInventoryItems(params) as { data: InventoryItem[], meta: { total: number } };
-        setRawMaterials(response.data);
-        setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
+        // Check if response and its properties exist before using them
+        if (response && response.data) {
+          setRawMaterials(response.data);
+          // Check if meta exists and has total property
+          if (response.meta && typeof response.meta.total === 'number') {
+            setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
+          } else {
+            setTotalPages(1); // Default to 1 page if meta data is missing
+          }
+        } else {
+          // Handle empty or invalid response
+          setRawMaterials([]);
+          setTotalPages(1);
+        }
       } catch (err: any) {
         console.error('Error fetching raw materials:', err);
         setError(err.message || 'Failed to load raw materials');
@@ -96,8 +118,12 @@ export default function RawMaterialsPage() {
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this raw material?')) {
       try {
-        await inventoryService.deleteInventoryItem(id);
-        setRawMaterials(rawMaterials.filter(item => item.id !== id));
+        const response = await inventoryService.deleteInventoryItem(id) as { success?: boolean };
+        if (response && response.success) {
+          setRawMaterials(rawMaterials.filter(item => item.id !== id));
+        } else {
+          throw new Error('Failed to delete raw material');
+        }
       } catch (err: any) {
         console.error('Error deleting raw material:', err);
         alert(err.message || 'Failed to delete raw material');

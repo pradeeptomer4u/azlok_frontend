@@ -51,7 +51,7 @@ const InvoiceDetailClient = ({ id }: InvoiceDetailClientProps) => {
     
     try {
       setDownloading(true);
-      await invoiceService.saveInvoicePdf(Number(invoice.id), `invoice_${invoice.invoice_number}.pdf`);
+      await invoiceService.saveInvoicePdf(String(invoice.id), `invoice_${invoice.invoice_number}.pdf`);
       setDownloading(false);
     } catch (err) {
       console.error('Error downloading invoice:', err);
@@ -178,7 +178,7 @@ const InvoiceDetailClient = ({ id }: InvoiceDetailClientProps) => {
             <div className="mt-3 space-y-3">
               <div className="flex justify-between">
                 <span className="text-sm text-gray-500">Total Amount:</span>
-                <span className="text-sm font-medium text-gray-900">{formatCurrency(invoice.subtotal + invoice.tax_amount - invoice.discount_amount)}</span>
+                <span className="text-sm font-medium text-gray-900">{formatCurrency(invoice.subtotal + invoice.total_tax_amount - invoice.discount_amount)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-gray-500">Subtotal:</span>
@@ -186,7 +186,7 @@ const InvoiceDetailClient = ({ id }: InvoiceDetailClientProps) => {
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-gray-500">Tax Amount:</span>
-                <span className="text-sm font-medium text-gray-900">{formatCurrency(invoice.tax_amount)}</span>
+                <span className="text-sm font-medium text-gray-900">{formatCurrency(invoice.total_tax_amount)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-gray-500">Discount:</span>
@@ -267,20 +267,7 @@ const InvoiceDetailClient = ({ id }: InvoiceDetailClientProps) => {
           <div className="flex justify-end">
             <div className="w-full md:w-1/3">
               <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-500">Subtotal:</span>
-                  <span className="text-sm font-medium text-gray-900">{formatCurrency(invoice.subtotal)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-500">Tax:</span>
-                  <span className="text-sm font-medium text-gray-900">{formatCurrency(invoice.tax_amount)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-500">Discount:</span>
-                  <span className="text-sm font-medium text-gray-900">
-                    {formatCurrency(invoice.discount_amount)}
-                  </span>
-                </div>
+                {/* Summary information will appear here */}
               </div>
             </div>
           </div>
@@ -293,7 +280,7 @@ const InvoiceDetailClient = ({ id }: InvoiceDetailClientProps) => {
                 <div className="flex justify-between pt-3 border-t border-gray-200">
                   <span className="text-base font-medium text-gray-900">Total:</span>
                   <span className="text-base font-bold text-gray-900">
-                    {formatCurrency(invoice.subtotal + invoice.tax_amount - invoice.discount_amount)}
+                    {formatCurrency(invoice.subtotal + invoice.total_tax_amount - invoice.discount_amount)}
                   </span>
                 </div>
               </div>

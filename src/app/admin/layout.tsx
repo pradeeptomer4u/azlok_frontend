@@ -35,7 +35,7 @@ export default function AdminLayout({
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-md">
+      <div className="w-64 bg-white shadow-md flex flex-col">
         <div className="p-4 border-b">
           <Link href="/admin" className="flex items-center">
             <Image 
@@ -48,7 +48,7 @@ export default function AdminLayout({
           </Link>
           <p className="text-xs text-gray-500 mt-1">Admin Panel</p>
         </div>
-        <nav className="p-4">
+        <nav className="p-4 overflow-y-auto flex-1">
           <p className="text-xs font-semibold text-gray-400 mb-2">DASHBOARD</p>
           <Link 
             href="/admin" 
@@ -175,6 +175,42 @@ export default function AdminLayout({
             </svg>
             Gate Passes
           </Link>
+          <Link 
+            href="/admin/inventory/production" 
+            className="flex items-center py-2 px-3 mb-1 rounded-md hover:bg-gray-100"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+            </svg>
+            Production
+          </Link>
+          <Link 
+            href="/admin/inventory/suppliers" 
+            className="flex items-center py-2 px-3 mb-1 rounded-md hover:bg-gray-100"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Suppliers
+          </Link>
+          <Link 
+            href="/admin/inventory/invoices" 
+            className="flex items-center py-2 px-3 mb-1 rounded-md hover:bg-gray-100"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Invoices
+          </Link>
+          <Link 
+            href="/admin/inventory/reports" 
+            className="flex items-center py-2 px-3 mb-1 rounded-md hover:bg-gray-100"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Reports
+          </Link>
           
           <p className="text-xs font-semibold text-gray-400 mt-6 mb-2">SETTINGS</p>
           <Link 
@@ -205,25 +241,16 @@ export default function AdminLayout({
             </svg>
             Settings
           </Link>
-          <Link 
-            href="/admin/tax-rates" 
-            className="flex items-center py-2 px-3 mb-1 rounded-md hover:bg-gray-100"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            Tax Rates
-          </Link>
         </nav>
       </div>
       
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         {/* Top Header */}
-        <header className="bg-white shadow-sm p-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-xl font-semibold text-gray-800">Admin Dashboard</h1>
-            <div className="flex items-center space-x-4">
+        <header className="bg-white shadow-sm p-4 sticky top-0 z-10">
+          <div className="flex justify-between items-center overflow-x-auto">
+            <h1 className="text-xl font-semibold text-gray-800 whitespace-nowrap mr-4">Admin Dashboard</h1>
+            <div className="flex items-center space-x-4 overflow-x-auto">
               <div className="relative">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />

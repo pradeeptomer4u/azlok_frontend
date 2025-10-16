@@ -151,19 +151,23 @@ export default function CreatePurchaseOrderPage() {
     try {
       setIsSubmitting(true);
       
+      // Create purchase order data object that matches the CreatePurchaseOrderInput interface
       const purchaseOrderData = {
         supplier_id: selectedSupplier,
         order_date: orderDate,
         expected_delivery_date: expectedDeliveryDate,
-        notes: notes,
-        shipping_address: shippingAddress,
-        billing_address: billingAddress,
+        delivery_address: shippingAddress, // Using shipping_address as delivery_address
+        status: 'pending' as const, // Required field with literal type
         payment_terms: paymentTerms,
+        notes: notes,
         items: orderItems.map(item => ({
           inventory_item_id: item.inventory_item_id,
           quantity: item.quantity,
+          unit_of_measure: item.unit_of_measure,
           unit_price: item.unit_price,
-          tax_rate: item.tax_rate
+          tax_rate: item.tax_rate,
+          discount_amount: 0, // Default value for required field
+          hsn_code: '' // Default empty string for optional field
         }))
       };
       

@@ -6,6 +6,7 @@ import inventoryService from '../../../../../services/inventoryService';
 
 interface SupplierFormData {
   name: string;
+  code: string; // Added required code field
   contact_person: string;
   email: string;
   phone: string;
@@ -33,6 +34,7 @@ export default function CreateSupplierPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<SupplierFormData>({
     name: '',
+    code: '', // Added required code field
     contact_person: '',
     email: '',
     phone: '',
@@ -76,6 +78,10 @@ export default function CreateSupplierPage() {
       // Basic validation
       if (!formData.name.trim()) {
         throw new Error('Supplier name is required');
+      }
+      
+      if (!formData.code.trim()) {
+        throw new Error('Supplier code is required');
       }
       
       if (!formData.email.trim() || !/^\S+@\S+\.\S+$/.test(formData.email)) {
@@ -138,6 +144,21 @@ export default function CreateSupplierPage() {
                 id="name"
                 name="name"
                 value={formData.name}
+                onChange={handleChange}
+                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                required
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-1">
+                Supplier Code <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="code"
+                name="code"
+                value={formData.code}
                 onChange={handleChange}
                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                 required

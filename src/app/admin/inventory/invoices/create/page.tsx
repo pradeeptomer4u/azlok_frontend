@@ -195,23 +195,15 @@ export default function CreateInvoicePage() {
     try {
       setIsSubmitting(true);
       
+      // Create invoice data object that matches the CreateInvoiceInput interface
       const invoiceData = {
         company_id: selectedCompany,
         customer_id: selectedCustomer,
-        invoice_number: invoiceNumber,
         invoice_date: invoiceDate,
         due_date: dueDate,
-        is_inter_state: isInterStateSale,
-        subtotal: subtotal,
-        cgst_amount: cgstAmount,
-        sgst_amount: sgstAmount,
-        igst_amount: igstAmount,
-        cess_amount: cessAmount,
-        total_tax: totalTax,
-        total_amount: grandTotal,
+        status: 'draft' as 'draft', // Using type assertion to match the literal type
         notes: notes,
-        terms_and_conditions: termsAndConditions,
-        status: 'draft',
+        terms: termsAndConditions,
         items: invoiceItems.map(item => ({
           product_id: item.product_id,
           description: item.description,

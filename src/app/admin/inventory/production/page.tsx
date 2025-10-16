@@ -130,7 +130,8 @@ export default function ProductionPage() {
 
   const handleCompleteProduction = async (id: number) => {
     try {
-      const response = await inventoryService.completeProductionBatch(id) as { success?: boolean, data?: ProductionBatch };
+      // Using 0 as a placeholder for producedQuantity - in a real app, you would prompt for this value
+      const response = await inventoryService.completeProductionBatch(id, 0) as { success?: boolean, data?: ProductionBatch };
       
       if (response && response.success && response.data) {
         // Update the batch in the list

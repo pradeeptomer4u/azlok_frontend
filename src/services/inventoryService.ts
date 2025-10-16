@@ -464,6 +464,97 @@ export interface CreateGatePassInput {
   }[];
 }
 
+// Company
+export interface Company {
+  id: number;
+  name: string;
+  code: string;
+  gst_number: string;
+  address: string;
+  phone: string;
+  email: string;
+  website?: string;
+  logo_url?: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// Customer
+export interface Customer {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  gst_number?: string;
+  pan_number?: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// Invoice
+export interface Invoice {
+  id: number;
+  invoice_number: string;
+  company_id: number;
+  company_name?: string;
+  customer_id: number;
+  customer_name?: string;
+  invoice_date: string;
+  due_date: string;
+  status: 'draft' | 'sent' | 'paid' | 'cancelled';
+  notes?: string;
+  terms?: string;
+  subtotal: number;
+  tax_amount: number;
+  total_amount: number;
+  created_at: string;
+  created_by: number;
+  created_by_name?: string;
+  items: InvoiceItem[];
+}
+
+export interface InvoiceItem {
+  id: number;
+  invoice_id: number;
+  product_id: number;
+  product_name?: string;
+  description: string;
+  quantity: number;
+  unit_price: number;
+  hsn_code: string;
+  cgst_rate: number;
+  sgst_rate: number;
+  igst_rate: number;
+  cess_rate: number;
+  discount: number;
+  amount: number;
+}
+
+export interface CreateInvoiceInput {
+  company_id: number;
+  customer_id: number;
+  invoice_date: string;
+  due_date: string;
+  status: 'draft' | 'sent';
+  notes?: string;
+  terms?: string;
+  items: {
+    product_id: number;
+    description: string;
+    quantity: number;
+    unit_price: number;
+    hsn_code: string;
+    cgst_rate: number;
+    sgst_rate: number;
+    igst_rate: number;
+    cess_rate: number;
+    discount: number;
+  }[];
+}
+
 // Service functions
 const inventoryService = {
   // Inventory Items
@@ -811,6 +902,12 @@ const inventoryService = {
     });
   },
   
+  deleteProductionBatch: async (id: number) => {
+    return await apiRequest(`/api/production/batches/${id}`, {
+      method: 'DELETE'
+    });
+  },
+  
   getMaterialRequirements: async (productId: number, quantity: number) => {
     const queryParams = new URLSearchParams();
     queryParams.append('product_id', productId.toString());
@@ -856,6 +953,116 @@ const inventoryService = {
   
   printGatePass: async (id: number) => {
     return await apiRequest(`/api/gate-pass/print/${id}`, {
+      method: 'GET'
+    });
+  },
+  
+  // Companies
+  getCompanies: async (params?: any) => {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, String(value));
+        }
+      });
+    }
+    const queryString = queryParams.toString();
+    const url = queryString ? `/api/companies?${queryString}` : '/api/companies';
+    return await apiRequest(url, { method: 'GET' });
+  },
+  
+  getCompany: async (id: number) => {
+    return await apiRequest(`/api/companies/${id}`, {
+      method: 'GET'
+    });
+  },
+  
+  // Customers
+  getCustomers: async (params?: any) => {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, String(value));
+        }
+      });
+    }
+    const queryString = queryParams.toString();
+    const url = queryString ? `/api/customers?${queryString}` : '/api/customers';
+    return await apiRequest(url, { method: 'GET' });
+  },
+  
+  getCustomer: async (id: number) => {
+    return await apiRequest(`/api/customers/${id}`, {
+      method: 'GET'
+    });
+  },
+  
+  // Products
+  getProducts: async (params?: any) => {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, String(value));
+        }
+      });
+    }
+    const queryString = queryParams.toString();
+    const url = queryString ? `/api/products?${queryString}` : '/api/products';
+    return await apiRequest(url, { method: 'GET' });
+  },
+  
+  getProduct: async (id: number) => {
+    return await apiRequest(`/api/products/${id}`, {
+      method: 'GET'
+    });
+  },
+  
+  // Invoices
+  getInvoices: async (params?: any) => {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, String(value));
+        }
+      });
+    }
+    const queryString = queryParams.toString();
+    const url = queryString ? `/api/invoices?${queryString}` : '/api/invoices';
+    return await apiRequest(url, { method: 'GET' });
+  },
+  
+  getInvoice: async (id: number) => {
+    return await apiRequest(`/api/invoices/${id}`, {
+      method: 'GET'
+    });
+  },
+  
+  createInvoice: async (data: CreateInvoiceInput) => {
+    return await apiRequest('/api/invoices', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+  
+  updateInvoiceStatus: async (id: number, status: 'draft' | 'sent' | 'paid' | 'cancelled') => {
+    return await apiRequest(`/api/invoices/${id}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status })
+    });
+  },
+  
+  deleteInvoice: async (id: number) => {
+    return await apiRequest(`/api/invoices/${id}`, {
+      method: 'DELETE'
+    });
+  },
+  
+  printInvoice: async (id: number) => {
+    return await apiRequest(`/api/invoices/print/${id}`, {
       method: 'GET'
     });
   }

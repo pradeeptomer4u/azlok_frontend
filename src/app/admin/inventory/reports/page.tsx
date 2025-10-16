@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Download, FileText, FileSpreadsheet, BarChart3 } from 'lucide-react';
@@ -9,7 +10,7 @@ interface ReportOption {
   id: string;
   name: string;
   description: string;
-  icon: JSX.Element;
+  icon: React.ReactElement;
   formats: string[];
   parameters: ReportParameter[];
 }
@@ -322,6 +323,10 @@ export default function ReportsPage() {
       
       if (missingParams.length > 0) {
         throw new Error(`Missing required parameters: ${missingParams.join(', ')}`);
+      }
+      
+      if (!selectedReport) {
+        throw new Error('No report selected');
       }
       
       const response = await inventoryService.generateReport({

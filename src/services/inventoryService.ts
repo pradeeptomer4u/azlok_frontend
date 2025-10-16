@@ -1065,6 +1065,14 @@ const inventoryService = {
     return await apiRequest(`/api/invoices/print/${id}`, {
       method: 'GET'
     });
+  },
+  
+  // Reports
+  generateReport: async (data: { report_id: string, format: string, parameters: Record<string, any> }) => {
+    return await apiRequest('/api/reports/generate', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
   }
 };
 

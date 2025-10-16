@@ -105,7 +105,8 @@ export default function CreateGatePassPage() {
         driver_name: driverName,
         notes: notes,
         items: gatePassItems.map(item => ({
-          inventory_item_id: item.inventory_item_id,
+          item_type: 'raw_material' as 'raw_material', // Using type assertion to match the expected literal type
+          item_id: item.inventory_item_id,
           quantity: item.quantity,
           unit_of_measure: item.unit_of_measure,
           description: item.description

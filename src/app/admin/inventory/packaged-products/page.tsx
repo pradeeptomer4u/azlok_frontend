@@ -8,7 +8,7 @@ import inventoryService, { PackagedProduct } from '../../../../services/inventor
 export default function PackagedProductsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const filter = searchParams.get('filter');
+  const filter = searchParams?.get('filter') || null;
   
   const [isLoading, setIsLoading] = useState(true);
   const [packagedProducts, setPackagedProducts] = useState<PackagedProduct[]>([]);
@@ -71,7 +71,7 @@ export default function PackagedProductsPage() {
           params.stock_status = 'critical';
         }
         
-        const response = await inventoryService.getPackagedProducts(params);
+        const response = await inventoryService.getPackagedProducts(params) as { data: PackagedProduct[], meta: { total: number } };
         setPackagedProducts(response.data);
         setTotalPages(Math.ceil(response.meta.total / itemsPerPage));
       } catch (err: any) {
@@ -206,7 +206,7 @@ export default function PackagedProductsPage() {
               value={filter || ''}
               onChange={(e) => {
                 const newFilter = e.target.value;
-                const params = new URLSearchParams(searchParams.toString());
+                const params = new URLSearchParams(searchParams?.toString() || '');
                 
                 if (newFilter) {
                   params.set('filter', newFilter);

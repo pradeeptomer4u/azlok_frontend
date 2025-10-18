@@ -320,56 +320,95 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeItem = async (id: number) => {
-    // If user is authenticated, use API
-    if (isAuthenticated) {
-      // Find the item to get its cart_item_id
-      const item = items.find(item => item.id === id);
-      const cartItemId = item?.cart_item_id || id;
-      
-      const success = await removeItemAPI(cartItemId);
-      if (success) {
-        // Refresh cart from API
-        await fetchCartFromAPI();
-        // Get updated cart summary with shipping method ID 1 (Free) as default
-        await fetchCartSummary(1);
-        return;
+    console.log(`Removing item with ID: ${id}`);
+    try {
+      // If user is authenticated, use API
+      if (isAuthenticated) {
+        // Find the item to get its cart_item_id
+        const item = items.find(item => item.id === id);
+        if (!item) {
+          console.error(`Item with ID ${id} not found in cart`);
+          return;
+        }
+        
+        const cartItemId = item?.cart_item_id || id;
+        console.log(`Using cart_item_id: ${cartItemId} for removal`);
+        
+        const success = await removeItemAPI(cartItemId);
+        if (success) {
+          console.log('Item removed successfully via API');
+          // Refresh cart from API
+          await fetchCartFromAPI();
+          // Get updated cart summary with shipping method ID 1 (Free) as default
+          await fetchCartSummary(1);
+          return;
+        } else {
+          console.error('API call to remove item failed');
+        }
+        // If API call fails, fall back to local cart
       }
-      // If API call fails, fall back to local cart
+      
+      // For unauthenticated users or if API call failed
+      console.log('Removing item from local cart');
+      setItems(prevItems => prevItems.filter(item => item.id !== id));
+    } catch (error) {
+      console.error('Error in removeItem:', error);
+      // Ensure we still update the local state even if there's an error
+      setItems(prevItems => prevItems.filter(item => item.id !== id));
     }
-    
-    // For unauthenticated users or if API call failed
-    setItems(prevItems => prevItems.filter(item => item.id !== id));
   };
 
   const updateQuantity = async (id: number, quantity: number) => {
-    if (quantity <= 0) {
-      await removeItem(id);
-      return;
-    }
-    
-    // If user is authenticated, use API
-    if (isAuthenticated) {
-      // Find the item to get its cart_item_id
-      const item = items.find(item => item.id === id);
-      const cartItemId = item?.cart_item_id || id;
-      
-      const success = await updateQuantityAPI(cartItemId, quantity);
-      if (success) {
-        // Refresh cart from API
-        await fetchCartFromAPI();
-        // Get updated cart summary with shipping method ID 1 (Free) as default
-        await fetchCartSummary(1);
+    console.log(`Updating quantity for item ${id} to ${quantity}`);
+    try {
+      if (quantity <= 0) {
+        console.log(`Quantity is ${quantity}, removing item instead`);
+        await removeItem(id);
         return;
       }
-      // If API call fails, fall back to local cart
+      
+      // If user is authenticated, use API
+      if (isAuthenticated) {
+        // Find the item to get its cart_item_id
+        const item = items.find(item => item.id === id);
+        if (!item) {
+          console.error(`Item with ID ${id} not found in cart`);
+          return;
+        }
+        
+        const cartItemId = item?.cart_item_id || id;
+        console.log(`Using cart_item_id: ${cartItemId} for quantity update`);
+        
+        const success = await updateQuantityAPI(cartItemId, quantity);
+        if (success) {
+          console.log('Quantity updated successfully via API');
+          // Refresh cart from API
+          await fetchCartFromAPI();
+          // Get updated cart summary with shipping method ID 1 (Free) as default
+          await fetchCartSummary(1);
+          return;
+        } else {
+          console.error('API call to update quantity failed');
+        }
+        // If API call fails, fall back to local cart
+      }
+      
+      // For unauthenticated users or if API call failed
+      console.log('Updating quantity in local cart');
+      setItems(prevItems => 
+        prevItems.map(item => 
+          item.id === id ? { ...item, quantity } : item
+        )
+      );
+    } catch (error) {
+      console.error('Error in updateQuantity:', error);
+      // Ensure we still update the local state even if there's an error
+      setItems(prevItems => 
+        prevItems.map(item => 
+          item.id === id ? { ...item, quantity } : item
+        )
+      );
     }
-    
-    // For unauthenticated users or if API call failed
-    setItems(prevItems => 
-      prevItems.map(item => 
-        item.id === id ? { ...item, quantity } : item
-      )
-    );
   };
 
   // Clear cart via API

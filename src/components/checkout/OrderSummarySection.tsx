@@ -1,11 +1,13 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { CartItem } from '../../context/CartContext';
 import { CheckoutSummary } from '../../services/checkoutService';
 import { Button } from '../../components/ui/Button';
 import { ErrorAlert } from '../../components/ui/ErrorAlert';
 import { Spinner } from '../../components/ui/Spinner';
 import Image from 'next/image';
+import { useAuth } from '../../context/AuthContext';
 
 interface OrderSummarySectionProps {
   items: CartItem[];
@@ -14,16 +16,23 @@ interface OrderSummarySectionProps {
   placingOrder: boolean;
   onPlaceOrder: () => void;
   isDisabled: boolean;
+  selectedShippingMethodId?: number | null;
 }
 
 export default function OrderSummarySection({
   items,
-  summary,
-  error,
+  summary: propSummary,
+  error: propError,
   placingOrder,
   onPlaceOrder,
-  isDisabled
+  isDisabled,
+  selectedShippingMethodId
 }: OrderSummarySectionProps) {
+  const { isAuthenticated } = useAuth();
+  const [cartSummary, setCartSummary] = useState<CheckoutSummary | null>(propSummary);
+  const [error, setError] = useState<string | null>(propError);
+  const [loading, setLoading] = useState(false);
+  
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -35,7 +44,52 @@ export default function OrderSummarySection({
   // Calculate the actual subtotal from cart items
   const calculatedSubtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
   
-  // Calculate the actual total
+  // Fetch cart summary directly from API
+  useEffect(() => {
+    const fetchCartSummary = async () => {
+      if (!isAuthenticated || items.length === 0) return;
+      
+      // Don't fetch if no shipping method is selected
+      if (!selectedShippingMethodId) return;
+      
+      try {
+        setLoading(true);
+        // Use the selected shipping method ID
+        const response = await fetch(`https://api.azlok.com/api/cart-summary/?shipping_method_id=${selectedShippingMethodId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('azlok-token')}`
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Cart summary data:', data);
+          setCartSummary({
+            subtotal: data.subtotal || calculatedSubtotal,
+            shipping: data.shipping || 0,
+            tax: data.tax || 0,
+            total: data.total || calculatedSubtotal
+          });
+          setError(null);
+        } else {
+          console.error('Failed to fetch cart summary');
+          setError('Failed to fetch cart summary');
+        }
+      } catch (err) {
+        console.error('Error fetching cart summary:', err);
+        setError('Error fetching cart summary');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchCartSummary();
+  }, [isAuthenticated, items, selectedShippingMethodId]);
+  
+  // Use API-fetched summary or fallback to calculated values
+  const summary = cartSummary || propSummary;
   const calculatedTotal = calculatedSubtotal + 
     (summary ? summary.shipping : 0) + 
     (summary ? summary.tax : 0);
@@ -49,6 +103,12 @@ export default function OrderSummarySection({
       
       <div className="p-4 space-y-4">
         {error && <ErrorAlert message={error} />}
+        {loading && (
+          <div className="flex items-center justify-center py-4">
+            <Spinner size="md" />
+            <span className="ml-2">Loading summary...</span>
+          </div>
+        )}
         
         <div className="space-y-4 max-h-60 overflow-y-auto pr-2">
           {items.map((item) => (
@@ -79,7 +139,7 @@ export default function OrderSummarySection({
         <div className="border-t pt-4 space-y-2">
           <div className="flex justify-between text-sm">
             <span>Subtotal</span>
-            <span>{formatPrice(calculatedSubtotal)}</span>
+            <span>{formatPrice(summary?.subtotal || 0)}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span>Shipping</span>
@@ -91,7 +151,7 @@ export default function OrderSummarySection({
           </div>
           <div className="flex justify-between font-medium text-base pt-2 border-t">
             <span>Total</span>
-            <span>{formatPrice(calculatedTotal)}</span>
+            <span>{summary ? formatPrice(summary.total) : formatPrice(calculatedTotal)}</span>
           </div>
         </div>
       </div>
@@ -100,12 +160,17 @@ export default function OrderSummarySection({
         <Button 
           className="w-full" 
           onClick={onPlaceOrder}
-          disabled={isDisabled || placingOrder || !summary}
+          disabled={isDisabled || placingOrder || loading || !summary}
         >
           {placingOrder ? (
             <>
               <div className="mr-2 inline-block"><Spinner size="sm" /></div>
               Processing...
+            </>
+          ) : loading ? (
+            <>
+              <div className="mr-2 inline-block"><Spinner size="sm" /></div>
+              Loading...
             </>
           ) : (
             'Place Order'

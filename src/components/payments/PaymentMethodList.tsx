@@ -126,8 +126,6 @@ const PaymentMethodList: React.FC = () => {
         return 'Net Banking';
       case PaymentMethodType.WALLET:
         return 'Wallet';
-      case PaymentMethodType.COD:
-        return 'Cash on Delivery';
       case PaymentMethodType.EMI:
         return 'EMI';
       case PaymentMethodType.BANK_TRANSFER:

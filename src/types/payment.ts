@@ -17,7 +17,8 @@ export enum PaymentMethodType {
   WALLET = 'wallet',
   COD = 'cash_on_delivery',
   EMI = 'emi',
-  BANK_TRANSFER = 'bank_transfer'
+  BANK_TRANSFER = 'bank_transfer',
+  RAZORPAY = 'razorpay'
 }
 
 export enum TransactionType {
@@ -203,6 +204,11 @@ export interface PaymentCreate {
   gateway?: string;
   due_date?: string;
   
+  // Razorpay specific fields
+  razorpay_order_id?: string;
+  razorpay_payment_id?: string;
+  razorpay_signature?: string;
+  
   // For installment payments
   is_installment?: boolean;
   installment_plan_id?: number;
@@ -212,8 +218,8 @@ export interface PaymentCreate {
   is_recurring?: boolean;
   recurring_schedule?: string;
   
-  // Additional metadata
-  metadata?: Record<string, unknown>;
+  // Additional metadata - matches backend's payment_metadata field
+  metadata?: Record<string, any>;
 }
 
 export interface PaymentUpdate {

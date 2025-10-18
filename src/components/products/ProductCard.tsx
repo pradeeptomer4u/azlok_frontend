@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { formatCurrency, formatTaxPercentage } from '../../utils/taxService';
+import { useCart } from '../../context/CartContext';
 
 // Export the Product interface so it can be imported elsewhere
 export interface Product {
@@ -35,6 +37,39 @@ export interface ProductCardProps {
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  const { addItem } = useCart();
+  const [addedToCart, setAddedToCart] = useState(false);
+  
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    addItem({
+      id: product.id,
+      product_id: product.id,
+      name: product.name,
+      image: product.image,
+      price: product.price,
+      quantity: 1,
+      seller: product.seller,
+      seller_id: product.seller_id,
+      minOrder: product.minOrder,
+      tax_amount: product.tax_amount,
+      cgst_amount: product.cgst_amount,
+      sgst_amount: product.sgst_amount,
+      igst_amount: product.igst_amount,
+      is_tax_inclusive: product.is_tax_inclusive,
+      hsn_code: product.hsn_code
+    });
+    
+    // Show visual feedback
+    setAddedToCart(true);
+    
+    // Reset after 2 seconds
+    setTimeout(() => {
+      setAddedToCart(false);
+    }, 2000);
+  };
   return (
     <div className="bg-gray-50 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
       <Link href={`/products/${product.slug}`} className="flex-grow">
@@ -88,12 +123,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
               {product.is_tax_inclusive ? 'Price includes tax' : `Final price: ${formatCurrency(product.price_with_tax)}`}
             </p>
           )}
-          <div className="mt-2 sm:mt-3 flex items-center text-xs sm:text-sm text-gray-600 truncate">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          {/* <div className="mt-2 sm:mt-3 flex items-center text-xs sm:text-sm text-gray-600 truncate"> */}
+            {/* <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
+            </svg> */}
             {/* <span className="truncate">{product.seller}</span> */}
-          </div>
+          {/* </div> */}
           <div className="mt-1 flex items-center text-xs sm:text-sm text-gray-600 truncate">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -136,18 +171,26 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <span className="hidden xs:inline">WhatsApp</span>
           </a>
           <button 
-            className="flex-1 bg-primary bg-opacity-20 text-gray-800 py-1.5 sm:py-2 rounded-md hover:bg-primary hover:bg-opacity-30 transition-colors text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center"
-            onClick={(e) => {
-              e.preventDefault();
-              // Add to cart functionality would go here
-              alert(`Added ${product.name} to cart`);
-            }}
+            className={`flex-1 py-1.5 sm:py-2 rounded-md transition-colors text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center ${addedToCart ? 'bg-green-500 text-white' : 'bg-primary bg-opacity-20 text-gray-800 hover:bg-primary hover:bg-opacity-30'}`}
+            onClick={handleAddToCart}
+            disabled={addedToCart}
             aria-label={`Add ${product.name} to cart`}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            <span className="hidden xs:inline">Add to Cart</span>
+            {addedToCart ? (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="hidden xs:inline">Added!</span>
+              </>
+            ) : (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span className="hidden xs:inline">Add to Cart</span>
+              </>
+            )}
           </button>
         </div>
       </div>

@@ -94,6 +94,7 @@ export default function ProductDetail() {
     if (product) {
       addItem({
         id: product.id,
+        product_id: product.id, // Add product_id field
         name: product.name,
         image: product.image_url,
         price: taxInfo?.price_with_tax || product.price,

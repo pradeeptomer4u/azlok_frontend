@@ -24,7 +24,7 @@ async function pingServices() {
     } else {
       console.warn(`[KeepAlive] Service ping returned status: ${response.status}`);
     }
-  } catch (error) {
+  } catch (_error) {
     // Just log the error but don't throw - we don't want to break the app
     console.warn('[KeepAlive] Error pinging services - this is expected in development');
   }

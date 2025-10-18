@@ -670,6 +670,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                   setTimeout(() => {
                     addItem({
                       id: product.id,
+                      product_id: product.id, // Add product_id field
                       name: product.name,
                       image: product.images[0],
                       price: product.price,

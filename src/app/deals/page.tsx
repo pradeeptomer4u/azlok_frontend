@@ -52,32 +52,6 @@ export default function DealsPage() {
             product_name: 'Industrial Machinery Part XYZ',
             original_price: 1500,
             discounted_price: 1050
-          },
-          {
-            id: 2,
-            title: 'Clearance Sale',
-            description: 'Huge discounts on selected items',
-            discount_percentage: 40,
-            start_date: '2025-08-15',
-            end_date: '2025-09-15',
-            image: '/globe.svg',
-            product_id: 2,
-            product_name: 'Premium Cotton Fabric',
-            original_price: 800,
-            discounted_price: 480
-          },
-          {
-            id: 3,
-            title: 'Flash Sale',
-            description: 'Limited time offer - 25% off',
-            discount_percentage: 25,
-            start_date: '2025-08-20',
-            end_date: '2025-08-27',
-            image: '/globe.svg',
-            product_id: 3,
-            product_name: 'LED Panel Lights (Pack of 10)',
-            original_price: 1200,
-            discounted_price: 900
           }
         ]);
       }

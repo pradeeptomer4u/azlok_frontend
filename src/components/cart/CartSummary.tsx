@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../context/CartContext';
 import { formatCurrency } from '@/utils/taxService';
@@ -23,7 +23,9 @@ const CartSummary = () => {
     calculateTaxes,
     taxCalculationLoading,
     taxCalculationError,
-    clearCart 
+    clearCart,
+    fetchCartSummary,
+    isAuthenticated
   } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [couponCode, setCouponCode] = useState('');
@@ -35,6 +37,17 @@ const CartSummary = () => {
   // Calculate final total
   const shipping = shippingAmount || (items.length > 0 ? 15 : 0);
   const total = totalPrice - couponDiscount;
+  
+  // Fetch cart summary on component mount if authenticated
+  useEffect(() => {
+    if (isAuthenticated && items.length > 0) {
+      // Map shipping amount to shipping method ID
+      const shippingMethodId = shipping === 0 ? 1 : 
+                              shipping === 15 ? 2 : 
+                              shipping === 30 ? 3 : 4;
+      fetchCartSummary(shippingMethodId);
+    }
+  }, [isAuthenticated, items.length, shipping, fetchCartSummary]);
   
   // Update shipping amount when it changes
   const handleShippingChange = (amount: number) => {
@@ -87,15 +100,15 @@ const CartSummary = () => {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
-      <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+      {/* <h2 className="text-xl font-semibold mb-4">Order Summary</h2> */}
       
       <div className="space-y-4">
-        <div className="flex justify-between">
+        {/* <div className="flex justify-between">
           <span className="text-gray-600">Subtotal ({items.length} items)</span>
           <span className="font-medium">{formatCurrency(subtotal)}</span>
-        </div>
+        </div> */}
         
-        <div className="flex flex-col space-y-2">
+        {/* <div className="flex flex-col space-y-2">
           <div className="flex justify-between">
             <span className="text-gray-600">Shipping</span>
             <span className="font-medium">{formatCurrency(shipping)}</span>
@@ -104,7 +117,18 @@ const CartSummary = () => {
             <select 
               className="text-sm border border-gray-300 rounded px-2 py-1"
               value={shipping}
-              onChange={(e) => handleShippingChange(Number(e.target.value))}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                handleShippingChange(value);
+                if (isAuthenticated && items.length > 0) {
+                  // Pass the actual shipping method ID, not the amount
+                  // Shipping method IDs: 1, 2, 3, 4 correspond to different shipping options
+                  const shippingMethodId = value === 0 ? 1 : 
+                                          value === 15 ? 2 : 
+                                          value === 30 ? 3 : 4;
+                  fetchCartSummary(shippingMethodId);
+                }
+              }}
             >
               <option value="0">Free Shipping</option>
               <option value="15">Standard Shipping (₹15)</option>
@@ -117,9 +141,9 @@ const CartSummary = () => {
               </span>
             )}
           </div>
-        </div>
+        </div> */}
         
-        <div className="border-t border-gray-100 pt-2">
+        {/* <div className="border-t border-gray-100 pt-2">
           <div className="flex justify-between">
             <span className="text-gray-600">Tax Amount</span>
             <span className="font-medium">{formatCurrency(taxAmount)}</span>
@@ -145,10 +169,10 @@ const CartSummary = () => {
               <span>{formatCurrency(igstAmount)}</span>
             </div>
           )}
-        </div>
+        </div> */}
         
         {/* State selection for tax calculation */}
-        <div className="border-t border-gray-100 pt-2 pb-2">
+        {/* <div className="border-t border-gray-100 pt-2 pb-2">
           <div className="mb-2">
             <label className="block text-sm text-gray-600 mb-1">Your State (for tax calculation)</label>
             <select
@@ -207,7 +231,7 @@ const CartSummary = () => {
           {taxCalculationError && (
             <p className="text-red-500 text-xs mt-1">{taxCalculationError}</p>
           )}
-        </div>
+        </div> */}
         
         {couponDiscount > 0 && (
           <div className="flex justify-between text-green-600">
@@ -216,10 +240,10 @@ const CartSummary = () => {
           </div>
         )}
         
-        <div className="border-t border-gray-200 pt-4 flex justify-between">
+        {/* <div className="border-t border-gray-200 pt-4 flex justify-between">
           <span className="text-lg font-semibold">Total</span>
           <span className="text-lg font-semibold">{formatCurrency(total)}</span>
-        </div>
+        </div> */}
       </div>
       
       <div className="mt-6">

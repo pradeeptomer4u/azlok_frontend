@@ -119,10 +119,31 @@ export const getPayment = async (id: number): Promise<Payment | null> => {
 
 export const createPayment = async (payment: PaymentCreate): Promise<Payment | null> => {
   try {
+    // Prepare payment data according to backend schema
+    const paymentData = {
+      ...payment,
+      // Ensure required fields have defaults
+      is_installment: payment.is_installment ?? false,
+      is_recurring: payment.is_recurring ?? false,
+      
+      // If Razorpay-specific fields are provided, add them to gateway_response
+      ...(payment.razorpay_order_id || payment.razorpay_payment_id || payment.razorpay_signature ? {
+        gateway_payment_id: payment.razorpay_payment_id,
+        gateway_response: {
+          razorpay_order_id: payment.razorpay_order_id,
+          razorpay_payment_id: payment.razorpay_payment_id,
+          razorpay_signature: payment.razorpay_signature
+        }
+      } : {})
+    };
+    
+    console.log('Creating payment with data:', paymentData);
+    
     const response = await apiRequest<Payment>('/api/payments', {
       method: 'POST',
-      body: JSON.stringify(payment)
+      body: JSON.stringify(paymentData)
     });
+    
     return response || null;
   } catch (error) {
     console.error('Error creating payment:', error);

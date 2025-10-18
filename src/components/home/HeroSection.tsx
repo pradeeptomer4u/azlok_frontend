@@ -145,11 +145,6 @@ const HeroSection = () => {
                     aria-label="Select category"
                   >
                     <option value="all">All Categories</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="clothing">Clothing & Textiles</option>
-                    <option value="machinery">Machinery</option>
-                    <option value="furniture">Furniture</option>
-                    <option value="food">Food & Beverages</option>
                   </select>
                 </div>
                 <button

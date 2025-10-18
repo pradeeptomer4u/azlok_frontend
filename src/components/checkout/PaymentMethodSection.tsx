@@ -25,6 +25,8 @@ export default function PaymentMethodSection({
         return 'UPI';
       case 'wallet':
         return 'W';
+      case 'razorpay':
+        return 'RZ';
       default:
         return 'P';
     }
@@ -39,6 +41,8 @@ export default function PaymentMethodSection({
         return `UPI: ${method.upi_id || ''}`;
       case 'wallet':
         return `${method.wallet_provider || method.provider}`;
+      case 'razorpay':
+        return 'Pay securely with Razorpay';
       default:
         return method.provider;
     }

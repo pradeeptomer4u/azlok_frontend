@@ -41,12 +41,12 @@ const CartItems = () => {
             
             <div className="flex-1 sm:ml-6 flex flex-col">
               <div className="flex justify-between">
-                <h3 className="text-lg font-medium text-gray-900">{item.name}</h3>
+                <h3 className="text-lg font-medium text-gray-900">{item.name || 'Product Name'}</h3>
+                <p className="text-sm text-gray-500">Seller: {item.seller || 'Unknown Seller'}</p>
                 <p className="text-lg font-medium text-gray-900">{formatCurrency(item.price)}</p>
               </div>
               
-              <p className="mt-1 text-sm text-gray-500">Seller: {item.seller}</p>
-              <p className="mt-1 text-sm text-gray-500">Min. Order: {item.minOrder} units</p>
+              {item.minOrder && <p className="mt-1 text-sm text-gray-500">Min. Order: {item.minOrder} units</p>}
               {item.hsn_code && <p className="mt-1 text-sm text-gray-500">HSN Code: {item.hsn_code}</p>}
               
               <div className="mt-4 flex justify-between items-center">
@@ -54,7 +54,7 @@ const CartItems = () => {
                   <button
                     onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
                     className="px-3 py-1 text-gray-600 hover:bg-gray-100"
-                    disabled={item.quantity <= item.minOrder}
+                    disabled={item.quantity <= (item.minOrder || 1)}
                   >
                     -
                   </button>

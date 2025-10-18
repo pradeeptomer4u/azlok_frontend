@@ -24,6 +24,7 @@ export interface Order {
   };
   shipping_method: string;
   payment_method: string;
+  payment_status?: 'pending' | 'paid' | 'failed' | 'refunded';
   tracking_number?: string;
   estimated_delivery?: string;
   created_at: string;
@@ -131,6 +132,29 @@ const orderService = {
       return response.ok;
     } catch (error) {
       console.error(`Error cancelling order with ID ${id}:`, error);
+      return false;
+    }
+  },
+
+  // Update payment status
+  updatePaymentStatus: async (id: number, paymentData: {
+    payment_status: 'pending' | 'paid' | 'failed' | 'refunded';
+    payment_method: string;
+    payment_id?: string;
+    payment_details?: Record<string, any>;
+  }): Promise<boolean> => {
+    try {
+      const response = await fetchWithAuth(`/api/orders/${id}/payment`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(paymentData),
+      });
+      
+      return response.ok;
+    } catch (error) {
+      console.error(`Error updating payment status for order with ID ${id}:`, error);
       return false;
     }
   }

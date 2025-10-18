@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import testimonialService, { Testimonial } from '../../services/testimonialService';
 
 const TestimonialSection = () => {
@@ -55,32 +56,102 @@ const TestimonialSection = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-60">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <div className="flex justify-center items-center h-80">
+        <motion.div 
+          className="flex flex-col items-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div 
+            className="w-16 h-16 border-4 border-green-200 border-t-green-600 rounded-full"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.p 
+            className="mt-4 text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            Loading testimonials...
+          </motion.p>
+        </motion.div>
       </div>
     );
   }
   
   if (error) {
     return (
-      <div className="flex justify-center items-center h-60">
-        <div className="text-red-500 text-center">
-          <p>{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            className="mt-4 bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-dark transition-colors"
+      <div className="flex justify-center items-center h-80">
+        <motion.div 
+          className="text-center max-w-md p-8 bg-[#defce8] rounded-xl shadow-lg border border-red-100"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div 
+            className="text-red-500 mb-4 flex justify-center"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2 }}
           >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </motion.div>
+          <motion.p 
+            className="text-gray-700 font-['Montserrat',sans-serif] mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            {error}
+          </motion.p>
+          <motion.button 
+            onClick={() => window.location.reload()} 
+            className="bg-gradient-to-r from-green-600 to-green-700 text-white py-2.5 px-6 rounded-full font-medium tracking-wide transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-green-200/40 flex items-center justify-center mx-auto"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
             Try Again
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
     );
   }
   
   if (testimonials.length === 0) {
     return (
-      <div className="flex justify-center items-center h-60">
-        <p className="text-gray-500">No testimonials available at the moment.</p>
+      <div className="flex justify-center items-center h-80">
+        <motion.div 
+          className="text-center max-w-md p-8 bg-[#defce8] rounded-xl shadow-lg border border-green-100"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div 
+            className="text-gray-400 mb-4 flex justify-center"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </motion.div>
+          <motion.p 
+            className="text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            No testimonials available at the moment.
+          </motion.p>
+        </motion.div>
       </div>
     );
   }
@@ -88,85 +159,135 @@ const TestimonialSection = () => {
   return (
     <div className="relative max-w-4xl mx-auto">
       <div className="overflow-hidden">
-        <div 
-          className="flex transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {testimonials.map((testimonial) => (
-            <div 
-              key={testimonial.id} 
-              className="w-full flex-shrink-0 px-4"
-            >
-              <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -100 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="w-full px-4"
+          >
+            {testimonials[currentIndex] && (
+              <motion.div 
+                className="bg-[#defce8] rounded-xl shadow-lg p-6 md:p-8 border border-green-100 hover:shadow-xl transition-shadow duration-300"
+                initial={{ y: 20 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                whileHover={{ scale: 1.02 }}
+              >
                 <div className="flex flex-col md:flex-row items-center mb-6">
-                  <div className="relative h-16 w-16 rounded-full overflow-hidden mb-4 md:mb-0 md:mr-4">
+                  <motion.div 
+                    className="relative h-20 w-20 rounded-full overflow-hidden mb-4 md:mb-0 md:mr-6 ring-4 ring-green-100 shadow-md"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                  >
                     <Image
-                      src={testimonial.image}
-                      alt={testimonial.name}
+                      src={testimonials[currentIndex].image}
+                      alt={testimonials[currentIndex].name}
                       fill
                       className="object-cover"
                     />
-                  </div>
+                  </motion.div>
                   <div className="text-center md:text-left">
-                    <h3 className="font-semibold text-gray-800">{testimonial.name}</h3>
-                    <p className="text-gray-600">{testimonial.company}</p>
-                    <div className="flex items-center justify-center md:justify-start mt-1">
+                    <motion.h3 
+                      className="font-['Playfair_Display',serif] font-bold text-gray-800 text-xl mb-1"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.4 }}
+                    >
+                      {testimonials[currentIndex].name}
+                    </motion.h3>
+                    <motion.p 
+                      className="text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.5 }}
+                    >
+                      {testimonials[currentIndex].company}
+                    </motion.p>
+                    <motion.div 
+                      className="flex items-center justify-center md:justify-start mt-2"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 0.6 }}
+                    >
                       {[...Array(5)].map((_, i) => (
-                        <svg 
+                        <motion.svg 
                           key={i} 
                           xmlns="http://www.w3.org/2000/svg" 
-                          className={`h-4 w-4 ${i < testimonial.rating ? 'text-yellow-500' : 'text-gray-300'}`} 
+                          className={`h-5 w-5 ${i < testimonials[currentIndex].rating ? 'text-yellow-500' : 'text-gray-300'}`} 
                           viewBox="0 0 20 20" 
                           fill="currentColor"
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.3, delay: 0.6 + (i * 0.1) }}
                         >
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
+                        </motion.svg>
                       ))}
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
-                <blockquote className="text-gray-700 text-center md:text-left">
-                  <svg className="h-8 w-8 text-primary opacity-20 mb-2" fill="currentColor" viewBox="0 0 32 32">
-                    <path d="M10 8c-3.3 0-6 2.7-6 6v10h10V14H8c0-1.1.9-2 2-2V8zm12 0c-3.3 0-6 2.7-6 6v10h10V14h-6c0-1.1.9-2 2-2V8z" />
-                  </svg>
-                  <p className="italic">{testimonial.testimonial}</p>
-                </blockquote>
-              </div>
-            </div>
-          ))}
-        </div>
+                <motion.blockquote 
+                  className="relative z-10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.7 }}
+                >
+                  <div className="relative">
+                    <svg className="absolute -top-6 -left-6 h-16 w-16 text-green-100 transform -rotate-6" fill="currentColor" viewBox="0 0 32 32">
+                      <path d="M10 8c-3.3 0-6 2.7-6 6v10h10V14H8c0-1.1.9-2 2-2V8zm12 0c-3.3 0-6 2.7-6 6v10h10V14h-6c0-1.1.9-2 2-2V8z" />
+                    </svg>
+                    <p className="italic text-gray-700 text-lg md:text-xl font-['Montserrat',sans-serif] font-light leading-relaxed relative z-10 pl-4 pr-2">
+                      {testimonials[currentIndex].testimonial}
+                    </p>
+                  </div>
+                </motion.blockquote>
+              </motion.div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Navigation Buttons */}
-      <button
+      <motion.button
         onClick={prevTestimonial}
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 focus:outline-none"
+        className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white rounded-full p-3 shadow-lg hover:shadow-xl focus:outline-none border border-gray-100 hover:bg-green-50 transition-all duration-300"
         aria-label="Previous testimonial"
+        whileHover={{ scale: 1.1, x: -8 }}
+        whileTap={{ scale: 0.9 }}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
-      </button>
-      <button
+      </motion.button>
+      <motion.button
         onClick={nextTestimonial}
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 focus:outline-none"
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white rounded-full p-3 shadow-lg hover:shadow-xl focus:outline-none border border-gray-100 hover:bg-green-50 transition-all duration-300"
         aria-label="Next testimonial"
+        whileHover={{ scale: 1.1, x: 8 }}
+        whileTap={{ scale: 0.9 }}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
-      </button>
+      </motion.button>
 
       {/* Dots Indicator */}
-      <div className="flex justify-center mt-6">
+      <div className="flex justify-center mt-8">
         {testimonials.map((_, index) => (
-          <button
+          <motion.button
             key={index}
             onClick={() => setCurrentIndex(index)}
-            className={`h-2 w-2 mx-1 rounded-full ${
-              currentIndex === index ? 'bg-primary' : 'bg-gray-300'
-            }`}
+            className={`h-3 w-3 mx-1.5 rounded-full transition-all duration-300 ${currentIndex === index ? 'bg-green-500 scale-125' : 'bg-gray-300 hover:bg-gray-400'}`}
             aria-label={`Go to testimonial ${index + 1}`}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 + (index * 0.1) }}
           />
         ))}
       </div>

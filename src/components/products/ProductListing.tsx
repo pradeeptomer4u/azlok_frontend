@@ -236,69 +236,107 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
   };
 
   return (
-    <div>
+    <div className="product-listing">
       <TaxLoadingIndicator />
       
-      {/* Results Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 pb-3 sm:pb-4 border-b">
-        <div>
-          <h2 className="text-lg sm:text-xl font-semibold">{displayProducts.length} Products Found</h2>
-          <p className="text-gray-600 text-xs sm:text-sm">Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, displayProducts.length)} of {displayProducts.length} products</p>
-        </div>
-        <div className="mt-3 sm:mt-0 w-full sm:w-auto flex flex-col sm:flex-row gap-2">
-          {/* State selection for tax calculation */}
-          <div className="flex items-center">
-            <label htmlFor="state" className="mr-2 text-gray-700 text-sm">Your State:</label>
-            <select
-              id="state"
-              value={buyerState}
-              onChange={(e) => {
-                setBuyerState(e.target.value);
-                // Re-fetch tax information when state changes
-                const taxInclusiveParam = searchParams?.get('taxInclusive') === 'true';
-                const maxTaxRateParam = searchParams?.get('maxTaxRate') ?? undefined;
-                fetchTaxInformation(products, e.target.value, taxInclusiveParam, maxTaxRateParam);
-              }}
-              className="border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary flex-grow sm:flex-grow-0"
-              aria-label="Select your state for tax calculation"
-            >
-              <option value="AP">Andhra Pradesh</option>
-              <option value="AR">Arunachal Pradesh</option>
-              <option value="AS">Assam</option>
-              <option value="BR">Bihar</option>
-              <option value="CG">Chhattisgarh</option>
-              <option value="GA">Goa</option>
-              <option value="GJ">Gujarat</option>
-              <option value="HR">Haryana</option>
-              <option value="HP">Himachal Pradesh</option>
-              <option value="JH">Jharkhand</option>
-              <option value="KA">Karnataka</option>
-              <option value="KL">Kerala</option>
-              <option value="MP">Madhya Pradesh</option>
-              <option value="MH">Maharashtra</option>
-              <option value="MN">Manipur</option>
-              <option value="ML">Meghalaya</option>
-              <option value="MZ">Mizoram</option>
-              <option value="NL">Nagaland</option>
-              <option value="OD">Odisha</option>
-              <option value="PB">Punjab</option>
-              <option value="RJ">Rajasthan</option>
-              <option value="SK">Sikkim</option>
-              <option value="TN">Tamil Nadu</option>
-              <option value="TS">Telangana</option>
-              <option value="TR">Tripura</option>
-              <option value="UK">Uttarakhand</option>
-              <option value="UP">Uttar Pradesh</option>
-              <option value="WB">West Bengal</option>
-              <option value="AN">Andaman and Nicobar Islands</option>
-              <option value="CH">Chandigarh</option>
-              <option value="DN">Dadra and Nagar Haveli and Daman and Diu</option>
-              <option value="DL">Delhi</option>
-              <option value="JK">Jammu and Kashmir</option>
-              <option value="LA">Ladakh</option>
-              <option value="LD">Lakshadweep</option>
-              <option value="PY">Puducherry</option>
-            </select>
+      <div className="relative bg-gradient-to-r from-[#dbf9e1]/80 to-[#dbf9e1]/40 rounded-lg p-4 sm:p-5 mb-6 sm:mb-8 shadow-sm overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#5dc285]/10 to-transparent rounded-full blur-xl"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-[#5dc285]/10 to-transparent rounded-full blur-xl"></div>
+        <div className="absolute -right-8 top-1/2 transform -translate-y-1/2 w-16 h-16 border border-[#5dc285]/20 rounded-full opacity-50"></div>
+        <div className="absolute -left-4 top-1/4 w-8 h-8 border border-[#5dc285]/20 rounded-full opacity-30 animate-pulse-slow"></div>
+        
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center relative z-10">
+          <div className="mb-4 sm:mb-0">
+            <div className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#5dc285] mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+              </svg>
+              <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold text-[#2c7a4c] relative inline-block">
+                {displayProducts.length} Products Found
+                <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#5dc285] to-transparent"></div>
+              </h2>
+            </div>
+            <p className="text-gray-600 text-xs sm:text-sm mt-1 pl-7 font-['Montserrat',sans-serif]">
+              Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, displayProducts.length)} of {displayProducts.length} products
+            </p>
+            
+            {/* Direct sourcing highlight */}
+            <div className="mt-2 pl-7 flex items-center">
+              <span className="inline-flex items-center text-xs font-medium text-[#d97706] bg-[#f59e0b]/10 px-2 py-1 rounded-full mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2M3 16V6a3 3 0 013-3h12a3 3 0 013 3v10a3 3 0 01-3 3H6a3 3 0 01-3-3z" />
+                </svg>
+                Artisanal
+              </span>
+              <span className="inline-flex items-center text-xs font-medium text-[#2c7a4c] bg-[#4ade80]/10 px-2 py-1 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                Farm Fresh
+              </span>
+            </div>
+          </div>
+          
+          <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-3 relative">
+            {/* State selection for tax calculation */}
+            <div className="relative group/select">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-[#5dc285]/20 via-[#5dc285]/20 to-[#5dc285]/20 rounded-md blur opacity-0 group-hover/select:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative">
+                <label htmlFor="state" className="block text-[#2c7a4c] text-xs font-medium mb-1 font-['Montserrat',sans-serif]">Your State</label>
+                <select
+                  id="state"
+                  value={buyerState}
+                  onChange={(e) => {
+                    setBuyerState(e.target.value);
+                    // Re-fetch tax information when state changes
+                    const taxInclusiveParam = searchParams?.get('taxInclusive') === 'true';
+                    const maxTaxRateParam = searchParams?.get('maxTaxRate') ?? undefined;
+                    fetchTaxInformation(products, e.target.value, taxInclusiveParam, maxTaxRateParam);
+                  }}
+                  className="border border-[#5dc285]/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#5dc285] bg-white/90 w-full sm:w-auto appearance-none pr-8 relative z-10"
+                  aria-label="Select your state for tax calculation"
+                  style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%235dc285%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')", backgroundRepeat: "no-repeat", backgroundPosition: "right 0.5rem center", backgroundSize: "0.6em auto" }}
+                >
+                  <option value="AP">Andhra Pradesh</option>
+                  <option value="AR">Arunachal Pradesh</option>
+                  <option value="AS">Assam</option>
+                  <option value="BR">Bihar</option>
+                  <option value="CG">Chhattisgarh</option>
+                  <option value="GA">Goa</option>
+                  <option value="GJ">Gujarat</option>
+                  <option value="HR">Haryana</option>
+                  <option value="HP">Himachal Pradesh</option>
+                  <option value="JH">Jharkhand</option>
+                  <option value="KA">Karnataka</option>
+                  <option value="KL">Kerala</option>
+                  <option value="MP">Madhya Pradesh</option>
+                  <option value="MH">Maharashtra</option>
+                  <option value="MN">Manipur</option>
+                  <option value="ML">Meghalaya</option>
+                  <option value="MZ">Mizoram</option>
+                  <option value="NL">Nagaland</option>
+                  <option value="OD">Odisha</option>
+                  <option value="PB">Punjab</option>
+                  <option value="RJ">Rajasthan</option>
+                  <option value="SK">Sikkim</option>
+                  <option value="TN">Tamil Nadu</option>
+                  <option value="TS">Telangana</option>
+                  <option value="TR">Tripura</option>
+                  <option value="UK">Uttarakhand</option>
+                  <option value="UP">Uttar Pradesh</option>
+                  <option value="WB">West Bengal</option>
+                  <option value="AN">Andaman and Nicobar Islands</option>
+                  <option value="CH">Chandigarh</option>
+                  <option value="DN">Dadra and Nagar Haveli and Daman and Diu</option>
+                  <option value="DL">Delhi</option>
+                  <option value="JK">Jammu and Kashmir</option>
+                  <option value="LA">Ladakh</option>
+                  <option value="LD">Lakshadweep</option>
+                  <option value="PY">Puducherry</option>
+                </select>
+              </div>
+          </div>
           </div>
           
           <div className="flex items-center">

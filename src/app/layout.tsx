@@ -82,6 +82,61 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Pre-compute the JSON string to avoid hydration errors
+  const organizationJsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Azlok",
+    "alternateName": "Azlok Enterprises",
+    "url": "https://azlok.com",
+    "logo": "https://azlok.com/logo.png",
+    "description": "India's leading B2C marketplace connecting verified suppliers with businesses",
+    "foundingDate": "2024",
+    "founders": [
+      {
+        "@type": "Person",
+        "name": "Azlok Team"
+      }
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "IN",
+      "addressRegion": "Maharashtra",
+      "addressLocality": "Mumbai"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "availableLanguage": ["English", "Hindi"]
+    },
+    "sameAs": [
+      "https://www.facebook.com/azlok",
+      "https://www.twitter.com/azlok",
+      "https://www.linkedin.com/company/azlok",
+      "https://www.instagram.com/azlok.pvt.ltd"
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Azlok Product Catalog",
+      "itemListElement": [
+        {
+          "@type": "OfferCatalog",
+          "name": "Organic Compounds",
+          "description": "High-quality organic compounds for industrial and research use"
+        },
+        {
+          "@type": "OfferCatalog", 
+          "name": "Industrial Chemicals",
+          "description": "Premium industrial chemicals from verified suppliers"
+        },
+        {
+          "@type": "OfferCatalog",
+          "name": "Spices & Food Products",
+          "description": "Authentic spices and food products for wholesale"
+        }
+      ]
+    }
+  });
   return (
     <html lang="en">
       <head>
@@ -93,62 +148,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "Azlok",
-              "alternateName": "Azlok Enterprises",
-              "url": "https://azlok.com",
-              "logo": "https://azlok.com/logo.png",
-              "description": "India's leading B2C marketplace connecting verified suppliers with businesses",
-              "foundingDate": "2024",
-              "founders": [
-                {
-                  "@type": "Person",
-                  "name": "Azlok Team"
-                }
-              ],
-              "address": {
-                "@type": "PostalAddress",
-                "addressCountry": "IN",
-                "addressRegion": "Maharashtra",
-                "addressLocality": "Mumbai"
-              },
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "contactType": "customer service",
-                "availableLanguage": ["English", "Hindi"]
-              },
-              "sameAs": [
-                "https://www.facebook.com/azlok",
-                "https://www.twitter.com/azlok",
-                "https://www.linkedin.com/company/azlok",
-                "https://www.instagram.com/azlok.pvt.ltd"
-              ],
-              "hasOfferCatalog": {
-                "@type": "OfferCatalog",
-                "name": "Azlok Product Catalog",
-                "itemListElement": [
-                  {
-                    "@type": "OfferCatalog",
-                    "name": "Organic Compounds",
-                    "description": "High-quality organic compounds for industrial and research use"
-                  },
-                  {
-                    "@type": "OfferCatalog", 
-                    "name": "Industrial Chemicals",
-                    "description": "Premium industrial chemicals from verified suppliers"
-                  },
-                  {
-                    "@type": "OfferCatalog",
-                    "name": "Spices & Food Products",
-                    "description": "Authentic spices and food products for wholesale"
-                  }
-                ]
-              }
-            })
-          }}
+          dangerouslySetInnerHTML={{ __html: organizationJsonLd }}
         />
       </head>
       <body

@@ -391,24 +391,36 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
       </nav>
 
       {/* Product Overview */}
-      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
+      <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border border-green-100/50 relative overflow-hidden group">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-green-100/20 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-green-100/10 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
+        <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-green-200/0 via-green-300/50 to-green-200/0"></div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           {/* Product Images */}
           <div>
-            <div className="relative h-64 xs:h-72 sm:h-80 bg-gray-100 rounded-lg mb-3 sm:mb-4">
+            <div className="relative h-64 xs:h-72 sm:h-80 bg-white rounded-lg mb-3 sm:mb-4 shadow-sm overflow-hidden group/image border border-green-100/50">
+              {/* Decorative corner elements */}
+              <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-green-300/30 rounded-tl-lg opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-green-300/30 rounded-br-lg opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"></div>
+              
               <Image
                 src={product.images[selectedImage]}
                 alt={product.name}
                 fill
-                className="object-contain p-4"
+                className="object-contain p-4 transition-transform duration-500 group-hover/image:scale-105"
                 priority
               />
+              
+              {/* Subtle glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-green-100/0 via-green-100/10 to-green-100/0 opacity-0 group-hover/image:opacity-100 transition-opacity duration-500"></div>
             </div>
+            
             <div className="grid grid-cols-4 gap-1 sm:gap-2">
               {product.images.map((image: string, index: number) => (
                 <div 
                   key={index}
-                  className={`relative h-16 sm:h-20 bg-gray-100 rounded cursor-pointer border-2 ${selectedImage === index ? 'border-primary' : 'border-transparent'}`}
+                  className={`relative h-16 sm:h-20 bg-white rounded cursor-pointer border-2 ${selectedImage === index ? 'border-green-500 shadow-md shadow-green-100' : 'border-transparent'} hover:border-green-300 transition-all duration-300 overflow-hidden`}
                   onClick={() => setSelectedImage(index)}
                   role="button"
                   tabIndex={0}
@@ -419,7 +431,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                     src={image}
                     alt={`${product.name} - Image ${index + 1}`}
                     fill
-                    className="object-contain p-2"
+                    className="object-contain p-2 transition-transform duration-300 hover:scale-110"
                   />
                 </div>
               ))}
@@ -427,16 +439,22 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
           </div>
 
           {/* Product Info */}
-          <div>
-            <h1 className="text-xl xs:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">{product.name}</h1>
+          <div className="relative">
+            {/* Subtle decorative element */}
+            <div className="absolute -top-6 right-4 w-12 h-12 bg-green-100/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <h1 className="text-xl xs:text-2xl font-['Playfair_Display',serif] font-bold text-gray-800 mb-3 sm:mb-4 relative z-10">{product.name}</h1>
             
             <div className="flex flex-wrap items-center mb-3 sm:mb-4">
-              <div className="flex items-center text-yellow-500 mr-3 sm:mr-4">
+              <div className="flex items-center text-yellow-500 mr-3 sm:mr-4 relative group/stars">
+                {/* Subtle glow effect on hover */}
+                <div className="absolute inset-0 bg-yellow-100/30 blur-md rounded-full opacity-0 group-hover/stars:opacity-100 transition-opacity duration-300"></div>
+                
                 {[...Array(5)].map((_, i) => (
                   <svg 
                     key={i} 
                     xmlns="http://www.w3.org/2000/svg" 
-                    className={`h-4 w-4 sm:h-5 sm:w-5 ${i < Math.floor(product.seller.rating) ? 'text-yellow-500' : 'text-gray-300'}`} 
+                    className={`h-4 w-4 sm:h-5 sm:w-5 ${i < Math.floor(product.seller.rating) ? 'text-yellow-500' : 'text-gray-300'} transition-transform duration-300 hover:scale-110`} 
                     viewBox="0 0 20 20" 
                     fill="currentColor"
                     aria-hidden="true"
@@ -444,209 +462,51 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                 ))}
-                <span className="ml-1 text-gray-700 text-sm sm:text-base" aria-label={`Rating: ${product.seller.rating} out of 5 stars`}>{product.seller.rating}</span>
+                <span className="ml-1 text-gray-700 text-sm sm:text-base font-['Montserrat',sans-serif] font-medium" aria-label={`Rating: ${product.seller.rating} out of 5 stars`}>{product.seller.rating}</span>
               </div>
               <span className="text-gray-500 hidden xs:inline">|</span>
-              <span className="ml-0 xs:ml-3 sm:ml-4 text-gray-600 text-sm sm:text-base w-full xs:w-auto mt-1 xs:mt-0">Category: {product.category} / {product.subcategory}</span>
+              <span className="ml-0 xs:ml-3 sm:ml-4 text-gray-600 text-sm sm:text-base w-full xs:w-auto mt-1 xs:mt-0 font-['Montserrat',sans-serif] font-light tracking-wide">Category: <span className="font-medium text-green-700">{product.category}</span> / <span className="font-medium text-green-700">{product.subcategory}</span></span>
             </div>
             
-            <div className="mb-4 sm:mb-6 pb-4 sm:pb-6 border-b">
-              <div className="flex items-baseline">
-                <span className="text-2xl sm:text-3xl font-bold text-primary">{formatCurrency(product.price)}</span>
-                <span className="ml-1 sm:ml-2 text-gray-600 text-sm sm:text-base">/ unit</span>
-              </div>
-              <p className="text-gray-600 mt-1 text-sm sm:text-base">Minimum Order: {product.minOrder} units</p>
+            <div className="mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-green-100/50 relative">
+              <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-1 h-12 bg-gradient-to-b from-green-300/0 via-green-400/30 to-green-300/0 rounded-full"></div>
               
-              {/* Tax Information */}
-              {taxInfo && (
-                <div className="mt-2 border-t border-gray-100 pt-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-700 text-sm font-medium">Tax Information:</span>
-                    {taxLoading ? (
-                      <span className="text-xs text-gray-500">Calculating...</span>
-                    ) : taxError ? (
-                      <span className="text-xs text-red-500">{taxError}</span>
-                    ) : null}
-                  </div>
-                  
-                  {!taxLoading && !taxError && (
-                    <div className="mt-1 text-sm">
-                      <div className="flex justify-between text-gray-600">
-                        <span>Tax Rate:</span>
-                        <span>{formatTaxPercentage(taxInfo.tax_percentage)}</span>
-                      </div>
-                      
-                      {taxInfo.hsn_code && (
-                        <div className="flex justify-between text-gray-600">
-                          <span>HSN Code:</span>
-                          <span>{taxInfo.hsn_code}</span>
-                        </div>
-                      )}
-                      
-                      <div className="flex justify-between text-gray-600">
-                        <span>Price {taxInfo.is_tax_inclusive ? '(incl. tax)' : '(excl. tax)'}:</span>
-                        <span>{formatCurrency(taxInfo.is_tax_inclusive ? taxInfo.price_with_tax : taxInfo.price_without_tax)}</span>
-                      </div>
-                      
-                      <div className="flex justify-between text-gray-600">
-                        <span>Tax Amount:</span>
-                        <span>{formatCurrency(taxInfo.tax_amount)}</span>
-                      </div>
-                      
-                      {taxInfo.cgst_amount > 0 && (
-                        <div className="flex justify-between text-gray-600">
-                          <span>CGST:</span>
-                          <span>{formatCurrency(taxInfo.cgst_amount)}</span>
-                        </div>
-                      )}
-                      
-                      {taxInfo.sgst_amount > 0 && (
-                        <div className="flex justify-between text-gray-600">
-                          <span>SGST:</span>
-                          <span>{formatCurrency(taxInfo.sgst_amount)}</span>
-                        </div>
-                      )}
-                      
-                      {taxInfo.igst_amount > 0 && (
-                        <div className="flex justify-between text-gray-600">
-                          <span>IGST:</span>
-                          <span>{formatCurrency(taxInfo.igst_amount)}</span>
-                        </div>
-                      )}
-                      
-                      <div className="mt-1 text-xs italic text-gray-500">
-                        {taxInfo.is_tax_inclusive ? 'Price is inclusive of all taxes' : 'Price is exclusive of taxes'}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
+              <div className="flex items-baseline">
+                <span className="text-2xl sm:text-3xl font-bold text-primary font-['Montserrat',sans-serif] tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-green-700 via-green-600 to-green-700">{formatCurrency(product.price)}</span>
+                <span className="ml-1 sm:ml-2 text-gray-600 text-sm sm:text-base font-['Montserrat',sans-serif] font-light">/ unit</span>
+              </div>
+              
+              <p className="text-gray-600 mt-1 text-sm sm:text-base font-['Montserrat',sans-serif] font-light tracking-wide">
+                <span className="font-medium">Minimum Order:</span> {product.minOrder} units
+              </p>
+              
             </div>
             
-            <div className="mb-4 sm:mb-6">
+            <div className="mb-4 sm:mb-6 bg-[#defce8]/30 p-4 rounded-lg border border-green-100/50 shadow-sm">
               <div className="flex flex-col xs:flex-row xs:items-center mb-3 sm:mb-4">
                 <div className="w-full xs:w-1/3 mb-1 xs:mb-0">
-                  <label htmlFor="quantity" className="block text-gray-700 text-sm sm:text-base">Quantity:</label>
+                  <label htmlFor="quantity" className="block text-gray-700 text-sm sm:text-base font-['Montserrat',sans-serif] font-medium">Quantity:</label>
                 </div>
                 <div className="w-full xs:w-2/3 flex items-center">
-                  <input
-                    type="number"
-                    id="quantity"
-                    min={product.minOrder}
-                    value={quantity}
-                    onChange={handleQuantityChange}
-                    className="border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 w-20 sm:w-24 focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
-                    aria-label="Product quantity"
-                  />
-                  <span className="ml-2 text-gray-600 text-sm sm:text-base">units</span>
-                </div>
-              </div>
-              
-              <div className="flex flex-col xs:flex-row xs:items-center mb-3 sm:mb-4">
-                <div className="w-full xs:w-1/3 mb-1 xs:mb-0">
-                  <span className="block text-gray-700 text-sm sm:text-base">Total Price:</span>
-                </div>
-                <div className="w-full xs:w-2/3">
-                  <span className="font-bold text-primary text-sm sm:text-base">
-                    {taxInfo ? formatCurrency(taxInfo.is_tax_inclusive ? 
-                      taxInfo.price_with_tax * quantity : 
-                      (taxInfo.price_without_tax + taxInfo.tax_amount) * quantity) : 
-                      formatCurrency(product.price * quantity)}
-                  </span>
-                </div>
-              </div>
-              
-              {/* State Selection for Tax Calculation */}
-              <div className="mb-4 border-t border-gray-100 pt-3">
-                <div className="text-sm font-medium text-gray-700 mb-2">Tax Calculation Settings:</div>
-                
-                <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 mb-2">
-                  <div>
-                    <label className="block text-xs text-gray-600 mb-1">Your State:</label>
-                    <select
-                      className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
-                      value={buyerState}
-                      onChange={handleBuyerStateChange}
-                    >
-                      <option value="AP">Andhra Pradesh</option>
-                      <option value="AR">Arunachal Pradesh</option>
-                      <option value="AS">Assam</option>
-                      <option value="BR">Bihar</option>
-                      <option value="CG">Chhattisgarh</option>
-                      <option value="GA">Goa</option>
-                      <option value="GJ">Gujarat</option>
-                      <option value="HR">Haryana</option>
-                      <option value="HP">Himachal Pradesh</option>
-                      <option value="JH">Jharkhand</option>
-                      <option value="KA">Karnataka</option>
-                      <option value="KL">Kerala</option>
-                      <option value="MP">Madhya Pradesh</option>
-                      <option value="MH">Maharashtra</option>
-                      <option value="MN">Manipur</option>
-                      <option value="ML">Meghalaya</option>
-                      <option value="MZ">Mizoram</option>
-                      <option value="NL">Nagaland</option>
-                      <option value="OD">Odisha</option>
-                      <option value="PB">Punjab</option>
-                      <option value="RJ">Rajasthan</option>
-                      <option value="SK">Sikkim</option>
-                      <option value="TN">Tamil Nadu</option>
-                      <option value="TS">Telangana</option>
-                      <option value="TR">Tripura</option>
-                      <option value="UK">Uttarakhand</option>
-                      <option value="UP">Uttar Pradesh</option>
-                      <option value="WB">West Bengal</option>
-                      <option value="AN">Andaman and Nicobar Islands</option>
-                      <option value="CH">Chandigarh</option>
-                      <option value="DN">Dadra and Nagar Haveli and Daman and Diu</option>
-                      <option value="DL">Delhi</option>
-                      <option value="JK">Jammu and Kashmir</option>
-                      <option value="LA">Ladakh</option>
-                      <option value="LD">Lakshadweep</option>
-                      <option value="PY">Puducherry</option>
-                    </select>
+                  <div className="relative group/input">
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-green-400/30 via-green-500/30 to-green-600/30 rounded-md blur opacity-0 group-hover/input:opacity-100 transition-opacity duration-300"></div>
+                    <input
+                      type="number"
+                      id="quantity"
+                      min={product.minOrder}
+                      value={quantity}
+                      onChange={handleQuantityChange}
+                      className="relative border border-green-200 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 w-20 sm:w-24 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base bg-white/90 font-['Montserrat',sans-serif]"
+                      aria-label="Product quantity"
+                    />
                   </div>
-                  
-                  <div>
-                    <label className="block text-xs text-gray-600 mb-1">Seller State:</label>
-                    <select
-                      className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
-                      value={sellerState}
-                      onChange={handleSellerStateChange}
-                      disabled
-                    >
-                      <option value="MH">Maharashtra</option>
-                    </select>
-                    <p className="text-xs text-gray-500 mt-1">Based on seller location</p>
-                  </div>
-                </div>
-                
-                <button
-                  onClick={calculateTax}
-                  className="w-full bg-gray-100 text-gray-700 text-xs py-1 rounded hover:bg-gray-200 transition-colors"
-                  disabled={taxLoading}
-                >
-                  {taxLoading ? 'Calculating...' : 'Recalculate Taxes'}
-                </button>
-              </div>
-              
-              <div className="flex flex-col xs:flex-row xs:items-center mb-3 sm:mb-4">
-                <div className="w-full xs:w-1/3 mb-1 xs:mb-0">
-                  <span className="block text-gray-700 text-sm sm:text-base">Lead Time:</span>
-                </div>
-                <div className="w-full xs:w-2/3">
-                  <span className="text-sm sm:text-base">{product.leadTime}</span>
+                  <span className="ml-2 text-gray-600 text-sm sm:text-base font-['Montserrat',sans-serif] font-light">units</span>
                 </div>
               </div>
               
-              <div className="flex flex-col xs:flex-row xs:items-center">
-                <div className="w-full xs:w-1/3 mb-1 xs:mb-0">
-                  <span className="block text-gray-700 text-sm sm:text-base">Payment Terms:</span>
-                </div>
-                <div className="w-full xs:w-2/3">
-                  <span className="text-sm sm:text-base">{product.paymentTerms}</span>
-                </div>
-              </div>
+
+              {/* Decorative element */}
+              <div className="absolute -right-2 top-1/2 transform -translate-y-1/2 w-1 h-12 bg-gradient-to-b from-green-300/0 via-green-400/30 to-green-300/0 rounded-full"></div>
             </div>
             
             <div className="flex flex-col xs:flex-row gap-3 xs:space-x-4">
@@ -654,10 +514,11 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                 href={`https://wa.me/8800412138?text=Hi, I'm interested in ${encodeURIComponent(product.name)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 bg-green-600 bg-opacity-20 text-gray-800 py-2 sm:py-3 rounded-md hover:bg-green-600 hover:bg-opacity-30 transition-colors flex items-center justify-center text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
+                className="flex-1 bg-gradient-to-r from-green-500/20 to-green-600/20 text-gray-800 py-2 sm:py-3 rounded-md hover:from-green-500/30 hover:to-green-600/30 transition-all duration-300 flex items-center justify-center text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 shadow-sm hover:shadow group relative overflow-hidden font-['Montserrat',sans-serif] font-medium"
                 aria-label="Contact supplier via WhatsApp about this product"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2 text-green-700" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
                   <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22c-5.523 0-10-4.477-10-10S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
                 </svg>
@@ -691,12 +552,13 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                   }, 500);
                 }}
                 disabled={addingToCart}
-                className="flex-1 border border-primary text-primary py-2 sm:py-3 rounded-md hover:bg-gray-50 transition-colors flex items-center justify-center disabled:opacity-50 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                className={`flex-1 py-2 sm:py-3 rounded-md transition-all duration-300 flex items-center justify-center shadow-sm hover:shadow relative overflow-hidden font-['Montserrat',sans-serif] font-medium ${addedToCart ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' : 'bg-gradient-to-r from-primary/20 to-primary/20 text-gray-800 hover:from-primary/30 hover:to-primary/30'} focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 disabled:opacity-50`}
                 aria-label="Add product to cart"
               >
+                <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
                 {addingToCart ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg className="animate-spin -ml-1 mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -704,14 +566,14 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                   </>
                 ) : addedToCart ? (
                   <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2 text-green-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    <svg className="-ml-1 mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Added to Cart
                   </>
                 ) : (
                   <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <svg className="-ml-1 mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5 text-green-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                     Add to Cart
@@ -724,14 +586,14 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
       </div>
 
       {/* Product Details Tabs */}
-      <div className="bg-white rounded-lg shadow-md mb-6 sm:mb-8">
-        <div className="border-b">
-          <div className="flex overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+      <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg mb-6 sm:mb-8 border border-[#dbf9e1]/60 relative overflow-hidden group/tabs">
+        <div className="border-b border-[#dbf9e1]/70">
+          <div className="flex overflow-x-auto scrollbar-thin scrollbar-thumb-[#5dc285]/50 scrollbar-track-transparent">
             <button
-              className={`px-3 xs:px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2 ${
+              className={`px-3 xs:px-4 sm:px-6 py-3 sm:py-4 font-['Montserrat',sans-serif] font-medium text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[#5dc285] focus:ring-opacity-50 focus:ring-offset-2 relative transition-all duration-300 ${
                 activeTab === 'description'
-                  ? 'text-primary border-b-2 border-primary'
-                  : 'text-gray-600 hover:text-primary'
+                  ? 'text-green-700 border-b-2 border-[#5dc285] font-semibold'
+                  : 'text-gray-600 hover:text-[#5dc285]'
               }`}
               onClick={() => setActiveTab('description')}
               aria-selected={activeTab === 'description'}
@@ -742,10 +604,10 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               Description
             </button>
             <button
-              className={`px-3 xs:px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2 ${
+              className={`px-3 xs:px-4 sm:px-6 py-3 sm:py-4 font-['Montserrat',sans-serif] font-medium text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[#5dc285] focus:ring-opacity-50 focus:ring-offset-2 relative transition-all duration-300 ${
                 activeTab === 'specifications'
-                  ? 'text-primary border-b-2 border-primary'
-                  : 'text-gray-600 hover:text-primary'
+                  ? 'text-green-700 border-b-2 border-[#5dc285] font-semibold'
+                  : 'text-gray-600 hover:text-[#5dc285]'
               }`}
               onClick={() => setActiveTab('specifications')}
               aria-selected={activeTab === 'specifications'}
@@ -756,10 +618,10 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               Specifications
             </button>
             <button
-              className={`px-3 xs:px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2 ${
+              className={`px-3 xs:px-4 sm:px-6 py-3 sm:py-4 font-['Montserrat',sans-serif] font-medium text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[#5dc285] focus:ring-opacity-50 focus:ring-offset-2 relative transition-all duration-300 ${
                 activeTab === 'features'
-                  ? 'text-primary border-b-2 border-primary'
-                  : 'text-gray-600 hover:text-primary'
+                  ? 'text-green-700 border-b-2 border-[#5dc285] font-semibold'
+                  : 'text-gray-600 hover:text-[#5dc285]'
               }`}
               onClick={() => setActiveTab('features')}
               aria-selected={activeTab === 'features'}
@@ -770,10 +632,10 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               Features & Apps
             </button>
             <button
-              className={`px-3 xs:px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2 ${
+              className={`px-3 xs:px-4 sm:px-6 py-3 sm:py-4 font-['Montserrat',sans-serif] font-medium text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[#5dc285] focus:ring-opacity-50 focus:ring-offset-2 relative transition-all duration-300 ${
                 activeTab === 'packaging'
-                  ? 'text-primary border-b-2 border-primary'
-                  : 'text-gray-600 hover:text-primary'
+                  ? 'text-green-700 border-b-2 border-[#5dc285] font-semibold'
+                  : 'text-gray-600 hover:text-[#5dc285]'
               }`}
               onClick={() => setActiveTab('packaging')}
               aria-selected={activeTab === 'packaging'}
@@ -786,15 +648,21 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
           </div>
         </div>
 
-        <div className="p-4 sm:p-6">
+        <div className="p-4 sm:p-6 relative">
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#dbf9e1]/20 to-transparent rounded-full blur-2xl opacity-0 group-hover/tabs:opacity-100 transition-opacity duration-700"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-[#dbf9e1]/20 to-transparent rounded-full blur-2xl opacity-0 group-hover/tabs:opacity-100 transition-opacity duration-700 delay-100"></div>
           {activeTab === 'description' && (
             <div
               role="tabpanel"
               id="description-panel"
               aria-labelledby="description-tab"
             >
-              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Product Description</h3>
-              <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{product.description}</p>
+              <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+                Product Description
+                <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
+              </h3>
+              <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-['Montserrat',sans-serif] font-light tracking-wide">{product.description}</p>
             </div>
           )}
 
@@ -804,14 +672,17 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               id="specifications-panel"
               aria-labelledby="specifications-tab"
             >
-              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Product Specifications</h3>
+              <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+                Product Specifications
+                <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
+              </h3>
               <div className="overflow-x-auto -mx-4 sm:mx-0">
                 <table className="min-w-full">
                   <tbody>
                     {product.specifications.map((spec: { name: string; value: string }, index: number) => (
-                      <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                        <td className="px-3 sm:px-4 py-2 sm:py-3 text-gray-700 font-medium w-1/3 text-sm sm:text-base">{spec.name}</td>
-                        <td className="px-3 sm:px-4 py-2 sm:py-3 text-gray-700 text-sm sm:text-base">{spec.value}</td>
+                      <tr key={index} className={index % 2 === 0 ? 'bg-[#dbf9e1]/30' : 'bg-white/80'}>
+                        <td className="px-3 sm:px-4 py-2 sm:py-3 text-gray-700 font-medium w-1/3 text-sm sm:text-base font-['Montserrat',sans-serif]">{spec.name}</td>
+                        <td className="px-3 sm:px-4 py-2 sm:py-3 text-gray-700 text-sm sm:text-base font-['Montserrat',sans-serif] font-light tracking-wide">{spec.value}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -826,17 +697,33 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               id="features-panel"
               aria-labelledby="features-tab"
             >
-              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Features</h3>
-              <ul className="list-disc pl-4 sm:pl-5 mb-5 sm:mb-6 text-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2 text-sm sm:text-base">
+              <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+                Features
+                <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
+              </h3>
+              <ul className="list-disc pl-4 sm:pl-5 mb-5 sm:mb-6 text-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-sm sm:text-base">
                 {product.features?.map((feature: string, index: number) => (
-                  <li key={index} className="ml-1">{feature}</li>
+                  <li key={index} className="ml-1 font-['Montserrat',sans-serif] font-light tracking-wide py-1 group">
+                    <span className="relative">
+                      <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#5dc285]/50 group-hover:w-full transition-all duration-300"></span>
+                      {feature}
+                    </span>
+                  </li>
                 ))}
               </ul>
 
-              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Applications</h3>
-              <ul className="list-disc pl-4 sm:pl-5 text-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2 text-sm sm:text-base">
+              <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+                Applications
+                <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
+              </h3>
+              <ul className="list-disc pl-4 sm:pl-5 text-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-sm sm:text-base">
                 {product.applications?.map((application: string, index: number) => (
-                  <li key={index} className="ml-1">{application}</li>
+                  <li key={index} className="ml-1 font-['Montserrat',sans-serif] font-light tracking-wide py-1 group">
+                    <span className="relative">
+                      <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#5dc285]/50 group-hover:w-full transition-all duration-300"></span>
+                      {application}
+                    </span>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -848,17 +735,20 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               id="packaging-panel"
               aria-labelledby="packaging-tab"
             >
-              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Packaging & Shipping</h3>
-              <div className="mb-4">
-                <h4 className="font-medium text-gray-800 mb-2 text-sm sm:text-base">Packaging Details:</h4>
-                <p className="text-gray-700 text-sm sm:text-base">{product.packaging}</p>
+              <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+                Packaging & Shipping
+                <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
+              </h3>
+              <div className="mb-5 bg-[#dbf9e1]/30 p-4 rounded-lg border border-[#dbf9e1]/60">
+                <h4 className="font-['Montserrat',sans-serif] font-medium text-[#5dc285] mb-2 text-sm sm:text-base">Packaging Details:</h4>
+                <p className="text-gray-700 text-sm sm:text-base font-['Montserrat',sans-serif] font-light tracking-wide">{product.packaging}</p>
               </div>
-              <div>
-                <h4 className="font-medium text-gray-800 mb-2 text-sm sm:text-base">Shipping Information:</h4>
+              <div className="bg-white/80 p-4 rounded-lg border border-[#dbf9e1]/60">
+                <h4 className="font-['Montserrat',sans-serif] font-medium text-[#5dc285] mb-2 text-sm sm:text-base">Shipping Information:</h4>
                 <ul className="list-disc pl-4 sm:pl-5 text-gray-700 text-sm sm:text-base">
-                  <li className="ml-1 mb-1">Delivery Time: {product.leadTime} after payment confirmation</li>
-                  <li className="ml-1 mb-1">Shipping available across India and internationally</li>
-                  <li className="ml-1">Custom packaging available for bulk orders</li>
+                  <li className="ml-1 mb-2 font-['Montserrat',sans-serif] font-light tracking-wide">Delivery Time: <span className="font-medium text-gray-800">{product.leadTime}</span> after payment confirmation</li>
+                  <li className="ml-1 mb-2 font-['Montserrat',sans-serif] font-light tracking-wide">Shipping available across India and internationally</li>
+                  <li className="ml-1 font-['Montserrat',sans-serif] font-light tracking-wide">Custom packaging available for bulk orders</li>
                 </ul>
               </div>
             </div>
@@ -866,62 +756,19 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
         </div>
       </div>
 
-      {/* Supplier Information */}
-      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
-        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Supplier Information</h3>
-        <div className="flex flex-col md:flex-row">
-          <div className="md:w-1/3 mb-4 md:mb-0">
-            <div className="flex items-center">
-              <div className="relative h-12 w-12 sm:h-16 sm:w-16 bg-gray-100 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
-                <Image
-                  src={product.seller.logo || '/logo.png'}
-                  alt={product.seller.name}
-                  fill
-                  className="object-contain p-2"
-                />
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-800 text-sm sm:text-base">{product.seller.name}</h4>
-                <div className="flex flex-wrap items-center mt-1">
-                  {product.seller.verified && (
-                    <span className="bg-primary bg-opacity-20 text-gray-800 text-xs px-2 py-0.5 sm:py-1 rounded-full flex items-center mr-2 mb-1 sm:mb-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-0.5 sm:mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className="text-2xs sm:text-xs">Verified</span>
-                    </span>
-                  )}
-                  <span className="text-gray-600 text-xs sm:text-sm">{product.seller.location}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="md:w-2/3 grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-            <div className="bg-gray-50 p-2 sm:p-3 rounded">
-              <p className="text-gray-600 text-xs sm:text-sm">Member Since</p>
-              <p className="font-medium text-sm sm:text-base">{product.seller.memberSince}</p>
-            </div>
-            <div className="bg-gray-50 p-2 sm:p-3 rounded">
-              <p className="text-gray-600 text-xs sm:text-sm">Response Rate</p>
-              <p className="font-medium text-sm sm:text-base">{product.seller.responseRate}</p>
-            </div>
-            <div className="bg-gray-50 p-2 sm:p-3 rounded">
-              <p className="text-gray-600 text-xs sm:text-sm">Response Time</p>
-              <p className="font-medium text-sm sm:text-base">{product.seller.responseTime}</p>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Contact Form Modal */}
       {showContactForm && (
-        <div className="fixed inset-0 bg-gray-100 bg-opacity-50 flex items-center justify-center z-50 p-3 sm:p-4" role="dialog" aria-modal="true" aria-labelledby="contact-form-title">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center p-4 sm:p-6 border-b sticky top-0 bg-white z-10">
-              <h3 className="text-base sm:text-lg font-semibold" id="contact-form-title">Contact Supplier</h3>
+        <div className="fixed inset-0 bg-gray-800/30 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4" role="dialog" aria-modal="true" aria-labelledby="contact-form-title">
+          <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto border border-green-100/50 relative group/modal">
+            <div className="flex justify-between items-center p-4 sm:p-6 border-b border-green-100/50 sticky top-0 bg-white/95 backdrop-blur-sm z-10">
+              <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold text-green-800 relative" id="contact-form-title">
+                Contact Supplier
+                <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-green-400 via-green-500 to-green-400"></div>
+              </h3>
               <button 
                 onClick={() => setShowContactForm(false)}
-                className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                className="text-gray-400 hover:text-green-600 p-1.5 rounded-full hover:bg-green-50 transition-all duration-300 group/close"
                 aria-label="Close contact form"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -929,72 +776,88 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                 </svg>
               </button>
             </div>
-            <form onSubmit={handleContactFormSubmit} className="p-4 sm:p-6">
-              <div className="mb-3 sm:mb-4">
-                <label htmlFor="name" className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base">Your Name *</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleContactFormChange}
-                  required
-                  className="w-full border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
-                  aria-required="true"
-                />
+            <form onSubmit={handleContactFormSubmit} className="p-4 sm:p-6 relative">
+              {/* Decorative elements */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-green-100/10 to-transparent rounded-full blur-2xl opacity-0 group-hover/modal:opacity-100 transition-opacity duration-700"></div>
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-green-100/10 to-transparent rounded-full blur-2xl opacity-0 group-hover/modal:opacity-100 transition-opacity duration-700 delay-100"></div>
+              <div className="mb-3 sm:mb-4 relative z-10">
+                <label htmlFor="name" className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base font-['Montserrat',sans-serif] font-medium">Your Name *</label>
+                <div className="relative group/input">
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-green-400/30 via-green-500/30 to-green-600/30 rounded-md blur opacity-0 group-hover/input:opacity-100 transition-opacity duration-300"></div>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleContactFormChange}
+                    required
+                    className="relative w-full border border-green-200 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base bg-white/90 font-['Montserrat',sans-serif] font-light"
+                    aria-required="true"
+                  />
+                </div>
               </div>
-              <div className="mb-3 sm:mb-4">
-                <label htmlFor="email" className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base">Email Address *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleContactFormChange}
-                  required
-                  className="w-full border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
-                  aria-required="true"
-                />
+              <div className="mb-3 sm:mb-4 relative z-10">
+                <label htmlFor="email" className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base font-['Montserrat',sans-serif] font-medium">Email Address *</label>
+                <div className="relative group/input">
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-green-400/30 via-green-500/30 to-green-600/30 rounded-md blur opacity-0 group-hover/input:opacity-100 transition-opacity duration-300"></div>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleContactFormChange}
+                    required
+                    className="relative w-full border border-green-200 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base bg-white/90 font-['Montserrat',sans-serif] font-light"
+                    aria-required="true"
+                  />
+                </div>
               </div>
-              <div className="mb-3 sm:mb-4">
-                <label htmlFor="phone" className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base">Phone Number *</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleContactFormChange}
-                  required
-                  className="w-full border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
-                  aria-required="true"
-                />
+              <div className="mb-3 sm:mb-4 relative z-10">
+                <label htmlFor="phone" className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base font-['Montserrat',sans-serif] font-medium">Phone Number *</label>
+                <div className="relative group/input">
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-green-400/30 via-green-500/30 to-green-600/30 rounded-md blur opacity-0 group-hover/input:opacity-100 transition-opacity duration-300"></div>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleContactFormChange}
+                    required
+                    className="relative w-full border border-green-200 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base bg-white/90 font-['Montserrat',sans-serif] font-light"
+                    aria-required="true"
+                  />
+                </div>
               </div>
-              <div className="mb-4 sm:mb-6">
-                <label htmlFor="message" className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base">Message *</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleContactFormChange}
-                  required
-                  rows={4}
-                  className="w-full border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
-                  placeholder={`I'm interested in ${product.name}. Please send more information.`}
-                  aria-required="true"
-                ></textarea>
+              <div className="mb-4 sm:mb-6 relative z-10">
+                <label htmlFor="message" className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base font-['Montserrat',sans-serif] font-medium">Message *</label>
+                <div className="relative group/input">
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-green-400/30 via-green-500/30 to-green-600/30 rounded-md blur opacity-0 group-hover/input:opacity-100 transition-opacity duration-300"></div>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleContactFormChange}
+                    required
+                    rows={4}
+                    className="relative w-full border border-green-200 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base bg-white/90 font-['Montserrat',sans-serif] font-light"
+                    placeholder={`I'm interested in ${product.name}. Please send more information.`}
+                    aria-required="true"
+                  ></textarea>
+                </div>
               </div>
-              <div className="flex flex-col xs:flex-row xs:justify-end gap-2 xs:gap-3">
+              <div className="flex flex-col xs:flex-row xs:justify-end gap-2 xs:gap-3 relative z-10">
                 <button
                   type="button"
                   onClick={() => setShowContactForm(false)}
-                  className="order-2 xs:order-1 px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  className="order-2 xs:order-1 px-4 py-2 border border-green-200 rounded-md text-gray-700 hover:bg-green-50 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-400 font-['Montserrat',sans-serif] font-medium transition-all duration-300 hover:shadow-sm"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="order-1 xs:order-2 px-4 py-2 bg-primary bg-opacity-20 text-gray-800 rounded-md hover:bg-primary-dark hover:bg-opacity-30 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                  className="order-1 xs:order-2 px-4 py-2 bg-gradient-to-r from-green-500/20 to-green-600/20 text-gray-800 rounded-md hover:from-green-500/30 hover:to-green-600/30 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 font-['Montserrat',sans-serif] font-medium transition-all duration-300 shadow-sm hover:shadow relative overflow-hidden group/btn"
                 >
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 transform translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000"></div>
                   Send Message
                 </button>
               </div>

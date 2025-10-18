@@ -10,6 +10,7 @@ interface FAQStructuredDataProps {
 }
 
 export default function FAQStructuredData({ faqs }: FAQStructuredDataProps) {
+  // Pre-compute the JSON string to avoid hydration errors
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -22,11 +23,14 @@ export default function FAQStructuredData({ faqs }: FAQStructuredDataProps) {
       }
     }))
   };
+  
+  // Convert to string outside of render to ensure consistency
+  const jsonLdString = JSON.stringify(structuredData);
 
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      dangerouslySetInnerHTML={{ __html: jsonLdString }}
     />
   );
 }

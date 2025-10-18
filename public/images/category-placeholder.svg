@@ -1,0 +1,6 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#e6f7e9"/>
+  <rect x="100" y="50" width="200" height="200" rx="10" fill="#4ade80" opacity="0.3"/>
+  <circle cx="200" cy="150" r="70" fill="#16a34a" opacity="0.2"/>
+  <text x="200" y="155" font-family="Arial" font-size="24" text-anchor="middle" fill="#166534">Natural Product</text>
+</svg>

@@ -33,10 +33,46 @@ const CategoryCarousel = () => {
         const transformedCategories: UICategory[] = apiCategories.map((category) => ({
           id: category.id,
           name: category.name,
-          image: category.image_url || '/globe.svg',
+          image: category.image_url || `/images/categories/${category.slug}.jpg` || '/images/category-placeholder.svg',
           slug: category.slug,
           productCount: category.product_count || 0
         }));
+        
+        // If no categories are returned, add some fallback categories
+        if (transformedCategories.length === 0) {
+          const fallbackCategories: UICategory[] = [
+            {
+              id: 1,
+              name: 'Spices',
+              image: '/images/categories/spices.jpg',
+              slug: 'spices',
+              productCount: 5
+            },
+            {
+              id: 2,
+              name: 'Organic Cereals',
+              image: '/images/categories/cereals.jpg',
+              slug: 'organic-cereals',
+              productCount: 4
+            },
+            {
+              id: 3,
+              name: 'Indian Masalas',
+              image: '/images/categories/masalas.jpg',
+              slug: 'indian-masalas',
+              productCount: 2
+            },
+            {
+              id: 4,
+              name: 'Essential Oils',
+              image: '/images/categories/oils.jpg',
+              slug: 'essential-oils',
+              productCount: 1
+            }
+          ];
+          setCategories(fallbackCategories);
+          return;
+        }
         
         setCategories(transformedCategories);
       } catch (error) {
@@ -109,20 +145,25 @@ const CategoryCarousel = () => {
             key={category.id}
             className="group"
           >
-            <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105 hover:shadow-lg">
-              <div className="relative h-40 bg-gray-100">
+            <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all transform hover:scale-105 hover:shadow-lg border border-green-100 hover:border-green-300">
+              <div className="relative h-40 bg-green-50">
                 <Image
                   src={category.image}
                   alt={category.name}
                   fill
-                  className="object-contain p-4"
+                  className="object-cover p-0"
+                  onError={(e) => {
+                    // @ts-ignore - TypeScript doesn't know about currentTarget.src
+                    e.currentTarget.src = '/images/category-placeholder.svg';
+                  }}
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-green-900/50 to-transparent"></div>
               </div>
               <div className="p-4 text-center">
-                <h3 className="font-semibold text-gray-800 group-hover:text-primary transition-colors">
+                <h3 className="font-semibold text-gray-800 group-hover:text-green-700 transition-colors">
                   {category.name}
                 </h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-green-600">
                   {category.productCount} products
                 </p>
               </div>
@@ -136,19 +177,19 @@ const CategoryCarousel = () => {
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 focus:outline-none"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white rounded-full p-2 shadow-md hover:bg-green-50 focus:outline-none border border-green-100 transition-all"
             aria-label="Previous categories"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 focus:outline-none"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white rounded-full p-2 shadow-md hover:bg-green-50 focus:outline-none border border-green-100 transition-all"
             aria-label="Next categories"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
@@ -163,7 +204,7 @@ const CategoryCarousel = () => {
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`h-2 w-2 mx-1 rounded-full ${
-                currentSlide === index ? 'bg-primary' : 'bg-gray-300'
+                currentSlide === index ? 'bg-green-600' : 'bg-gray-300'
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

@@ -129,16 +129,19 @@ const ProductFilters = () => {
 
   return (
     <>
-      {/* Mobile Filter Toggle - Removed from here as it's now in the parent component */}
-      
-      {/* Filter Sidebar - Hidden on mobile unless toggled */}
       <div className="sticky top-4">
-        <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 md:p-5">
-          <div className="flex justify-between items-center mb-3 sm:mb-4">
-            <h3 className="text-base sm:text-lg font-semibold">Filters</h3>
+        <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg p-3 sm:p-4 md:p-5 border border-[#dbf9e1]/60 relative overflow-hidden group/filters">
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#dbf9e1]/20 to-transparent rounded-full blur-2xl opacity-0 group-hover/filters:opacity-100 transition-opacity duration-700"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-[#dbf9e1]/20 to-transparent rounded-full blur-2xl opacity-0 group-hover/filters:opacity-100 transition-opacity duration-700 delay-100"></div>
+          <div className="flex justify-between items-center mb-3 sm:mb-4 relative z-10">
+            <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold text-[#5dc285] relative inline-block">
+              Filters
+              <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
+            </h3>
             <button
               onClick={clearAllFilters}
-              className="text-xs sm:text-sm text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm"
+              className="text-xs sm:text-sm text-[#5dc285] hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-[#5dc285] focus:ring-opacity-50 focus:ring-offset-2 rounded-sm transition-colors duration-300 font-['Montserrat',sans-serif] font-medium"
               aria-label="Clear all filters"
             >
               Clear All
@@ -146,8 +149,8 @@ const ProductFilters = () => {
           </div>
 
           {/* Categories Filter */}
-          <div className="mb-4 sm:mb-6">
-            <h4 className="font-medium mb-2 sm:mb-3 text-sm sm:text-base">Categories</h4>
+          <div className="mb-4 sm:mb-6 relative z-10">
+            <h4 className="font-['Montserrat',sans-serif] font-semibold mb-2 sm:mb-3 text-sm sm:text-base text-gray-700 border-l-2 border-[#5dc285] pl-2">Categories</h4>
             {isLoading ? (
               <div className="animate-pulse space-y-2">
                 {[...Array(5)].map((_, index) => (
@@ -157,27 +160,27 @@ const ProductFilters = () => {
             ) : (
               <div className="space-y-1 sm:space-y-2 max-h-40 sm:max-h-60 overflow-y-auto pr-1 custom-scrollbar">
                 <div 
-                  className={`flex items-center justify-between cursor-pointer hover:bg-gray-50 p-1 rounded text-sm sm:text-base ${!selectedCategory ? 'font-medium text-primary' : ''}`}
+                  className={`flex items-center justify-between cursor-pointer hover:bg-[#dbf9e1]/30 p-1.5 rounded text-sm sm:text-base transition-colors duration-300 ${!selectedCategory ? 'font-medium text-[#5dc285] bg-[#dbf9e1]/20' : 'font-light'}`}
                   onClick={() => handleCategoryChange(null)}
                   role="button"
                   tabIndex={0}
                   aria-pressed={!selectedCategory}
                   onKeyDown={(e) => e.key === 'Enter' && handleCategoryChange(null)}
                 >
-                  <span>All Categories</span>
+                  <span className="font-['Montserrat',sans-serif]">All Categories</span>
                 </div>
                 {categories.map((category) => (
                   <div 
                     key={category.id}
-                    className={`flex items-center justify-between cursor-pointer hover:bg-gray-50 p-1 rounded text-sm sm:text-base ${selectedCategory === category.slug ? 'font-medium text-primary' : ''}`}
+                    className={`flex items-center justify-between cursor-pointer hover:bg-[#dbf9e1]/30 p-1.5 rounded text-sm sm:text-base transition-colors duration-300 ${selectedCategory === category.slug ? 'font-medium text-[#5dc285] bg-[#dbf9e1]/20' : 'font-light'}`}
                     onClick={() => handleCategoryChange(category.slug)}
                     role="button"
                     tabIndex={0}
                     aria-pressed={selectedCategory === category.slug}
                     onKeyDown={(e) => e.key === 'Enter' && handleCategoryChange(category.slug)}
                   >
-                    <span>{category.name}</span>
-                    <span className="text-gray-500 text-xs sm:text-sm">{category.count}</span>
+                    <span className="font-['Montserrat',sans-serif]">{category.name}</span>
+                    <span className="text-[#5dc285] text-xs sm:text-sm bg-[#dbf9e1]/30 px-2 py-0.5 rounded-full font-['Montserrat',sans-serif]">{category.count}</span>
                   </div>
                 ))}
               </div>
@@ -185,26 +188,28 @@ const ProductFilters = () => {
           </div>
 
           {/* Price Range Filter */}
-          <div className="mb-4 sm:mb-6">
-            <h4 className="font-medium mb-2 sm:mb-3 text-sm sm:text-base">Price Range (₹)</h4>
-            <div className="flex space-x-2">
-              <div className="w-1/2">
+          <div className="mb-4 sm:mb-6 relative z-10">
+            <h4 className="font-['Montserrat',sans-serif] font-semibold mb-2 sm:mb-3 text-sm sm:text-base text-gray-700 border-l-2 border-[#5dc285] pl-2">Price Range (₹)</h4>
+            <div className="flex space-x-2 bg-[#dbf9e1]/10 p-2 rounded-md border border-[#dbf9e1]/30">
+              <div className="w-1/2 relative group/input">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-[#5dc285]/20 via-[#5dc285]/20 to-[#5dc285]/20 rounded-md blur opacity-0 group-hover/input:opacity-100 transition-opacity duration-300"></div>
                 <input
                   type="number"
                   placeholder="Min"
                   value={priceRange.min}
                   onChange={(e) => handlePriceChange('min', e.target.value)}
-                  className="w-full border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-[#dbf9e1]/50 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#5dc285] bg-white/90 font-['Montserrat',sans-serif] relative z-10"
                   aria-label="Minimum price"
                 />
               </div>
-              <div className="w-1/2">
+              <div className="w-1/2 relative group/input">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-[#5dc285]/20 via-[#5dc285]/20 to-[#5dc285]/20 rounded-md blur opacity-0 group-hover/input:opacity-100 transition-opacity duration-300"></div>
                 <input
                   type="number"
                   placeholder="Max"
                   value={priceRange.max}
                   onChange={(e) => handlePriceChange('max', e.target.value)}
-                  className="w-full border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-[#dbf9e1]/50 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#5dc285] bg-white/90 font-['Montserrat',sans-serif] relative z-10"
                   aria-label="Maximum price"
                 />
               </div>
@@ -212,62 +217,79 @@ const ProductFilters = () => {
           </div>
 
           {/* Verified Suppliers Filter */}
-          <div className="mb-4 sm:mb-6">
-            <label className="flex items-center space-x-2 cursor-pointer text-sm sm:text-base">
-              <input
-                type="checkbox"
-                checked={verifiedOnly}
-                onChange={(e) => handleVerifiedChange(e.target.checked)}
-                className="rounded text-primary focus:ring-primary h-3.5 w-3.5 sm:h-4 sm:w-4"
-                aria-label="Show only verified suppliers"
-              />
-              <span>Verified Suppliers Only</span>
-            </label>
+          <div className="mb-4 sm:mb-6 relative z-10">
+            <h4 className="font-['Montserrat',sans-serif] font-semibold mb-2 sm:mb-3 text-sm sm:text-base text-gray-700 border-l-2 border-[#5dc285] pl-2">Supplier Options</h4>
+            <div className="bg-[#dbf9e1]/10 p-2 rounded-md border border-[#dbf9e1]/30">
+              <label className="flex items-center space-x-2 cursor-pointer text-sm sm:text-base group/check">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    checked={verifiedOnly}
+                    onChange={(e) => handleVerifiedChange(e.target.checked)}
+                    className="rounded text-[#5dc285] focus:ring-[#5dc285] h-3.5 w-3.5 sm:h-4 sm:w-4 border-[#5dc285]/30"
+                    aria-label="Show only verified suppliers"
+                  />
+                  <div className="absolute -inset-1 bg-[#5dc285]/10 rounded-full scale-0 group-hover/check:scale-100 transition-transform duration-200"></div>
+                </div>
+                <span className="font-['Montserrat',sans-serif] font-light">Verified Suppliers Only</span>
+              </label>
+            </div>
           </div>
 
           {/* Tax Filters */}
-          <div className="mb-4 sm:mb-6">
-            <h4 className="font-medium mb-2 sm:mb-3 text-sm sm:text-base">Tax Options</h4>
+          <div className="mb-4 sm:mb-6 relative z-10">
+            <h4 className="font-['Montserrat',sans-serif] font-semibold mb-2 sm:mb-3 text-sm sm:text-base text-gray-700 border-l-2 border-[#5dc285] pl-2">Tax Options</h4>
             
-            {/* Tax Inclusive Filter */}
-            <div className="mb-2">
-              <label className="flex items-center space-x-2 cursor-pointer text-sm sm:text-base">
-                <input
-                  type="checkbox"
-                  checked={taxInclusiveOnly}
-                  onChange={(e) => handleTaxInclusiveChange(e.target.checked)}
-                  className="rounded text-primary focus:ring-primary h-3.5 w-3.5 sm:h-4 sm:w-4"
-                  aria-label="Show only tax inclusive products"
-                />
-                <span>Tax Inclusive Products Only</span>
-              </label>
-            </div>
-            
-            {/* Max Tax Rate Filter */}
-            <div className="mt-3">
-              <label className="block text-sm mb-1">Maximum Tax Rate (%)</label>
-              <input
-                type="number"
-                placeholder="e.g. 18"
-                value={maxTaxRate}
-                onChange={(e) => handleMaxTaxRateChange(e.target.value)}
-                min="0"
-                max="28"
-                className="w-full border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                aria-label="Maximum tax rate percentage"
-              />
-              <p className="text-xs text-gray-500 mt-1">Filter products with GST rate up to this percentage</p>
+            <div className="bg-[#dbf9e1]/10 p-2 rounded-md border border-[#dbf9e1]/30">
+              {/* Tax Inclusive Filter */}
+              <div className="mb-3">
+                <label className="flex items-center space-x-2 cursor-pointer text-sm sm:text-base group/check">
+                  <div className="relative">
+                    <input
+                      type="checkbox"
+                      checked={taxInclusiveOnly}
+                      onChange={(e) => handleTaxInclusiveChange(e.target.checked)}
+                      className="rounded text-[#5dc285] focus:ring-[#5dc285] h-3.5 w-3.5 sm:h-4 sm:w-4 border-[#5dc285]/30"
+                      aria-label="Show only tax inclusive products"
+                    />
+                    <div className="absolute -inset-1 bg-[#5dc285]/10 rounded-full scale-0 group-hover/check:scale-100 transition-transform duration-200"></div>
+                  </div>
+                  <span className="font-['Montserrat',sans-serif] font-light">Tax Inclusive Products Only</span>
+                </label>
+              </div>
+              
+              {/* Max Tax Rate Filter */}
+              <div className="mt-3">
+                <label className="block text-sm mb-1 font-['Montserrat',sans-serif] font-medium text-gray-700">Maximum Tax Rate (%)</label>
+                <div className="relative group/input">
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-[#5dc285]/20 via-[#5dc285]/20 to-[#5dc285]/20 rounded-md blur opacity-0 group-hover/input:opacity-100 transition-opacity duration-300"></div>
+                  <input
+                    type="number"
+                    placeholder="e.g. 18"
+                    value={maxTaxRate}
+                    onChange={(e) => handleMaxTaxRateChange(e.target.value)}
+                    min="0"
+                    max="28"
+                    className="w-full border border-[#dbf9e1]/50 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#5dc285] bg-white/90 font-['Montserrat',sans-serif] relative z-10"
+                    aria-label="Maximum tax rate percentage"
+                  />
+                </div>
+                <p className="text-xs text-gray-500 mt-1 font-['Montserrat',sans-serif] italic">Filter products with GST rate up to this percentage</p>
+              </div>
             </div>
           </div>
 
           {/* Location Filter (could be expanded in a real app) */}
-          <div className="mb-4 sm:mb-6">
-            <h4 className="font-medium mb-2 sm:mb-3 text-sm sm:text-base">Location</h4>
-            <select
-              className="w-full border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-              defaultValue=""
-              aria-label="Filter by location"
-            >
+          <div className="mb-4 sm:mb-6 relative z-10">
+            <h4 className="font-['Montserrat',sans-serif] font-semibold mb-2 sm:mb-3 text-sm sm:text-base text-gray-700 border-l-2 border-[#5dc285] pl-2">Location</h4>
+            <div className="relative group/select">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-[#5dc285]/20 via-[#5dc285]/20 to-[#5dc285]/20 rounded-md blur opacity-0 group-hover/select:opacity-100 transition-opacity duration-300"></div>
+              <select
+                className="w-full border border-[#dbf9e1]/50 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#5dc285] bg-white/90 font-['Montserrat',sans-serif] relative z-10 appearance-none pr-8"
+                defaultValue=""
+                aria-label="Filter by location"
+                style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%235dc285%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')", backgroundRepeat: "no-repeat", backgroundPosition: "right 0.5rem center", backgroundSize: "0.6em auto" }}
+              >
               <option value="">All of India</option>
               <option value="delhi">Delhi</option>
               <option value="mumbai">Mumbai</option>
@@ -281,16 +303,21 @@ const ProductFilters = () => {
           </div>
 
           {/* Apply Filters Button (Mobile Only) */}
-          <div className="mt-4 sm:mt-6 lg:hidden">
-            <button
-              onClick={() => setShowMobileFilters(false)}
-              className="w-full bg-primary text-white py-1.5 sm:py-2 rounded-md hover:bg-primary-dark transition-colors text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-              aria-label="Apply filters"
-            >
-              Apply Filters
-            </button>
+          <div className="mt-4 sm:mt-6 lg:hidden relative z-10">
+            <div className="relative group/btn">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-[#5dc285]/30 via-[#5dc285]/30 to-[#5dc285]/30 rounded-md blur opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+              <button
+                onClick={() => setShowMobileFilters(false)}
+                className="w-full bg-gradient-to-r from-[#5dc285] to-[#5dc285] text-white py-1.5 sm:py-2 rounded-md hover:from-[#5dc285]/90 hover:to-[#5dc285]/90 transition-all duration-300 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#5dc285] focus:ring-offset-2 shadow-sm hover:shadow relative z-10 font-['Montserrat',sans-serif] font-medium"
+                aria-label="Apply filters"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 transform translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000"></div>
+                Apply Filters
+              </button>
+            </div>
           </div>
         </div>
+      </div>
       </div>
     </>
   );

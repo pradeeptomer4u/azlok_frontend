@@ -10,16 +10,66 @@ export interface Category {
   product_count?: number;
 }
 
+// Cache for categories to reduce API calls
+let categoriesCache: {
+  data: Category[];
+  timestamp: number;
+} | null = null;
+
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+
 // Category API service
 const categoryService = {
-  // Get all categories
-  getAllCategories: async (): Promise<Category[]> => {
+  // Get all categories with caching
+  getAllCategories: async (forceRefresh = false): Promise<Category[]> => {
+    // Return cached data if available and not expired
+    if (
+      !forceRefresh &&
+      categoriesCache && 
+      categoriesCache.data.length > 0 && 
+      Date.now() - categoriesCache.timestamp < CACHE_DURATION
+    ) {
+      console.log('Using cached categories data');
+      return categoriesCache.data;
+    }
+    
     try {
-      const response = await apiRequest<Category[]>('/api/categories/all');
-      return response || [];
+      // Try the primary API endpoint
+      try {
+        const response = await apiRequest<Category[]>('/api/categories/all');
+        if (response && Array.isArray(response) && response.length > 0) {
+          // Update cache
+          categoriesCache = {
+            data: response,
+            timestamp: Date.now()
+          };
+          return response;
+        }
+      } catch (primaryError) {
+        console.warn('Primary categories endpoint failed, trying fallback:', primaryError);
+      }
+      
+      // Fallback to alternative endpoint
+      const fallbackResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/categories/`);
+      if (!fallbackResponse.ok) {
+        throw new Error(`HTTP error! status: ${fallbackResponse.status}`);
+      }
+      
+      const fallbackData = await fallbackResponse.json();
+      if (fallbackData && Array.isArray(fallbackData)) {
+        // Update cache
+        categoriesCache = {
+          data: fallbackData,
+          timestamp: Date.now()
+        };
+        return fallbackData;
+      }
+      
+      return [];
     } catch (error) {
       console.error('Error fetching all categories:', error);
-      return [];
+      // Return cached data even if expired as a last resort
+      return categoriesCache?.data || [];
     }
   },
   
@@ -93,6 +143,38 @@ const categoryService = {
       return response || null;
     } catch (error) {
       console.error(`Error fetching category with ID ${id}:`, error);
+      return null;
+    }
+  },
+  
+  // Get a single category by slug
+  getCategoryBySlug: async (slug: string): Promise<Category | null> => {
+    try {
+      // First try to use cached data if available
+      if (categoriesCache && categoriesCache.data.length > 0) {
+        const cachedCategory = categoriesCache.data.find(cat => cat.slug === slug);
+        if (cachedCategory) {
+          console.log('Found category by slug in cache:', slug);
+          return cachedCategory;
+        }
+      }
+      
+      // If not in cache, fetch all categories and find the one with matching slug
+      const allCategories = await categoryService.getAllCategories();
+      const foundCategory = allCategories.find(cat => cat.slug === slug);
+      
+      if (foundCategory) {
+        return foundCategory;
+      }
+      
+      // Try with normalized slug
+      const normalizedSlug = slug.toLowerCase().trim();
+      return allCategories.find(cat => 
+        cat.slug.toLowerCase() === normalizedSlug ||
+        cat.name.toLowerCase() === normalizedSlug
+      ) || null;
+    } catch (error) {
+      console.error(`Error fetching category with slug ${slug}:`, error);
       return null;
     }
   }

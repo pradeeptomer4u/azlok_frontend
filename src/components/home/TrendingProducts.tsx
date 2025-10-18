@@ -94,21 +94,36 @@ const TrendingProducts = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-60">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <div className="flex justify-center items-center h-80">
+        <div className="flex flex-col items-center">
+          <div className="w-16 h-16 border-4 border-green-200 border-t-green-600 rounded-full animate-spin"></div>
+          <p className="mt-4 text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide">
+            Loading trending products...
+          </p>
+        </div>
       </div>
     );
   }
   
   if (error) {
     return (
-      <div className="flex justify-center items-center h-60">
-        <div className="text-red-500 text-center">
-          <p>{error}</p>
+      <div className="flex justify-center items-center h-80">
+        <div className="text-center max-w-md p-8 bg-[#defce8] rounded-xl shadow-lg border border-red-100">
+          <div className="text-red-500 mb-4 flex justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <p className="text-gray-700 font-['Montserrat',sans-serif] mb-6">
+            {error}
+          </p>
           <button 
             onClick={() => window.location.reload()} 
-            className="mt-4 bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-dark transition-colors"
+            className="bg-gradient-to-r from-green-600 to-green-700 text-white py-2.5 px-6 rounded-full font-medium tracking-wide transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-green-200/40 flex items-center justify-center mx-auto"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
             Try Again
           </button>
         </div>
@@ -118,8 +133,17 @@ const TrendingProducts = () => {
   
   if (products.length === 0) {
     return (
-      <div className="flex justify-center items-center h-60">
-        <p className="text-gray-500">No trending products available at the moment.</p>
+      <div className="flex justify-center items-center h-80">
+        <div className="text-center max-w-md p-8 bg-[#defce8] rounded-xl shadow-lg border border-gray-100">
+          <div className="text-gray-400 mb-4 flex justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <p className="text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide">
+            No trending products available at the moment.
+          </p>
+        </div>
       </div>
     );
   }
@@ -127,21 +151,27 @@ const TrendingProducts = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {products.map((product: UIProduct) => (
-        <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+        <div key={product.id} className="bg-[#defce8]/90 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col transform hover:scale-[1.02] group">
           <Link href={`/products/${product.slug}`}>
             <div className="relative">
-              <div className="relative h-48 bg-gray-100">
+              <div className="relative h-48 bg-white overflow-hidden">
+                {/* Decorative corner elements */}
+                <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-green-300/30 rounded-tl-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-green-300/30 rounded-br-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <Image
                   src={product.image}
                   alt={product.name}
                   fill
-                  className="object-contain p-4"
+                  className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
-              <div className="absolute top-2 right-2 bg-secondary text-white text-xs px-2 py-1 rounded-full">
-                Trending
+              <div className="absolute top-2 right-2 bg-gradient-to-r from-secondary to-secondary/80 text-white text-xs px-3 py-1 rounded-full flex items-center shadow-md transform -rotate-2 group-hover:rotate-0 transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+                <span className="font-medium tracking-wide">Trending</span>
               </div>
-              <div className="absolute bottom-2 right-2 bg-gray-800 bg-opacity-70 text-white text-xs px-2 py-1 rounded-full flex items-center">
+              <div className="absolute bottom-2 right-2 bg-gradient-to-r from-gray-800/70 to-gray-700/70 text-white text-xs px-3 py-1 rounded-full flex items-center shadow-sm group-hover:shadow transition-shadow duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -149,37 +179,32 @@ const TrendingProducts = () => {
                 {product.views}
               </div>
             </div>
-            <div className="p-4">
-              <h3 className="font-medium text-gray-800 hover:text-primary transition-colors line-clamp-2 h-12">
+            <div className="p-4 relative">
+              {/* Subtle decorative element */}
+              <div className="absolute -top-6 right-4 w-12 h-12 bg-green-100/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <h3 className="font-['Playfair_Display',serif] font-semibold text-gray-800 group-hover:text-green-700 transition-colors line-clamp-2 h-12 relative z-10">
                 {product.name}
               </h3>
-              <p className="text-primary font-bold mt-2">
+              <p className="text-primary font-bold mt-2 font-['Montserrat',sans-serif] tracking-tight">
                 ₹{product.price.toLocaleString()}
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide">
                 Min. Order: {product.minOrder} units
               </p>
-              <div className="mt-3 flex items-center text-sm text-gray-600">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-                {/* {product.seller} */}
-              </div>
-              <div className="mt-1 flex items-center text-sm text-gray-600">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                {product.location}
-              </div>
             </div>
           </Link>
-          <div className="px-4 pb-4 flex space-x-2">
+          <div className="px-4 pb-4 flex space-x-2 relative mt-auto">
+            {/* Decorative wave pattern */}
+            <div className="absolute -top-6 left-0 right-0 h-6 opacity-30">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full h-full">
+                <path fill="#4ade80" fillOpacity="0.2" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,202.7C672,203,768,181,864,181.3C960,181,1056,203,1152,208C1248,213,1344,203,1392,197.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+              </svg>
+            </div>
             <a 
               href={`https://wa.me/8800412138?text=Hi, I'm interested in ${encodeURIComponent(product.name)}`} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex-1 bg-green-600 bg-opacity-20 text-gray-800 py-1.5 sm:py-2 rounded-md hover:bg-green-600 hover:bg-opacity-30 transition-colors text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 flex items-center justify-center"
+              className="flex-1 bg-gradient-to-r from-green-500/20 to-green-600/20 text-gray-800 py-1.5 sm:py-2 rounded-md hover:from-green-500/30 hover:to-green-600/30 transition-all duration-300 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 flex items-center justify-center shadow-sm hover:shadow group relative overflow-hidden"
               aria-label={`Contact via WhatsApp for ${product.name}`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="currentColor">
@@ -189,7 +214,7 @@ const TrendingProducts = () => {
               WhatsApp
             </a>
             <button 
-              className="flex-1 bg-primary bg-opacity-20 text-gray-800 py-1.5 sm:py-2 rounded-md hover:bg-primary hover:bg-opacity-30 transition-colors text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center"
+              className="flex-1 bg-gradient-to-r from-primary/20 to-primary/20 text-gray-800 py-1.5 sm:py-2 rounded-md hover:from-primary/30 hover:to-primary/30 transition-all duration-300 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center shadow-sm hover:shadow group relative overflow-hidden"
               onClick={(e) => {
                 e.preventDefault();
                 // Add to cart functionality would go here
@@ -202,6 +227,8 @@ const TrendingProducts = () => {
               </svg>
               Add to Cart
             </button>
+            {/* Add subtle hover effect for buttons */}
+            <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-green-300/0 via-green-400/20 to-green-300/0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"></div>
           </div>
         </div>
       ))}

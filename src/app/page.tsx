@@ -130,7 +130,7 @@ export default function Home() {
       </section>
 
       {/* Featured Brands */}
-      <section className="py-16 bg-gray-50">
+      {/* <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900">Popular Brands</h2>
@@ -140,7 +140,7 @@ export default function Home() {
           </div>
           <SellerShowcase />
         </div>
-      </section>
+      </section> */}
 
       {/* Testimonials */}
       <section className="py-16 bg-white">

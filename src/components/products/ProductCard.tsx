@@ -40,11 +40,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const { addItem } = useCart();
   const [addedToCart, setAddedToCart] = useState(false);
   
-  const handleAddToCart = (e: React.MouseEvent) => {
+  // Enhanced handleAddToCart function to handle both mouse and touch events
+  const handleAddToCart = (e: React.MouseEvent | React.TouchEvent) => {
+    // Prevent default behavior for both mouse and touch events
     e.preventDefault();
     e.stopPropagation();
     
-    addItem({
+    // Create the cart item object
+    const cartItem = {
       id: product.id,
       product_id: product.id,
       name: product.name,
@@ -60,19 +63,39 @@ const ProductCard = ({ product }: ProductCardProps) => {
       igst_amount: product.igst_amount,
       is_tax_inclusive: product.is_tax_inclusive,
       hsn_code: product.hsn_code
-    });
+    };
     
-    // Show visual feedback
-    setAddedToCart(true);
+    // Log the action for debugging
+    console.log(`Adding to cart: ${product.name}`);
     
-    // Reset after 2 seconds
-    setTimeout(() => {
-      setAddedToCart(false);
-    }, 2000);
+    try {
+      // Call addItem directly without setTimeout to ensure it runs
+      addItem(cartItem);
+      
+      // Show visual feedback
+      setAddedToCart(true);
+      
+      // Log success
+      console.log(`Successfully added ${product.name} to cart`);
+      
+      // Reset after 2 seconds
+      setTimeout(() => {
+        setAddedToCart(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+      alert('Failed to add item to cart. Please try again.');
+    }
   };
   return (
     <div className="bg-[#defce8]/90 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col transform hover:scale-[1.02] group">
-      <Link href={`/products/${product.slug}`} className="flex-grow">
+      {/* Product details section - wrapped in Link */}
+      <Link href={`/products/${product.slug}`} className="flex-grow relative" onClick={(e) => {
+        // Prevent navigation if the click is coming from the action buttons area
+        if ((e.target as HTMLElement).closest('.action-buttons-container')) {
+          e.preventDefault();
+        }
+      }}>
         <div className="relative">
           <div className="relative h-40 sm:h-48 bg-white overflow-hidden">
             {/* Decorative corner elements */}
@@ -168,14 +191,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </div>
         </div>
       </Link>
-      <div className="px-3 sm:px-4 pb-3 sm:pb-4 mt-auto relative">
+      <div className="px-3 sm:px-4 pb-3 sm:pb-4 mt-auto relative action-buttons-container">
         {/* Decorative wave pattern */}
         <div className="absolute -top-6 left-0 right-0 h-6 opacity-30">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full h-full">
             <path fill="#4ade80" fillOpacity="0.2" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,202.7C672,203,768,181,864,181.3C960,181,1056,203,1152,208C1248,213,1344,203,1392,197.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
           </svg>
         </div>
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 action-buttons">
           <a 
             href={`https://wa.me/8800412138?text=Hi, I'm interested in ${encodeURIComponent(product.name)}`} 
             target="_blank" 
@@ -190,10 +213,23 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <span className="hidden xs:inline">WhatsApp</span>
           </a>
           <button 
-            className={`flex-1 py-1.5 sm:py-2 rounded-md transition-all duration-300 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center shadow-sm hover:shadow relative overflow-hidden ${addedToCart ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' : 'bg-gradient-to-r from-primary/20 to-primary/20 text-gray-800 hover:from-primary/30 hover:to-primary/30'}`}
+            className={`flex-1 py-1.5 sm:py-2 rounded-md transition-all duration-300 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center shadow-sm hover:shadow relative overflow-hidden z-20 ${addedToCart ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' : 'bg-gradient-to-r from-primary/20 to-primary/20 text-gray-800 hover:from-primary/30 hover:to-primary/30'}`}
             onClick={handleAddToCart}
+            onTouchStart={(e) => {
+              // Prevent default to avoid any unwanted behavior
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onTouchEnd={(e) => {
+              // Prevent default to avoid any unwanted behavior
+              e.preventDefault();
+              e.stopPropagation();
+              handleAddToCart(e);
+            }}
             disabled={addedToCart}
             aria-label={`Add ${product.name} to cart`}
+            // Add a higher z-index and position relative to ensure the button is on top
+            style={{ position: 'relative', zIndex: 20 }}
           >
             {addedToCart ? (
               <>

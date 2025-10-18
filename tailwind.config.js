@@ -26,6 +26,7 @@ module.exports = {
       },
       animation: {
         'fadeIn': 'fadeIn 0.3s ease-in-out',
+        'fade-in': 'fadeIn 0.5s ease-in-out',
         'float1': 'float 6s ease-in-out infinite',
         'float2': 'float 8s ease-in-out infinite 1s',
         'float3': 'float 7s ease-in-out infinite 2s',
@@ -45,6 +46,7 @@ module.exports = {
         'slide-down': 'slideDown 0.5s ease-out',
         'slide-left': 'slideLeft 0.5s ease-out',
         'slide-right': 'slideRight 0.5s ease-out',
+        'image-load': 'imageLoad 0.5s ease-in',
       },
       keyframes: {
         fadeIn: {

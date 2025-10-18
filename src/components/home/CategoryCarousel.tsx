@@ -152,10 +152,13 @@ const CategoryCarousel = () => {
                   alt={category.name}
                   fill
                   className="object-cover p-0"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                   onError={(e) => {
+                    console.error(`Failed to load image for category: ${category.name}`, e);
                     const imgElement = e.currentTarget as HTMLImageElement;
                     imgElement.src = '/images/category-placeholder.svg';
                   }}
+                  loading="eager"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-green-900/50 to-transparent"></div>
               </div>

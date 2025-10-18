@@ -175,14 +175,36 @@ const HeroSection = () => {
           </div>
           
           <div className="flex justify-center lg:justify-end">
-            <div className="relative w-80 h-80 lg:w-96 lg:h-96">
-              <Image
-                src="/home_page_banner.png"
-                alt="Global B2C Marketplace"
-                fill
-                className="object-contain drop-shadow-lg"
-                priority
-              />
+            <div className="relative w-full h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
+              {/* Use a regular img tag for better mobile compatibility */}
+              <div className="block sm:hidden w-full h-full">
+                <img
+                  src="/home_page_banner.png"
+                  alt="Global B2C Marketplace"
+                  className="w-full h-full object-contain drop-shadow-lg"
+                  onError={(e) => {
+                    console.error('Mobile image failed to load');
+                    e.currentTarget.src = '/globe.svg';
+                  }}
+                />
+              </div>
+              
+              {/* Use Next.js Image for desktop */}
+              <div className="hidden sm:block w-full h-full relative">
+                <Image
+                  src="/images/hero-side-bg.jpg"
+                  alt="Global B2C Marketplace"
+                  fill
+                  className="object-contain drop-shadow-lg"
+                  priority
+                  sizes="(max-width: 768px) 80vw, (max-width: 1200px) 40vw, 33vw"
+                  onError={(e) => {
+                    console.error('Desktop image failed to load');
+                    const imgElement = e.currentTarget as HTMLImageElement;
+                    imgElement.src = '/images/hero-side-bg.jpg';
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -102,7 +102,21 @@ export default function Home() {
             </div>
             
             <div className="md:w-1/2 relative">
-              <div className="relative h-80 md:h-96 w-full rounded-lg overflow-hidden shadow-2xl transform md:translate-x-8">
+              {/* Mobile version with regular img tag */}
+              <div className="block md:hidden relative h-64 w-full rounded-lg overflow-hidden shadow-xl">
+                <img 
+                  src="/images/hero-side-bg.jpg" 
+                  alt="Natural Organic Products" 
+                  className="w-full h-full object-cover rounded-lg"
+                  onError={(e) => {
+                    console.error('Mobile hero image failed to load');
+                    e.currentTarget.src = '/globe.svg';
+                  }}
+                />
+              </div>
+              
+              {/* Desktop version with Next.js Image */}
+              <div className="hidden md:block relative h-96 w-full rounded-lg overflow-hidden shadow-2xl transform md:translate-x-8">
                 <Image 
                   src="/images/hero-side-bg.jpg" 
                   alt="Natural Organic Products" 
@@ -110,6 +124,12 @@ export default function Home() {
                   style={{objectFit: 'cover'}} 
                   className="rounded-lg"
                   priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  onError={(e) => {
+                    console.error('Desktop hero image failed to load:', e);
+                    const imgElement = e.currentTarget as HTMLImageElement;
+                    imgElement.src = '/globe.svg';
+                  }}
                 />
               </div>
               <div className="absolute -bottom-4 -left-4 bg-yellow-500 text-green-900 font-bold py-2 px-4 rounded-lg shadow-lg">

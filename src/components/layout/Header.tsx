@@ -350,60 +350,300 @@ const Header = () => {
           <div className="md:hidden flex items-center">
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-green-800 hover:text-green-600 font-medium transition-all duration-200 focus:outline-none"
+              className="relative p-2 rounded-lg bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 shadow-sm hover:shadow-md transition-all duration-300 focus:outline-none group overflow-hidden"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              {/* Background glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+              
+              {/* Animated particles */}
+              <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-green-500/30 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-float1 transition-opacity duration-500"></div>
+              <div className="absolute bottom-1/4 right-1/4 w-1.5 h-1.5 bg-green-400/30 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-float2 transition-opacity duration-500"></div>
+              
+              {/* Menu icon with animation */}
+              <div className="relative z-10 flex flex-col justify-center items-center space-y-1.5 transform group-hover:scale-105 transition-transform duration-300">
+                <span className={`block h-0.5 w-6 bg-gradient-to-r from-green-600 to-green-500 rounded-full transform transition-all duration-300 ease-in-out ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+                <span className={`block h-0.5 w-6 bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all duration-300 ease-in-out ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+                <span className={`block h-0.5 w-6 bg-gradient-to-r from-green-600 to-green-500 rounded-full transform transition-all duration-300 ease-in-out ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+              </div>
+              
+              {/* Subtle ring effect */}
+              <div className="absolute inset-0 rounded-lg border border-green-300/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
           </div>
         </div>
 
-        {/* Search Bar - Mobile */}
-        <div className="md:hidden pb-4">
-          <div className="relative w-full">
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="w-full py-2 pl-4 pr-10 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/80 backdrop-blur-sm shadow-inner"
-            />
-            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-green-600">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-          </div>
-        </div>
+        {/* Mobile search bar removed as requested */}
       </div>
 
       {isMenuOpen && (
-        <div className="md:hidden bg-gradient-to-r from-green-50 to-green-100 border-t border-green-200 z-[90] relative">
-          <div className="container-custom mx-auto py-3">
-            <nav className="flex flex-col space-y-3 max-h-[70vh] overflow-y-auto">
-              <Link href="/products" className="text-green-800 hover:text-green-600 font-medium transition-all duration-200 py-2" onClick={() => setIsMenuOpen(false)}>
-                Products
+        <div className="md:hidden bg-gradient-to-r from-green-50 via-green-100 to-green-50 border-t border-green-200 z-[90] relative overflow-hidden">
+          {/* Enhanced background effects */}
+          <div className="absolute inset-0 bg-gradient-to-br from-green-50/80 via-green-100/90 to-green-50/80"></div>
+          
+          {/* Subtle pattern overlay */}
+          <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/leaf-pattern.png')] opacity-5 bg-repeat mix-blend-overlay"></div>
+          
+          {/* Animated gradient orbs */}
+          <div className="absolute -top-12 -right-12 w-64 h-64 bg-gradient-to-br from-green-300/20 to-green-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+          <div className="absolute -bottom-16 -left-16 w-72 h-72 bg-gradient-to-tr from-green-400/10 to-blue-300/5 rounded-full blur-3xl animate-float1"></div>
+          
+          {/* Light rays */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent rotate-45 transform opacity-20 animate-slowPan"></div>
+          
+          {/* Enhanced animated particles */}
+          <div className="absolute top-1/4 left-1/3 w-1.5 h-1.5 bg-green-500/30 rounded-full animate-float1 shadow-lg shadow-green-500/10"></div>
+          <div className="absolute top-3/4 left-1/2 w-2 h-2 bg-green-600/20 rounded-full animate-float2 shadow-lg shadow-green-600/10"></div>
+          <div className="absolute top-1/3 left-2/3 w-1.5 h-1.5 bg-green-400/30 rounded-full animate-float3 shadow-lg shadow-green-400/10"></div>
+          
+          <div className="container-custom mx-auto py-4 relative z-10">
+            <nav className="flex flex-col space-y-4 max-h-[70vh] overflow-y-auto">
+              <Link 
+                href="/products" 
+                className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {/* Background glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+                
+                {/* Icon container with glow */}
+                <div className="relative mr-3 p-2 rounded-full bg-gradient-to-br from-green-400/80 to-green-500/80 text-white shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-110">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-300/0 via-green-300/30 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                </div>
+                
+                {/* Text with animated underline */}
+                <div className="relative">
+                  <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Products</span>
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
+                </div>
+                
+                {/* Arrow indicator */}
+                <div className="ml-auto transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
               </Link>
-              <Link href="/categories" className="text-green-800 hover:text-green-600 font-medium transition-all duration-200 py-2" onClick={() => setIsMenuOpen(false)}>
-                Categories
+              
+              <Link 
+                href="/categories" 
+                className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {/* Background glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+                
+                {/* Icon container with glow */}
+                <div className="relative mr-3 p-2 rounded-full bg-gradient-to-br from-green-400/80 to-green-500/80 text-white shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-110">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-300/0 via-green-300/30 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                </div>
+                
+                {/* Text with animated underline */}
+                <div className="relative">
+                  <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Categories</span>
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
+                </div>
+                
+                {/* Arrow indicator */}
+                <div className="ml-auto transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
               </Link>
-              <Link href="/track" className="text-green-800 hover:text-green-600 font-medium transition-all duration-200 py-2" onClick={() => setIsMenuOpen(false)}>
-                Track Order
+              
+              <Link 
+                href="/cart" 
+                className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {/* Background glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+                
+                {/* Icon container with glow */}
+                <div className="relative mr-3 p-2 rounded-full bg-gradient-to-br from-green-400/80 to-green-500/80 text-white shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-110">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-300/0 via-green-300/30 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                </div>
+                
+                {/* Text with animated underline */}
+                <div className="relative">
+                  <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Cart</span>
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
+                </div>
+                
+                {/* Cart count indicator */}
+                {itemCount > 0 && (
+                  <div className="ml-2 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-medium shadow-sm">
+                    {itemCount}
+                  </div>
+                )}
+                
+                {/* Arrow indicator */}
+                <div className="ml-auto transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </Link>
+              
+              <Link 
+                href="/track" 
+                className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {/* Background glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+                
+                {/* Icon container with glow */}
+                <div className="relative mr-3 p-2 rounded-full bg-gradient-to-br from-green-400/80 to-green-500/80 text-white shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-110">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-300/0 via-green-300/30 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                </div>
+                
+                {/* Text with animated underline */}
+                <div className="relative">
+                  <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Track Order</span>
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
+                </div>
+                
+                {/* Arrow indicator */}
+                <div className="ml-auto transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
               </Link>
               {isAuthenticated ? (
                 <>
-                  <Link href="/dashboard" className="text-green-800 hover:text-green-600 font-medium transition-all duration-200 py-2" onClick={() => setIsMenuOpen(false)}>
-                    Dashboard
+                  <Link 
+                    href="/dashboard" 
+                    className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden animation-delay-300" 
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {/* Background glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+                    
+                    {/* Icon container with glow */}
+                    <div className="relative mr-3 p-2 rounded-full bg-gradient-to-br from-green-400/80 to-green-500/80 text-white shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-110">
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-300/0 via-green-300/30 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></div>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                      </svg>
+                    </div>
+                    
+                    {/* Text with animated underline */}
+                    <div className="relative">
+                      <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Dashboard</span>
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
+                    </div>
+                    
+                    {/* Arrow indicator */}
+                    <div className="ml-auto transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
                   </Link>
-                  <Link href="/profile" className="text-green-800 hover:text-green-600 font-medium transition-all duration-200 py-2" onClick={() => setIsMenuOpen(false)}>
-                    Profile
+                  
+                  <Link 
+                    href="/profile" 
+                    className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden animation-delay-600" 
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {/* Background glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+                    
+                    {/* Icon container with glow */}
+                    <div className="relative mr-3 p-2 rounded-full bg-gradient-to-br from-green-400/80 to-green-500/80 text-white shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-110">
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-300/0 via-green-300/30 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></div>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    
+                    {/* Text with animated underline */}
+                    <div className="relative">
+                      <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Profile</span>
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
+                    </div>
+                    
+                    {/* Arrow indicator */}
+                    <div className="ml-auto transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
                   </Link>
                   {(user?.role === 'admin' || user?.role === 'seller') && (
                     <>
-                      <Link href="/logistics" className="text-green-800 hover:text-green-600 font-medium transition-all duration-200 py-2" onClick={() => setIsMenuOpen(false)}>
-                        Logistics
+                      <Link 
+                        href="/logistics" 
+                        className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden animation-delay-900" 
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {/* Background glow effect */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+                        
+                        {/* Icon container with glow */}
+                        <div className="relative mr-3 p-2 rounded-full bg-gradient-to-br from-green-400/80 to-green-500/80 text-white shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-110">
+                          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-300/0 via-green-300/30 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></div>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                          </svg>
+                        </div>
+                        
+                        {/* Text with animated underline */}
+                        <div className="relative">
+                          <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Logistics</span>
+                          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
+                        </div>
+                        
+                        {/* Arrow indicator */}
+                        <div className="ml-auto transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
                       </Link>
-                      <Link href="/payments" className="text-green-800 hover:text-green-600 font-medium transition-all duration-200 py-2" onClick={() => setIsMenuOpen(false)}>
-                        Payments
+                      
+                      <Link 
+                        href="/payments" 
+                        className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden animation-delay-1200" 
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {/* Background glow effect */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+                        
+                        {/* Icon container with glow */}
+                        <div className="relative mr-3 p-2 rounded-full bg-gradient-to-br from-green-400/80 to-green-500/80 text-white shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-110">
+                          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-300/0 via-green-300/30 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></div>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                          </svg>
+                        </div>
+                        
+                        {/* Text with animated underline */}
+                        <div className="relative">
+                          <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Payments</span>
+                          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
+                        </div>
+                        
+                        {/* Arrow indicator */}
+                        <div className="ml-auto transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
                       </Link>
                     </>
                   )}
@@ -412,29 +652,90 @@ const Header = () => {
                       setIsMenuOpen(false);
                       logout();
                     }}
-                    className="text-red-600 hover:text-red-800 py-2 text-left w-full"
+                    className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-red-50 to-red-100/80 hover:from-red-100 hover:to-red-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden animation-delay-1500 w-full text-left"
                   >
-                    Logout
+                    {/* Background glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-300/0 via-red-300/10 to-red-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+                    
+                    {/* Icon container with glow */}
+                    <div className="relative mr-3 p-2 rounded-full bg-gradient-to-br from-red-400/80 to-red-500/80 text-white shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-110">
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-300/0 via-red-300/30 to-red-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></div>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                    </div>
+                    
+                    {/* Text with animated underline */}
+                    <div className="relative">
+                      <span className="text-red-600 group-hover:text-red-700 font-medium text-lg tracking-wide transition-colors duration-300">Logout</span>
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-red-400 via-red-600 to-red-400 group-hover:w-full transition-all duration-500 ease-out"></span>
+                    </div>
                   </button>
                 </>
               ) : (
                 <>
-                  <Link href="/login" className="text-green-800 hover:text-green-600 font-medium transition-all duration-200 py-2" onClick={() => setIsMenuOpen(false)}>
-                    Login
+                  <Link 
+                    href="/login" 
+                    className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden animation-delay-300" 
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {/* Background glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+                    
+                    {/* Icon container with glow */}
+                    <div className="relative mr-3 p-2 rounded-full bg-gradient-to-br from-green-400/80 to-green-500/80 text-white shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-110">
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-300/0 via-green-300/30 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></div>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                      </svg>
+                    </div>
+                    
+                    {/* Text with animated underline */}
+                    <div className="relative">
+                      <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Login</span>
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
+                    </div>
+                    
+                    {/* Arrow indicator */}
+                    <div className="ml-auto transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
                   </Link>
-                  <Link href="/register" className="text-green-800 hover:text-green-600 font-medium transition-all duration-200 py-2" onClick={() => setIsMenuOpen(false)}>
-                    Register
+                  
+                  <Link 
+                    href="/register" 
+                    className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden animation-delay-600" 
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {/* Background glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+                    
+                    {/* Icon container with glow */}
+                    <div className="relative mr-3 p-2 rounded-full bg-gradient-to-br from-green-400/80 to-green-500/80 text-white shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-110">
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-300/0 via-green-300/30 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></div>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                      </svg>
+                    </div>
+                    
+                    {/* Text with animated underline */}
+                    <div className="relative">
+                      <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Register</span>
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
+                    </div>
+                    
+                    {/* Arrow indicator */}
+                    <div className="ml-auto transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
                   </Link>
                 </>
               )}
-              <Link href="/cart" className="text-green-800 hover:text-green-600 font-medium transition-all duration-200 py-2 flex items-center" onClick={() => setIsMenuOpen(false)}>
-                Cart
-                {itemCount > 0 && (
-                  <span className="ml-2 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
-                    {itemCount}
-                  </span>
-                )}
-              </Link>
+              {/* Cart menu item moved to third position */}
             </nav>
           </div>
         </div>

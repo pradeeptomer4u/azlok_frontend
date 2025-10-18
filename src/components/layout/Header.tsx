@@ -50,55 +50,73 @@ const Header = () => {
   }, [isUserMenuOpen]);
 
   return (
-    <header className="bg-gradient-to-r from-green-50 via-green-100 to-green-50 shadow-lg sticky top-0 z-50 backdrop-blur-sm border-b border-green-200/30 relative font-[Poppins,sans-serif]">
+    <header className="bg-gradient-to-r from-green-50 via-green-100 to-green-50 shadow-xl sticky top-0 z-50 backdrop-blur-md border-b border-green-200/40 relative font-['Poppins',sans-serif]">
       {/* Advanced background graphics with enhanced elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Gradient mesh background */}
+        {/* Enhanced gradient mesh background with multiple layers */}
         <div className="absolute inset-0 bg-gradient-to-br from-green-50/80 via-green-100/90 to-green-50/80"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-200/5 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-blue-100/5 via-transparent to-transparent"></div>
         
-        {/* Subtle pattern overlay */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/leaf-pattern.png')] opacity-5 bg-repeat mix-blend-overlay"></div>
+        {/* Subtle pattern overlay with fallback color */}
+        <div className="absolute top-0 left-0 w-full h-full bg-[#f0fff4] bg-[url('/images/leaf-pattern.png')] opacity-5 bg-repeat mix-blend-overlay"></div>
         
-        {/* Animated gradient orbs */}
-        <div className="absolute -top-12 -right-12 w-64 h-64 bg-gradient-to-br from-green-300/30 to-green-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute -bottom-16 -left-16 w-72 h-72 bg-gradient-to-tr from-green-400/20 to-blue-300/10 rounded-full blur-3xl animate-float1"></div>
-        <div className="absolute top-1/2 left-1/4 w-48 h-48 bg-gradient-to-r from-orange-300/10 to-yellow-200/10 rounded-full blur-3xl animate-float2"></div>
-        <div className="absolute top-1/3 right-1/4 w-36 h-36 bg-gradient-to-l from-green-200/20 to-green-400/10 rounded-full blur-2xl animate-float3"></div>
+        {/* Enhanced animated gradient orbs with better positioning */}
+        <div className="absolute -top-16 -right-16 w-72 h-72 bg-gradient-to-br from-green-300/30 to-green-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-gradient-to-tr from-green-400/20 to-blue-300/10 rounded-full blur-3xl animate-float1"></div>
+        <div className="absolute top-1/2 left-1/4 w-56 h-56 bg-gradient-to-r from-orange-300/10 to-yellow-200/10 rounded-full blur-3xl animate-float2"></div>
+        <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-gradient-to-l from-green-200/20 to-green-400/10 rounded-full blur-2xl animate-float3"></div>
         
-        {/* Light rays */}
+        {/* Enhanced light rays with multiple layers */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent rotate-45 transform opacity-30 animate-slowPan"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/3 to-transparent rotate-[135deg] transform opacity-20 animate-[slowPan_25s_linear_infinite_reverse]"></div>
         
-        {/* Enhanced animated particles */}
-        <div className="absolute top-1/4 left-1/3 w-1.5 h-1.5 bg-green-500/40 rounded-full animate-float1 shadow-lg shadow-green-500/20"></div>
-        <div className="absolute top-3/4 left-1/2 w-2 h-2 bg-green-600/30 rounded-full animate-float2 shadow-lg shadow-green-600/20"></div>
-        <div className="absolute top-1/3 left-2/3 w-1.5 h-1.5 bg-green-400/40 rounded-full animate-float3 shadow-lg shadow-green-400/20"></div>
-        <div className="absolute top-2/3 left-1/5 w-2.5 h-2.5 bg-green-300/30 rounded-full animate-float4 shadow-lg shadow-green-300/20"></div>
-        <div className="absolute top-1/5 right-1/3 w-1.5 h-1.5 bg-blue-300/30 rounded-full animate-float2 shadow-lg shadow-blue-300/20"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-2 h-2 bg-yellow-300/30 rounded-full animate-float3 shadow-lg shadow-yellow-300/20"></div>
+        {/* Enhanced animated particles with glow effects */}
+        <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-green-500/40 rounded-full animate-float1 shadow-lg shadow-green-500/20"></div>
+        <div className="absolute top-3/4 left-1/2 w-2.5 h-2.5 bg-green-600/30 rounded-full animate-float2 shadow-lg shadow-green-600/20"></div>
+        <div className="absolute top-1/3 left-2/3 w-2 h-2 bg-green-400/40 rounded-full animate-float3 shadow-lg shadow-green-400/20"></div>
+        <div className="absolute top-2/3 left-1/5 w-3 h-3 bg-green-300/30 rounded-full animate-float4 shadow-lg shadow-green-300/20"></div>
+        <div className="absolute top-1/5 right-1/3 w-2 h-2 bg-blue-300/30 rounded-full animate-float2 shadow-lg shadow-blue-300/20"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-2.5 h-2.5 bg-yellow-300/30 rounded-full animate-float3 shadow-lg shadow-yellow-300/20"></div>
         
-        {/* Advanced decorative geometric shapes */}
-        <div className="absolute top-0 left-1/4 w-20 h-20 border border-green-200/30 rounded-lg rotate-45 transform opacity-30 animate-spin-slow"></div>
-        <div className="absolute bottom-0 right-1/3 w-16 h-16 border border-green-300/30 rounded-full opacity-20 animate-pulse-slow"></div>
-        <div className="absolute top-1/2 right-1/4 w-12 h-12 border border-green-400/20 rounded-md rotate-12 transform opacity-20 animate-float1"></div>
-        <div className="absolute top-1/4 right-1/2 w-24 h-8 border-t border-l border-green-300/20 opacity-30"></div>
-        <div className="absolute bottom-1/3 left-1/3 w-8 h-24 border-r border-b border-green-300/20 opacity-30"></div>
+        {/* Advanced decorative geometric shapes with enhanced animations */}
+        <div className="absolute top-0 left-1/4 w-24 h-24 border border-green-200/30 rounded-lg rotate-45 transform opacity-30 animate-spin-slow"></div>
+        <div className="absolute bottom-0 right-1/3 w-20 h-20 border border-green-300/30 rounded-full opacity-20 animate-pulse-slow"></div>
+        <div className="absolute top-1/2 right-1/4 w-16 h-16 border border-green-400/20 rounded-md rotate-12 transform opacity-20 animate-float1"></div>
+        <div className="absolute top-1/4 right-1/2 w-28 h-10 border-t border-l border-green-300/20 opacity-30"></div>
+        <div className="absolute bottom-1/3 left-1/3 w-10 h-28 border-r border-b border-green-300/20 opacity-30"></div>
       </div>
       
       <div className="container-custom mx-auto relative overflow-hidden">
-        <div className="flex items-center justify-between py-2">
-          {/* Logo with enhanced styling */}
+        <div className="flex items-center justify-between py-3 px-4 md:px-6">
+          {/* Logo with enhanced styling and animations */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center group relative">
-              <div className="absolute -inset-2 bg-gradient-to-r from-green-200/0 via-green-300/20 to-green-200/0 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-700 blur-xl group-hover:duration-500"></div>
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-orange-400/30 to-yellow-300/30 rounded-lg blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500 z-0"></div>
-                <Image 
-                  src="/logo.png" 
-                  alt="Azlok Enterprises" 
-                  width={120} 
-                  height={40} 
-                  className="object-contain relative z-10 transform group-hover:scale-105 transition-transform duration-300"
-                />
+            <Link href="/" className="flex items-center group relative overflow-hidden">
+              {/* Enhanced glow effect */}
+              <div className="absolute -inset-3 bg-gradient-to-r from-green-200/0 via-green-300/30 to-green-200/0 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-700 blur-xl group-hover:duration-500"></div>
+              
+              {/* Subtle animated particles */}
+              <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-green-500/30 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-float1 transition-opacity duration-500"></div>
+              <div className="absolute bottom-1/4 right-1/4 w-1.5 h-1.5 bg-green-400/30 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-float2 transition-opacity duration-500"></div>
+              
+              <div className="relative p-1.5">
+                {/* Enhanced glow behind logo */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-orange-400/40 to-yellow-300/40 rounded-lg blur-md opacity-0 group-hover:opacity-100 transition-all duration-500 z-0"></div>
+                
+                {/* Logo with enhanced animation */}
+                <div className="relative overflow-hidden rounded-lg p-1 bg-white/5 backdrop-blur-sm">
+                  <Image 
+                    src="/logo.png" 
+                    alt="Azlok Enterprises" 
+                    width={130} 
+                    height={45} 
+                    className="object-contain relative z-10 transform group-hover:scale-110 transition-all duration-500 drop-shadow-md"
+                    priority
+                  />
+                  
+                  {/* Subtle shine effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1500 ease-in-out"></div>
+                </div>
               </div>
             </Link>
           </div>
@@ -346,28 +364,36 @@ const Header = () => {
             </Link>
           </nav>
 
-          {/* Mobile Menu Button */}
+          {/* Enhanced Mobile Menu Button */}
           <div className="md:hidden flex items-center">
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="relative p-2 rounded-lg bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 shadow-sm hover:shadow-md transition-all duration-300 focus:outline-none group overflow-hidden"
+              className="relative p-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none group overflow-hidden"
+              aria-label="Toggle mobile menu"
+              aria-expanded={isMenuOpen}
             >
-              {/* Background glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+              {/* Enhanced background glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/20 to-green-300/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:duration-200"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-green-200/0 via-green-200/10 to-green-200/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 group-hover:duration-300"></div>
               
-              {/* Animated particles */}
-              <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-green-500/30 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-float1 transition-opacity duration-500"></div>
-              <div className="absolute bottom-1/4 right-1/4 w-1.5 h-1.5 bg-green-400/30 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-float2 transition-opacity duration-500"></div>
+              {/* Enhanced animated particles */}
+              <div className="absolute top-1/4 left-1/4 w-1.5 h-1.5 bg-green-500/40 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-float1 transition-opacity duration-500"></div>
+              <div className="absolute bottom-1/4 right-1/4 w-2 h-2 bg-green-400/40 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-float2 transition-opacity duration-500"></div>
+              <div className="absolute top-3/4 right-1/3 w-1 h-1 bg-green-600/30 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-float3 transition-opacity duration-500"></div>
               
-              {/* Menu icon with animation */}
-              <div className="relative z-10 flex flex-col justify-center items-center space-y-1.5 transform group-hover:scale-105 transition-transform duration-300">
-                <span className={`block h-0.5 w-6 bg-gradient-to-r from-green-600 to-green-500 rounded-full transform transition-all duration-300 ease-in-out ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
-                <span className={`block h-0.5 w-6 bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all duration-300 ease-in-out ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-                <span className={`block h-0.5 w-6 bg-gradient-to-r from-green-600 to-green-500 rounded-full transform transition-all duration-300 ease-in-out ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+              {/* Enhanced menu icon with animation */}
+              <div className="relative z-10 flex flex-col justify-center items-center space-y-1.5 transform group-hover:scale-110 transition-transform duration-300 w-7 h-5">
+                <span className={`block h-0.5 w-7 bg-gradient-to-r from-green-700 via-green-600 to-green-500 rounded-full transform transition-all duration-300 ease-in-out ${isMenuOpen ? 'rotate-45 translate-y-2' : ''} shadow-sm`}></span>
+                <span className={`block h-0.5 w-7 bg-gradient-to-r from-green-500 via-green-600 to-green-700 rounded-full transition-all duration-300 ease-in-out ${isMenuOpen ? 'opacity-0 translate-x-3' : 'opacity-100'} shadow-sm`}></span>
+                <span className={`block h-0.5 w-7 bg-gradient-to-r from-green-700 via-green-600 to-green-500 rounded-full transform transition-all duration-300 ease-in-out ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''} shadow-sm`}></span>
               </div>
               
-              {/* Subtle ring effect */}
-              <div className="absolute inset-0 rounded-lg border border-green-300/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              {/* Enhanced ring effects */}
+              <div className="absolute inset-0 rounded-lg border border-green-300/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 rounded-lg border-2 border-green-400/0 group-hover:border-green-400/10 transition-colors duration-500"></div>
+              
+              {/* Pulse effect when menu is open */}
+              <div className={`absolute inset-0 bg-green-400/10 rounded-lg transition-opacity duration-500 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}></div>
             </button>
           </div>
         </div>
@@ -376,27 +402,36 @@ const Header = () => {
       </div>
 
       {isMenuOpen && (
-        <div className="md:hidden bg-gradient-to-r from-green-50 via-green-100 to-green-50 border-t border-green-200 z-[90] relative overflow-hidden">
-          {/* Enhanced background effects */}
+        <div className="md:hidden bg-gradient-to-r from-green-50 via-green-100 to-green-50 border-t border-green-200/50 z-[90] relative overflow-hidden animate-slideDown">
+          {/* Enhanced background effects with multiple layers */}
           <div className="absolute inset-0 bg-gradient-to-br from-green-50/80 via-green-100/90 to-green-50/80"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-200/10 via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-blue-100/10 via-transparent to-transparent"></div>
           
-          {/* Subtle pattern overlay */}
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/leaf-pattern.png')] opacity-5 bg-repeat mix-blend-overlay"></div>
+          {/* Enhanced pattern overlay with fallback color */}
+          <div className="absolute top-0 left-0 w-full h-full bg-[#f0fff4] bg-[url('/images/leaf-pattern.png')] opacity-5 bg-repeat mix-blend-overlay"></div>
           
-          {/* Animated gradient orbs */}
-          <div className="absolute -top-12 -right-12 w-64 h-64 bg-gradient-to-br from-green-300/20 to-green-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-          <div className="absolute -bottom-16 -left-16 w-72 h-72 bg-gradient-to-tr from-green-400/10 to-blue-300/5 rounded-full blur-3xl animate-float1"></div>
+          {/* Enhanced animated gradient orbs with better positioning */}
+          <div className="absolute -top-16 -right-16 w-72 h-72 bg-gradient-to-br from-green-300/20 to-green-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-gradient-to-tr from-green-400/10 to-blue-300/5 rounded-full blur-3xl animate-float1"></div>
+          <div className="absolute top-1/2 right-1/4 w-56 h-56 bg-gradient-to-r from-yellow-200/5 to-orange-200/5 rounded-full blur-3xl animate-float2"></div>
           
-          {/* Light rays */}
+          {/* Enhanced light rays with multiple layers */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent rotate-45 transform opacity-20 animate-slowPan"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/3 to-transparent rotate-[135deg] transform opacity-10 animate-[slowPan_25s_linear_infinite_reverse]"></div>
           
-          {/* Enhanced animated particles */}
-          <div className="absolute top-1/4 left-1/3 w-1.5 h-1.5 bg-green-500/30 rounded-full animate-float1 shadow-lg shadow-green-500/10"></div>
-          <div className="absolute top-3/4 left-1/2 w-2 h-2 bg-green-600/20 rounded-full animate-float2 shadow-lg shadow-green-600/10"></div>
-          <div className="absolute top-1/3 left-2/3 w-1.5 h-1.5 bg-green-400/30 rounded-full animate-float3 shadow-lg shadow-green-400/10"></div>
+          {/* Enhanced animated particles with glow effects */}
+          <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-green-500/30 rounded-full animate-float1 shadow-lg shadow-green-500/10"></div>
+          <div className="absolute top-3/4 left-1/2 w-2.5 h-2.5 bg-green-600/20 rounded-full animate-float2 shadow-lg shadow-green-600/10"></div>
+          <div className="absolute top-1/3 left-2/3 w-2 h-2 bg-green-400/30 rounded-full animate-float3 shadow-lg shadow-green-400/10"></div>
+          <div className="absolute bottom-1/4 right-1/3 w-1.5 h-1.5 bg-green-300/30 rounded-full animate-float4 shadow-lg shadow-green-300/10"></div>
           
-          <div className="container-custom mx-auto py-4 relative z-10">
-            <nav className="flex flex-col space-y-4 max-h-[70vh] overflow-y-auto">
+          {/* Decorative geometric shapes */}
+          <div className="absolute top-10 right-10 w-16 h-16 border border-green-200/20 rounded-lg rotate-45 transform opacity-20"></div>
+          <div className="absolute bottom-10 left-10 w-12 h-12 border border-green-300/20 rounded-full opacity-10"></div>
+          
+          <div className="container-custom mx-auto py-5 px-4 relative z-10">
+            <nav className="flex flex-col space-y-4 max-h-[70vh] overflow-y-auto px-1">
               <Link 
                 href="/products" 
                 className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
@@ -741,42 +776,53 @@ const Header = () => {
         </div>
       )}
 
-      {/* Contact Info Bar with enhanced graphics */}
-      <div className="bg-gradient-to-r from-green-700 via-green-800 to-green-700 text-white py-2 px-4 shadow-inner relative overflow-hidden">
-        {/* Advanced background effects */}
+      {/* Enhanced Contact Info Bar with advanced graphics */}
+      <div className="bg-gradient-to-r from-green-700 via-green-800 to-green-700 text-white py-3 px-4 shadow-inner relative overflow-hidden">
+        {/* Advanced background effects with multiple layers */}
         <div className="absolute inset-0 bg-[url('/images/leaf-pattern.png')] opacity-10 bg-repeat animate-slowPan"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/10"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-green-600/10 via-transparent to-transparent"></div>
         
-        {/* Light streaks */}
+        {/* Enhanced light streaks with multiple layers */}
         <div className="absolute -inset-full h-[500%] w-[500%] rotate-[-35deg] animate-[spin_20s_linear_infinite] bg-gradient-to-r from-transparent via-white/5 to-transparent blur-2xl"></div>
+        <div className="absolute -inset-full h-[500%] w-[500%] rotate-[35deg] animate-[spin_25s_linear_infinite_reverse] bg-gradient-to-r from-transparent via-white/3 to-transparent blur-xl"></div>
         
-        {/* Animated particles */}
+        {/* Enhanced animated particles with glow effects */}
         <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-white/30 rounded-full animate-float1"></div>
-          <div className="absolute top-3/4 left-1/2 w-1.5 h-1.5 bg-white/40 rounded-full animate-float2"></div>
-          <div className="absolute top-1/3 left-3/4 w-1 h-1 bg-white/30 rounded-full animate-float3"></div>
-          <div className="absolute top-2/3 left-1/5 w-2 h-2 bg-white/20 rounded-full animate-float4"></div>
-          <div className="absolute top-1/2 left-1/3 w-1.5 h-1.5 bg-white/25 rounded-full animate-float1"></div>
-          <div className="absolute top-1/5 left-2/3 w-1 h-1 bg-white/30 rounded-full animate-float3"></div>
+          <div className="absolute top-1/4 left-1/4 w-1.5 h-1.5 bg-white/30 rounded-full animate-float1 shadow-sm shadow-white/10"></div>
+          <div className="absolute top-3/4 left-1/2 w-2 h-2 bg-white/40 rounded-full animate-float2 shadow-sm shadow-white/10"></div>
+          <div className="absolute top-1/3 left-3/4 w-1.5 h-1.5 bg-white/30 rounded-full animate-float3 shadow-sm shadow-white/10"></div>
+          <div className="absolute top-2/3 left-1/5 w-2.5 h-2.5 bg-white/20 rounded-full animate-float4 shadow-sm shadow-white/10"></div>
+          <div className="absolute top-1/2 left-1/3 w-2 h-2 bg-white/25 rounded-full animate-float1 shadow-sm shadow-white/10"></div>
+          <div className="absolute top-1/5 left-2/3 w-1.5 h-1.5 bg-white/30 rounded-full animate-float3 shadow-sm shadow-white/10"></div>
         </div>
         
-        {/* Geometric decorations */}
-        <div className="absolute top-0 right-1/4 w-12 h-12 border border-white/10 rounded-full opacity-20 rotate-45 transform"></div>
-        <div className="absolute bottom-0 left-1/3 w-8 h-8 border border-white/10 rounded-lg opacity-20 rotate-12 transform"></div>
+        {/* Enhanced geometric decorations */}
+        <div className="absolute top-0 right-1/4 w-16 h-16 border border-white/10 rounded-full opacity-20 rotate-45 transform animate-spin-slow"></div>
+        <div className="absolute bottom-0 left-1/3 w-12 h-12 border border-white/10 rounded-lg opacity-20 rotate-12 transform animate-pulse-slow"></div>
+        <div className="absolute top-1/2 right-1/3 w-8 h-8 border-t border-r border-white/10 opacity-15 rotate-[30deg] transform"></div>
         
         <div className="container-custom mx-auto flex flex-col md:flex-row justify-between items-center text-base relative">
-          <div className="flex items-center mb-3 md:mb-0 relative z-10 group">
-            <div className="relative mr-2">
-              <div className="absolute -inset-1 bg-white/20 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10 text-white/90 group-hover:text-white transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
+          {/* Enhanced call us section with better mobile styling */}
+          <div className="flex items-center justify-center w-full md:w-auto mb-3 md:mb-0 relative z-10 group">
+            <div className="relative mr-3">
+              <div className="absolute -inset-1.5 bg-white/20 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="p-2 bg-white/10 rounded-full backdrop-blur-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10 text-white/90 group-hover:text-white transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+              </div>
             </div>
-            <span className="text-white/90 group-hover:text-white drop-shadow-sm font-medium tracking-wider transition-colors duration-300">Call us: <span className="font-semibold tracking-widest">8800412138</span></span>
+            <div className="flex flex-col">
+              <span className="text-white/70 text-xs font-medium tracking-wider transition-colors duration-300">Call us:</span>
+              <a href="tel:8800412138" className="text-white font-semibold tracking-widest text-lg group-hover:text-white/90 transition-colors duration-300 hover:underline decoration-white/30 underline-offset-2">8800412138</a>
+            </div>
           </div>
-          <div className="flex items-center relative z-10">
-            <div className="relative overflow-hidden inline-block">
-              <span className="text-white/90 font-medium tracking-[0.15em] drop-shadow-sm bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white animate-shimmer bg-[length:200%_100%] uppercase text-sm">Azlok - Premium B2C Shopping Experience</span>
+          
+          {/* Enhanced company tagline with better mobile styling */}
+          <div className="flex items-center justify-center w-full md:w-auto relative z-10">
+            <div className="relative overflow-hidden inline-block text-center">
+              <span className="text-white/90 font-medium tracking-[0.15em] drop-shadow-sm bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white animate-shimmer bg-[length:200%_100%] uppercase text-sm md:text-base">AZLOK - PREMIUM B2C SHOPPING EXPERIENCE</span>
             </div>
           </div>
         </div>

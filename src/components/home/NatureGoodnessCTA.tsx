@@ -225,7 +225,7 @@ const NatureGoodnessCTA = () => {
               />
             </span>{' '}
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-100 via-white to-green-100 animate-shimmer bg-[length:200%_100%]">
-              Nature's Goodness!
+              Nature&apos;s Goodness!
             </span>
           </motion.h2>
           

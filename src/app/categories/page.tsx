@@ -102,7 +102,7 @@ export default function CategoriesPage() {
               Browse authentic products sourced directly from local farmers and artisanal manufacturers. Experience the difference that comes from supporting real people and their craft.
             </p>
             <div className="mt-4 italic text-sm text-gray-500 border-l-2 border-[#4ade80] pl-3 max-w-xl">
-              <span className="font-medium text-[#2c7a4c]">"</span> I've been using Azlok products for years. Knowing that my purchase supports local farmers and craftspeople makes every item special. The quality speaks for itself! <span className="font-medium text-[#2c7a4c]">"</span>
+              <span className="font-medium text-[#2c7a4c]">&quot;</span> I&apos;ve been using Azlok products for years. Knowing that my purchase supports local farmers and craftspeople makes every item special. The quality speaks for itself! <span className="font-medium text-[#2c7a4c]">&quot;</span>
               <span className="block mt-1 text-right font-medium">— Priya S., Loyal Customer</span>
             </div>
           </div>

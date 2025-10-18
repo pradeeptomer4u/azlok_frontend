@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import categoryService, { Category } from '../../services/categoryService';
+import categoryService from '../../services/categoryService';
 
 // Define the UI Category type for display
 interface UICategory {
@@ -153,8 +153,8 @@ const CategoryCarousel = () => {
                   fill
                   className="object-cover p-0"
                   onError={(e) => {
-                    // @ts-ignore - TypeScript doesn't know about currentTarget.src
-                    e.currentTarget.src = '/images/category-placeholder.svg';
+                    const imgElement = e.currentTarget as HTMLImageElement;
+                    imgElement.src = '/images/category-placeholder.svg';
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-green-900/50 to-transparent"></div>

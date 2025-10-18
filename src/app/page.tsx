@@ -394,8 +394,8 @@ export default function Home() {
           ></motion.div>
           
           {/* Decorative quotes */}
-          <div className="absolute top-12 left-12 text-9xl text-green-100/20 font-serif">"</div>
-          <div className="absolute bottom-12 right-12 text-9xl text-green-100/20 font-serif">"</div>
+          <div className="absolute top-12 left-12 text-9xl text-green-100/20 font-serif">&quot;</div>
+          <div className="absolute bottom-12 right-12 text-9xl text-green-100/20 font-serif">&quot;</div>
         </div>
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">

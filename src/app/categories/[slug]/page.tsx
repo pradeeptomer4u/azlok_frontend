@@ -139,7 +139,7 @@ export default function CategoryPage() {
               </h1>
               
               <p className="text-gray-600 text-center mb-8 max-w-md">
-                We couldn't find the category you're looking for. It might have been removed or renamed.
+                We couldn&apos;t find the category you&apos;re looking for. It might have been removed or renamed.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">

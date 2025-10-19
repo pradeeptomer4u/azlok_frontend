@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import productService, { Product as ApiProduct } from '../../services/productService';
+import { useCart } from '../../context/CartContext';
 
 // Define the UI Product type for display
 interface UIProduct {
@@ -21,6 +22,8 @@ const FeaturedProducts = () => {
   const [products, setProducts] = useState<UIProduct[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { addItem } = useCart();
+  const [addedToCartMap, setAddedToCartMap] = useState<Record<number, boolean>>({});
 
   // Fetch featured products from the API
   useEffect(() => {
@@ -173,18 +176,58 @@ const FeaturedProducts = () => {
               WhatsApp
             </a>
             <button 
-              className="flex-1 bg-gradient-to-r from-primary/20 to-primary/20 text-gray-800 py-1.5 sm:py-2 rounded-md hover:from-primary/30 hover:to-primary/30 transition-all duration-300 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center shadow-sm hover:shadow group relative overflow-hidden"
+              className={`flex-1 py-1.5 sm:py-2 rounded-md transition-all duration-300 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center shadow-sm hover:shadow relative overflow-hidden z-20 ${addedToCartMap[product.id] ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' : 'bg-gradient-to-r from-primary/20 to-primary/20 text-gray-800 hover:from-primary/30 hover:to-primary/30'}`}
               onClick={(e) => {
                 e.preventDefault();
-                // Add to cart functionality would go here
-                alert(`Added ${product.name} to cart`);
+                e.stopPropagation();
+                
+                // Create the cart item object
+                const cartItem = {
+                  id: product.id,
+                  product_id: product.id,
+                  name: product.name,
+                  image: product.image,
+                  price: product.price,
+                  quantity: 1,
+                  seller: product.seller,
+                  minOrder: product.minOrder
+                };
+                
+                try {
+                  // Add to cart
+                  addItem(cartItem);
+                  
+                  // Show visual feedback
+                  setAddedToCartMap(prev => ({ ...prev, [product.id]: true }));
+                  
+                  // Reset after 2 seconds
+                  setTimeout(() => {
+                    setAddedToCartMap(prev => ({ ...prev, [product.id]: false }));
+                  }, 2000);
+                } catch (error) {
+                  console.error('Error adding item to cart:', error);
+                  alert('Failed to add item to cart. Please try again.');
+                }
               }}
+              disabled={addedToCartMap[product.id]}
               aria-label={`Add ${product.name} to cart`}
+              style={{ position: 'relative', zIndex: 20 }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-              Add to Cart
+              {addedToCartMap[product.id] ? (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Added!
+                </>
+              ) : (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  Add to Cart
+                </>
+              )}
             </button>
             {/* Add subtle hover effect for buttons */}
             <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-green-300/0 via-green-400/20 to-green-300/0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"></div>

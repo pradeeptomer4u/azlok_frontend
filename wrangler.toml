@@ -8,7 +8,7 @@ pages_build_output_dir = ".vercel/output/static"
 NODE_VERSION = "20.19.5"
 
 [build]
-command = "npm run pages:build"
+command = "bash ./scripts/cloudflare-install.sh"
 
 [site]
 wrangler_config_path = "wrangler.toml"

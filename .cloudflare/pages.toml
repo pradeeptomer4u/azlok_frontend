@@ -2,7 +2,7 @@
 # This file configures the build process for Cloudflare Pages
 
 [build]
-  command = "npm run pages:build"
+  command = "bash ./scripts/cloudflare-install.sh"
   publish = ".vercel/output/static"
 
 [build.environment]

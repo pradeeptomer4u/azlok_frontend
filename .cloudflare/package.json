@@ -1,0 +1,11 @@
+{
+  "name": "azlok-cloudflare-build",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd .. && npm install --legacy-peer-deps && npm run pages:build"
+  },
+  "dependencies": {
+    "@cloudflare/next-on-pages": "^1.13.16"
+  }
+}

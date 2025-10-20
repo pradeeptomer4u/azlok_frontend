@@ -4,12 +4,19 @@ import path from 'path';
 
 export async function GET() {
   try {
-    // Try to read the static sitemap file first
+    // Always read the static sitemap file first
     const filePath = path.join(process.cwd(), 'public', 'sitemap.xml');
     let sitemapContent = '';
     
     try {
       sitemapContent = fs.readFileSync(filePath, 'utf8');
+      // Return the static file content directly
+      return new NextResponse(sitemapContent, {
+        headers: {
+          'Content-Type': 'application/xml',
+          'Cache-Control': 'public, max-age=3600',
+        },
+      });
     } catch (readError) {
       console.error('Error reading sitemap file:', readError);
       

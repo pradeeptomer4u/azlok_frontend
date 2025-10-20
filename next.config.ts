@@ -16,16 +16,17 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  optimizeCss: {
-      // Configure critters for CSS optimization
-      minify: true,
-      inlineFonts: false,
-    },
+  // SEO and Performance Optimizations
+  compress: true,
   poweredByHeader: false,
   generateEtags: true,
-  // Enable experimental features for better SEO
+  // Enable experimental features for better SEO and performance
   experimental: {
     optimizePackageImports: ['@mui/material', '@mui/icons-material'],
+    // CSS optimization settings
+    optimizeCss: true,
+    // Memory optimization
+    memoryBasedWorkersCount: true,
   },
   // No rewrites needed as we're using static files
   

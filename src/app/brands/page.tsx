@@ -6,6 +6,8 @@ import Link from 'next/link';
 import sellerService, { Seller } from '../../services/sellerService';
 import MetaTags from '../../components/SEO/MetaTags';
 
+export const runtime = "edge";
+
 // Define the UI Seller type for display
 interface UISeller {
   id: number;

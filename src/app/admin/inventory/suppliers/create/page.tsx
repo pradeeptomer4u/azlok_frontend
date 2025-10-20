@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import inventoryService from '../../../../../services/inventoryService';
 
+export const runtime = "edge";
+
 interface SupplierFormData {
   name: string;
   code: string; // Added required code field

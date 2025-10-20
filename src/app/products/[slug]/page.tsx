@@ -1,6 +1,8 @@
 import ProductDetail from '@/components/products/ProductDetail';
 import productService from '@/services/productService';
 
+export const runtime = "edge";
+
 export async function generateMetadata({ params }: PageProps<'/products/[slug]'>) {
   const { slug } = await params;
   

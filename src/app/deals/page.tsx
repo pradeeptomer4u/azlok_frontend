@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import axios from 'axios';
 
+export const runtime = "edge";
+
 interface Deal {
   id: number;
   title: string;

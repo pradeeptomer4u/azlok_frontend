@@ -2,6 +2,8 @@
 
 import BulkTaxRateUpdate from '../../../components/admin/BulkTaxRateUpdate';
 
+export const runtime = "edge";
+
 export default function AdminTaxRatesPage() {
   return (
     <div className="container mx-auto px-4 py-8">

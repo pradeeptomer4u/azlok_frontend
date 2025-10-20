@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { Company } from '../../../types/invoice';
 import invoiceService from '../../../services/invoiceService';
 
+export const runtime = "edge";
+
 export default function CompaniesPage() {
   const router = useRouter();
   

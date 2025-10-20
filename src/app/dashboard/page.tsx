@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import Link from 'next/link';
 
+export const runtime = "edge";
+
 export default function Dashboard() {
   const { user, isLoading, isAuthenticated } = useAuth();
   const router = useRouter();

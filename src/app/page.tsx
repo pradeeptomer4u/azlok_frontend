@@ -17,6 +17,8 @@ import AIOverviewOptimized from "../components/SEO/AIOverviewOptimized";
 import FAQStructuredData from "../components/SEO/FAQStructuredData";
 import { ArrowRight, ShoppingBag, Truck, BadgeCheck, Clock, Star } from 'lucide-react';
 
+export const runtime = "edge";
+
 export default function Home() {
   return (
     <div className="min-h-screen">

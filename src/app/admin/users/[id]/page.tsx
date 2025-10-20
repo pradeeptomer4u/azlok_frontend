@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { useRouter, useParams } from 'next/navigation';
 import { getUserById, deleteUser, updateUserStatus, User, BuyerActivity, SellerActivity } from '../../../../services/userService';
 
+export const runtime = "edge";
+
 export default function UserDetailPage() {
   const params = useParams();
   const [user, setUser] = useState<User | null>(null);

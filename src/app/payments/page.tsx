@@ -7,6 +7,8 @@ import PaymentSummary from '@/components/payments/PaymentSummary';
 import { useAuth } from '@/context/AuthContext';
 import AccessDenied from '@/components/common/AccessDenied';
 
+export const runtime = "edge";
+
 const PaymentsPage = () => {
   const { isAuthenticated } = useAuth();
   const [tabValue, setTabValue] = useState(0);

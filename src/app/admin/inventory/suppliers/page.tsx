@@ -8,6 +8,8 @@ import inventoryService from '../../../../services/inventoryService';
 import Pagination from '../../../../components/admin/common/Pagination';
 import DeleteConfirmModal from '../../../../components/admin/common/DeleteConfirmModal';
 
+export const runtime = "edge";
+
 interface Supplier {
   id: number;
   name: string;

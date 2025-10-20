@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import MetaTags from '../../components/SEO/MetaTags';
 import { OrganizationStructuredData } from '../../components/SEO/StructuredData';
 
+export const runtime = "edge";
+
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',

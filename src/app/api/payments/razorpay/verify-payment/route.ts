@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 
+export const runtime = "edge";
+
 // Get Razorpay secret key from environment variables
 const KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
 

@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../context/AuthContext';
 
+export const runtime = "edge";
+
 // Mock data for seller dashboard
 const mockData = {
   summary: {

@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
+export const runtime = "edge";
+
 export async function GET() {
   try {
     // Always generate a fresh robots.txt to ensure it's up to date

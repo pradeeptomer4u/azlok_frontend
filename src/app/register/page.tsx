@@ -6,6 +6,8 @@ import { useAuth } from '../../context/AuthContext';
 import { checkUsernameAvailability } from '../../services/authService';
 import { debounce } from 'lodash';
 
+export const runtime = "edge";
+
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: '',

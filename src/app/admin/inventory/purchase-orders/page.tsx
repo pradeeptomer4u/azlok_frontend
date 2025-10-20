@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import inventoryService, { PurchaseOrder } from '../../../../services/inventoryService';
 
+export const runtime = "edge";
+
 export default function PurchaseOrdersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();

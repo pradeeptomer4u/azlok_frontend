@@ -3,6 +3,8 @@
 import ProductForm from '../../../../components/admin/ProductForm';
 import Link from 'next/link';
 
+export const runtime = "edge";
+
 export default function AddProductPage() {
   return (
     <div>

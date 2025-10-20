@@ -3,5 +3,5 @@
   "name": "azlok",
   "compatibility_date": "2023-10-30",
   "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": ".next"
+  "pages_build_output_dir": ".vercel/output/static"
 }

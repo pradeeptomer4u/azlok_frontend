@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import inventoryService, { CreateInventoryItemInput } from '../../../../../services/inventoryService';
 
+export const runtime = "edge";
+
 export default function CreateRawMaterialPage() {
   const router = useRouter();
   

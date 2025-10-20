@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Download, FileText, FileSpreadsheet, BarChart3 } from 'lucide-react';
 import inventoryService from '../../../../services/inventoryService';
 
+export const runtime = "edge";
+
 interface ReportOption {
   id: string;
   name: string;

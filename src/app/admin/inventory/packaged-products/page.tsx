@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import inventoryService, { PackagedProduct } from '../../../../services/inventoryService';
 
+export const runtime = "edge";
+
 export default function PackagedProductsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();

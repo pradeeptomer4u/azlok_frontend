@@ -4,6 +4,8 @@ import React from 'react';
 import PublicShipmentTracker from '../../components/logistics/PublicShipmentTracker';
 import MetaTags from '../../components/SEO/MetaTags';
 
+export const runtime = "edge";
+
 export default function TrackShipment() {
   return (
     <div className="min-h-screen py-10">

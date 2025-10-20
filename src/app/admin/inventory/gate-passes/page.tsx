@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import inventoryService, { GatePass } from '../../../../services/inventoryService';
 
+export const runtime = "edge";
+
 export default function GatePassesPage() {
   const router = useRouter();
   const searchParams = useSearchParams();

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { apiRequest } from '../../utils/apiRequest';
 
+export const runtime = "edge";
+
 // Define interfaces for dashboard data
 interface DashboardStats {
   total_users: number;

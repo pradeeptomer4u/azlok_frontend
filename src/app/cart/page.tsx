@@ -5,6 +5,8 @@ import CartItems from '../../components/cart/CartItems';
 import CartSummary from '../../components/cart/CartSummary';
 import { useCart } from '../../context/CartContext';
 
+export const runtime = "edge";
+
 export default function CartPage() {
   const { items } = useCart();
 

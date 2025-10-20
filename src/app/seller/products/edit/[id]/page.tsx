@@ -5,6 +5,8 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 
+export const runtime = "edge";
+
 // Mock product data
 const mockProduct = {
   id: 1,

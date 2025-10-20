@@ -9,6 +9,8 @@ import Pagination from '../../../../components/admin/common/Pagination';
 import StatusBadge from '../../../../components/admin/common/StatusBadge';
 import DeleteConfirmModal from '../../../../components/admin/common/DeleteConfirmModal';
 
+export const runtime = "edge";
+
 interface ProductionBatch {
   id: number;
   batch_number: string;

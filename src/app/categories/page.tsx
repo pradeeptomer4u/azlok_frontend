@@ -4,6 +4,8 @@ import { Metadata } from 'next';
 import { OrganizationStructuredData } from '../../components/SEO/StructuredData';
 import CategoryListClient from '../../components/categories/CategoryListClient';
 
+export const runtime = "edge";
+
 export const generateMetadata = async (): Promise<Metadata> => {
   return {
     title: 'All Categories - Azlok',

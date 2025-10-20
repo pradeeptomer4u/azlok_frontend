@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../context/AuthContext';
 import Image from 'next/image';
 
+export const runtime = "edge";
+
 interface OrderItem {
   id: number;
   product_name: string;

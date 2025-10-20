@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import inventoryService, { StockMovement } from '../../../../services/inventoryService';
 
+export const runtime = "edge";
+
 export default function StockMovementsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();

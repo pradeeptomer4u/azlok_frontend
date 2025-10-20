@@ -6,6 +6,8 @@ import PaymentMethodList from '@/components/payments/PaymentMethodList';
 import { useAuth } from '@/context/AuthContext';
 import AccessDenied from '@/components/common/AccessDenied';
 
+export const runtime = "edge";
+
 const PaymentMethodsPage = () => {
   const { isAuthenticated } = useAuth();
 

@@ -3,6 +3,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+export const runtime = "edge";
+
 export default function AdminDashboardRedirect() {
   const router = useRouter();
   

@@ -8,6 +8,8 @@ import invoiceService from '@/services/invoiceService';
 import { formatDate, formatCurrency } from '@/utils/formatters';
 import { Breadcrumb, PaginationWrapper, Spinner, Badge, Button } from '@/components/ui';
 
+export const runtime = "edge";
+
 const statusColors: Record<InvoiceStatus | string, string> = {
   draft: 'bg-gray-200 text-gray-800',
   pending: 'bg-blue-100 text-blue-800',

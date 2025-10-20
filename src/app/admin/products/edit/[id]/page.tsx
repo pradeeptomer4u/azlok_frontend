@@ -6,6 +6,8 @@ import ProductForm from '../../../../../components/admin/ProductForm';
 import Link from 'next/link';
 import axios from 'axios';
 
+export const runtime = "edge";
+
 export default function EditProductPage() {
   const params = useParams();
   const [product, setProduct] = useState<any>(null);

@@ -7,6 +7,8 @@ import Spinner from '../../../../../components/ui/Spinner';
 import { ErrorAlert } from '../../../../../components/ui/ErrorAlert';
 import blogService, { Blog } from '../../../../../services/blogService';
 
+export const runtime = "edge";
+
 export default function EditBlogPage() {
   const params = useParams();
   const router = useRouter();

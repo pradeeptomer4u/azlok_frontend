@@ -9,6 +9,8 @@ import Link from 'next/link';
 import orderService from '../../services/orderService';
 import RazorpayCheckout from '../../components/payments/RazorpayCheckout';
 
+export const runtime = "edge";
+
 function OrderConfirmationContent() {
   const router = useRouter();
   const searchParams = useSearchParams();

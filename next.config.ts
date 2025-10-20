@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
 
 // Check if we're in production build
 const isProd = process.env.NODE_ENV === 'production';
@@ -117,5 +118,16 @@ const nextConfig: NextConfig = {
     ];
   },
 };
+
+// Setup development platform for Cloudflare Pages
+if (process.env.NODE_ENV === 'development') {
+  // Using top-level await in a module
+  const setupDevEnv = async () => {
+    await setupDevPlatform();
+  };
+  
+  // Execute but don't block module initialization
+  setupDevEnv().catch(console.error);
+}
 
 export default nextConfig;

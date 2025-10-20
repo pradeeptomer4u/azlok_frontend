@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import axios from 'axios';
 
+export const runtime = "edge";
+
 // User interface
 interface User {
   id: number;

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import inventoryService from '../../../../../services/inventoryService';
 
+export const runtime = "edge";
+
 interface Product {
   id: number;
   name: string;

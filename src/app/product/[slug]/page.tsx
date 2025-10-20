@@ -10,6 +10,8 @@ import { ProductStructuredData, BreadcrumbStructuredData } from '@/components/SE
 import { calculateProductTax, TaxCalculationResponse, formatCurrency, formatTaxPercentage } from '@/utils/taxService';
 import Link from 'next/link';
 
+export const runtime = "edge";
+
 interface Product {
   id: number;
   name: string;

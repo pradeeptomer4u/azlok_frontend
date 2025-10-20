@@ -21,6 +21,8 @@ import OrderSummarySection from '../../components/checkout/OrderSummarySection';
 import razorpayService, { RazorpayOptions, RazorpaySuccessResponse } from '../../services/razorpayService';
 import { createPayment } from '../../services/paymentService';
 
+export const runtime = "edge";
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();

@@ -9,6 +9,8 @@ import { ErrorAlert } from '../../../components/ui/ErrorAlert';
 import blogService, { Blog } from '../../../services/blogService';
 import productService, { Product } from '../../../services/productService';
 
+export const runtime = "edge";
+
 export default function BlogDetailPage() {
   const params = useParams();
   const [blog, setBlog] = useState<Blog | null>(null);

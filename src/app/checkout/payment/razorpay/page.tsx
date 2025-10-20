@@ -6,6 +6,8 @@ import RazorpayCheckout from '../../../../components/payments/RazorpayCheckout';
 import { ErrorAlert } from '../../../../components/ui/ErrorAlert';
 import { Spinner } from '../../../../components/ui/Spinner';
 
+export const runtime = "edge";
+
 // Use a more flexible interface that can handle any fields from the API
 interface OrderDetails {
   id: number;

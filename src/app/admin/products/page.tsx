@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import productService, { Product, ProductFilters } from '../../../services/productService';
 
+export const runtime = "edge";
+
 // Categories will be fetched from API
 interface Category {
   id: number;

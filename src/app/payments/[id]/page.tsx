@@ -8,6 +8,8 @@ import PaymentDetail from '@/components/payments/PaymentDetail';
 import { useAuth } from '@/context/AuthContext';
 import AccessDenied from '@/components/common/AccessDenied';
 
+export const runtime = "edge";
+
 const PaymentDetailPage: React.FC = () => {
   const router = useRouter();
   const params = useParams();

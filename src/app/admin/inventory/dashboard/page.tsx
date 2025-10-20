@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import inventoryService from '../../../../services/inventoryService';
 
+export const runtime = "edge";
+
 interface StockStatus {
   id: number;
   name: string;

@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+export const runtime = "edge";
+
 // Mock product data
 const mockProducts = [
   {

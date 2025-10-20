@@ -7,6 +7,8 @@ import blogService, { Blog } from '../../services/blogService';
 import Spinner from '../../components/ui/Spinner';
 import { ErrorAlert } from '../../components/ui/ErrorAlert';
 
+export const runtime = "edge";
+
 export default function BlogListingPage() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+export const runtime = "edge";
+
 // Types for API responses
 interface OrderItem {
   id: string;

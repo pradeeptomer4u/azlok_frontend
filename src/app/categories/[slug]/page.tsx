@@ -1,5 +1,7 @@
 import CategoryDetailClient from '@/components/categories/CategoryDetailClient';
 
+export const runtime = "edge";
+
 export async function generateMetadata({ params }: PageProps<'/categories/[slug]'>) {
   const { slug } = await params;
   

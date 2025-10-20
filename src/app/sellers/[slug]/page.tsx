@@ -8,6 +8,8 @@ import sellerService, { Seller } from '../../../services/sellerService';
 import { Product } from '../../../types/product';
 import MetaTags from '../../../components/SEO/MetaTags';
 
+export const runtime = "edge";
+
 export default function SellerDetailPage() {
   const params = useParams();
   const slug = params?.slug as string || '';

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const runtime = "edge";
+
 export async function GET(request: NextRequest) {
   try {
     // Get the shipping_method_id from the URL

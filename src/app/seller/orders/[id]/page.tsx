@@ -7,6 +7,8 @@ import { downloadInvoice } from '../../../utils/invoiceGenerator';
 import Image from 'next/image';
 import Link from 'next/link';
 
+export const runtime = "edge";
+
 // Types for API responses
 interface OrderItem {
   id: string;

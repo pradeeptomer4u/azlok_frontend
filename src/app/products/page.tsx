@@ -4,6 +4,8 @@ import ProductListing from '@/components/products/ProductListing';
 import ProductFilters from '@/components/products/ProductFilters';
 import { Suspense } from 'react';
 
+export const runtime = "edge";
+
 // Metadata needs to be in a separate file for client components
 // This is just for reference, actual metadata should be in layout.tsx
 const metadata = {

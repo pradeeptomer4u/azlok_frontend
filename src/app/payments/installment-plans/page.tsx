@@ -23,6 +23,8 @@ import { getInstallmentPlans } from '@/services/paymentService';
 import { useAuth } from '@/context/AuthContext';
 import AccessDenied from '@/components/common/AccessDenied';
 
+export const runtime = "edge";
+
 const InstallmentPlansPage = () => {
   const router = useRouter();
   const { isAuthenticated } = useAuth();

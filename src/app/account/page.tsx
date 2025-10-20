@@ -6,6 +6,8 @@ import { Order } from '@/types/order';
 import type { Invoice } from '@/types/invoice';
 import { formatDate, formatCurrency } from '@/utils/formatters';
 
+export const runtime = "edge";
+
 // This is a mock implementation - in a real app, you would fetch from your API
 const fetchRecentOrders = async (): Promise<Order[]> => {
   // Placeholder for API call

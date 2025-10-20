@@ -4,6 +4,8 @@ import React from 'react';
 import MetaTags from '../../components/SEO/MetaTags';
 import { OrganizationStructuredData } from '../../components/SEO/StructuredData';
 
+export const runtime = "edge";
+
 export default function ShippingPage() {
   return (
     <div className="min-h-screen py-10">

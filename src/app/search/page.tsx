@@ -3,6 +3,8 @@
 import { Suspense } from 'react';
 import SearchContent from '../../components/search/SearchContent';
 
+export const runtime = "edge";
+
 export default function SearchPage() {
   return (
     <Suspense fallback={

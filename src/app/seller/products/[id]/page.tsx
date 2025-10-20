@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 
+export const runtime = "edge";
+
 interface ProductSpecifications {
   material: string;
   dimensions: string;

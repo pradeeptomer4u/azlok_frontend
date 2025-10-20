@@ -6,6 +6,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ImageUploader from '../../../components/ImageUploader';
 
+export const runtime = "edge";
+
 export default function AddProductPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);

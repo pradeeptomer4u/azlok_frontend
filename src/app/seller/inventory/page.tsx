@@ -27,6 +27,8 @@ import { Loader2, Plus, Search, Filter, Download } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+export const runtime = "edge";
+
 // Mock inventory data
 const mockInventory = [
   {

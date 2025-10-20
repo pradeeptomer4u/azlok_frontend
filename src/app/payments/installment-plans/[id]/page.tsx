@@ -26,6 +26,8 @@ import { getInstallmentPlan, getPayments } from '@/services/paymentService';
 import { useAuth } from '@/context/AuthContext';
 import AccessDenied from '@/components/common/AccessDenied';
 
+export const runtime = "edge";
+
 const InstallmentPlanDetailPage: React.FC = () => {
   const router = useRouter();
   const params = useParams();

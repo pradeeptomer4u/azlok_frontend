@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import inventoryService from '../../../../../services/inventoryService';
 
+export const runtime = "edge";
+
 interface Supplier {
   id: number;
   name: string;

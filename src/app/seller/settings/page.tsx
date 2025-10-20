@@ -16,6 +16,8 @@ import {
 import { Loader2, Save, Upload, Bell, CreditCard, Lock, User, Building, Globe } from 'lucide-react';
 import Link from 'next/link';
 
+export const runtime = "edge";
+
 export default function SellerSettings() {
   const { user, isLoading, isAuthenticated } = useAuth();
   const [isSaving, setIsSaving] = useState(false);

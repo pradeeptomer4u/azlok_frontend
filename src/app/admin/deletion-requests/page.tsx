@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../context/AuthContext';
 import MetaTags from '../../../components/SEO/MetaTags';
 
+export const runtime = "edge";
+
 interface DeletionRequest {
   id: string;
   userId: string;

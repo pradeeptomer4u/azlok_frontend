@@ -16,8 +16,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // SEO and Performance Optimizations
-  compress: true,
+  optimizeCss: {
+      // Configure critters for CSS optimization
+      minify: true,
+      inlineFonts: false,
+    },
   poweredByHeader: false,
   generateEtags: true,
   // Enable experimental features for better SEO

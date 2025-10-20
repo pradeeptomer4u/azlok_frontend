@@ -1,22 +1,11 @@
 import ProductDetail from '@/components/products/ProductDetail';
 import productService from '@/services/productService';
 
-// Define the params type separately
-type ProductParams = {
-  slug: string;
-};
-
-// Use the correct Next.js App Router types
-type ProductPageProps = {
-  params: ProductParams;
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-export async function generateMetadata({ params }: { params: ProductParams }) {
-  const { slug } = params;
+export async function generateMetadata({ params }: PageProps<'/products/[slug]'>) {
+  const { slug } = await params;
   
   // Format the product name from slug for use in both main and fallback paths
-  const formattedProductName = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  const formattedProductName = slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
   
   try {
     // Fetch all products and find the one matching the slug
@@ -197,8 +186,8 @@ export async function generateMetadata({ params }: { params: ProductParams }) {
   };
 }
 
-export default function ProductPage({ params }: { params: ProductParams }) {
-  const { slug } = params;
+export default async function ProductPage(props: PageProps<'/products/[slug]'>) {
+  const { slug } = await props.params;
   
   return (
     <div className="min-h-screen py-8 bg-[#dbf9e1]/50 relative overflow-hidden">

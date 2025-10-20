@@ -1,27 +1,13 @@
-import Link from 'next/link';
-import { Metadata } from 'next';
-import { BreadcrumbStructuredData } from '@/components/SEO/StructuredData';
 import CategoryDetailClient from '@/components/categories/CategoryDetailClient';
 
-// Define the params type separately
-type CategoryParams = {
-  slug: string;
-};
-
-// Use the correct Next.js App Router types
-type CategoryPageProps = {
-  params: CategoryParams;
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-export async function generateMetadata({ params }: { params: CategoryParams }): Promise<Metadata> {
-  const { slug } = params;
+export async function generateMetadata({ params }: PageProps<'/categories/[slug]'>) {
+  const { slug } = await params;
   
   // For a real app, you would fetch the category data here
   // For now, we'll create a formatted title from the slug
   const formattedCategoryName = slug
     .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
   
   return {
@@ -55,10 +41,10 @@ export async function generateMetadata({ params }: { params: CategoryParams }): 
       site: '@azlok',
     },
   };
-};
+}
 
-export default function CategoryPage({ params }: { params: CategoryParams }) {
-  return (
-    <CategoryDetailClient slug={params.slug} />
-  );
+// Main category page component (server component)
+export default async function CategoryPage(props: PageProps<'/categories/[slug]'>) {
+  const { slug } = await props.params;
+  return <CategoryDetailClient slug={slug} />;
 }

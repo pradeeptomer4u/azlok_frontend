@@ -1,12 +1,11 @@
+'use client';
+
+import { useParams } from 'next/navigation';
 import InvoiceDetailWrapper from './InvoiceDetailWrapper';
-import { Metadata } from 'next';
 
-type PageProps = {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-export default function Page({ params }: PageProps) {
-  const { id } = params;
+export default function Page() {
+  const params = useParams();
+  const id = params?.id as string;
+  
   return <InvoiceDetailWrapper id={id} />;
 }

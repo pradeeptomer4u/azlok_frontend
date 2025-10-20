@@ -1,16 +1,7 @@
 {
   // Wrangler configuration for Cloudflare Pages
   "name": "azlok",
-  "main": ".next-prepared/server.js",
   "compatibility_date": "2023-10-30",
   "compatibility_flags": ["nodejs_compat"],
-  "workers_dev": true,
-  "pages_build_output_dir": ".next-prepared",
-  "build": {
-    "command": "npm run pages:prepare",
-    "output_dir": ".next-prepared"
-  },
-  "site": {
-    "bucket": ".next-prepared"
-  }
+  "pages_build_output_dir": ".next"
 }

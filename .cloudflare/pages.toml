@@ -1,0 +1,13 @@
+# Cloudflare Pages configuration
+# This file configures the build process for Cloudflare Pages
+
+[build]
+  command = "npm run pages:build"
+  publish = ".vercel/output/static"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps --strict-false"
+
+[compatibility]
+  nodejs_compat = true

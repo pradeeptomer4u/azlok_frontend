@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
 
+// Check if we're in production build
+const isProd = process.env.NODE_ENV === 'production';
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -28,6 +31,15 @@ const nextConfig: NextConfig = {
     // Memory optimization
     memoryBasedWorkersCount: true,
   },
+  
+  // Output in standalone mode for better compatibility with Cloudflare Pages
+  output: 'standalone',
+  
+  // Disable source maps in production to reduce file sizes
+  productionBrowserSourceMaps: false,
+  
+  // Optimize build for Cloudflare Pages
+  swcMinify: true,
   // No rewrites needed as we're using static files
   
   // Headers for better SEO and security

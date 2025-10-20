@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "pages:prepare": "next build && node scripts/prepare-for-pages.js",
+    "deploy:pages": "npm run pages:prepare && wrangler pages deploy .next-prepared"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

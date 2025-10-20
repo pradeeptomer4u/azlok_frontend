@@ -443,7 +443,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
             {/* Subtle decorative element */}
             <div className="absolute -top-6 right-4 w-12 h-12 bg-green-100/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             
-            <h1 className="text-xl xs:text-2xl font-['Playfair_Display',serif] font-bold text-gray-800 mb-3 sm:mb-4 relative z-10">{product.name}</h1>
+            <h1 className="text-xl xs:text-2xl sm:text-3xl font-['Playfair_Display',serif] font-bold text-gray-800 mb-3 sm:mb-4 relative z-10">{product.name}</h1>
             
             <div className="flex flex-wrap items-center mb-3 sm:mb-4">
               <div className="flex items-center text-yellow-500 mr-3 sm:mr-4 relative group/stars">
@@ -658,10 +658,10 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               id="description-panel"
               aria-labelledby="description-tab"
             >
-              <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+              <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
                 Product Description
                 <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
-              </h3>
+              </h2>
               <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-['Montserrat',sans-serif] font-light tracking-wide">{product.description}</p>
             </div>
           )}
@@ -672,10 +672,10 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               id="specifications-panel"
               aria-labelledby="specifications-tab"
             >
-              <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+              <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
                 Product Specifications
                 <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
-              </h3>
+              </h2>
               <div className="overflow-x-auto -mx-4 sm:mx-0">
                 <table className="min-w-full">
                   <tbody>
@@ -697,10 +697,10 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               id="features-panel"
               aria-labelledby="features-tab"
             >
-              <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+              <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
                 Features
                 <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
-              </h3>
+              </h2>
               <ul className="list-disc pl-4 sm:pl-5 mb-5 sm:mb-6 text-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-sm sm:text-base">
                 {product.features?.map((feature: string, index: number) => (
                   <li key={index} className="ml-1 font-['Montserrat',sans-serif] font-light tracking-wide py-1 group">
@@ -735,10 +735,10 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               id="packaging-panel"
               aria-labelledby="packaging-tab"
             >
-              <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+              <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
                 Packaging & Shipping
                 <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
-              </h3>
+              </h2>
               <div className="mb-5 bg-[#dbf9e1]/30 p-4 rounded-lg border border-[#dbf9e1]/60">
                 <h4 className="font-['Montserrat',sans-serif] font-medium text-[#5dc285] mb-2 text-sm sm:text-base">Packaging Details:</h4>
                 <p className="text-gray-700 text-sm sm:text-base font-['Montserrat',sans-serif] font-light tracking-wide">{product.packaging}</p>
@@ -762,10 +762,10 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
         <div className="fixed inset-0 bg-gray-800/30 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4" role="dialog" aria-modal="true" aria-labelledby="contact-form-title">
           <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto border border-green-100/50 relative group/modal">
             <div className="flex justify-between items-center p-4 sm:p-6 border-b border-green-100/50 sticky top-0 bg-white/95 backdrop-blur-sm z-10">
-              <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold text-green-800 relative" id="contact-form-title">
+              <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold text-green-800 relative" id="contact-form-title">
                 Contact Supplier
                 <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-green-400 via-green-500 to-green-400"></div>
-              </h3>
+              </h2>
               <button 
                 onClick={() => setShowContactForm(false)}
                 className="text-gray-400 hover:text-green-600 p-1.5 rounded-full hover:bg-green-50 transition-all duration-300 group/close"

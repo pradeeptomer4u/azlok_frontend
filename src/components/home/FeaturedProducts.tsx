@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import productService, { Product as ApiProduct } from '../../services/productService';
 import { useCart } from '../../context/CartContext';
+import ProductListSchema from '../SEO/ProductListSchema';
 
 // Define the UI Product type for display
 interface UIProduct {
@@ -20,6 +21,7 @@ interface UIProduct {
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState<UIProduct[]>([]);
+  const [apiProducts, setApiProducts] = useState<ApiProduct[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { addItem } = useCart();
@@ -34,6 +36,9 @@ const FeaturedProducts = () => {
         // Get featured products from the API service - limit to 4 items
         const featuredProducts = await productService.getFeaturedProducts(4);
         console.log('API Response - Featured Products:', featuredProducts);
+        
+        // Store the original API products for schema
+        setApiProducts(featuredProducts);
         
         // Transform API products to match our UI component needs
         const transformedProducts: UIProduct[] = featuredProducts.map(product => {
@@ -126,8 +131,15 @@ const FeaturedProducts = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {products.map((product: UIProduct) => (
+    <>
+      {/* Add Product List Schema for SEO */}
+      <ProductListSchema 
+        products={apiProducts} 
+        listType="ItemList" 
+        listName="Featured Products"
+      />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products.map((product: UIProduct) => (
         <div key={product.id} className="bg-[#defce8]/90 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] group">
           <Link href={`/products/${product.slug}`}>
             <div className="relative h-48 bg-white overflow-hidden">
@@ -235,6 +247,7 @@ const FeaturedProducts = () => {
         </div>
       ))}
     </div>
+    </>
   );
 };
 

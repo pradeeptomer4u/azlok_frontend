@@ -47,7 +47,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({
       {keywords && <meta name="keywords" content={keywords} />}
       
       {/* Canonical URL */}
-      {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+      <link rel="canonical" href={`https://azlok.com${canonicalUrl || ''}`} />
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={ogType} />

@@ -42,6 +42,19 @@ export default function Home() {
           "https://x.com/Azlok_Pvt_Ltd",
           "https://www.instagram.com/azlok.pvt.ltd"
         ]}
+        address={{
+          streetAddress: "26-Chandresh Godavari, Station Road Nilje, Dombivli",
+          addressLocality: "Mumbai",
+          addressRegion: "Maharashtra",
+          postalCode: "421204",
+          addressCountry: "IN"
+        }}
+        contactPoint={{
+          telephone: "+91-8800412138",
+          email: "info@azlok.com",
+          contactType: "customer service"
+        }}
+        priceRange="₹₹"
       />
       {/* Hero Banner with Search - Modern Style */}
       <section className="relative bg-gradient-to-r from-green-700 to-green-900 overflow-hidden">

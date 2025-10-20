@@ -1,6 +1,8 @@
-import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
+
+// Import metadata from separate file
+import { metadata } from "./layout-metadata";
 
 // Components
 import Header from "../components/layout/Header";
@@ -20,62 +22,8 @@ const robotoMono = Roboto_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Azlok - Premium B2C Marketplace & E-commerce Platform in India",
-  description: "Azlok is India's leading B2C marketplace connecting verified suppliers with businesses. Shop quality products including organic compounds, spices, chemicals, and industrial supplies with competitive pricing and fast delivery across India.",
-  keywords: [
-    "B2C marketplace India", "wholesale suppliers", "bulk products", "organic compounds", 
-    "industrial chemicals", "spices wholesale", "verified suppliers", "business procurement",
-    "GST compliant", "tax inclusive pricing", "bulk orders", "manufacturer direct",
-    "chemical suppliers India", "organic compounds supplier", "industrial supplies",
-    "wholesale marketplace", "B2C e-commerce", "supplier network India"
-  ],
-  authors: [{ name: "Azlok Team" }],
-  creator: "Azlok Enterprises",
-  publisher: "Azlok",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  metadataBase: new URL('https://azlok.com'),
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    title: "Azlok - Premium B2C Marketplace & E-commerce Platform in India",
-    description: "India's leading B2C marketplace connecting verified suppliers with businesses. Quality products, competitive pricing, fast delivery.",
-    url: 'https://azlok.com',
-    siteName: 'Azlok',
-    images: [
-      {
-        url: '/home_page_banner.png',
-        width: 1200,
-        height: 630,
-        alt: 'Azlok B2C Marketplace',
-      }
-    ],
-    locale: 'en_IN',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: "Azlok - Premium B2C Marketplace India",
-    description: "India's leading B2C marketplace for verified suppliers and quality products.",
-    images: ['/home_page_banner.png'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-};
+// Export the metadata
+export { metadata };
 
 export default function RootLayout({
   children,
@@ -92,6 +40,7 @@ export default function RootLayout({
     "logo": "https://azlok.com/logo.png",
     "description": "India's leading B2C marketplace connecting verified suppliers with businesses",
     "foundingDate": "2024",
+    "priceRange": "₹₹",
     "founders": [
       {
         "@type": "Person",
@@ -100,13 +49,17 @@ export default function RootLayout({
     ],
     "address": {
       "@type": "PostalAddress",
-      "addressCountry": "IN",
+      "streetAddress": "26-Chandresh Godavari, Station Road Nilje, Dombivli",
+      "addressLocality": "Mumbai",
       "addressRegion": "Maharashtra",
-      "addressLocality": "Mumbai"
+      "postalCode": "421204",
+      "addressCountry": "IN"
     },
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "customer service",
+      "telephone": "+91-8800412138",
+      "email": "hello@azlok.com",
       "availableLanguage": ["English", "Hindi"]
     },
     "sameAs": [
@@ -142,7 +95,15 @@ export default function RootLayout({
       <head>
       <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <link rel="canonical" href="https://azlok.com" />
+      <link rel="sitemap" type="application/xml" href="https://azlok.com/sitemap.xml" />
+      {/* Hreflang tags */}
+      <link rel="alternate" hrefLang="en" href="https://azlok.com" />
+      <link rel="alternate" hrefLang="en-us" href="https://azlok.com" />
+      <link rel="alternate" hrefLang="en-in" href="https://azlok.com" />
+      <link rel="alternate" hrefLang="x-default" href="https://azlok.com" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1" />
         <meta name="google-site-verification" content="your-google-site-verification-code" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

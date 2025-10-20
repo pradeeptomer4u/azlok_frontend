@@ -151,23 +151,7 @@ const Footer = () => {
             <p className="text-gray-600 mb-4 leading-relaxed font-['Montserrat',sans-serif] font-light tracking-wide">
               <span className="font-medium tracking-wider text-gray-700 font-['Playfair_Display',serif]">Azlok</span> is your premium online shopping destination for quality products and exceptional customer experience.
             </p>
-            <div className="bg-white/70 backdrop-blur-sm p-2 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 hover:border-green-200">
-              {/* Billing Address */}
-              <div className="flex">
-                <div className="mr-3 mt-1">
-                  <div className="p-2 bg-gradient-to-br from-orange-400 to-orange-500 rounded-md text-white shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                  </div>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-800 mb-1 tracking-wide">Billing Address:</p>
-                  <p className="text-gray-600 font-light">Dr Tomar Enterprises</p>
-                  <p className="text-gray-600 font-light">Shamli, Uttar Pradesh, India</p>
-                </div>
-              </div>
-            </div>
+            
           </motion.div>
           
           {/* Quick Links */}
@@ -420,7 +404,7 @@ const Footer = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </div>
-                  <span className="text-xs font-light tracking-wide">Shamli, Uttar Pradesh, India</span>
+                  <span className="text-xs font-light tracking-wide">26-Chandresh Godavari, Station Road Nilje, Dombivli, Maharashtra-421204, India</span>
                 </div>
               </div>
             </div>

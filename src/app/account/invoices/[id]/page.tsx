@@ -1,6 +1,10 @@
 import InvoiceDetailWrapper from './InvoiceDetailWrapper';
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+type InvoiceParams = {
+  id: string;
+};
+
+export default function Page({ params }: { params: InvoiceParams }) {
+  const { id } = params;
   return <InvoiceDetailWrapper id={id} />;
 }

@@ -225,8 +225,9 @@ export default function ContactPage() {
                       <div>
                         <h3 className="font-semibold text-gray-800">Address</h3>
                         <p className="text-gray-700">
-                          Dr Tomar Enterprises<br />
-                          Shamli, Uttar Pradesh 247776<br />
+                          Azlok Pvt Ltd<br />
+                          26-Chandresh Godavari, Station Road Nilje<br />
+                          Dombivli, Maharashtra-421204<br />
                           India
                         </p>
                       </div>
@@ -290,7 +291,7 @@ export default function ContactPage() {
             <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4">Find Us</h2>
             <div className="w-full h-96 bg-gray-200 rounded-lg mb-8 overflow-hidden">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3474.2769909481117!2d77.31354117793454!3d29.4499209826444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390c2f841734be21%3A0x79761bb449e44c04!2sAzlok!5e0!3m2!1sen!2sin!4v1760632835915!5m2!1sen!2sin" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3768.91872485829!2d73.07388648201197!3d19.155034635823935!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7bff984a49f61%3A0x7eb636656e964daf!2sChandresh%20Godavari%2C%20Nilje%20Gaon%2C%20Maharashtra%20421204!5e0!3m2!1sen!2sin!4v1760933782551!5m2!1sen!2sin" 
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }} 

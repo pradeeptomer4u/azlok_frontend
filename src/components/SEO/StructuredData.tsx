@@ -30,6 +30,19 @@ interface OrganizationStructuredDataProps {
   url: string;
   logo: string;
   sameAs?: string[];
+  address?: {
+    streetAddress: string;
+    addressLocality: string;
+    addressRegion: string;
+    postalCode: string;
+    addressCountry: string;
+  };
+  contactPoint?: {
+    telephone?: string;
+    email?: string;
+    contactType: string;
+  };
+  priceRange?: string;
 }
 
 export const ProductStructuredData: React.FC<ProductStructuredDataProps> = ({ product }) => {
@@ -128,9 +141,12 @@ export const OrganizationStructuredData: React.FC<OrganizationStructuredDataProp
   name, 
   url, 
   logo, 
-  sameAs = [] 
+  sameAs = [],
+  address,
+  contactPoint,
+  priceRange
 }) => {
-  const structuredData = {
+  const structuredData: any = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name,
@@ -138,6 +154,27 @@ export const OrganizationStructuredData: React.FC<OrganizationStructuredDataProp
     logo,
     sameAs,
   };
+  
+  // Add address if provided
+  if (address) {
+    structuredData.address = {
+      '@type': 'PostalAddress',
+      ...address
+    };
+  }
+  
+  // Add contact point if provided
+  if (contactPoint) {
+    structuredData.contactPoint = {
+      '@type': 'ContactPoint',
+      ...contactPoint
+    };
+  }
+  
+  // Add price range if provided
+  if (priceRange) {
+    structuredData.priceRange = priceRange;
+  }
 
   return (
     <Head>

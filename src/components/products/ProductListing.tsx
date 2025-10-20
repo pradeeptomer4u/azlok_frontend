@@ -6,6 +6,7 @@ import ProductCard from '@/components/products/ProductCard';
 import type { Product as ProductCardProduct } from '@/components/products/ProductCard';
 import { calculateProductTax, TaxCalculationRequest } from '../../utils/taxService';
 import productService, { Product as ApiProduct, ProductFilters } from '../../services/productService';
+import ProductListSchema from '../SEO/ProductListSchema';
 
 // Define the Product type that combines API data with UI-specific fields
 type Product = ApiProduct & Omit<ProductCardProduct, 'id' | 'price' | 'rating'> & {
@@ -237,6 +238,14 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
 
   return (
     <div className="product-listing">
+      {/* Add Product List Schema for SEO */}
+      {products.length > 0 && (
+        <ProductListSchema 
+          products={products} 
+          listType="ItemList" 
+          listName={categorySlug ? `${categorySlug.replace(/-/g, ' ')} Products` : 'Product Listing'}
+        />
+      )}
       <TaxLoadingIndicator />
       
       <div className="relative bg-gradient-to-r from-[#dbf9e1]/80 to-[#dbf9e1]/40 rounded-lg p-4 sm:p-5 mb-6 sm:mb-8 shadow-sm overflow-hidden">

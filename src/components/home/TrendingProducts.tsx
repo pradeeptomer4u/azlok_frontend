@@ -21,6 +21,7 @@ interface UIProduct {
 
 const TrendingProducts = () => {
   const [products, setProducts] = useState<UIProduct[]>([]);
+  const [apiProducts, setApiProducts] = useState<ApiProduct[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { addItem } = useCart();
@@ -35,6 +36,9 @@ const TrendingProducts = () => {
         // Get bestseller products from the API service - limit to 4 items
         const bestsellers = await productService.getBestsellers(4);
         console.log('API Response - Bestsellers:', bestsellers);
+        
+        // Store the original API products for schema
+        setApiProducts(bestsellers);
         
         // Transform API products to match our UI component needs
         const transformedProducts: UIProduct[] = bestsellers.map((product, index) => {
@@ -152,8 +156,9 @@ const TrendingProducts = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {products.map((product: UIProduct) => (
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {products.map((product: UIProduct) => (
         <div key={product.id} className="bg-[#defce8]/90 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col transform hover:scale-[1.02] group">
           <Link href={`/products/${product.slug}`}>
             <div className="relative">
@@ -276,6 +281,7 @@ const TrendingProducts = () => {
         </div>
       ))}
     </div>
+    </>
   );
 };
 

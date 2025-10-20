@@ -24,9 +24,53 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['@mui/material', '@mui/icons-material'],
   },
+  // No rewrites needed as we're using static files
+  
   // Headers for better SEO and security
   async headers() {
     return [
+      // Headers for sitemap.xml
+      {
+        source: '/sitemap.xml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/xml',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600',
+          },
+        ],
+      },
+      // Headers for sitemap-index.xml
+      {
+        source: '/sitemap-index.xml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/xml',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600',
+          },
+        ],
+      },
+      // Headers for robots.txt
+      {
+        source: '/robots.txt',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/plain',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600',
+          },
+        ],
+      },
       {
         source: '/(.*)',
         headers: [

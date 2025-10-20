@@ -198,7 +198,7 @@ export default function AboutPage() {
                 </div>
                 <div className="text-center">
                   <h4 className="font-semibold text-gray-800 mb-2">📍 Visit Us</h4>
-                  <p className="text-gray-700">Shamli, Uttar Pradesh, India</p>
+                  <p className="text-gray-700">Mumbai, Maharashtra, India</p>
                 </div>
               </div>
             </div>

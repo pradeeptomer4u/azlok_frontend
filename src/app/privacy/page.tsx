@@ -149,7 +149,7 @@ export default function PrivacyPolicyPage() {
             <ul className="list-none pl-6 mb-4 text-gray-700">
               <li className="mb-2">By email: hello@azlok.com</li>
               <li className="mb-2">By phone: 8800412138</li>
-              <li className="mb-2">By mail: Shamli, Uttar Pradesh, India</li>
+              <li className="mb-2">By mail: 26-Chandresh Godavari, Station Road Nilje, Dombivli, Maharashtra-421204, India</li>
             </ul>
           </div>
         </div>

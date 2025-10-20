@@ -1,25 +1,204 @@
-import ProductDetail from '../../../components/products/ProductDetail';
+import ProductDetail from '@/components/products/ProductDetail';
+import productService from '@/services/productService';
 
-interface ProductPageProps {
-  params: Promise<{
-    slug: string;
-  }>;
-}
+// Define the params type separately
+type ProductParams = {
+  slug: string;
+};
 
-export async function generateMetadata({ params }: ProductPageProps) {
-  const { slug } = await params;
-  // In a real app, fetch product data from API
-  // const product = await fetch(`/api/products/${slug}`).then(res => res.json());
+// Use the correct Next.js App Router types
+type ProductPageProps = {
+  params: ProductParams;
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata({ params }: { params: ProductParams }) {
+  const { slug } = params;
   
-  // For now, using a placeholder title
+  // Format the product name from slug for use in both main and fallback paths
+  const formattedProductName = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  
+  try {
+    // Fetch all products and find the one matching the slug
+    const productsResponse = await productService.getProducts({}, 1, 100);
+    const allProducts = productsResponse.items || [];
+    
+    // Check if slug is numeric (product ID)
+    const productId = parseInt(slug);
+    let product = null;
+    
+    if (!isNaN(productId)) {
+      product = allProducts.find(p => p.id === productId);
+    }
+    
+    // If not found by ID, search by slug or name
+    if (!product) {
+      product = allProducts.find(p => 
+        p.slug === slug || 
+        p.name.toLowerCase().replace(/\s+/g, '-') === slug.toLowerCase() ||
+        p.sku === slug.toUpperCase()
+      );
+    }
+    
+    if (product) {
+      // Extract keywords from product data
+      const extractKeywords = (text: string): string[] => {
+        if (!text) return [];
+        
+        // Remove common words and keep meaningful terms
+        const commonWords = ['and', 'or', 'the', 'a', 'an', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'about', 'as', 'of'];
+        
+        // Split text into words, filter out common words, and take unique words
+        return text.toLowerCase()
+          .replace(/[^\w\s]/g, '') // Remove punctuation
+          .split(/\s+/) // Split by whitespace
+          .filter(word => word.length > 2 && !commonWords.includes(word)) // Remove short and common words
+          .slice(0, 15); // Limit to 15 keywords
+      };
+      
+      // Get category and subcategory
+      const category = product.category_name || '';
+      const subcategory = product.categories && product.categories.length > 1 ? 
+        product.categories[1].name : '';
+      
+      // Extract keywords from description
+      const descriptionKeywords = extractKeywords(product.description);
+      
+      // Combine all keywords
+      const allKeywords = [
+        product.name,
+        category,
+        subcategory,
+        product.brand || 'Azlok',
+        ...descriptionKeywords
+      ].filter(Boolean); // Remove empty values
+      
+      // Remove duplicates and join with commas
+      const uniqueKeywords = [...new Set(allKeywords)].join(', ');
+      
+      // Get product image URL - with safe fallbacks at each step
+      let productImage = '/globe.svg'; // Default fallback image
+      
+      try {
+        if (product.image_url) {
+          productImage = product.image_url;
+        } else if (product.image_urls) {
+          if (typeof product.image_urls === 'string') {
+            try {
+              const parsedImages = JSON.parse(product.image_urls);
+              if (Array.isArray(parsedImages) && parsedImages.length > 0) {
+                productImage = parsedImages[0];
+              }
+            } catch {
+              // Keep default if parsing fails
+            }
+          } else if (Array.isArray(product.image_urls) && product.image_urls.length > 0) {
+            productImage = product.image_urls[0];
+          }
+        }
+        
+        // Ensure image URL is absolute and valid
+        if (productImage && productImage !== '/globe.svg' && !productImage.startsWith('http')) {
+          // Make sure we have a valid base URL
+          const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://azlok.com';
+          // Ensure proper path joining
+          productImage = `${baseUrl}${productImage.startsWith('/') ? '' : '/'}${productImage}`;
+        }
+      } catch (error) {
+        console.error('Error processing product image:', error);
+        productImage = '/globe.svg'; // Fallback on any error
+      }
+      
+      // Format price for display with safe fallback
+      let formattedPrice = '';
+      try {
+        if (typeof product.price === 'number') {
+          formattedPrice = new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            maximumFractionDigits: 2
+          }).format(product.price);
+        }
+      } catch (error) {
+        console.error('Error formatting price:', error);
+      }
+      
+      // Use real product data for metadata
+      return {
+        title: `${product.name} | Azlok Enterprises`,
+        description: (product.description ? product.description.substring(0, 160) : 'View detailed product specifications, pricing, and supplier information').substring(0, 160),
+        keywords: uniqueKeywords,
+        alternates: {
+          canonical: `/products/${slug}`,
+        },
+        openGraph: {
+          title: product.name || formattedProductName,
+          description: ((product.description || 'View detailed product specifications, pricing, and supplier information').substring(0, 160)),
+          url: `/products/${slug}`,
+          siteName: 'Azlok Enterprises',
+          images: [
+            {
+              url: productImage,
+              width: 1200,
+              height: 630,
+              alt: product.name || formattedProductName,
+            }
+          ],
+          type: 'website',
+        },
+        twitter: {
+          card: 'summary_large_image',
+          title: product.name || formattedProductName,
+          description: ((product.description || 'View detailed product specifications, pricing, and supplier information').substring(0, 160)),
+          images: [productImage],
+          creator: '@azlok',
+          site: '@azlok',
+        },
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching product for metadata:', error);
+  }
+  
+  // Use the formattedProductName for fallback (already defined at the top of the function)
+  
+  // Fallback metadata if product not found or error occurs
   return {
-    title: `Product Details | Azlok Enterprises`,
-    description: 'View detailed product specifications, pricing, and supplier information',
+    title: `${formattedProductName} | Azlok Enterprises`,
+    description: 'View detailed product specifications, pricing, and supplier information'.substring(0, 160),
+    keywords: `${slug.replace(/-/g, ' ')}, product, Azlok, marketplace`,
+    alternates: {
+      canonical: `/products/${slug}`,
+    },
+    openGraph: {
+      title: `${formattedProductName} | Azlok Enterprises`,
+      description: 'View detailed product specifications, pricing, and supplier information'.substring(0, 160),
+      url: `/products/${slug}`,
+      siteName: 'Azlok Enterprises',
+      images: [
+        {
+          url: '/globe.svg',
+          width: 1200,
+          height: 630,
+          alt: formattedProductName,
+        }
+      ],
+      locale: 'en_IN',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${formattedProductName} | Azlok Enterprises`,
+      description: 'View detailed product specifications, pricing, and supplier information'.substring(0, 160),
+      images: ['/globe.svg'],
+      creator: '@azlok',
+      site: '@azlok',
+    },
   };
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
-  const { slug } = await params;
+export default function ProductPage({ params }: { params: ProductParams }) {
+  const { slug } = params;
   
   return (
     <div className="min-h-screen py-8 bg-[#dbf9e1]/50 relative overflow-hidden">

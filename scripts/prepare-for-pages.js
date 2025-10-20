@@ -23,7 +23,22 @@ const MAX_FILE_SIZE = 24 * 1024 * 1024; // 24 MiB (slightly under the 25 MiB lim
 const EXCLUDED_PATHS = [
   'cache',
   'server/chunks/font-manifest.json',
-  'trace'
+  'trace',
+  'webpack-runtime',
+  'webpack-',
+  'webpack.',
+  'server/pages/webpack',
+  'server/webpack',
+  'server/chunks/webpack',
+  'static/chunks/webpack',
+  'static/webpack',
+  'build-manifest.json',
+  'react-loadable-manifest.json',
+  'middleware-manifest.json',
+  'middleware-build-manifest.json',
+  'middleware-react-loadable-manifest.json',
+  'prerender-manifest.json',
+  'app-build-manifest.json'
 ];
 
 async function copyDirectory(source, destination, excludedPaths = []) {

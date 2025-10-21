@@ -58,7 +58,7 @@ export default function RootLayout({
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "customer service",
-      "telephone": "+91-8800412138",
+      "telephone": "+91 8800412138",
       "email": "hello@azlok.com",
       "availableLanguage": ["English", "Hindi"]
     },

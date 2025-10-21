@@ -50,7 +50,7 @@ export default function Home() {
           addressCountry: "IN"
         }}
         contactPoint={{
-          telephone: "+91-8800412138",
+          telephone: "+91 8800412138",
           email: "info@azlok.com",
           contactType: "customer service"
         }}

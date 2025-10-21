@@ -232,7 +232,7 @@ export default function BlogDetailPage() {
                 <div className="mt-6">
                   <div className="flex space-x-2">
                     <a 
-                      href={`https://wa.me/8800412138?text=Hi, I'm interested in ${encodeURIComponent(sidebarProducts[0]?.name || 'your products')}`} 
+                      href={`https://wa.me/918800412138?text=Hi, I'm interested in ${encodeURIComponent(sidebarProducts[0]?.name || 'your products')}`} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="flex-1 bg-green-600 bg-opacity-20 text-gray-800 py-1.5 sm:py-2 rounded-md hover:bg-green-600 hover:bg-opacity-30 transition-colors text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 flex items-center justify-center"

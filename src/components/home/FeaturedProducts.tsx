@@ -175,7 +175,7 @@ const FeaturedProducts = () => {
               </svg>
             </div>
             <a 
-              href={`https://wa.me/8800412138?text=Hi, I'm interested in ${encodeURIComponent(product.name)}`} 
+              href={`https://wa.me/918800412138?text=Hi, I'm interested in ${encodeURIComponent(product.name)}`} 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex-1 bg-gradient-to-r from-green-500/20 to-green-600/20 text-gray-800 py-1.5 sm:py-2 rounded-md hover:from-green-500/30 hover:to-green-600/30 transition-all duration-300 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 flex items-center justify-center shadow-sm hover:shadow group relative overflow-hidden"

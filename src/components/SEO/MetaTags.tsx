@@ -55,6 +55,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({
       <meta property="og:title" content={finalOgTitle} />
       <meta property="og:description" content={finalOgDescription} />
       <meta property="og:image" content={ogImage} />
+      <meta property="og:image:secure_url" content={ogImage.startsWith('http') ? ogImage : `https://azlok.com${ogImage}`} />
       
       {/* Twitter */}
       <meta property="twitter:card" content={twitterCard} />

@@ -104,36 +104,6 @@ export default function LoginPage() {
             </p>
           </div>
           
-          <div className="mt-8">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Demo Accounts</span>
-              </div>
-            </div>
-            
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              <div 
-                onClick={() => {
-                  setEmail('buyer@example.com');
-                  setPassword('password');
-                }}
-                className="cursor-pointer py-2 px-3 border border-gray-300 rounded-md text-sm text-center hover:bg-gray-50"
-              >
-                Buyer Account
-              </div>
-              <div 
-                onClick={() => {
-                  setEmail('seller@example.com');
-                  setPassword('password');
-                }}
-                className="cursor-pointer py-2 px-3 border border-gray-300 rounded-md text-sm text-center hover:bg-gray-50"
-              >
-                Seller Account
-              </div>
-            </div>
           </div>
         </div>
       </div>

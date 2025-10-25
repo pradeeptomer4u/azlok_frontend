@@ -88,7 +88,7 @@ const Header = () => {
       </div>
       
       <div className="container-custom mx-auto relative overflow-hidden">
-        <div className="flex items-center justify-between py-3 px-4 md:px-6">
+        <div className="flex items-center justify-between py-.10 px-1 md:px-2">
           {/* Logo with enhanced styling and animations */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center group relative overflow-hidden">
@@ -108,8 +108,8 @@ const Header = () => {
                   <Image 
                     src="/logo.png" 
                     alt="Azlok Enterprises" 
-                    width={130} 
-                    height={45} 
+                    width={110} 
+                    height={38} 
                     className="object-contain relative z-10 transform group-hover:scale-110 transition-all duration-500 drop-shadow-md"
                     priority
                   />
@@ -164,8 +164,8 @@ const Header = () => {
           </div>
 
           {/* Navigation - Desktop */}
-          <nav className="hidden md:flex items-center space-x-6">
-            <Link href="/products" className="text-green-800 hover:text-green-600 font-medium tracking-wide transition-all duration-200 relative group px-3 py-1.5 overflow-hidden">
+          <nav className="hidden md:flex items-center space-x-3">
+            <Link href="/products" className="text-green-800 hover:text-green-600 font-medium tracking-wide transition-all duration-200 relative group px-2 py-1 overflow-hidden">
               {/* Enhanced background effect */}
               <span className="absolute bottom-0 left-0 w-full h-0 bg-gradient-to-r from-green-400/20 via-green-500/20 to-green-400/20 group-hover:h-full transition-all duration-300 -z-10 rounded-md"></span>
               
@@ -181,7 +181,7 @@ const Header = () => {
                 <span className="font-medium tracking-wide relative z-10">Products</span>
               </span>
             </Link>
-            <Link href="/categories" className="text-green-800 hover:text-green-600 font-medium tracking-wide transition-all duration-200 relative group px-3 py-1.5 overflow-hidden">
+            <Link href="/categories" className="text-green-800 hover:text-green-600 font-medium tracking-wide transition-all duration-200 relative group px-2 py-1 overflow-hidden">
               {/* Enhanced background effect */}
               <span className="absolute bottom-0 left-0 w-full h-0 bg-gradient-to-r from-green-400/20 via-green-500/20 to-green-400/20 group-hover:h-full transition-all duration-300 -z-10 rounded-md"></span>
               
@@ -197,7 +197,7 @@ const Header = () => {
                 <span className="font-medium tracking-wide relative z-10">Categories</span>
               </span>
             </Link>
-            <Link href="/track" className="text-green-800 hover:text-green-600 font-medium tracking-wide transition-all duration-200 relative group px-3 py-1.5 overflow-hidden">
+            <Link href="/track" className="text-green-800 hover:text-green-600 font-medium tracking-wide transition-all duration-200 relative group px-2 py-1 overflow-hidden">
               {/* Enhanced background effect */}
               <span className="absolute bottom-0 left-0 w-full h-0 bg-gradient-to-r from-green-400/20 via-green-500/20 to-green-400/20 group-hover:h-full transition-all duration-300 -z-10 rounded-md"></span>
               
@@ -368,7 +368,7 @@ const Header = () => {
           <div className="md:hidden flex items-center">
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="relative p-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none group overflow-hidden"
+              className="relative p-2 rounded-lg bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none group overflow-hidden"
               aria-label="Toggle mobile menu"
               aria-expanded={isMenuOpen}
             >
@@ -382,10 +382,10 @@ const Header = () => {
               <div className="absolute top-3/4 right-1/3 w-1 h-1 bg-green-600/30 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-float3 transition-opacity duration-500"></div>
               
               {/* Enhanced menu icon with animation */}
-              <div className="relative z-10 flex flex-col justify-center items-center space-y-1.5 transform group-hover:scale-110 transition-transform duration-300 w-7 h-5">
-                <span className={`block h-0.5 w-7 bg-gradient-to-r from-green-700 via-green-600 to-green-500 rounded-full transform transition-all duration-300 ease-in-out ${isMenuOpen ? 'rotate-45 translate-y-2' : ''} shadow-sm`}></span>
-                <span className={`block h-0.5 w-7 bg-gradient-to-r from-green-500 via-green-600 to-green-700 rounded-full transition-all duration-300 ease-in-out ${isMenuOpen ? 'opacity-0 translate-x-3' : 'opacity-100'} shadow-sm`}></span>
-                <span className={`block h-0.5 w-7 bg-gradient-to-r from-green-700 via-green-600 to-green-500 rounded-full transform transition-all duration-300 ease-in-out ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''} shadow-sm`}></span>
+              <div className="relative z-10 flex flex-col justify-center items-center space-y-1 transform group-hover:scale-110 transition-transform duration-300 w-6 h-4">
+                <span className={`block h-0.5 w-6 bg-gradient-to-r from-green-700 via-green-600 to-green-500 rounded-full transform transition-all duration-300 ease-in-out ${isMenuOpen ? 'rotate-45 translate-y-1.5' : ''} shadow-sm`}></span>
+                <span className={`block h-0.5 w-6 bg-gradient-to-r from-green-500 via-green-600 to-green-700 rounded-full transition-all duration-300 ease-in-out ${isMenuOpen ? 'opacity-0 translate-x-3' : 'opacity-100'} shadow-sm`}></span>
+                <span className={`block h-0.5 w-6 bg-gradient-to-r from-green-700 via-green-600 to-green-500 rounded-full transform transition-all duration-300 ease-in-out ${isMenuOpen ? '-rotate-45 -translate-y-1.5' : ''} shadow-sm`}></span>
               </div>
               
               {/* Enhanced ring effects */}
@@ -430,11 +430,11 @@ const Header = () => {
           <div className="absolute top-10 right-10 w-16 h-16 border border-green-200/20 rounded-lg rotate-45 transform opacity-20"></div>
           <div className="absolute bottom-10 left-10 w-12 h-12 border border-green-300/20 rounded-full opacity-10"></div>
           
-          <div className="container-custom mx-auto py-5 px-4 relative z-10">
-            <nav className="flex flex-col space-y-4 max-h-[70vh] overflow-y-auto px-1">
+          <div className="container-custom mx-auto py-3 px-3 relative z-10">
+            <nav className="flex flex-col space-y-2 max-h-[70vh] overflow-y-auto px-1">
               <Link 
                 href="/products" 
-                className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
+                className="flex items-center px-3 py-2 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
                 onClick={() => setIsMenuOpen(false)}
               >
                 {/* Background glow effect */}
@@ -450,7 +450,7 @@ const Header = () => {
                 
                 {/* Text with animated underline */}
                 <div className="relative">
-                  <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Products</span>
+                  <span className="text-green-800 group-hover:text-green-600 font-medium text-sm tracking-wide transition-colors duration-300">Products</span>
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
                 </div>
                 
@@ -464,7 +464,7 @@ const Header = () => {
               
               <Link 
                 href="/categories" 
-                className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
+                className="flex items-center px-3 py-2 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
                 onClick={() => setIsMenuOpen(false)}
               >
                 {/* Background glow effect */}
@@ -480,7 +480,7 @@ const Header = () => {
                 
                 {/* Text with animated underline */}
                 <div className="relative">
-                  <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Categories</span>
+                  <span className="text-green-800 group-hover:text-green-600 font-medium text-sm tracking-wide transition-colors duration-300">Categories</span>
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
                 </div>
                 
@@ -494,7 +494,7 @@ const Header = () => {
               
               <Link 
                 href="/cart" 
-                className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
+                className="flex items-center px-3 py-2 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
                 onClick={() => setIsMenuOpen(false)}
               >
                 {/* Background glow effect */}
@@ -510,7 +510,7 @@ const Header = () => {
                 
                 {/* Text with animated underline */}
                 <div className="relative">
-                  <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Cart</span>
+                  <span className="text-green-800 group-hover:text-green-600 font-medium text-sm tracking-wide transition-colors duration-300">Cart</span>
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
                 </div>
                 
@@ -531,7 +531,7 @@ const Header = () => {
               
               <Link 
                 href="/track" 
-                className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
+                className="flex items-center px-3 py-2 rounded-lg bg-gradient-to-r from-green-50 to-green-100/80 hover:from-green-100 hover:to-green-200/80 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden" 
                 onClick={() => setIsMenuOpen(false)}
               >
                 {/* Background glow effect */}
@@ -547,7 +547,7 @@ const Header = () => {
                 
                 {/* Text with animated underline */}
                 <div className="relative">
-                  <span className="text-green-800 group-hover:text-green-600 font-medium text-lg tracking-wide transition-colors duration-300">Track Order</span>
+                  <span className="text-green-800 group-hover:text-green-600 font-medium text-sm tracking-wide transition-colors duration-300">Track Order</span>
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 via-green-600 to-green-400 group-hover:w-full transition-all duration-500 ease-out"></span>
                 </div>
                 
@@ -777,7 +777,7 @@ const Header = () => {
       )}
 
       {/* Enhanced Contact Info Bar with advanced graphics */}
-      <div className="bg-gradient-to-r from-green-700 via-green-800 to-green-700 text-white py-3 px-4 shadow-inner relative overflow-hidden">
+      <div className="bg-gradient-to-r from-green-700 via-green-800 to-green-700 text-white py-0.5 px-2 shadow-inner relative overflow-hidden">
         {/* Advanced background effects with multiple layers */}
         <div className="absolute inset-0 bg-[url('/images/leaf-pattern.png')] opacity-10 bg-repeat animate-slowPan"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/10"></div>
@@ -802,27 +802,27 @@ const Header = () => {
         <div className="absolute bottom-0 left-1/3 w-12 h-12 border border-white/10 rounded-lg opacity-20 rotate-12 transform animate-pulse-slow"></div>
         <div className="absolute top-1/2 right-1/3 w-8 h-8 border-t border-r border-white/10 opacity-15 rotate-[30deg] transform"></div>
         
-        <div className="container-custom mx-auto flex flex-col md:flex-row justify-between items-center text-base relative">
+        <div className="container-custom mx-auto flex flex-col md:flex-row justify-between items-center text-base relative py-0">
           {/* Enhanced call us section with better mobile styling */}
-          <div className="flex items-center justify-center w-full md:w-auto mb-3 md:mb-0 relative z-10 group">
-            <div className="relative mr-3">
+          <div className="flex items-center justify-center w-full md:w-auto mb-0 md:mb-0 relative z-10 group">
+            <div className="relative mr-1.5">
               <div className="absolute -inset-1.5 bg-white/20 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="p-2 bg-white/10 rounded-full backdrop-blur-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10 text-white/90 group-hover:text-white transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="p-1 bg-white/10 rounded-full backdrop-blur-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 relative z-10 text-white/90 group-hover:text-white transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
               </div>
             </div>
-            <div className="flex flex-col">
-              <span className="text-white/70 text-xs font-medium tracking-wider transition-colors duration-300">Call us:</span>
-              <a href="tel:8800412138" className="text-white font-semibold tracking-widest text-lg group-hover:text-white/90 transition-colors duration-300 hover:underline decoration-white/30 underline-offset-2">8800412138</a>
+            <div className="flex flex-col space-y-0">
+              <span className="text-white/70 text-[12px] font-medium tracking-wider transition-colors duration-300">Call us:</span>
+              <a href="tel:8800412138" className="text-white font-semibold tracking-widest text-xs group-hover:text-white/90 transition-colors duration-300 hover:underline decoration-white/30 underline-offset-2">8800412138</a>
             </div>
           </div>
           
           {/* Enhanced company tagline with better mobile styling */}
           <div className="flex items-center justify-center w-full md:w-auto relative z-10">
             <div className="relative overflow-hidden inline-block text-center">
-              <span className="text-white/90 font-medium tracking-[0.15em] drop-shadow-sm bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white animate-shimmer bg-[length:200%_100%] uppercase text-sm md:text-base">AZLOK - PREMIUM B2C SHOPPING EXPERIENCE</span>
+              <span className="text-white/90 font-medium tracking-[0.15em] drop-shadow-sm bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white animate-shimmer bg-[length:200%_100%] uppercase text-xs md:text-sm">AZLOK - PREMIUM B2C SHOPPING EXPERIENCE</span>
             </div>
           </div>
         </div>

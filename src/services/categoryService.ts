@@ -111,7 +111,8 @@ const categoryService = {
       // Get all products to calculate counts
       const productsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/products/`);
       const products = productsResponse.ok ? await productsResponse.json() : [];
-      
+      console.log("products",products);
+      console.log("apiCategories",apiCategories);
       // Transform to categories with actual product count
       const transformedCategories = apiCategories.map((category) => {
         const productCount = products.filter((product: any) => 

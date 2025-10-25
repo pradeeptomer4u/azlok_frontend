@@ -63,9 +63,9 @@ export default function RootLayout({
       "availableLanguage": ["English", "Hindi"]
     },
     "sameAs": [
-      "https://www.facebook.com/azlok",
-      "https://www.twitter.com/azlok",
-      "https://www.linkedin.com/company/azlok",
+      "https://www.facebook.com/azl.ok/",
+      "https://x.com/Azlok_Pvt_Ltd",
+      "https://www.linkedin.com/in/azlok/",
       "https://www.instagram.com/azlok.pvt.ltd"
     ],
     "hasOfferCatalog": {

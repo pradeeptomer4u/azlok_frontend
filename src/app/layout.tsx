@@ -11,6 +11,7 @@ import { CartProvider } from "../context/CartContext";
 import { AuthProvider } from "../context/AuthContext";
 import KeepAliveInitializer from "../components/utils/KeepAliveInitializer";
 import ErrorBoundary from "../components/utils/ErrorBoundary";
+import WhatsAppChat from "../components/WhatsAppChat";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -124,6 +125,15 @@ export default function RootLayout({
               </div>
               {/* Keep-alive service to prevent Render from spinning down due to inactivity */}
               <KeepAliveInitializer />
+              
+              {/* WhatsApp Chat Widget */}
+              <WhatsAppChat 
+                phoneNumber="918800412138"
+                welcomeMessage="Hello! I'm interested in Azlok products and would like more information."
+                buttonStyle="floating"
+                position="bottom-right"
+                companyName="Azlok Pvt Ltd"
+              />
             </CartProvider>
           </AuthProvider>
         </ErrorBoundary>

@@ -8,15 +8,7 @@ export default function TermsOfServicePage() {
   return (
     <div className="min-h-screen py-8 bg-[#dbf9e1]/50 relative overflow-hidden">
       {/* SEO Meta Tags */}
-      <MetaTags
-        title="Terms of Service - Azlok"
-        description="Read Azlok's terms of service, including user agreements, purchase terms, and platform usage policies."
-        keywords="terms of service, user agreement, terms and conditions, legal, policy, usage terms"
-        ogType="website"
-        ogUrl="/terms"
-        ogImage="/logo.png"
-        canonicalUrl="/terms"
-      />
+            {/* Metadata now handled by layout.tsx */}
       
       {/* Organization Structured Data */}
       <OrganizationStructuredData

@@ -8,15 +8,7 @@ export default function ReturnsPage() {
   return (
     <div className="min-h-screen py-8 bg-[#dbf9e1]/50 relative overflow-hidden">
       {/* SEO Meta Tags */}
-      <MetaTags
-        title="Returns & Refunds - Azlok"
-        description="Learn about Azlok's return policy, refund process, and how to return or exchange items with easy step-by-step instructions."
-        keywords="returns, refunds, return policy, exchange, money back guarantee, return process, refund policy"
-        ogType="website"
-        ogUrl="/returns"
-        ogImage="/logo.png"
-        canonicalUrl="/returns"
-      />
+            {/* Metadata now handled by layout.tsx */}
       
       {/* Organization Structured Data */}
       <OrganizationStructuredData

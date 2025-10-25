@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import MetaTags from '../../components/SEO/MetaTags';
 import { OrganizationStructuredData } from '../../components/SEO/StructuredData';
 
 export default function ContactPage() {
@@ -78,16 +77,7 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen py-8 bg-[#dbf9e1]/50 relative overflow-hidden">
-      {/* SEO Meta Tags */}
-      <MetaTags
-        title="Contact Us - Azlok"
-        description="Get in touch with Azlok's customer support team. We're here to help with your questions, feedback, and inquiries about our products and services."
-        keywords="contact azlok, customer support, help, inquiries, feedback, get in touch"
-        ogType="website"
-        ogUrl="/contact"
-        ogImage="/logo.png"
-        canonicalUrl="/contact"
-      />
+      {/* Organization Structured Data is now handled separately */}
       
       {/* Organization Structured Data */}
       <OrganizationStructuredData

@@ -8,15 +8,7 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="min-h-screen py-8 bg-[#dbf9e1]/50 relative overflow-hidden">
       {/* SEO Meta Tags */}
-      <MetaTags
-        title="Privacy Policy - Azlok"
-        description="Learn about Azlok's privacy policy, how we collect, use, and protect your personal information."
-        keywords="privacy policy, data protection, personal information, cookies, GDPR, privacy rights"
-        ogType="website"
-        ogUrl="/privacy"
-        ogImage="/logo.png"
-        canonicalUrl="/privacy"
-      />
+            {/* Metadata now handled by layout.tsx */}
       
       {/* Organization Structured Data */}
       <OrganizationStructuredData

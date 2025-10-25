@@ -61,15 +61,7 @@ export default function BrandsPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       {/* SEO Meta Tags */}
-      <MetaTags
-        title="Brands - Azlok"
-        description="Discover all the premium brands available on Azlok. Find quality products from verified sellers."
-        keywords="brands, sellers, online shopping, e-commerce, verified sellers"
-        ogType="website"
-        ogUrl="/brands"
-        ogImage="/logo.png"
-        canonicalUrl="/brands"
-      />
+            {/* Metadata now handled by layout.tsx */}
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <h1 className="text-4xl font-bold text-gray-900 mb-8">Our Brands</h1>

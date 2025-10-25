@@ -59,15 +59,7 @@ export default function FAQPage() {
   return (
     <div className="min-h-screen py-8 bg-[#dbf9e1]/50 relative overflow-hidden">
       {/* SEO Meta Tags */}
-      <MetaTags
-        title="Frequently Asked Questions - Azlok"
-        description="Find answers to common questions about shopping, shipping, returns, and more at Azlok."
-        keywords="FAQ, frequently asked questions, help, support, shipping, returns, orders, customer service"
-        ogType="website"
-        ogUrl="/faq"
-        ogImage="/logo.png"
-        canonicalUrl="/faq"
-      />
+            {/* Metadata now handled by layout.tsx */}
       
       {/* Organization Structured Data */}
       <OrganizationStructuredData

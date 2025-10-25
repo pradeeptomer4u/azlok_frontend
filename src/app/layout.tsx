@@ -95,7 +95,6 @@ export default function RootLayout({
       <head>
       <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-      <link rel="canonical" href="https://azlok.com" />
       <link rel="sitemap" type="application/xml" href="https://azlok.com/sitemap.xml" />
       {/* Hreflang tags */}
       <link rel="alternate" hrefLang="en" href="https://azlok.com" />

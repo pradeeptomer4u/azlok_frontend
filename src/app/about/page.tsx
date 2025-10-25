@@ -1,22 +1,12 @@
 'use client';
 
 import React from 'react';
-import MetaTags from '../../components/SEO/MetaTags';
 import { OrganizationStructuredData } from '../../components/SEO/StructuredData';
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen py-8 bg-[#dbf9e1]/50 relative overflow-hidden">
-      {/* SEO Meta Tags */}
-      <MetaTags
-        title="About Us - Azlok"
-        description="Learn about Azlok's mission, values, and commitment to providing premium online shopping experiences with quality products and exceptional service."
-        keywords="about azlok, company, mission, vision, values, team, premium shopping, e-commerce"
-        ogType="website"
-        ogUrl="/about"
-        ogImage="/logo.png"
-        canonicalUrl="/about"
-      />
+      {/* Organization Structured Data is now handled separately */}
       
       {/* Organization Structured Data */}
       <OrganizationStructuredData

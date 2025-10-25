@@ -8,15 +8,7 @@ export default function ShippingPage() {
   return (
     <div className="min-h-screen py-8 bg-[#dbf9e1]/50 relative overflow-hidden">
       {/* SEO Meta Tags */}
-      <MetaTags
-        title="Shipping Information - Azlok"
-        description="Learn about Azlok's shipping policies, delivery options, costs, and estimated delivery times across India."
-        keywords="shipping, delivery, shipping policy, delivery time, shipping cost, express delivery, standard shipping"
-        ogType="website"
-        ogUrl="/shipping"
-        ogImage="/logo.png"
-        canonicalUrl="/shipping"
-      />
+            {/* Metadata now handled by layout.tsx */}
       
       {/* Organization Structured Data */}
       <OrganizationStructuredData

@@ -57,7 +57,7 @@ export default function FAQPage() {
   ];
 
   return (
-    <div className="min-h-screen py-10">
+    <div className="min-h-screen py-8 bg-[#dbf9e1]/50 relative overflow-hidden">
       {/* SEO Meta Tags */}
       <MetaTags
         title="Frequently Asked Questions - Azlok"
@@ -82,46 +82,75 @@ export default function FAQPage() {
         ]}
       />
 
-      <div className="container-custom mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Frequently Asked Questions</h1>
+      {/* Advanced background graphics */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Subtle pattern overlay */}
+        <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/leaf-pattern.png')] opacity-5 bg-repeat mix-blend-overlay"></div>
         
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <p className="text-gray-600 mb-8">
-            Find answers to the most common questions about shopping at Azlok. If you can&apos;t find what you&apos;re looking for, feel free to contact our customer support team.
-          </p>
+        {/* Animated gradient orbs */}
+        <div className="absolute -top-24 -right-24 w-64 h-64 bg-gradient-to-br from-green-300/25 to-green-400/15 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-1/3 -left-24 w-72 h-72 bg-gradient-to-tr from-green-200/20 to-green-300/10 rounded-full blur-3xl animate-float1"></div>
+        <div className="absolute top-1/2 left-1/4 w-48 h-48 bg-gradient-to-r from-yellow-200/10 to-orange-200/5 rounded-full blur-3xl animate-float2"></div>
+        
+        {/* Decorative geometric shapes */}
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 border border-green-200/10 rounded-lg opacity-20"></div>
+        <div className="absolute bottom-1/3 right-1/3 w-24 h-24 border border-green-200/10 rounded-full opacity-10"></div>
+      </div>
 
-          <div className="space-y-6">
+      <div className="container-custom mx-auto relative z-10 py-8">
+        <div className="max-w-3xl mx-auto bg-white/90 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden border border-green-100/50">
+          <div className="px-6 py-8 relative group">
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-green-100/20 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-green-100/10 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
+            <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-green-200/0 via-green-300/50 to-green-200/0"></div>
+            
+            <h1 className="text-xl xs:text-2xl sm:text-3xl font-['Playfair_Display',serif] font-bold text-gray-800 mb-6 text-center relative z-10">Frequently Asked Questions</h1>
+            
+            <p className="text-gray-600 mb-8 font-['Montserrat',sans-serif] text-center">
+              Find answers to the most common questions about shopping at Azlok. If you can&apos;t find what you&apos;re looking for, feel free to contact our customer support team.
+            </p>
+
+          <div className="space-y-6 font-['Montserrat',sans-serif]">
             {faqs.map((faq, index) => (
-              <div key={index} className="border-b border-gray-200 pb-6 last:border-b-0 last:pb-0">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">
+              <div key={index} className="border-b border-green-100 pb-6 last:border-b-0 last:pb-0 group hover:bg-green-50/30 p-4 rounded-lg transition-colors duration-300">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                  <span className="inline-block w-6 h-6 rounded-full bg-gradient-to-r from-green-400 to-green-500 text-white flex items-center justify-center mr-3 text-xs font-bold">{index + 1}</span>
                   {faq.question}
                 </h3>
-                <p className="text-gray-700 leading-relaxed">
+                <p className="text-gray-700 leading-relaxed pl-9">
                   {faq.answer}
                 </p>
               </div>
             ))}
           </div>
 
-          <div className="mt-8 p-6 bg-blue-50 rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">Still have questions?</h3>
-            <p className="text-gray-700 mb-4">
-              Our customer support team is available round the clock to assist you. 24/7.
+          <div className="mt-8 p-6 bg-gradient-to-r from-green-50 to-green-100/70 rounded-lg border border-green-200/50 relative overflow-hidden group">
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-green-200/20 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+            <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-gradient-to-tr from-green-200/10 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
+            
+            <h3 className="text-lg font-semibold text-gray-800 mb-3 font-['Playfair_Display',serif] relative z-10">Still have questions?</h3>
+            <p className="text-gray-700 mb-4 font-['Montserrat',sans-serif] relative z-10">
+              Our customer support team is available round the clock to assist you 24/7.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 relative z-10">
               <a 
                 href="mailto:hello@azlok.com" 
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors text-center"
+                className="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-2 rounded-md hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-sm hover:shadow-md text-center font-['Montserrat',sans-serif] font-medium relative overflow-hidden group/btn"
               >
+                <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 transform translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000"></div>
                 Email Support
               </a>
               <a 
                 href="tel:8800412138" 
-                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors text-center"
+                className="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-2 rounded-md hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-sm hover:shadow-md text-center font-['Montserrat',sans-serif] font-medium relative overflow-hidden group/btn"
               >
+                <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 transform translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000"></div>
                 Call Support
               </a>
             </div>
+          </div>
           </div>
         </div>
       </div>

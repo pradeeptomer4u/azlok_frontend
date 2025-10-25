@@ -300,7 +300,7 @@ const Footer = () => {
             <div className="mb-3">
               <div className="text-xs font-medium text-gray-700 mb-2 uppercase tracking-wider">Follow Us</div>
               <div className="flex space-x-3">
-                <a href="https://www.facebook.com/azlok" className="group">
+                <a href="https://www.facebook.com/azl.ok/" className="group">
                   <div className="w-8 h-8 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:border-blue-200">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500 group-hover:text-blue-600 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />

@@ -47,6 +47,10 @@ module.exports = {
         'slide-left': 'slideLeft 0.5s ease-out',
         'slide-right': 'slideRight 0.5s ease-out',
         'image-load': 'imageLoad 0.5s ease-in',
+        'ping': 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+        'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+        'shine': 'shine 1.5s ease-in-out infinite',
+        'glow': 'glow 2s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -92,6 +96,18 @@ module.exports = {
         'reverse-spin': {
           '0%': { transform: 'rotate(0deg)' },
           '100%': { transform: 'rotate(-360deg)' },
+        },
+        ping: {
+          '0%': { transform: 'scale(1)', opacity: '1' },
+          '75%, 100%': { transform: 'scale(2)', opacity: '0' },
+        },
+        shine: {
+          '0%': { backgroundPosition: '-100%' },
+          '100%': { backgroundPosition: '200%' },
+        },
+        glow: {
+          '0%, 100%': { boxShadow: '0 0 5px rgba(74, 222, 128, 0.3)' },
+          '50%': { boxShadow: '0 0 20px rgba(74, 222, 128, 0.6)' },
         },
       },
     },

@@ -125,7 +125,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
         let apiProduct = null;
         
         // First try to get all products and find by slug or ID
-        const productsResponse = await productService.getProducts({}, 1, 100);
+        const productsResponse = await productService.getProducts({slug:slug}, 1, 100);
         const allProducts = productsResponse.items || [];
         
         // Check if slug is numeric (product ID)

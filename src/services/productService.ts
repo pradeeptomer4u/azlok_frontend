@@ -99,6 +99,7 @@ export interface ProductFilters {
   sort_order?: 'asc' | 'desc';
   page?: number;
   size?: number;
+  slug?: string;
 }
 
 // Product API service

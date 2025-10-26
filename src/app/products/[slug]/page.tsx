@@ -1,6 +1,7 @@
 import ProductDetail from '@/components/products/ProductDetail';
 import productService from '@/services/productService';
 import { ProductSchema } from '@/components/SEO';
+import ProductFAQSection from './ProductFAQSection';
 
 export async function generateMetadata({ params }: PageProps<'/products/[slug]'>) {
   const { slug } = await params;

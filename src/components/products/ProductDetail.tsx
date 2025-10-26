@@ -6,6 +6,9 @@ import Link from 'next/link';
 import { useCart } from '../../context/CartContext';
 import { calculateProductTax, TaxCalculationRequest, TaxCalculationResponse, formatCurrency, formatTaxPercentage } from '../../utils/taxService';
 import productService, { Product as ApiProduct } from '../../services/productService';
+import ProductFAQSection from '../../app/products/[slug]/ProductFAQSection';
+import ProductDetailedContent from './ProductDetailedContent';
+import { BlogPostingSchema } from '../SEO';
 
 // Define the enhanced product type for UI with additional fields
 interface EnhancedProduct {
@@ -89,7 +92,6 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
 
   const [product, setProduct] = useState<DetailedProduct | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('description');
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showContactForm, setShowContactForm] = useState(false);
@@ -397,30 +399,14 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-green-100/10 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
         <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-green-200/0 via-green-300/50 to-green-200/0"></div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          {/* Product Images */}
-          <div>
-            <div className="relative h-64 xs:h-72 sm:h-80 bg-white rounded-lg mb-3 sm:mb-4 shadow-sm overflow-hidden group/image border border-green-100/50">
-              {/* Decorative corner elements */}
-              <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-green-300/30 rounded-tl-lg opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"></div>
-              <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-green-300/30 rounded-br-lg opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"></div>
-              
-              <Image
-                src={product.images[selectedImage]}
-                alt={product.name}
-                fill
-                className="object-contain p-4 transition-transform duration-500 group-hover/image:scale-105"
-                priority
-              />
-              
-              {/* Subtle glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-green-100/0 via-green-100/10 to-green-100/0 opacity-0 group-hover/image:opacity-100 transition-opacity duration-500"></div>
-            </div>
-            
-            <div className="grid grid-cols-4 gap-1 sm:gap-2">
+          {/* Product Images - Thumbnails on the left */}
+          <div className="flex flex-row-reverse md:flex-row gap-3 sm:gap-4">
+            {/* Thumbnails - Vertical on the left - Reduced size */}
+            <div className="flex flex-col gap-2 w-14 sm:w-16">
               {product.images.map((image: string, index: number) => (
                 <div 
                   key={index}
-                  className={`relative h-16 sm:h-20 bg-white rounded cursor-pointer border-2 ${selectedImage === index ? 'border-green-500 shadow-md shadow-green-100' : 'border-transparent'} hover:border-green-300 transition-all duration-300 overflow-hidden`}
+                  className={`relative h-14 sm:h-16 bg-white rounded cursor-pointer border-2 ${selectedImage === index ? 'border-green-500 shadow-md shadow-green-100' : 'border-transparent'} hover:border-green-300 transition-all duration-300 overflow-hidden`}
                   onClick={() => setSelectedImage(index)}
                   role="button"
                   tabIndex={0}
@@ -435,6 +421,26 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                   />
                 </div>
               ))}
+            </div>
+            
+            {/* Main Product Image - Reduced height */}
+            <div className="flex-1">
+              <div className="relative h-52 xs:h-60 sm:h-64 bg-white rounded-lg shadow-sm overflow-hidden group/image border border-green-100/50">
+                {/* Decorative corner elements */}
+                <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-green-300/30 rounded-tl-lg opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-green-300/30 rounded-br-lg opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"></div>
+                
+                <Image
+                  src={product.images[selectedImage]}
+                  alt={product.name}
+                  fill
+                  className="object-contain p-4 transition-transform duration-500 group-hover/image:scale-105"
+                  priority
+                />
+                
+                {/* Subtle glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-green-100/0 via-green-100/10 to-green-100/0 opacity-0 group-hover/image:opacity-100 transition-opacity duration-500"></div>
+              </div>
             </div>
           </div>
 
@@ -468,59 +474,55 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
               <span className="ml-0 xs:ml-3 sm:ml-4 text-gray-600 text-sm sm:text-base w-full xs:w-auto mt-1 xs:mt-0 font-['Montserrat',sans-serif] font-light tracking-wide">Category: <span className="font-medium text-green-700">{product.category}</span> / <span className="font-medium text-green-700">{product.subcategory}</span></span>
             </div>
             
-            <div className="mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-green-100/50 relative">
+            <div className="mb-3 sm:mb-4 pb-3 sm:pb-4 border-b border-green-100/50 relative">
               <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-1 h-12 bg-gradient-to-b from-green-300/0 via-green-400/30 to-green-300/0 rounded-full"></div>
               
-              <div className="flex items-baseline">
-                <span className="text-2xl sm:text-3xl font-bold text-primary font-['Montserrat',sans-serif] tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-green-700 via-green-600 to-green-700">{formatCurrency(product.price)}</span>
-                <span className="ml-1 sm:ml-2 text-gray-600 text-sm sm:text-base font-['Montserrat',sans-serif] font-light">/ unit</span>
-              </div>
-              
-              <p className="text-gray-600 mt-1 text-sm sm:text-base font-['Montserrat',sans-serif] font-light tracking-wide">
-                <span className="font-medium">Minimum Order:</span> {product.minOrder} units
-              </p>
-              
-            </div>
-            
-            <div className="mb-4 sm:mb-6 bg-[#defce8]/30 p-4 rounded-lg border border-green-100/50 shadow-sm">
-              <div className="flex flex-col xs:flex-row xs:items-center mb-3 sm:mb-4">
-                <div className="w-full xs:w-1/3 mb-1 xs:mb-0">
-                  <label htmlFor="quantity" className="block text-gray-700 text-sm sm:text-base font-['Montserrat',sans-serif] font-medium">Quantity:</label>
-                </div>
-                <div className="w-full xs:w-2/3 flex items-center">
-                  <div className="relative group/input">
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-green-400/30 via-green-500/30 to-green-600/30 rounded-md blur opacity-0 group-hover/input:opacity-100 transition-opacity duration-300"></div>
-                    <input
-                      type="number"
-                      id="quantity"
-                      min={product.minOrder}
-                      value={quantity}
-                      onChange={handleQuantityChange}
-                      className="relative border border-green-200 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 w-20 sm:w-24 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base bg-white/90 font-['Montserrat',sans-serif]"
-                      aria-label="Product quantity"
-                    />
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-baseline">
+                    <span className="text-2xl sm:text-3xl font-bold text-primary font-['Montserrat',sans-serif] tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-green-700 via-green-600 to-green-700">{formatCurrency(product.price)}</span>
+                    <span className="ml-1 sm:ml-2 text-gray-600 text-sm sm:text-base font-['Montserrat',sans-serif] font-light">/ unit</span>
                   </div>
-                  <span className="ml-2 text-gray-600 text-sm sm:text-base font-['Montserrat',sans-serif] font-light">units</span>
+                  
+                  <p className="text-gray-600 mt-1 text-sm sm:text-base font-['Montserrat',sans-serif] font-light tracking-wide">
+                    <span className="font-medium">Minimum Order:</span> {product.minOrder} units
+                  </p>
+                </div>
+                
+                {/* Quantity selector moved to right side of price */}
+                <div className="flex items-center">
+                  <div className="mr-2">
+                    <label htmlFor="quantity" className="block text-gray-700 text-sm sm:text-base font-['Montserrat',sans-serif] font-medium">Quantity:</label>
+                  </div>
+                  <div className="flex items-center border border-green-200 rounded-full overflow-hidden">
+                    <div className="relative">
+                      <input
+                        type="number"
+                        id="quantity"
+                        min={product.minOrder}
+                        value={quantity}
+                        onChange={handleQuantityChange}
+                        className="w-12 sm:w-16 py-1 px-2 text-center focus:outline-none text-sm sm:text-base bg-white font-['Montserrat',sans-serif]"
+                        aria-label="Product quantity"
+                      />
+                    </div>
+                    <span className="px-2 text-gray-600 text-sm sm:text-base font-['Montserrat',sans-serif] font-light">units</span>
+                  </div>
                 </div>
               </div>
-              
-
-              {/* Decorative element */}
-              <div className="absolute -right-2 top-1/2 transform -translate-y-1/2 w-1 h-12 bg-gradient-to-b from-green-300/0 via-green-400/30 to-green-300/0 rounded-full"></div>
             </div>
             
-            <div className="flex flex-col xs:flex-row gap-3 xs:space-x-4">
+            {/* WhatsApp and Add to Cart buttons in a single row - Adjusted height */}
+            <div className="flex flex-row gap-3 mt-2">
               <a 
                 href={`https://wa.me/8800412138?text=Hi, I'm interested in ${encodeURIComponent(product.name)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 bg-gradient-to-r from-green-500/20 to-green-600/20 text-gray-800 py-2 sm:py-3 rounded-md hover:from-green-500/30 hover:to-green-600/30 transition-all duration-300 flex items-center justify-center text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 shadow-sm hover:shadow group relative overflow-hidden font-['Montserrat',sans-serif] font-medium"
+                className="flex-1 bg-green-100 hover:bg-green-200 text-green-800 py-2.5 rounded-full transition-all duration-300 flex items-center justify-center text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 shadow-sm hover:shadow font-['Montserrat',sans-serif] font-medium"
                 aria-label="Contact supplier via WhatsApp about this product"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2 text-green-700" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-green-700" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22c-5.523 0-10-4.477-10-10S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
                 </svg>
                 WhatsApp
               </a>
@@ -546,19 +548,17 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                       is_tax_inclusive: taxInfo?.is_tax_inclusive,
                       hsn_code: taxInfo?.hsn_code
                     });
-                    setAddingToCart(false);
                     setAddedToCart(true);
                     setTimeout(() => setAddedToCart(false), 3000);
                   }, 500);
                 }}
                 disabled={addingToCart}
-                className={`flex-1 py-2 sm:py-3 rounded-md transition-all duration-300 flex items-center justify-center shadow-sm hover:shadow relative overflow-hidden font-['Montserrat',sans-serif] font-medium ${addedToCart ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' : 'bg-gradient-to-r from-primary/20 to-primary/20 text-gray-800 hover:from-primary/30 hover:to-primary/30'} focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 disabled:opacity-50`}
+                className={`flex-1 py-2.5 rounded-full transition-all duration-300 flex items-center justify-center shadow-sm hover:shadow font-['Montserrat',sans-serif] font-medium ${addedToCart ? 'bg-green-600 text-white' : 'bg-blue-100 text-blue-800 hover:bg-blue-200'} focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50`}
                 aria-label="Add product to cart"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-green-300/0 via-green-300/10 to-green-300/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
                 {addingToCart ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg className="animate-spin mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -566,14 +566,14 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                   </>
                 ) : addedToCart ? (
                   <>
-                    <svg className="-ml-1 mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <svg className="mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Added to Cart
                   </>
                 ) : (
                   <>
-                    <svg className="-ml-1 mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5 text-green-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <svg className="mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                     Add to Cart
@@ -584,179 +584,119 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
           </div>
         </div>
       </div>
+      
 
-      {/* Product Details Tabs */}
-      <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg mb-6 sm:mb-8 border border-[#dbf9e1]/60 relative overflow-hidden group/tabs">
-        <div className="border-b border-[#dbf9e1]/70">
-          <div className="flex overflow-x-auto scrollbar-thin scrollbar-thumb-[#5dc285]/50 scrollbar-track-transparent">
-            <button
-              className={`px-3 xs:px-4 sm:px-6 py-3 sm:py-4 font-['Montserrat',sans-serif] font-medium text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[#5dc285] focus:ring-opacity-50 focus:ring-offset-2 relative transition-all duration-300 ${
-                activeTab === 'description'
-                  ? 'text-green-700 border-b-2 border-[#5dc285] font-semibold'
-                  : 'text-gray-600 hover:text-[#5dc285]'
-              }`}
-              onClick={() => setActiveTab('description')}
-              aria-selected={activeTab === 'description'}
-              role="tab"
-              aria-controls="description-panel"
-              id="description-tab"
-            >
-              Description
-            </button>
-            <button
-              className={`px-3 xs:px-4 sm:px-6 py-3 sm:py-4 font-['Montserrat',sans-serif] font-medium text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[#5dc285] focus:ring-opacity-50 focus:ring-offset-2 relative transition-all duration-300 ${
-                activeTab === 'specifications'
-                  ? 'text-green-700 border-b-2 border-[#5dc285] font-semibold'
-                  : 'text-gray-600 hover:text-[#5dc285]'
-              }`}
-              onClick={() => setActiveTab('specifications')}
-              aria-selected={activeTab === 'specifications'}
-              role="tab"
-              aria-controls="specifications-panel"
-              id="specifications-tab"
-            >
-              Specifications
-            </button>
-            <button
-              className={`px-3 xs:px-4 sm:px-6 py-3 sm:py-4 font-['Montserrat',sans-serif] font-medium text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[#5dc285] focus:ring-opacity-50 focus:ring-offset-2 relative transition-all duration-300 ${
-                activeTab === 'features'
-                  ? 'text-green-700 border-b-2 border-[#5dc285] font-semibold'
-                  : 'text-gray-600 hover:text-[#5dc285]'
-              }`}
-              onClick={() => setActiveTab('features')}
-              aria-selected={activeTab === 'features'}
-              role="tab"
-              aria-controls="features-panel"
-              id="features-tab"
-            >
-              Features & Apps
-            </button>
-            <button
-              className={`px-3 xs:px-4 sm:px-6 py-3 sm:py-4 font-['Montserrat',sans-serif] font-medium text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[#5dc285] focus:ring-opacity-50 focus:ring-offset-2 relative transition-all duration-300 ${
-                activeTab === 'packaging'
-                  ? 'text-green-700 border-b-2 border-[#5dc285] font-semibold'
-                  : 'text-gray-600 hover:text-[#5dc285]'
-              }`}
-              onClick={() => setActiveTab('packaging')}
-              aria-selected={activeTab === 'packaging'}
-              role="tab"
-              aria-controls="packaging-panel"
-              id="packaging-tab"
-            >
-              Packaging
-            </button>
-          </div>
-        </div>
-
+      {/* Product Details - All sections displayed without tabs */}
+      <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg mb-6 sm:mb-8 border border-[#dbf9e1]/60 relative overflow-hidden">
         <div className="p-4 sm:p-6 relative">
           {/* Decorative elements */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#dbf9e1]/20 to-transparent rounded-full blur-2xl opacity-0 group-hover/tabs:opacity-100 transition-opacity duration-700"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-[#dbf9e1]/20 to-transparent rounded-full blur-2xl opacity-0 group-hover/tabs:opacity-100 transition-opacity duration-700 delay-100"></div>
-          {activeTab === 'description' && (
-            <div
-              role="tabpanel"
-              id="description-panel"
-              aria-labelledby="description-tab"
-            >
-              <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
-                Product Description
-                <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
-              </h2>
-              <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-['Montserrat',sans-serif] font-light tracking-wide">{product.description}</p>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#dbf9e1]/20 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-[#dbf9e1]/20 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
+          
+          {/* Description Section */}
+          <div className="mb-8">
+            <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+              Description
+              <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
+            </h2>
+            <div className="prose prose-sm max-w-none mb-6">
+              <p className="text-gray-700">{product.description}</p>
             </div>
-          )}
+            <ProductDetailedContent productSlug={slug} />
+            
+          </div>
+      <div className="mb-6 sm:mb-8">
+        <ProductFAQSection slug={product?.slug} />
+      </div>
+      
+      {/* Specifications Section */}
+          <div className="mb-8">
+            <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+              Specifications
+              <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              {product.specifications.map((spec, index) => (
+                <div key={index} className="bg-white/70 p-3 sm:p-4 rounded-md shadow-sm border border-[#dbf9e1]/40 hover:shadow-md transition-shadow duration-300">
+                  <div className="font-medium text-gray-700 mb-1">{spec.name}</div>
+                  <div className="text-gray-600">{spec.value}</div>
+                </div>
+              ))}
+            </div>
+          </div>
 
-          {activeTab === 'specifications' && (
-            <div
-              role="tabpanel"
-              id="specifications-panel"
-              aria-labelledby="specifications-tab"
-            >
+          {/* Features & Applications Section */}
+          {((product.features && product.features.length > 0) || (product.applications && product.applications.length > 0)) && (
+            <div className="mb-8">
               <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
-                Product Specifications
+                Features & Apps
                 <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
               </h2>
-              <div className="overflow-x-auto -mx-4 sm:mx-0">
-                <table className="min-w-full">
-                  <tbody>
-                    {product.specifications.map((spec: { name: string; value: string }, index: number) => (
-                      <tr key={index} className={index % 2 === 0 ? 'bg-[#dbf9e1]/30' : 'bg-white/80'}>
-                        <td className="px-3 sm:px-4 py-2 sm:py-3 text-gray-700 font-medium w-1/3 text-sm sm:text-base font-['Montserrat',sans-serif]">{spec.name}</td>
-                        <td className="px-3 sm:px-4 py-2 sm:py-3 text-gray-700 text-sm sm:text-base font-['Montserrat',sans-serif] font-light tracking-wide">{spec.value}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                {product.features && product.features.length > 0 && (
+                  <div>
+                    <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+                      Key Features
+                    </h3>
+                    <ul className="space-y-3">
+                      {product.features?.map((feature: string, index: number) => (
+                        <li key={index} className="flex items-start">
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#dbf9e1] flex items-center justify-center mt-0.5">
+                            <div className="w-2 h-2 rounded-full bg-[#5dc285]"></div>
+                          </div>
+                          <span className="ml-2 text-gray-700">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {product.applications && product.applications?.length > 0 && (
+                  <div>
+                    <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+                      Applications
+                    </h3>
+                    <ul className="space-y-3">
+                      {product.applications.map((app, index) => (
+                        <li key={index} className="flex items-start">
+                          <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#dbf9e1] flex items-center justify-center mt-0.5">
+                            <div className="w-2 h-2 rounded-full bg-[#5dc285]"></div>
+                          </div>
+                          <span className="ml-2 text-gray-700">{app}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           )}
 
-          {activeTab === 'features' && (
-            <div
-              role="tabpanel"
-              id="features-panel"
-              aria-labelledby="features-tab"
-            >
-              <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
-                Features
-                <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
-              </h2>
-              <ul className="list-disc pl-4 sm:pl-5 mb-5 sm:mb-6 text-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-sm sm:text-base">
-                {product.features?.map((feature: string, index: number) => (
-                  <li key={index} className="ml-1 font-['Montserrat',sans-serif] font-light tracking-wide py-1 group">
-                    <span className="relative">
-                      <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#5dc285]/50 group-hover:w-full transition-all duration-300"></span>
-                      {feature}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
-              <h3 className="text-base sm:text-lg font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
-                Applications
-                <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
-              </h3>
-              <ul className="list-disc pl-4 sm:pl-5 text-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-sm sm:text-base">
-                {product.applications?.map((application: string, index: number) => (
-                  <li key={index} className="ml-1 font-['Montserrat',sans-serif] font-light tracking-wide py-1 group">
-                    <span className="relative">
-                      <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#5dc285]/50 group-hover:w-full transition-all duration-300"></span>
-                      {application}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {activeTab === 'packaging' && (
-            <div
-              role="tabpanel"
-              id="packaging-panel"
-              aria-labelledby="packaging-tab"
-            >
-              <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
-                Packaging & Shipping
-                <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
-              </h2>
-              <div className="mb-5 bg-[#dbf9e1]/30 p-4 rounded-lg border border-[#dbf9e1]/60">
-                <h4 className="font-['Montserrat',sans-serif] font-medium text-[#5dc285] mb-2 text-sm sm:text-base">Packaging Details:</h4>
-                <p className="text-gray-700 text-sm sm:text-base font-['Montserrat',sans-serif] font-light tracking-wide">{product.packaging}</p>
+          {/* Packaging Section */}
+          <div>
+            <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
+              Packaging
+              <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div className="bg-white/70 p-3 sm:p-4 rounded-md shadow-sm border border-[#dbf9e1]/40 hover:shadow-md transition-shadow duration-300">
+                <div className="font-medium text-gray-700 mb-1">Packaging Type</div>
+                <div className="text-gray-600">{product.packaging}</div>
               </div>
-              <div className="bg-white/80 p-4 rounded-lg border border-[#dbf9e1]/60">
-                <h4 className="font-['Montserrat',sans-serif] font-medium text-[#5dc285] mb-2 text-sm sm:text-base">Shipping Information:</h4>
-                <ul className="list-disc pl-4 sm:pl-5 text-gray-700 text-sm sm:text-base">
-                  <li className="ml-1 mb-2 font-['Montserrat',sans-serif] font-light tracking-wide">Delivery Time: <span className="font-medium text-gray-800">{product.leadTime}</span> after payment confirmation</li>
-                  <li className="ml-1 mb-2 font-['Montserrat',sans-serif] font-light tracking-wide">Shipping available across India and internationally</li>
-                  <li className="ml-1 font-['Montserrat',sans-serif] font-light tracking-wide">Custom packaging available for bulk orders</li>
-                </ul>
+              <div className="bg-white/70 p-3 sm:p-4 rounded-md shadow-sm border border-[#dbf9e1]/40 hover:shadow-md transition-shadow duration-300">
+                <div className="font-medium text-gray-700 mb-1">Lead Time</div>
+                <div className="text-gray-600">{product.leadTime}</div>
+              </div>
+              <div className="bg-white/70 p-3 sm:p-4 rounded-md shadow-sm border border-[#dbf9e1]/40 hover:shadow-md transition-shadow duration-300">
+                <div className="font-medium text-gray-700 mb-1">Payment Terms</div>
+                <div className="text-gray-600">{product.paymentTerms}</div>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
 
 
+      
       {/* Contact Form Modal */}
       {showContactForm && (
         <div className="fixed inset-0 bg-gray-800/30 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4" role="dialog" aria-modal="true" aria-labelledby="contact-form-title">
@@ -864,6 +804,71 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
             </form>
           </div>
         </div>
+      )}
+      
+      {/* BlogPosting Schema for SEO */}
+      {product && (
+        <BlogPostingSchema
+          title={product.name}
+          description={product.description}
+          datePublished={new Date().toISOString()} // Use actual publish date if available
+          dateModified={new Date().toISOString()} // Use actual modified date if available
+          authorName="Azlok Team"
+          imageUrl={product.images[0]}
+          url={`https://azlok.com/products/${slug}`}
+          keywords={[
+            // Product specific keywords
+            product.category, 
+            product.subcategory || '', 
+            ...product.features || [],
+            // Common keywords for all products
+            'Azlok', 'pure', 'natural', 'authentic', 'premium quality',
+            // Category specific keywords
+            ...(product.category?.toLowerCase().includes('spice') ? 
+              ['Indian spices', 'organic spices', 'cooking ingredients', 'culinary', 'Ayurvedic spices', 
+               'traditional', 'kitchen essentials', 'flavor enhancers', 'aroma', 'medicinal spices'] : []),
+            ...(product.category?.toLowerCase().includes('chemical') ? 
+              ['laboratory grade', 'pure chemicals', 'industrial use', 'pharmaceutical grade', 
+               'cleaning agents', 'household chemicals', 'DIY ingredients', 'high purity', 'technical grade',
+               'certified chemicals', 'reagent grade', 'analytical grade', 'USP grade'] : []),
+            // Chemical specific keywords
+            ...(product.name?.toLowerCase().includes('alum') || product.name?.toLowerCase().includes('fitkari') ? 
+              ['potassium aluminum sulfate', 'astringent', 'antiseptic', 'antibacterial', 'water purification', 
+               'skin tightening', 'styptic', 'coagulant', 'natural deodorant'] : []),
+            ...(product.name?.toLowerCase().includes('borax') || product.name?.toLowerCase().includes('suhaga') ? 
+              ['sodium tetraborate', 'cleaning agent', 'pH buffer', 'preservative', 'glass production', 
+               'ceramics', 'enamel', 'fungal infections', 'arthritis treatment'] : []),
+            ...(product.name?.toLowerCase().includes('glycerine') ? 
+              ['humectant', 'moisturizer', 'skin hydration', 'wound healing', 'cough syrup', 
+               'pharmaceutical', 'cosmetics', 'soaps', 'creams', 'natural disinfectant'] : []),
+            ...(product.name?.toLowerCase().includes('oxalic acid') ? 
+              ['rust remover', 'metal cleaning', 'tile cleaning', 'marble polish', 'wood restoration', 
+               'textile dyeing', 'metal finishing', 'organic acid'] : []),
+            ...(product.name?.toLowerCase().includes('isopropyl') || product.name?.toLowerCase().includes('ipa') ? 
+              ['disinfectant', 'sanitizer', 'electronics cleaning', 'glass cleaner', 'fast-evaporating', 
+               'sterilizing', 'medical wipes', 'thermometers', 'residue-free'] : []),
+            ...(product.name?.toLowerCase().includes('stearic acid') ? 
+              ['emulsifier', 'thickener', 'stabilizer', 'candle making', 'soap manufacturing', 'cosmetics', 
+               'lotions', 'tablets', 'consistency', 'texture', 'fatty acid'] : []),
+            // Product name specific keywords
+            ...(product.name?.toLowerCase().includes('turmeric') || product.name?.toLowerCase().includes('haldi') ? 
+              ['curcumin', 'anti-inflammatory', 'golden spice', 'immunity booster', 'natural coloring', 
+               'Haldi Doodh', 'golden milk', 'Katu Rasa', 'Tikta Rasa'] : []),
+            ...(product.name?.toLowerCase().includes('cumin') || product.name?.toLowerCase().includes('jeera') ? 
+              ['digestive aid', 'cuminaldehyde', 'thymol', 'tadka', 'tempering', 'Jeera Pani', 
+               'detox drink', 'metabolism booster', 'Jiraka'] : []),
+            ...(product.name?.toLowerCase().includes('coriander') || product.name?.toLowerCase().includes('dhania') ? 
+              ['linalool', 'borneol', 'vitamin C', 'detoxification', 'cholesterol', 'Sheeta Veerya', 
+               'Pitta dosha', 'Panch Phoran', 'cooling spice'] : []),
+            ...(product.name?.toLowerCase().includes('chilli') || product.name?.toLowerCase().includes('mirchi') ? 
+              ['capsaicin', 'heat', 'metabolism', 'circulation', 'endorphins', 'Ushna Veerya', 
+               'Vata dosha', 'Kapha dosha', 'Agni'] : []),
+            ...(product.name?.toLowerCase().includes('garam masala') ? 
+              ['spice blend', 'warming spices', 'Mughal cuisine', 'essential oils', 'antioxidants', 
+               'antimicrobial', 'gut health', 'nutrient absorption'] : [])
+          ]}
+          category={product.category}
+        />
       )}
     </div>
   );

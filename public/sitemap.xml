@@ -91,6 +91,24 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.azlok.com/blog</loc>
+    <lastmod>2025-10-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+    <url>
+    <loc>https://www.azlok.com/blog/borax-powder-helpful-for-human</loc>
+    <lastmod>2025-10-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.azlok.com/product-faqs</loc>
+    <lastmod>2025-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.azlok.com/about</loc>
     <lastmod>2025-10-20</lastmod>
     <changefreq>monthly</changefreq>

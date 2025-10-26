@@ -7,6 +7,8 @@ export { default as BreadcrumbSchema } from './BreadcrumbSchema';
 export { default as OrganizationSchema } from './OrganizationSchema';
 export { default as ProductSchema } from './ProductSchema';
 export { default as CanonicalUrl } from './CanonicalUrl';
+export { default as FAQSchema } from './FAQSchema';
+export { default as BlogPostingSchema } from './BlogPostingSchema';
 
 // Legacy schema components (using next/head)
 export { 

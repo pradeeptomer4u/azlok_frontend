@@ -33,6 +33,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: '/privacy', changeFreq: 'monthly', priority: 0.5 },
     { route: '/shipping', changeFreq: 'monthly', priority: 0.5 },
     { route: '/returns', changeFreq: 'monthly', priority: 0.5 },
+    { route: '/blog', changeFreq: 'monthly', priority: 0.5 },
+    { route: '/blog/borax-powder-helpful-for-human', changeFreq: 'monthly', priority: 0.5 },
+    { route: '/product-faqs', changeFreq: 'monthly', priority: 0.6 },
   ];
 
   return routes.map(({ route, changeFreq, priority }) => ({

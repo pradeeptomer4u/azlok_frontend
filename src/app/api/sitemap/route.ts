@@ -47,6 +47,9 @@ export async function GET() {
         { url: '/privacy', priority: '0.5', changefreq: 'monthly' },
         { url: '/shipping', priority: '0.5', changefreq: 'monthly' },
         { url: '/returns', priority: '0.5', changefreq: 'monthly' },
+        { url: '/blog', priority: '0.5', changefreq: 'monthly' },
+        { url: '/blog/borax-powder-helpful-for-human', priority: '0.5', changefreq: 'monthly' },
+        { url: '/product-faqs', priority: '0.6', changefreq: 'monthly' },
       ];
       
       // Generate XML

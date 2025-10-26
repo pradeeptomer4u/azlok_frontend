@@ -230,13 +230,18 @@ export default function BlogDetailPage() {
                   <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-green-300/30 rounded-br-lg opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"></div>
                   
                   <Image
-                    src={blog.featured_image}
+                    src={
+                      Array.isArray(blog?.featured_image) && blog?.featured_image?.length > 0
+                        ? blog?.featured_image[0]
+                        : typeof blog?.featured_image === 'string'
+                          ? blog?.featured_image
+                          : '/globe.svg'
+                    }
                     alt={blog.title}
                     fill
                     className="object-cover p-0 transition-transform duration-500 group-hover/image:scale-105"
                     priority
                   />
-                  
                   {/* Subtle glow effect */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-green-100/0 via-green-100/10 to-green-100/0 opacity-0 group-hover/image:opacity-100 transition-opacity duration-500"></div>
                 </div>

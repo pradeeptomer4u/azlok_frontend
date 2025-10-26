@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '../../context/CartContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { calculateProductTax, TaxCalculationRequest, TaxCalculationResponse, formatCurrency, formatTaxPercentage } from '../../utils/taxService';
 import productService, { Product as ApiProduct } from '../../services/productService';
 import ProductFAQSection from '../../app/products/[slug]/ProductFAQSection';
 import ProductDetailedContent from './ProductDetailedContent';
+import LanguageToggle from '../ui/LanguageToggle';
 import { BlogPostingSchema } from '../SEO';
 
 // Define the enhanced product type for UI with additional fields
@@ -50,6 +52,7 @@ interface ProductDetailProps {
 }
 
 const ProductDetail = ({ slug }: ProductDetailProps) => {
+  const { language } = useLanguage();
   interface DetailedProduct {
     id: number;
     name: string;
@@ -74,6 +77,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
     rating: number;
     isVerified: boolean;
     description: string;
+    description_hi?: string;
     specifications: { name: string; value: string }[];
     images: string[];
     features?: string[];
@@ -171,6 +175,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
             rating: apiProduct.rating || 4.5,
             isVerified: true,
             description: apiProduct.description || 'No description available',
+            description_hi: apiProduct.description_hi,
             // Generate specifications from available data
             specifications: [
               { name: 'SKU', value: apiProduct.sku || 'N/A' },
@@ -602,14 +607,19 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
           
           {/* Description Section */}
           <div className="mb-8">
-            <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold mb-3 sm:mb-4 text-[#5dc285] relative inline-block">
-              Description
-              <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
-            </h2>
-            <div className="prose prose-sm max-w-none mb-6">
-              <p className="text-gray-700">{product.description}</p>
+            <div className="flex flex-row justify-between items-center mb-3 sm:mb-4">
+              <h2 className="text-lg sm:text-xl font-['Playfair_Display',serif] font-semibold text-[#5dc285] relative inline-block">
+                Description
+                <div className="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-gradient-to-r from-[#dbf9e1] via-[#5dc285] to-[#dbf9e1]"></div>
+              </h2>
+              <LanguageToggle />
             </div>
-            <ProductDetailedContent productSlug={slug} />
+            <div className="prose prose-sm max-w-none mb-6">
+              <p className="text-gray-700">
+                {language === 'en' ? product.description : (product.description_hi || product.description)}
+              </p>
+            </div>
+            <ProductDetailedContent productSlug={slug} showLanguageToggle={false} />
             
           </div>
       <div className="mb-6 sm:mb-8">

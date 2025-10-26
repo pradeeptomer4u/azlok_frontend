@@ -9,6 +9,7 @@ import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import { CartProvider } from "../context/CartContext";
 import { AuthProvider } from "../context/AuthContext";
+import { LanguageProvider } from "../context/LanguageContext";
 import KeepAliveInitializer from "../components/utils/KeepAliveInitializer";
 import ErrorBoundary from "../components/utils/ErrorBoundary";
 import WhatsAppChat from "../components/WhatsAppChat";
@@ -114,6 +115,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <AuthProvider>
             <CartProvider>
+              <LanguageProvider>
               <div className="flex flex-col min-h-screen">
                 <Header />
                 <main className="flex-grow">{children}</main>
@@ -150,6 +152,7 @@ export default function RootLayout({
                 priceRange={organizationData.priceRange}
                 sameAs={organizationData.sameAs}
               />
+              </LanguageProvider>
             </CartProvider>
           </AuthProvider>
         </ErrorBoundary>

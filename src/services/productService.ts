@@ -4,6 +4,7 @@ export interface Product {
   id: number;
   name: string;
   description: string;
+  description_hi?: string;
   price: number;
   base_price?: number; // Added base price field
   discount_price?: number;

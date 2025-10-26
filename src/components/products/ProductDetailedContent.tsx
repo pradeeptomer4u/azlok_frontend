@@ -142,9 +142,6 @@ export default function ProductDetailedContent({ productSlug, showLanguageToggle
     <div className="mt-8 space-y-6">
       {/* Language toggle and title */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-        <h2 className="text-xl font-bold text-gray-800 mb-2 sm:mb-0">
-          {content?.title || 'Product Details'}
-        </h2>
         {showLanguageToggle && apiData && (
           <LanguageToggle />
         )}

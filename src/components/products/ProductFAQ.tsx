@@ -160,11 +160,6 @@ const ProductFAQ: React.FC<ProductFAQProps> = ({
       <div className="relative z-10">
         {/* Language toggle and title */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-          {apiData && (
-            <h2 className="text-xl font-bold text-green-800 mb-2 sm:mb-0">
-              {getProductTitle()}
-            </h2>
-          )}
           {showLanguageToggle && apiData && (
             <div className="mt-2 sm:mt-0">
               <LanguageToggle />

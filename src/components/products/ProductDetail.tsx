@@ -531,25 +531,32 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                   setAddingToCart(true);
                   // Simulate API call delay
                   setTimeout(() => {
-                    addItem({
-                      id: product.id,
-                      product_id: product.id, // Add product_id field
-                      name: product.name,
-                      image: product.images[0],
-                      price: product.price,
-                      quantity: quantity,
-                      seller: product.seller.name,
-                      seller_id: product.seller.id,
-                      minOrder: product.minOrder,
-                      tax_amount: taxInfo?.tax_amount,
-                      cgst_amount: taxInfo?.cgst_amount,
-                      sgst_amount: taxInfo?.sgst_amount,
-                      igst_amount: taxInfo?.igst_amount,
-                      is_tax_inclusive: taxInfo?.is_tax_inclusive,
-                      hsn_code: taxInfo?.hsn_code
-                    });
-                    setAddedToCart(true);
-                    setTimeout(() => setAddedToCart(false), 3000);
+                    try {
+                      addItem({
+                        id: product.id,
+                        product_id: product.id, // Add product_id field
+                        name: product.name,
+                        image: product.images[0],
+                        price: product.price,
+                        quantity: quantity,
+                        seller: product.seller.name,
+                        seller_id: product.seller.id,
+                        minOrder: product.minOrder,
+                        tax_amount: taxInfo?.tax_amount,
+                        cgst_amount: taxInfo?.cgst_amount,
+                        sgst_amount: taxInfo?.sgst_amount,
+                        igst_amount: taxInfo?.igst_amount,
+                        is_tax_inclusive: taxInfo?.is_tax_inclusive,
+                        hsn_code: taxInfo?.hsn_code
+                      });
+                      setAddedToCart(true);
+                      setTimeout(() => setAddedToCart(false), 3000);
+                    } catch (error) {
+                      console.error('Error adding item to cart:', error);
+                      // Optionally show an error message to the user
+                    } finally {
+                      setAddingToCart(false); // Always reset loading state
+                    }
                   }, 500);
                 }}
                 disabled={addingToCart}

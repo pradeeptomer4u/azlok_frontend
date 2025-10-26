@@ -35,7 +35,7 @@ export default function RootLayout({
   // Organization data for schema
   const organizationData = {
     name: "Azlok",
-    alternateName: "Azlok Enterprises",
+    alternateName: "Azlok",
     url: "https://www.azlok.com",
     logo: "https://www.azlok.com/logo.png",
     description: "India's leading B2C marketplace connecting verified suppliers with businesses",

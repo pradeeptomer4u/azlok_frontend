@@ -140,7 +140,7 @@ const Footer = () => {
                 <div className="absolute -inset-2 bg-gradient-to-r from-green-200/0 via-green-300/20 to-green-200/0 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-700 blur-xl group-hover:duration-500"></div>
                 <Image 
                   src="/logo.png" 
-                  alt="Azlok Enterprises" 
+                  alt="Azlok" 
                   width={140} 
                   height={50} 
                   className="object-contain relative z-10 drop-shadow-sm"

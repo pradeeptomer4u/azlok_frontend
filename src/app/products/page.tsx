@@ -7,7 +7,7 @@ import { Suspense } from 'react';
 // Metadata needs to be in a separate file for client components
 // This is just for reference, actual metadata should be in layout.tsx
 const metadata = {
-  title: 'Products | Azlok Enterprises',
+  title: 'Products | Azlok',
   description: 'Browse our wide range of products from verified suppliers across India',
 };
 

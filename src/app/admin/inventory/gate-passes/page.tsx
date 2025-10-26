@@ -137,7 +137,7 @@ export default function GatePassesPage() {
             </head>
             <body>
               <div class="header">
-                <div class="company-name">Azlok Enterprises</div>
+                <div class="company-name">Azlok</div>
                 <div class="title">${response.data.pass_type.toUpperCase()} GATE PASS</div>
                 <div>Pass No: ${response.data.pass_number}</div>
                 <div>Date: ${new Date(response.data.pass_date).toLocaleDateString()}</div>

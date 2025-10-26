@@ -155,7 +155,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
             minOrder: 1, // Default minimum order
             seller: {
               id: apiProduct.seller?.id || 1,
-              name: apiProduct.seller?.business_name || apiProduct.seller?.full_name || 'Azlok Enterprises',
+              name: apiProduct.seller?.business_name || apiProduct.seller?.full_name || 'Azlok',
               logo: '/logo.png',
               location: apiProduct.seller?.region || 'Mumbai, India',
               memberSince: '2020',
@@ -218,7 +218,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
             minOrder: 1,
             seller: {
               id: 0,
-              name: 'Azlok Enterprises',
+              name: 'Azlok',
               logo: '/logo.png',
               location: 'Mumbai, India',
               memberSince: '2020',
@@ -259,7 +259,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
           minOrder: 1,
           seller: {
             id: 0,
-            name: 'Azlok Enterprises',
+            name: 'Azlok',
             logo: '/logo.png',
             location: 'Mumbai, India',
             memberSince: '2020',

@@ -116,7 +116,7 @@ export async function generateMetadata({ params }: PageProps<'/products/[slug]'>
       
       // Use real product data for metadata
       return {
-        title: `${product.name} | Azlok Enterprises`,
+        title: `${product.name} | Azlok`,
         description: (product.description ? product.description.substring(0, 160) : 'View detailed product specifications, pricing, and supplier information').substring(0, 160),
         keywords: uniqueKeywords,
         alternates: {
@@ -126,7 +126,7 @@ export async function generateMetadata({ params }: PageProps<'/products/[slug]'>
           title: product.name || formattedProductName,
           description: ((product.description || 'View detailed product specifications, pricing, and supplier information').substring(0, 160)),
           url: `/products/${slug}`,
-          siteName: 'Azlok Enterprises',
+          siteName: 'Azlok',
           images: [
             {
               url: productImage,
@@ -155,17 +155,17 @@ export async function generateMetadata({ params }: PageProps<'/products/[slug]'>
   
   // Fallback metadata if product not found or error occurs
   return {
-    title: `${formattedProductName} | Azlok Enterprises`,
+    title: `${formattedProductName} | Azlok`,
     description: 'View detailed product specifications, pricing, and supplier information'.substring(0, 160),
     keywords: `${slug.replace(/-/g, ' ')}, product, Azlok, marketplace`,
     alternates: {
       canonical: `/products/${slug}`,
     },
     openGraph: {
-      title: `${formattedProductName} | Azlok Enterprises`,
+      title: `${formattedProductName} | Azlok`,
       description: 'View detailed product specifications, pricing, and supplier information'.substring(0, 160),
       url: `/products/${slug}`,
-      siteName: 'Azlok Enterprises',
+      siteName: 'Azlok',
       images: [
         {
           url: '/globe.svg',
@@ -179,7 +179,7 @@ export async function generateMetadata({ params }: PageProps<'/products/[slug]'>
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${formattedProductName} | Azlok Enterprises`,
+      title: `${formattedProductName} | Azlok`,
       description: 'View detailed product specifications, pricing, and supplier information'.substring(0, 160),
       images: ['/globe.svg'],
       creator: '@azlok',

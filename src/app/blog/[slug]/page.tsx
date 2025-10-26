@@ -137,7 +137,7 @@ export default function BlogDetailPage() {
     <>
       <MetaTags
         title={`${blog.title} - Azlok Blog`}
-        description={blog.excerpt || `Read about ${blog.title} on the Azlok Enterprises blog.`}
+        description={blog.excerpt || `Read about ${blog.title} on the Azlok blog.`}
         ogType="article"
         ogUrl={`/blog/${blog.slug}`}
         ogImage={blog.featured_image || '/images/blog/blog-banner.jpg'}

@@ -50,7 +50,7 @@ const ProductListSchema: React.FC<ProductListSchemaProps> = ({
             'availability': product.stock_quantity > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
             'seller': {
               '@type': 'Organization',
-              'name': product.seller?.business_name || product.seller?.full_name || 'Azlok Enterprises'
+              'name': product.seller?.business_name || product.seller?.full_name || 'Azlok'
             }
           }
         }
@@ -88,7 +88,7 @@ const ProductListSchema: React.FC<ProductListSchemaProps> = ({
               'availability': product.stock_quantity > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
               'seller': {
                 '@type': 'Organization',
-                'name': product.seller?.business_name || product.seller?.full_name || 'Azlok Enterprises'
+                'name': product.seller?.business_name || product.seller?.full_name || 'Azlok'
               }
             }
           }

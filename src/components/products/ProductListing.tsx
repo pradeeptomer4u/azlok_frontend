@@ -102,7 +102,7 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
           rating: product.rating || 0,
           isVerified: true,
           minOrder: 1,
-          seller: product.seller?.business_name || product.seller?.full_name || 'Azlok Enterprises',
+          seller: product.seller?.business_name || product.seller?.full_name || 'Azlok',
           location: product.seller?.region || 'Mumbai, India'
         })) as Product[];
         

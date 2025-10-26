@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "wholesale marketplace", "B2C e-commerce", "supplier network India"
   ],
   authors: [{ name: "Azlok Team" }],
-  creator: "Azlok Enterprises",
+  creator: "Azlok",
   publisher: "Azlok",
   formatDetection: {
     email: false,

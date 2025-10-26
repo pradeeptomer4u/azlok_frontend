@@ -16,7 +16,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
       title: 'All Categories - Azlok',
       description: 'Browse all product categories available at Azlok. Find electronics, clothing, furniture, and more.'.substring(0, 160),
       url: '/categories',
-      siteName: 'Azlok Enterprises',
+      siteName: 'Azlok',
       images: [
         {
           url: '/logo.png',

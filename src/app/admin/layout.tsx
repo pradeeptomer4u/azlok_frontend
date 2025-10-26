@@ -40,7 +40,7 @@ export default function AdminLayout({
           <Link href="/admin" className="flex items-center">
             <Image 
               src="/logo.png" 
-              alt="Azlok Enterprises" 
+              alt="Azlok" 
               width={120} 
               height={40} 
               className="object-contain"

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps<'/categories/[slug]
       title: `${formattedCategoryName} - Azlok`,
       description: `Browse ${formattedCategoryName} products at Azlok. Find the best deals and quality items.`.substring(0, 160),
       url: `/categories/${slug}`,
-      siteName: 'Azlok Enterprises',
+      siteName: 'Azlok',
       images: [
         {
           url: '/logo.png',

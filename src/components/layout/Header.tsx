@@ -94,7 +94,7 @@ const Header = () => {
               <div className="relative p-1.5">
                 <Image 
                   src="/logo.png" 
-                  alt="Azlok Enterprises" 
+                  alt="Azlok" 
                   width={110} 
                   height={38} 
                   className="object-contain relative z-10"
@@ -316,7 +316,7 @@ const Header = () => {
             <div className="flex items-center">
               <Image 
                 src="/logo.png" 
-                alt="Azlok Enterprises" 
+                alt="Azlok" 
                 width={80} 
                 height={30} 
                 className="object-contain"

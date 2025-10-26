@@ -64,8 +64,8 @@ export default function BlogListingPage() {
   return (
     <>
       <MetaTags
-        title="Blog - Azlok Enterprises"
-        description="Latest news, insights, and updates from Azlok Enterprises. Read our blog for information on organic products, sustainability, and more."
+        title="Blog - Azlok"
+        description="Latest news, insights, and updates from Azlok. Read our blog for information on organic products, sustainability, and more."
         ogType="website"
         ogUrl="/blog"
         ogImage="/images/blog/blog-banner.jpg"
@@ -119,7 +119,7 @@ export default function BlogListingPage() {
               transition={{ delay: 0.2, duration: 0.5 }}
               className="text-lg text-green-700 max-w-2xl mx-auto font-light"
             >
-              Latest news, insights, and updates from Azlok Enterprises
+              Latest news, insights, and updates from Azlok
             </motion.p>
           </div>
 

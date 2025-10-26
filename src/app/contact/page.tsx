@@ -82,7 +82,7 @@ export default function ContactPage() {
       {/* Organization Structured Data */}
       <OrganizationStructuredData
         name="Azlok"
-        url="https://azlok.com"
+        url="https://www.azlok.com"
         logo="/logo.png"
         sameAs={[
           "https://www.linkedin.com/in/azlok/",

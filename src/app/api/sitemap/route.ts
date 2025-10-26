@@ -57,7 +57,7 @@ export async function GET() {
       // Add each page
       for (const page of mainPages) {
         sitemapContent += `  <url>
-    <loc>https://azlok.com${page.url}</loc>
+    <loc>https://www.azlok.com${page.url}</loc>
     <lastmod>${currentDate}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>

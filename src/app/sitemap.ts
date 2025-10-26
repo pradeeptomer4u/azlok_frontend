@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://azlok.com';
+  const baseUrl = 'https://www.azlok.com';
   const currentDate = new Date();
   
   // Define all routes

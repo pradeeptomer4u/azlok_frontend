@@ -44,7 +44,7 @@ const ProductListSchema: React.FC<ProductListSchemaProps> = ({
           },
           'offers': {
             '@type': 'Offer',
-            'url': `https://azlok.com/products/${product.slug || product.id}`,
+            'url': `https://www.azlok.com/products/${product.slug || product.id}`,
             'price': product.price,
             'priceCurrency': 'INR',
             'availability': product.stock_quantity > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
@@ -82,7 +82,7 @@ const ProductListSchema: React.FC<ProductListSchemaProps> = ({
             },
             'offers': {
               '@type': 'Offer',
-              'url': `https://azlok.com/products/${product.slug || product.id}`,
+              'url': `https://www.azlok.com/products/${product.slug || product.id}`,
               'price': product.price,
               'priceCurrency': 'INR',
               'availability': product.stock_quantity > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',

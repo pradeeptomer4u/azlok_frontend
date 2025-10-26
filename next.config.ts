@@ -38,8 +38,6 @@ const nextConfig: NextConfig = {
   // Disable source maps in production to reduce file sizes
   productionBrowserSourceMaps: false,
   
-  // Optimize build for Cloudflare Pages
-  swcMinify: true,
   // No rewrites needed as we're using static files
   
   // Headers for better SEO and security

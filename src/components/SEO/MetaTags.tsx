@@ -47,7 +47,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({
       {keywords && <meta name="keywords" content={keywords} />}
       
       {/* Canonical URL */}
-<link rel="canonical" href={canonicalUrl ? `https://azlok.com${canonicalUrl}` : 'https://azlok.com'} />
+<link rel="canonical" href={canonicalUrl ? `https://www.azlok.com${canonicalUrl}` : 'https://www.azlok.com'} />
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={ogType} />
@@ -55,7 +55,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({
       <meta property="og:title" content={finalOgTitle} />
       <meta property="og:description" content={finalOgDescription} />
       <meta property="og:image" content={ogImage} />
-      <meta property="og:image:secure_url" content={ogImage.startsWith('http') ? ogImage : `https://azlok.com${ogImage}`} />
+      <meta property="og:image:secure_url" content={ogImage.startsWith('http') ? ogImage : `https://www.azlok.com${ogImage}`} />
       
       {/* Twitter */}
       <meta property="twitter:card" content={twitterCard} />

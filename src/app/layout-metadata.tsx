@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://azlok.com'),
+  metadataBase: new URL('https://www.azlok.com'),
   // Canonical URLs are set by individual pages
 
   openGraph: {
     title: "Azlok - Premium B2C Marketplace & E-commerce Platform in India",
     description: "India's leading B2C marketplace connecting verified suppliers with businesses. Quality products, competitive pricing, fast delivery.".substring(0, 160),
-    url: 'https://azlok.com',
+    url: 'https://www.azlok.com',
     siteName: 'Azlok',
     images: [
       {

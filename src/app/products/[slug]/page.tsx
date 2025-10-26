@@ -1,5 +1,6 @@
 import ProductDetail from '@/components/products/ProductDetail';
 import productService from '@/services/productService';
+import { ProductSchema } from '@/components/SEO';
 
 export async function generateMetadata({ params }: PageProps<'/products/[slug]'>) {
   const { slug } = await params;
@@ -89,7 +90,7 @@ export async function generateMetadata({ params }: PageProps<'/products/[slug]'>
         // Ensure image URL is absolute and valid
         if (productImage && productImage !== '/globe.svg' && !productImage.startsWith('http')) {
           // Make sure we have a valid base URL
-          const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://azlok.com';
+          const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://www.azlok.com';
           // Ensure proper path joining
           productImage = `${baseUrl}${productImage.startsWith('/') ? '' : '/'}${productImage}`;
         }
@@ -189,6 +190,37 @@ export async function generateMetadata({ params }: PageProps<'/products/[slug]'>
 export default async function ProductPage(props: PageProps<'/products/[slug]'>) {
   const { slug } = await props.params;
   
+  // Fetch product data for schema
+  let productData = null;
+  try {
+    const productsResponse = await productService.getProducts({}, 1, 100);
+    const allProducts = productsResponse.items || [];
+    
+    // Find product by slug
+    productData = allProducts.find(p => 
+      p.slug === slug || 
+      p.name.toLowerCase().replace(/\s+/g, '-') === slug.toLowerCase() ||
+      p.sku === slug.toUpperCase()
+    );
+  } catch (error) {
+    console.error('Error fetching product for schema:', error);
+  }
+  
+  // Prepare product schema data if product was found
+  const schemaData = productData ? {
+    id: productData.id,
+    name: productData.name,
+    description: productData.description || `Azlok ${productData.name} - Premium quality product`,
+    price: productData.price,
+    currency: 'INR',
+    image: productData.image_url || '/globe.svg',
+    url: `/products/${slug}`,
+    sku: productData.sku || `AZL-${productData.id}`,
+    brand: 'Azlok',
+    availability: (productData.stock_quantity && productData.stock_quantity > 0) ? 'InStock' : 'OutOfStock' as 'InStock' | 'OutOfStock',
+    category: productData.category_name || 'Product'
+  } : null;
+  
   return (
     <div className="min-h-screen py-8 bg-[#dbf9e1]/50 relative overflow-hidden">
       {/* Advanced background graphics */}
@@ -208,6 +240,11 @@ export default async function ProductPage(props: PageProps<'/products/[slug]'>) 
       
       <div className="container-custom mx-auto relative z-10">
         <ProductDetail slug={slug} />
+        
+        {/* Add ProductSchema for SEO */}
+        {schemaData && (
+          <ProductSchema product={schemaData} />
+        )}
       </div>
     </div>
   );

@@ -55,8 +55,8 @@ Disallow: /*?*sessionid=
 Disallow: /*?*page=*&*
 
 # Sitemap
-Sitemap: https://azlok.com/sitemap.xml
-Sitemap: https://azlok.com/sitemap-index.xml`;
+Sitemap: https://www.azlok.com/sitemap.xml
+Sitemap: https://www.azlok.com/sitemap-index.xml`;
 
     return new NextResponse(robotsContent, {
       headers: {
@@ -77,7 +77,7 @@ Disallow: /admin/
 Disallow: /api/
 Disallow: /private/
 
-Sitemap: https://azlok.com/sitemap.xml`;
+Sitemap: https://www.azlok.com/sitemap.xml`;
 
     return new NextResponse(fallbackContent, {
       headers: {

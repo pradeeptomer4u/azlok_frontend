@@ -17,6 +17,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: 'https://azlok.com/sitemap.xml',
+    sitemap: 'https://www.azlok.com/sitemap.xml',
   }
 }

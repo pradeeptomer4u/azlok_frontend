@@ -18,7 +18,7 @@ export default function BreadcrumbStructuredData({ items }: BreadcrumbStructured
       "@type": "ListItem",
       "position": index + 1,
       "name": item.name,
-      "item": `https://azlok.com${item.url}`
+      "item": `https://www.azlok.com${item.url}`
     }))
   };
   

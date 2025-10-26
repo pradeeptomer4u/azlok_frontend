@@ -9,4 +9,4 @@ Disallow: /checkout/
 Disallow: /api/
 Disallow: /private/
 
-Sitemap: https://azlok.com/sitemap.xml
+Sitemap: https://www.azlok.com/sitemap.xml

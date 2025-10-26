@@ -74,18 +74,18 @@ Azlok is positioned as a premium online shopping platform offering:
 - Quality assurance for all products
 
 ## Important URLs
-- **Website**: https://azlok.com
+- **Website**: https://www.azlok.com
 - **Sample Products**: 
-  - https://azlok.com/products/azl01008
-  - https://azlok.com/products/azl05008
+  - https://www.azlok.com/products/azl01008
+  - https://www.azlok.com/products/azl05008
 - **Legal & Information Pages**:
-  - Privacy Policy: https://azlok.com/privacy
-  - Terms of Service: https://azlok.com/terms
-  - FAQ: https://azlok.com/faq
-  - Shipping Information: https://azlok.com/shipping
-  - Returns & Refunds: https://azlok.com/returns
-  - About Us: https://azlok.com/about
-  - Contact Us: https://azlok.com/contact
+  - Privacy Policy: https://www.azlok.com/privacy
+  - Terms of Service: https://www.azlok.com/terms
+  - FAQ: https://www.azlok.com/faq
+  - Shipping Information: https://www.azlok.com/shipping
+  - Returns & Refunds: https://www.azlok.com/returns
+  - About Us: https://www.azlok.com/about
+  - Contact Us: https://www.azlok.com/contact
 
 ## Code Patterns
 - Client components marked with 'use client'

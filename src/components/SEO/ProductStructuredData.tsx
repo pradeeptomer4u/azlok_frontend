@@ -50,7 +50,7 @@ export default function ProductStructuredData({ product }: ProductStructuredData
     },
     "offers": {
       "@type": "Offer",
-      "url": `https://azlok.com/products/${product.name.toLowerCase().replace(/\s+/g, '-')}`,
+      "url": `https://www.azlok.com/products/${product.name.toLowerCase().replace(/\s+/g, '-')}`,
       "priceCurrency": "INR",
       "price": product.price,
       "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days from now

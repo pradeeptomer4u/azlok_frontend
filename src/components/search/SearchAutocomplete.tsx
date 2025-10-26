@@ -343,7 +343,7 @@ const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({ onSelect }) => 
                 </div>
                 <h3 className="text-xl font-medium text-gray-700 mb-3">No products found</h3>
                 <p className="text-gray-500 mb-6 text-lg">
-                  We couldn't find any products matching "{query}"
+                  We couldn&apos;t find any products matching
                 </p>
               </div>
             </div>

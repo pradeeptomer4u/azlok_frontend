@@ -195,7 +195,13 @@ export default function SearchContent() {
               >
                 <div className="relative h-48 bg-gray-50">
                   <Image
-                    src={product.image_url || product.image || '/globe.svg'}
+                    src={
+                      Array.isArray(product.image_url) && product.image_url.length > 0
+                        ? product.image_url[0]
+                        : typeof product.image_url === 'string'
+                          ? product.image_url
+                          : product.image || '/globe.svg'
+                    }
                     alt={product.name}
                     fill
                     className="object-contain p-4"

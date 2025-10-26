@@ -317,7 +317,13 @@ export default function ProductsPage() {
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10 relative">
                         <Image
-                          src={product.image_url || '/logo.png'}
+                          src={
+                            Array.isArray(product.image_url) && product.image_url.length > 0
+                              ? product.image_url[0]
+                              : typeof product.image_url === 'string'
+                                ? product.image_url
+                                : '/logo.png'
+                          }
                           alt={product.name}
                           fill
                           className="object-cover rounded-md"

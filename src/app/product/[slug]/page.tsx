@@ -201,13 +201,17 @@ export default function ProductDetail() {
                 {product.image_url ? (
                   <div className="relative h-full w-full">
                     <Image
-                      src={product.image_url}
+                      src={
+                        Array.isArray(product.image_url) && product.image_url.length > 0
+                          ? product.image_url[0]
+                          : typeof product.image_url === 'string'
+                            ? product.image_url
+                            : '/globe.svg'
+                      }
                       alt={product.name}
                       fill
                       style={{ objectFit: 'contain' }}
-                      sizes="(max-width: 768px) 100vw, 50vw"
                       priority
-                      className="hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                 ) : (
@@ -228,7 +232,13 @@ export default function ProductDetail() {
                 {product.image_url && (
                   <div className="relative h-full w-full">
                     <Image
-                      src={product.image_url}
+                      src={
+                        Array.isArray(product.image_url) && product.image_url.length > 0
+                          ? product.image_url[0]
+                          : typeof product.image_url === 'string'
+                            ? product.image_url
+                            : '/globe.svg'
+                      }
                       alt={`${product.name} thumbnail 1`}
                       fill
                       style={{ objectFit: 'cover' }}

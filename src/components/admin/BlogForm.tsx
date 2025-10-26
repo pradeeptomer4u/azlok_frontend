@@ -552,7 +552,13 @@ export default function BlogForm({ blogId, initialData }: BlogFormProps) {
                               {product.image_url && (
                                 <div className="h-10 w-10 mr-3 relative">
                                   <Image
-                                    src={product.image_url}
+                                    src={
+                                      Array.isArray(product.image_url) && product.image_url.length > 0
+                                        ? product.image_url[0]
+                                        : typeof product.image_url === 'string'
+                                          ? product.image_url
+                                          : '/globe.svg'
+                                    }
                                     alt={product.name}
                                     fill
                                     style={{ objectFit: 'cover' }}
@@ -599,7 +605,13 @@ export default function BlogForm({ blogId, initialData }: BlogFormProps) {
                             {product.image_url && (
                               <div className="h-10 w-10 mr-3 relative">
                                 <Image
-                                  src={product.image_url}
+                                  src={
+                                    Array.isArray(product.image_url) && product.image_url.length > 0
+                                      ? product.image_url[0]
+                                      : typeof product.image_url === 'string'
+                                        ? product.image_url
+                                        : '/globe.svg'
+                                  }
                                   alt={product.name}
                                   fill
                                   style={{ objectFit: 'cover' }}

@@ -303,21 +303,19 @@ const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({ onSelect }) => 
                     onMouseEnter={() => setHighlightedIndex(index)}
                   >
                     <div className="relative h-16 w-16 flex-shrink-0 rounded-md overflow-hidden bg-white shadow-sm border border-gray-200">
-                      {getImageUrl(suggestion) ? (
+                      {getImageUrl(suggestion) && (
                         <Image
-                          src={getImageUrl(suggestion)}
-                          alt={suggestion.name}
-                          fill
-                          className="object-contain p-1"
-                          sizes="64px"
-                          unoptimized={isExternalImage(getImageUrl(suggestion))}
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center h-full w-full bg-gray-100 text-gray-500">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                        </div>
+                                              src={
+                                                Array.isArray(suggestion.image_urls) && suggestion.image_urls.length > 0
+                                                  ? suggestion.image_urls[0]
+                                                  : typeof suggestion.image_urls === 'string'
+                                                    ? suggestion.image_urls
+                                                    : '/globe.svg'
+                                              }
+                                              alt={`${suggestion.name} search 1`}
+                                              fill
+                                              style={{ objectFit: 'cover' }}
+                                            />
                       )}
                     </div>
                     <div className="ml-4 flex-grow">

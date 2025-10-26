@@ -15,6 +15,7 @@ import MetaTags from "../components/SEO/MetaTags";
 import { OrganizationStructuredData } from "../components/SEO/StructuredData";
 import AIOverviewOptimized from "../components/SEO/AIOverviewOptimized";
 import FAQStructuredData from "../components/SEO/FAQStructuredData";
+import { CanonicalUrl } from "../components/SEO";
 import { ArrowRight, ShoppingBag, Truck, BadgeCheck, Clock, Star } from 'lucide-react';
 
 export default function Home() {
@@ -30,6 +31,9 @@ export default function Home() {
         ogImage="/home_page_banner.png"
         canonicalUrl="/"
       />
+      
+      {/* Explicit Canonical URL */}
+      <CanonicalUrl url="/" />
       
       {/* Organization Structured Data */}
       <OrganizationStructuredData

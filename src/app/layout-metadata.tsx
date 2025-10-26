@@ -19,7 +19,10 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL('https://www.azlok.com'),
-  // Canonical URLs are set by individual pages
+  // Set canonical URL for the root/home page
+  alternates: {
+    canonical: '/',
+  },
 
   openGraph: {
     title: "Azlok - Premium B2C Marketplace & E-commerce Platform in India",

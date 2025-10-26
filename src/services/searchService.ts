@@ -1,5 +1,5 @@
 import { apiRequest } from '../utils/apiRequest';
-import { Product } from '../types/product';
+import { Product, Category } from '../types/product';
 
 export interface SearchResults {
   items: Product[];
@@ -14,9 +14,13 @@ export interface AutocompleteResult {
   id: number;
   name: string;
   image?: string;
-  image_url?: string;
+  image_url?: string[] | string; // Can be either an array of strings or a single string
+  image_urls?: string[]; // From API response
   price: number;
   category?: string;
+  categories?: Category[]; // From API response
+  description?: string;
+  slug?: string;
 }
 
 const searchService = {
@@ -29,96 +33,38 @@ const searchService = {
   ): Promise<SearchResults> => {
     try {
       // Use our Next.js API route
-      let url = `/api/search?query=${encodeURIComponent(query)}&page=${page}&size=${size}`;
+      let url = `/api/products/search?query=${encodeURIComponent(query)}&page=${page}&size=${size}`;
       
       if (category_id) {
         url += `&category_id=${category_id}`;
       }
       
+      console.log(`Sending search request to: ${url}`);
       const response = await apiRequest<SearchResults>(url);
-      return response || { items: [], total: 0, page, size, pages: 0, query };
-    } catch (error) {
-      console.error('Error searching products:', error);
-      return { items: [], total: 0, page, size, pages: 0, query };
-    }
-  },
-  
-  // Get autocomplete suggestions
-  getAutocompleteSuggestions: async (
-    query: string,
-    limit: number = 5
-  ): Promise<AutocompleteResult[]> => {
-    if (!query || query.trim().length < 2) {
-      return [];
-    }
-    
-    try {
-      // Create mock data for testing - this is safer than making API calls that might fail
-      const mockData: AutocompleteResult[] = [
-        {
-          id: 1,
-          name: 'Industrial Supplies - Sample Product 1',
-          image: '/globe.svg',
-          price: 1299,
-          category: 'Industrial'
-        },
-        {
-          id: 2,
-          name: 'Industrial Equipment - Sample Product 2',
-          image: '/globe.svg',
-          price: 2499,
-          category: 'Industrial'
-        },
-        {
-          id: 3,
-          name: 'Industrial Tools - Sample Product 3',
-          image: '/globe.svg',
-          price: 999,
-          category: 'Industrial'
-        },
-        {
-          id: 4,
-          name: 'Organic Compounds - Premium Quality',
-          image: '/globe.svg',
-          price: 3499,
-          category: 'Chemicals'
-        },
-        {
-          id: 5,
-          name: 'Spices - Wholesale Package',
-          image: '/globe.svg',
-          price: 1899,
-          category: 'Food'
+      
+      // Check if response has the expected structure
+      if (response && typeof response === 'object') {
+        // If response is empty object (which happens on API error)
+        if (Object.keys(response).length === 0) {
+          console.log('Empty response from search API');
+          return { items: [], total: 0, page, size, pages: 0, query };
         }
-      ];
-      
-      // Filter mock data based on query
-      return mockData.filter(item => 
-        item.name.toLowerCase().includes(query.toLowerCase())
-      );
-      
-      /* API-based implementation - commented out for now
-      // Use our Next.js API route
-      const url = `/api/search?query=${encodeURIComponent(query)}&size=${limit}`;
-      const response = await apiRequest<SearchResults>(url);
-      
-      if (!response || !response.items) {
-        return [];
+        
+        // If response has items array
+        if (Array.isArray(response.items)) {
+          console.log(`Search API returned ${response.items.length} results`);
+          return response;
+        } else {
+          console.warn('Search API returned invalid response structure:', response);
+          return { items: [], total: 0, page, size, pages: 0, query };
+        }
+      } else {
+        console.warn('Search API returned non-object response:', response);
+        return { items: [], total: 0, page, size, pages: 0, query };
       }
-      
-      // Transform to autocomplete results
-      return response.items.map(item => ({
-        id: item.id,
-        name: item.name,
-        image: item.image_url || item.image,
-        price: item.price,
-        category: item.category
-      }));
-      */
     } catch (error) {
-      console.error('Error getting autocomplete suggestions:', error);
-      // Return empty array on error to prevent app crashes
-      return [];
+      console.error('Error searching products:', error instanceof Error ? error.message : 'Unknown error');
+      return { items: [], total: 0, page, size, pages: 0, query };
     }
   }
 };

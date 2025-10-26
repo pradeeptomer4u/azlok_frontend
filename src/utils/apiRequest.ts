@@ -53,7 +53,14 @@ export const apiRequest = async <T>(
         }
       }).catch(() => ({}));
       
-      console.error(`API error response:`, errorData);
+      // For 404 errors on search endpoint, return empty result without error logging
+      // This is because the search API might not be available in development
+      if (response.status === 404 && endpoint.includes('/api/products/search')) {
+        console.log(`Search API not found (404), returning empty result`);
+        return {} as T;
+      }
+      
+      console.error(`API error response for ${endpoint} (${response.status}):`, errorData || 'No error details available');
       // Return empty result instead of throwing to prevent app crashes
       return {} as T;
     }
@@ -68,7 +75,8 @@ export const apiRequest = async <T>(
     console.log(`API Response data for ${endpoint}:`, data);
     return data as T;
   } catch (error) {
-    console.error(`API request error for ${endpoint}:`, error);
-    throw error;
+    console.error(`API request error for ${endpoint}:`, error instanceof Error ? error.message : 'Unknown error');
+    // Return empty result instead of throwing to prevent app crashes
+    return {} as T;
   }
 };

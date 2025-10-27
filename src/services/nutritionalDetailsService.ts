@@ -86,6 +86,21 @@ export interface NutritionalDetails {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.azlok.com';
 
+// Interface for schema.org nutrition format
+export interface SchemaOrgNutrition {
+  servingSize: string;
+  calories?: { value: string; unitText: string };
+  fatContent?: { value: string; unitText: string };
+  saturatedFatContent?: { value: string; unitText: string };
+  transFatContent?: { value: string; unitText: string };
+  cholesterolContent?: { value: string; unitText: string };
+  sodiumContent?: { value: string; unitText: string };
+  carbohydrateContent?: { value: string; unitText: string };
+  fiberContent?: { value: string; unitText: string };
+  sugarContent?: { value: string; unitText: string };
+  proteinContent?: { value: string; unitText: string };
+}
+
 const nutritionalDetailsService = {
   getNutritionalDetails: async (slug: string): Promise<NutritionalDetails | null> => {
     try {
@@ -95,6 +110,30 @@ const nutritionalDetailsService = {
       console.error('Error fetching nutritional details:', error);
       return null;
     }
+  },
+  
+  // Convert API nutritional details to schema.org format
+  convertToSchemaFormat: (data: NutritionalDetails): SchemaOrgNutrition => {
+  
+    if (!data) {
+      return { servingSize: '100g' };
+    }
+    
+    const result = {
+      servingSize: `${data.serving_size}${data.serving_unit}`,
+      calories: { value: data.calories.toString(), unitText: data.calories_unit },
+      fatContent: { value: data.total_fat.toString(), unitText: data.total_fat_unit },
+      saturatedFatContent: { value: data.saturated_fat.toString(), unitText: data.saturated_fat_unit },
+      transFatContent: { value: data.trans_fat.toString(), unitText: data.trans_fat_unit },
+      cholesterolContent: { value: data.cholesterol.toString(), unitText: data.cholesterol_unit },
+      sodiumContent: { value: data.sodium.toString(), unitText: data.sodium_unit },
+      carbohydrateContent: { value: data.carbohydrates.toString(), unitText: data.carbohydrates_unit },
+      fiberContent: { value: data.dietary_fiber.toString(), unitText: data.dietary_fiber_unit },
+      ...(data.sugar !== null ? { sugarContent: { value: data.sugar.toString(), unitText: data.sugar_unit } } : {}),
+      proteinContent: { value: data.protein.toString(), unitText: data.protein_unit }
+    };
+    
+    return result;
   }
 };
 

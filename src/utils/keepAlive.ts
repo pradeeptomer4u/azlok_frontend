@@ -45,7 +45,6 @@ export function startKeepAlive() {
     return;
   }
 
-  console.log('[KeepAlive] Starting keep-alive service');
   
   // Initial ping
   pingServices();

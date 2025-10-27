@@ -19,7 +19,8 @@ interface EnhancedProduct {
   name: string;
   description: string;
   price: number;
-  category: string;
+  category: string; // This is used for category checks
+  category_name?: string; // This is from the API
   subcategory: string;
   rating: number;
   isVerified: boolean;
@@ -351,7 +352,6 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
   const handleContactFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, we would send this data to an API
-    console.log('Contact form submitted:', formData);
     alert('Your message has been sent to the supplier. They will contact you shortly.');
     setShowContactForm(false);
     setFormData({
@@ -532,26 +532,20 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                 </svg>
                 WhatsApp
               </a>
-              <button 
+              
+              <button
                 onClick={() => {
                   setAddingToCart(true);
-                  // Simulate API call delay
                   setTimeout(() => {
                     try {
                       addItem({
                         id: product.id,
-                        product_id: product.id, // Add product_id field
+                        product_id: product.id,
                         name: product.name,
-                        image: product.images[0],
                         price: product.price,
+                        image: product.image || '/globe.svg',
                         quantity: quantity,
-                        seller: product.seller.name,
-                        seller_id: product.seller.id,
-                        minOrder: product.minOrder,
-                        tax_amount: taxInfo?.tax_amount,
-                        cgst_amount: taxInfo?.cgst_amount,
-                        sgst_amount: taxInfo?.sgst_amount,
-                        igst_amount: taxInfo?.igst_amount,
+                        seller: product.seller?.name || 'Azlok',
                         is_tax_inclusive: taxInfo?.is_tax_inclusive,
                         hsn_code: taxInfo?.hsn_code
                       });
@@ -627,8 +621,18 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
             <ProductFAQSection slug={product?.slug} />
           </div>
       
-      {/* Nutritional Details Section - Only for spice category */}
-      {product?.category?.toLowerCase().includes('spice') && (
+      {/* Nutritional Details Section - Only for spice category or specific spice products */}
+      {(() => {
+        const spiceTerms = ['turmeric', 'haldi', 'coriander', 'dhaniya', 'cumin', 'jeera', 'cardamom', 'cinnamon', 'clove', 'pepper'];
+        const exclusionTerms = ['alum', 'fitkari', 'soap', 'detergent', 'cleaner', 'chemical'];
+        
+        const isSpiceProduct = 
+          ((product?.category?.toLowerCase() === 'spice' || product?.category?.toLowerCase() === 'spices') || 
+           spiceTerms.some(term => product?.name?.toLowerCase().includes(term))) &&
+          !exclusionTerms.some(term => product?.name?.toLowerCase().includes(term));
+          
+        return isSpiceProduct;
+      })() && (
         <div className="mb-8">
           <NutritionalDetails slug={product.slug} className="mt-6" />
         </div>

@@ -41,7 +41,6 @@ async function copyDirectory(source, destination, excludedPaths = []) {
       // Check if path should be excluded
       const relativePath = path.relative(SOURCE_DIR, srcPath);
       if (excludedPaths.some(excluded => relativePath.startsWith(excluded))) {
-        console.log(`Skipping excluded path: ${relativePath}`);
         continue;
       }
       
@@ -52,7 +51,6 @@ async function copyDirectory(source, destination, excludedPaths = []) {
         // Check file size before copying
         const stats = await statAsync(srcPath);
         if (stats.size > MAX_FILE_SIZE) {
-          console.log(`Skipping large file (${(stats.size / 1024 / 1024).toFixed(2)} MiB): ${relativePath}`);
           continue;
         }
         
@@ -68,12 +66,10 @@ async function copyDirectory(source, destination, excludedPaths = []) {
 
 async function prepareForPages() {
   try {
-    console.log('Preparing Next.js build for Cloudflare Pages deployment...');
     
     // Remove existing prepared directory if it exists
     try {
       await rmdirAsync(PREPARED_DIR, { recursive: true, force: true });
-      console.log(`Removed existing directory: ${PREPARED_DIR}`);
     } catch (error) {
       // Ignore if directory doesn't exist
     }
@@ -81,9 +77,7 @@ async function prepareForPages() {
     // Copy .next directory to .next-prepared, excluding large files
     await copyDirectory(SOURCE_DIR, PREPARED_DIR, EXCLUDED_PATHS);
     
-    console.log('Build preparation complete!');
-    console.log(`Prepared build is available at: ${PREPARED_DIR}`);
-    console.log('You can now deploy this directory to Cloudflare Pages.');
+
   } catch (error) {
     console.error(`Error preparing build: ${error.message}`);
     process.exit(1);

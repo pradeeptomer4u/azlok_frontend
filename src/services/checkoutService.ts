@@ -142,7 +142,6 @@ const checkoutService = {
             if (Array.isArray(detail) && detail.length > 0) {
               const firstError = detail[0];
               errorMessage = `Validation error: ${firstError.msg || 'Invalid data format'}`;
-              console.log('Validation error details:', firstError);
             } else if (typeof detail === 'string') {
               errorMessage = `Error: ${detail}`;
             }

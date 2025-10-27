@@ -100,7 +100,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     
     try {
       setSyncingCart(true);
-      console.log('Syncing cart with backend...');
       
       // Get local cart items to sync
       const localCart = JSON.parse(localStorage.getItem('azlok-cart') || '[]');
@@ -141,7 +140,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Cart data from API:', data);
         
         if (data && Array.isArray(data.items)) {
           // Transform API response to match CartItem format
@@ -159,7 +157,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             seller: item.product?.seller?.business_name || 'Unknown Seller'
           }));
           
-          console.log('Transformed cart items:', cartItems);
           setItems(cartItems);
           
           // Update localStorage with the synced cart
@@ -190,7 +187,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       
       return response.ok;
     } catch (error) {
-      console.error('Failed to add item to cart via API:', error);
       return false;
     }
   };
@@ -293,7 +289,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       
       return response.ok;
     } catch (error) {
-      console.error('Failed to remove item from cart via API:', error);
       return false;
     }
   };
@@ -314,29 +309,24 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       
       return response.ok;
     } catch (error) {
-      console.error('Failed to update item quantity via API:', error);
       return false;
     }
   };
 
   const removeItem = async (id: number) => {
-    console.log(`Removing item with ID: ${id}`);
     try {
       // If user is authenticated, use API
       if (isAuthenticated) {
         // Find the item to get its cart_item_id
         const item = items.find(item => item.id === id);
         if (!item) {
-          console.error(`Item with ID ${id} not found in cart`);
           return;
         }
         
         const cartItemId = item?.cart_item_id || id;
-        console.log(`Using cart_item_id: ${cartItemId} for removal`);
         
         const success = await removeItemAPI(cartItemId);
         if (success) {
-          console.log('Item removed successfully via API');
           // Refresh cart from API
           await fetchCartFromAPI();
           // Get updated cart summary with shipping method ID 1 (Free) as default
@@ -349,20 +339,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       }
       
       // For unauthenticated users or if API call failed
-      console.log('Removing item from local cart');
       setItems(prevItems => prevItems.filter(item => item.id !== id));
     } catch (error) {
-      console.error('Error in removeItem:', error);
       // Ensure we still update the local state even if there's an error
       setItems(prevItems => prevItems.filter(item => item.id !== id));
     }
   };
 
   const updateQuantity = async (id: number, quantity: number) => {
-    console.log(`Updating quantity for item ${id} to ${quantity}`);
     try {
       if (quantity <= 0) {
-        console.log(`Quantity is ${quantity}, removing item instead`);
         await removeItem(id);
         return;
       }
@@ -377,11 +363,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         }
         
         const cartItemId = item?.cart_item_id || id;
-        console.log(`Using cart_item_id: ${cartItemId} for quantity update`);
         
         const success = await updateQuantityAPI(cartItemId, quantity);
         if (success) {
-          console.log('Quantity updated successfully via API');
           // Refresh cart from API
           await fetchCartFromAPI();
           // Get updated cart summary with shipping method ID 1 (Free) as default
@@ -394,7 +378,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       }
       
       // For unauthenticated users or if API call failed
-      console.log('Updating quantity in local cart');
       setItems(prevItems => 
         prevItems.map(item => 
           item.id === id ? { ...item, quantity } : item
@@ -483,7 +466,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Cart summary data:', data);
         
         // Update state with summary values
         setSubtotal(data.subtotal || 0);

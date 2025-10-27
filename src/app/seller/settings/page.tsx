@@ -70,7 +70,6 @@ export default function SellerSettings() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       // In a real app, we would make an API call to update settings
-      console.log('Settings updated:', formData);
       // Show success message
     } catch (error) {
       console.error('Error updating settings:', error);

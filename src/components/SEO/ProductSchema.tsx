@@ -18,6 +18,19 @@ interface ProductSchemaProps {
     reviewCount?: number;
     reviewRating?: number;
     category?: string;
+    nutrition?: {
+      servingSize: string;
+      calories?: { value: string; unitText: string };
+      fatContent?: { value: string; unitText: string };
+      saturatedFatContent?: { value: string; unitText: string };
+      transFatContent?: { value: string; unitText: string };
+      cholesterolContent?: { value: string; unitText: string };
+      sodiumContent?: { value: string; unitText: string };
+      carbohydrateContent?: { value: string; unitText: string };
+      fiberContent?: { value: string; unitText: string };
+      sugarContent?: { value: string; unitText: string };
+      proteinContent?: { value: string; unitText: string };
+    };
     weight?: {
       value: number;
       unit: string;
@@ -168,6 +181,64 @@ export default function ProductSchema({
       '@type': 'AggregateRating',
       ratingValue: product.reviewRating,
       reviewCount: product.reviewCount,
+    };
+  }
+  
+  // Add nutrition information if available AND product is a spice
+  const isSpiceProduct = (() => {
+    // Check if category is spice or product name contains spice terms
+    const spiceTerms = ['turmeric', 'haldi', 'coriander', 'dhaniya', 'cumin', 'jeera', 'cardamom', 'cinnamon', 'clove', 'pepper'];
+    const exclusionTerms = ['alum', 'fitkari', 'soap', 'detergent', 'cleaner', 'chemical'];
+    
+    // Check category
+    const categoryIsSpice = product.category?.toLowerCase() === 'spice' || product.category?.toLowerCase() === 'spices';
+    
+    // Check name for spice terms
+    const nameHasSpiceTerm = spiceTerms.some(term => product.name?.toLowerCase().includes(term));
+    
+    // Check name for exclusion terms
+    const nameHasExclusionTerm = exclusionTerms.some(term => product.name?.toLowerCase().includes(term));
+    
+    return (categoryIsSpice || nameHasSpiceTerm) && !nameHasExclusionTerm;
+  })();
+
+  
+  if (product.nutrition && isSpiceProduct) {
+    productSchema.nutrition = {
+      '@type': 'NutritionInformation',
+      servingSize: product.nutrition.servingSize,
+      // Format nutrition values according to schema.org standards
+      // Each value should be formatted as "value unitText" (e.g., "5 g")
+      ...(product.nutrition.calories && {
+        calories: `${product.nutrition.calories.value} ${product.nutrition.calories.unitText}`
+      }),
+      ...(product.nutrition.fatContent && {
+        fatContent: `${product.nutrition.fatContent.value} ${product.nutrition.fatContent.unitText}`
+      }),
+      ...(product.nutrition.saturatedFatContent && {
+        saturatedFatContent: `${product.nutrition.saturatedFatContent.value} ${product.nutrition.saturatedFatContent.unitText}`
+      }),
+      ...(product.nutrition.transFatContent && {
+        transFatContent: `${product.nutrition.transFatContent.value} ${product.nutrition.transFatContent.unitText}`
+      }),
+      ...(product.nutrition.cholesterolContent && {
+        cholesterolContent: `${product.nutrition.cholesterolContent.value} ${product.nutrition.cholesterolContent.unitText}`
+      }),
+      ...(product.nutrition.sodiumContent && {
+        sodiumContent: `${product.nutrition.sodiumContent.value} ${product.nutrition.sodiumContent.unitText}`
+      }),
+      ...(product.nutrition.carbohydrateContent && {
+        carbohydrateContent: `${product.nutrition.carbohydrateContent.value} ${product.nutrition.carbohydrateContent.unitText}`
+      }),
+      ...(product.nutrition.fiberContent && {
+        fiberContent: `${product.nutrition.fiberContent.value} ${product.nutrition.fiberContent.unitText}`
+      }),
+      ...(product.nutrition.sugarContent && {
+        sugarContent: `${product.nutrition.sugarContent.value} ${product.nutrition.sugarContent.unitText}`
+      }),
+      ...(product.nutrition.proteinContent && {
+        proteinContent: `${product.nutrition.proteinContent.value} ${product.nutrition.proteinContent.unitText}`
+      })
     };
   }
 

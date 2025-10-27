@@ -39,31 +39,25 @@ const searchService = {
         url += `&category_id=${category_id}`;
       }
       
-      console.log(`Sending search request to: ${url}`);
       const response = await apiRequest<SearchResults>(url);
       
       // Check if response has the expected structure
       if (response && typeof response === 'object') {
         // If response is empty object (which happens on API error)
         if (Object.keys(response).length === 0) {
-          console.log('Empty response from search API');
           return { items: [], total: 0, page, size, pages: 0, query };
         }
         
         // If response has items array
         if (Array.isArray(response.items)) {
-          console.log(`Search API returned ${response.items.length} results`);
           return response;
         } else {
-          console.warn('Search API returned invalid response structure:', response);
           return { items: [], total: 0, page, size, pages: 0, query };
         }
       } else {
-        console.warn('Search API returned non-object response:', response);
         return { items: [], total: 0, page, size, pages: 0, query };
       }
     } catch (error) {
-      console.error('Error searching products:', error instanceof Error ? error.message : 'Unknown error');
       return { items: [], total: 0, page, size, pages: 0, query };
     }
   }

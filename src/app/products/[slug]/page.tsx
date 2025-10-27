@@ -1,6 +1,7 @@
 import ProductDetail from '@/components/products/ProductDetail';
 import productService from '@/services/productService';
-import { ProductSchema } from '@/components/SEO';
+import nutritionalDetailsService from '@/services/nutritionalDetailsService';
+import { ProductSchema, BreadcrumbSchema } from '@/components/SEO';
 import ProductFAQSection from './ProductFAQSection';
 
 export async function generateMetadata({ params }: PageProps<'/products/[slug]'>) {
@@ -96,7 +97,6 @@ export async function generateMetadata({ params }: PageProps<'/products/[slug]'>
           productImage = `${baseUrl}${productImage.startsWith('/') ? '' : '/'}${productImage}`;
         }
       } catch (error) {
-        console.error('Error processing product image:', error);
         productImage = '/globe.svg'; // Fallback on any error
       }
       
@@ -207,6 +207,31 @@ export default async function ProductPage(props: PageProps<'/products/[slug]'>) 
     console.error('Error fetching product for schema:', error);
   }
   
+  // Fetch nutritional details if product is in spice category
+  let nutritionalData = null;
+  // Check if product is STRICTLY in spice category - only include nutrition for actual spices
+  const spiceTerms = ['turmeric', 'haldi', 'coriander', 'dhaniya', 'cumin', 'jeera', 'cardamom', 'cinnamon', 'clove', 'pepper'];
+  
+  // Products that should never have nutrition data
+  const exclusionTerms = ['alum', 'fitkari', 'soap', 'detergent', 'cleaner', 'chemical'];
+  
+  // More strict check - must be in spice category OR have a specific spice name
+  // AND must not contain any exclusion terms
+  const isSpiceCategory = 
+    ((productData?.category_name?.toLowerCase() === 'spice' || productData?.category_name?.toLowerCase() === 'spices') ||
+     spiceTerms.some(term => productData?.name?.toLowerCase().includes(term))) &&
+    !exclusionTerms.some(term => productData?.name?.toLowerCase().includes(term));
+  
+  
+  if (isSpiceCategory) {
+    try {
+      nutritionalData = await nutritionalDetailsService.getNutritionalDetails(slug);
+
+    } catch (error) {
+      console.error('Error fetching nutritional details:', error);
+    }
+  }
+
   // Prepare product schema data if product was found
   const schemaData = productData ? {
     id: productData.id,
@@ -219,7 +244,25 @@ export default async function ProductPage(props: PageProps<'/products/[slug]'>) 
     sku: productData.sku || `AZL-${productData.id}`,
     brand: 'Azlok',
     availability: (productData.stock_quantity && productData.stock_quantity > 0) ? 'InStock' : 'OutOfStock' as 'InStock' | 'OutOfStock',
-    category: productData.category_name || 'Product'
+    category: productData.category_name || 'Product',
+    // Add nutrition information from API if available and product is in spice category
+    ...(isSpiceCategory && {
+      nutrition: nutritionalData ? 
+        nutritionalDetailsService.convertToSchemaFormat(nutritionalData) : 
+        // Fallback nutrition data for spice products when API data is not available
+        {
+          servingSize: '100g',
+          calories: { value: '340', unitText: 'kcal' },
+          fatContent: { value: '16.8', unitText: 'g' },
+          saturatedFatContent: { value: '1', unitText: 'g' },
+          transFatContent: { value: '0', unitText: 'g' },
+          cholesterolContent: { value: '0', unitText: 'mg' },
+          sodiumContent: { value: '35', unitText: 'mg' },
+          carbohydrateContent: { value: '54.9', unitText: 'g' },
+          fiberContent: { value: '42', unitText: 'g' },
+          proteinContent: { value: '13.3', unitText: 'g' }
+        }
+    })
   } : null;
   
   return (
@@ -244,7 +287,17 @@ export default async function ProductPage(props: PageProps<'/products/[slug]'>) 
         
         {/* Add ProductSchema for SEO */}
         {schemaData && (
-          <ProductSchema product={schemaData} />
+          <>
+            <ProductSchema product={schemaData} />
+            <BreadcrumbSchema 
+              items={[
+                { name: 'Home', item: '/', position: 1 },
+                { name: 'Products', item: '/products', position: 2 },
+                { name: productData?.category_name || 'Category', item: `/products?category=${productData?.category_name?.toLowerCase() || 'all'}`, position: 3 },
+                { name: productData?.name || slug.replace(/-/g, ' '), item: `/products/${slug}`, position: 4 }
+              ]}
+            />
+          </>
         )}
       </div>
     </div>

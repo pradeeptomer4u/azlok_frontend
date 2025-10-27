@@ -65,7 +65,6 @@ export default function OrderSummarySection({
         
         if (response.ok) {
           const data = await response.json();
-          console.log('Cart summary data:', data);
           setCartSummary({
             subtotal: data.subtotal || calculatedSubtotal,
             shipping: data.shipping || 0,

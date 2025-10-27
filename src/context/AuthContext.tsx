@@ -165,7 +165,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       };
       
       // In a real implementation, we would send the username to the backend
-      console.log(`Registering user with username: ${userData.username}`);
       
       setUser(newUser);
       setToken(`mock-jwt-token-${newUser.id}-${newUser.role}`);

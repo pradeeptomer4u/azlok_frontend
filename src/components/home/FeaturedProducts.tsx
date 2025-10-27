@@ -35,7 +35,6 @@ const FeaturedProducts = () => {
       try {
         // Get featured products from the API service - limit to 4 items
         const featuredProducts = await productService.getFeaturedProducts(4);
-        console.log('API Response - Featured Products:', featuredProducts);
         
         // Store the original API products for schema
         setApiProducts(featuredProducts);
@@ -59,7 +58,6 @@ const FeaturedProducts = () => {
                 }
               } catch (e) {
                 // If parsing fails, use the string directly
-                console.log('Using image_urls directly as string:', product.image_urls);
                 imageUrl = product.image_urls;
               }
             } else if (Array.isArray(product.image_urls) && product.image_urls.length > 0) {
@@ -85,10 +83,8 @@ const FeaturedProducts = () => {
         
         // Ensure we only show 4 items maximum
         const limitedProducts = transformedProducts.slice(0, 4);
-        console.log('Transformed Featured Products:', limitedProducts);
         setProducts(limitedProducts);
       } catch (error) {
-        console.error('Error fetching featured products:', error);
         setError('Failed to load featured products. Please try again later.');
       } finally {
         setIsLoading(false);

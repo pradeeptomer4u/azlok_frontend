@@ -65,8 +65,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
       hsn_code: product.hsn_code
     };
     
-    // Log the action for debugging
-    console.log(`Adding to cart: ${product.name}`);
     
     try {
       // Call addItem directly without setTimeout to ensure it runs
@@ -76,7 +74,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
       setAddedToCart(true);
       
       // Log success
-      console.log(`Successfully added ${product.name} to cart`);
       
       // Reset after 2 seconds
       setTimeout(() => {

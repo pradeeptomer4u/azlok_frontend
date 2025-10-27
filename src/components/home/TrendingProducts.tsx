@@ -35,7 +35,6 @@ const TrendingProducts = () => {
       try {
         // Get bestseller products from the API service - limit to 4 items
         const bestsellers = await productService.getBestsellers(4);
-        console.log('API Response - Bestsellers:', bestsellers);
         
         // Store the original API products for schema
         setApiProducts(bestsellers);
@@ -59,7 +58,6 @@ const TrendingProducts = () => {
                 }
               } catch (e) {
                 // If parsing fails, use the string directly
-                console.log('Using image_urls directly as string:', product.image_urls);
                 imageUrl = product.image_urls;
               }
             } else if (Array.isArray(product.image_urls) && product.image_urls.length > 0) {
@@ -86,10 +84,8 @@ const TrendingProducts = () => {
         
         // Ensure we only show 4 items maximum
         const limitedProducts = transformedProducts.slice(0, 4);
-        console.log('Transformed Products:', limitedProducts);
         setProducts(limitedProducts);
       } catch (error) {
-        console.error('Error fetching trending products:', error);
         setError('Failed to load trending products. Please try again later.');
       } finally {
         setIsLoading(false);
@@ -251,7 +247,6 @@ const TrendingProducts = () => {
                     setAddedToCartMap(prev => ({ ...prev, [product.id]: false }));
                   }, 2000);
                 } catch (error) {
-                  console.error('Error adding item to cart:', error);
                   alert('Failed to add item to cart. Please try again.');
                 }
               }}

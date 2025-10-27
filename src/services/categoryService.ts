@@ -29,7 +29,6 @@ const categoryService = {
       categoriesCache.data.length > 0 && 
       Date.now() - categoriesCache.timestamp < CACHE_DURATION
     ) {
-      console.log('Using cached categories data');
       return categoriesCache.data;
     }
     
@@ -111,8 +110,6 @@ const categoryService = {
       // Get all products to calculate counts
       const productsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/products/`);
       const products = productsResponse.ok ? await productsResponse.json() : [];
-      console.log("products",products);
-      console.log("apiCategories",apiCategories);
       // Transform to categories with actual product count
       const transformedCategories = apiCategories.map((category) => {
         const productCount = products.filter((product: any) => 
@@ -155,7 +152,6 @@ const categoryService = {
       if (categoriesCache && categoriesCache.data.length > 0) {
         const cachedCategory = categoriesCache.data.find(cat => cat.slug === slug);
         if (cachedCategory) {
-          console.log('Found category by slug in cache:', slug);
           return cachedCategory;
         }
       }

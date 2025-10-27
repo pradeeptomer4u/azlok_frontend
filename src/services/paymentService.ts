@@ -137,7 +137,6 @@ export const createPayment = async (payment: PaymentCreate): Promise<Payment | n
       } : {})
     };
     
-    console.log('Creating payment with data:', paymentData);
     
     const response = await apiRequest<Payment>('/api/payments', {
       method: 'POST',

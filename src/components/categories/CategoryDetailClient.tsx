@@ -28,17 +28,14 @@ export default function CategoryDetailClient({ slug }: CategoryDetailClientProps
     const fetchCategory = async (retryCount = 0) => {
       setIsLoading(true);
       try {
-        console.log('Fetching category with slug:', slug);
         
         // Get all categories and find the one with matching slug
         const allCategories = await categoryService.getAllCategories();
-        console.log('All categories:', allCategories);
         
         // Check if we have categories data
         if (!allCategories || allCategories.length === 0) {
           // If no categories and we haven't retried too many times, retry
           if (retryCount < 3) {
-            console.log(`No categories found, retrying (${retryCount + 1}/3)...`);
             setTimeout(() => fetchCategory(retryCount + 1), 1000); // Retry after 1 second
             return;
           } else {
@@ -62,7 +59,6 @@ export default function CategoryDetailClient({ slug }: CategoryDetailClientProps
             productCount: products.length
           };
           
-          console.log('Found category:', uiCategory);
           setCategory(uiCategory);
           setError(null); // Clear any previous errors
         } else {
@@ -86,7 +82,6 @@ export default function CategoryDetailClient({ slug }: CategoryDetailClientProps
               productCount: products.length
             };
             
-            console.log('Found category with normalized slug:', uiCategory);
             setCategory(uiCategory);
             setError(null); // Clear any previous errors
           } else {

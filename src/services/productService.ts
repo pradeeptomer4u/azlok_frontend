@@ -146,16 +146,13 @@ const productService = {
   // Get featured products
   getFeaturedProducts: async (limit: number = 8): Promise<Product[]> => {
     try {
-      console.log(`Requesting featured products: /api/products/?is_featured=true&size=${limit}`);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/products/?is_featured=true&size=${limit}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log('Featured products response:', data);
       return data || [];
     } catch (error) {
-      console.error('Error fetching featured products:', error);
       return [];
     }
   },
@@ -163,16 +160,13 @@ const productService = {
   // Search products by name or description
   searchProducts: async (query: string, page: number = 1, size: number = 20): Promise<Product[]> => {
     try {
-      console.log(`Searching products: /api/products/?search=${query}&page=${page}&size=${size}`);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/products/?search=${encodeURIComponent(query)}&page=${page}&size=${size}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log('Search products response:', data);
       return data || [];
     } catch (error) {
-      console.error('Error searching products:', error);
       return [];
     }
   },
@@ -195,16 +189,13 @@ const productService = {
   // Get bestsellers
   getBestsellers: async (limit: number = 8): Promise<Product[]> => {
     try {
-      console.log(`Requesting bestsellers: /api/products/?is_bestseller=true&size=${limit}`);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/products/?is_bestseller=true&size=${limit}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log('Bestsellers API response:', data);
       return data || [];
     } catch (error) {
-      console.error('Error fetching bestsellers:', error);
       return [];
     }
   },

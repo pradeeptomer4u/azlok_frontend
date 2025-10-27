@@ -58,10 +58,8 @@ const fetchDirectFromApi = async (searchQuery: string) => {
     }
     
     const data = await response.json();
-    console.log('Direct API response:', data);
     return data;
   } catch (error) {
-    console.error('Error fetching directly from API:', error);
     return null;
   }
 };
@@ -89,13 +87,11 @@ const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({ onSelect }) => 
 
       setIsLoading(true);
       try {
-        console.log(`Searching for: ${query}`);
         
         // Try direct API call first
         const directApiData = await fetchDirectFromApi(query);
         
         if (directApiData && directApiData.results && directApiData.results.length > 0) {
-          console.log(`Found ${directApiData.results.length} results directly from API`);
           
           // Map the direct API response to match the expected structure
           const mappedSuggestions = directApiData.results.map((item: any) => ({
@@ -110,7 +106,6 @@ const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({ onSelect }) => 
             description: item.description
           }));
           
-          console.log('Mapped suggestions from direct API:', mappedSuggestions);
           setSuggestions(mappedSuggestions);
         } else {
           // Fallback to using the service if direct API call fails
@@ -118,7 +113,6 @@ const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({ onSelect }) => 
                     
           // Check if results and items exist before setting suggestions
           if (results && Array.isArray(results.items)) {
-            console.log(`Found ${results.items.length} results for ${query}`);
             
             // Map the API response to match the expected structure
             const mappedSuggestions = results.items.map((item: any) => ({
@@ -133,15 +127,12 @@ const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({ onSelect }) => 
               description: item.description
             }));
             
-            console.log('Mapped suggestions from service:', mappedSuggestions);
             setSuggestions(mappedSuggestions);
           } else {
-            console.warn('Search returned empty or invalid results structure:', results);
             setSuggestions([]);
           }
         }
       } catch (error) {
-        console.error('Error fetching suggestions:', error instanceof Error ? error.message : 'Unknown error');
         setSuggestions([]);
       } finally {
         setIsLoading(false);

@@ -54,7 +54,6 @@ function RazorpayCheckoutContent() {
           }
           
           const data = await response.json();
-          console.log('Order details:', data);
           
           // Use only data from API, no fallbacks
           if (!data || !data.id) {

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-  console.log('Search API route called');
   try {
     // Get search parameters from the request URL
     const searchParams = request.nextUrl.searchParams;
@@ -17,11 +16,9 @@ export async function GET(request: NextRequest) {
       backendUrl += `&category_id=${categoryId}`;
     }
     
-    console.log(`Proxying search request to: ${backendUrl}`);
     
     try {
       // Forward the request to the backend API
-      console.log('Sending request to backend:', backendUrl);
       const response = await fetch(backendUrl, {
         headers: {
           'Content-Type': 'application/json',
@@ -31,9 +28,6 @@ export async function GET(request: NextRequest) {
       });
       
       if (!response.ok) {
-        console.error(`Backend API error: ${response.status} ${response.statusText}`);
-        const errorText = await response.text();
-        console.error(`Error details: ${errorText}`);
         
         // Return error response
         return NextResponse.json(
@@ -44,7 +38,6 @@ export async function GET(request: NextRequest) {
       
       // Get the response data
       const data = await response.json();
-      console.log('Raw API response:', JSON.stringify(data, null, 2));
       
       // Transform the response structure to match what our frontend expects
       const transformedData = {
@@ -56,14 +49,11 @@ export async function GET(request: NextRequest) {
         query: query
       };
       
-      console.log(`Search results: ${transformedData.items.length} items found`);
-      console.log('Transformed data:', JSON.stringify(transformedData, null, 2));
-      
+
       // Return the transformed response
       return NextResponse.json(transformedData);
     } catch (error) {
-      console.error('Error connecting to backend API:', error);
-      
+    
       // Return error response
       return NextResponse.json(
         { error: 'Failed to connect to backend API', items: [] },
@@ -71,7 +61,6 @@ export async function GET(request: NextRequest) {
       );
     }
   } catch (error) {
-    console.error('Error in search API route:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

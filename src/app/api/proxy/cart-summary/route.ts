@@ -56,7 +56,6 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
     
     // Log the response for debugging
-    console.log('Cart summary API response:', data);
     
     // Transform the response if needed to match the expected format
     const transformedData = {
@@ -72,7 +71,6 @@ export async function GET(request: NextRequest) {
     
     return NextResponse.json(transformedData);
   } catch (error) {
-    console.error('Error in cart-summary proxy:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

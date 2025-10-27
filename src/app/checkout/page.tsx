@@ -80,12 +80,10 @@ export default function CheckoutPage() {
       // Continue loading checkout data if authenticated
       if (isAuthenticated) {
         // Load addresses
-        console.log('Loading shipping addresses...');
         const addressesResponse = await checkoutService.getShippingAddresses();
         
         // Handle addresses
         if (addressesResponse.error) {
-          console.error('Error loading addresses:', addressesResponse.error);
           setAddresses([]);
           setAddressError(addressesResponse.error);
         } else {
@@ -98,12 +96,10 @@ export default function CheckoutPage() {
         }
         
         // Load payment methods
-        console.log('Loading payment methods...');
         const paymentMethodsResponse = await checkoutService.getPaymentMethods();
         
         // Handle payment methods
         if (paymentMethodsResponse.error) {
-          console.error('Error loading payment methods:', paymentMethodsResponse.error);
           setPaymentMethods([]);
           setPaymentMethodError(paymentMethodsResponse.error);
         } else {
@@ -117,12 +113,10 @@ export default function CheckoutPage() {
         }
         
         // Load shipping methods
-        console.log('Loading shipping methods...');
         const shippingMethodsResponse = await checkoutService.getShippingMethods();
         
         // Handle shipping methods
         if (shippingMethodsResponse.error) {
-          console.error('Error loading shipping methods:', shippingMethodsResponse.error);
           setShippingMethods([]);
           setShippingMethodError(shippingMethodsResponse.error);
         } else {
@@ -133,7 +127,6 @@ export default function CheckoutPage() {
             setSelectedShippingMethodId(shippingMethodsResponse.data[0].id);
             
             // Call checkout summary
-            console.log('Loading checkout summary...');
             await updateCheckoutSummary();
           }
         }
@@ -143,7 +136,6 @@ export default function CheckoutPage() {
         router.push('/login?redirect=/checkout');
       }
     } catch (err) {
-      console.error('Error loading checkout data:', err);
       setError('Failed to load checkout information. Please try again.');
     } finally {
       setLoading(false);
@@ -156,7 +148,6 @@ export default function CheckoutPage() {
     try {
       // Calculate subtotal from cart items
       const itemsSubtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
-      console.log('Calculated subtotal from items:', itemsSubtotal);
       
       // Direct API call to cart summary
       const response = await fetch(`https://api.azlok.com/api/cart-summary/?shipping_method_id=${selectedShippingMethodId}`, {
@@ -168,13 +159,11 @@ export default function CheckoutPage() {
       });
       
       if (!response.ok) {
-        console.error('Error updating checkout summary');
         setSummaryError('Failed to calculate checkout summary');
         return;
       }
       
       const data = await response.json();
-      console.log('Cart summary API response:', data);
       
       // Create summary from API response
       const apiSummary: CheckoutSummary = {
@@ -184,11 +173,9 @@ export default function CheckoutPage() {
         total: data.total || (itemsSubtotal + data.shipping_amount + data.tax_amount)
       };
       
-      console.log('API checkout summary:', apiSummary);
       setSummary(apiSummary);
       setSummaryError(null);
     } catch (err) {
-      console.error('Error updating checkout summary:', err);
       setSummaryError('Failed to calculate checkout summary');
     }
   };
@@ -199,7 +186,6 @@ export default function CheckoutPage() {
       const response = await checkoutService.addShippingAddress(address);
       
       if (response.error) {
-        console.error('Error adding address:', response.error);
         setAddressError(response.error);
       } else if (response.data) {
         // Successfully added the address
@@ -208,7 +194,6 @@ export default function CheckoutPage() {
         setAddressError(null);
       }
     } catch (err) {
-      console.error('Error adding address:', err);
       setAddressError('Failed to add address. Please try again.');
     } finally {
       setLoading(false);
@@ -258,7 +243,6 @@ export default function CheckoutPage() {
       const orderResponse = await checkoutService.placeOrder(orderRequest);
       
       if (orderResponse.error) {
-        console.error('Error placing order:', orderResponse.error);
         setError(orderResponse.error);
         return;
       } 
@@ -270,7 +254,6 @@ export default function CheckoutPage() {
       
       // Step 2: Order created successfully
       const orderId = orderResponse.orderId;
-      console.log('Order created successfully with ID:', orderId);
       
       // Always use Razorpay regardless of selected payment method
       // This ensures Razorpay is always called after order creation
@@ -309,7 +292,6 @@ export default function CheckoutPage() {
           image: '/logo.png',
           order_id: razorpayOrderResponse.id,
           handler: function(response) {
-            console.log('Razorpay handler called with response:', response);
             
             // Immediately show the modal with loading state
             setError(null);
@@ -320,7 +302,6 @@ export default function CheckoutPage() {
             // Process payment verification and recording asynchronously
             (async function() {
               try {
-                console.log('Starting payment verification...');
                 // Step 5: Verify payment
                 const isVerified = await razorpayService.verifyPayment({
                   razorpay_payment_id: response.razorpay_payment_id,
@@ -328,14 +309,12 @@ export default function CheckoutPage() {
                   razorpay_signature: response.razorpay_signature
                 });
                 
-                console.log('Payment verification result:', isVerified);
 
                 if (!isVerified) {
                   throw new Error('Payment verification failed');
                 }
 
                 // Step 6: Create payment record
-                console.log('Creating payment record...');
                 const payment = await createPayment({
                   amount: amount,
                   currency: 'INR',
@@ -355,13 +334,10 @@ export default function CheckoutPage() {
                   }
                 });
                 
-                console.log('Payment record created:', payment);
 
                 // Clear cart
                 clearCart();
-                console.log('Cart cleared, payment flow complete!');
               } catch (err) {
-                console.error('Error in payment processing:', err);
                 // Update modal to show error
                 setPaymentSuccess(false);
               } finally {
@@ -379,7 +355,6 @@ export default function CheckoutPage() {
           },
           modal: {
             ondismiss: function() {
-              console.log('Razorpay modal dismissed');
               // Show our own modal with payment cancelled message
               setPaymentSuccess(false);
               setShowPaymentModal(true);
@@ -391,12 +366,10 @@ export default function CheckoutPage() {
         // Step 7: Open Razorpay checkout
         razorpayService.openCheckout(options);
       } catch (err) {
-        console.error('Error initiating payment:', err);
         setError('Failed to initiate payment. Please try again.');
         setPlacingOrder(false);
       }
     } catch (err) {
-      console.error('Error placing order:', err);
       setError('Failed to place order. Please try again.');
     } finally {
       setPlacingOrder(false);

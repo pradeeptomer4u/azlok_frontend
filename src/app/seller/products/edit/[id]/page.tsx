@@ -170,7 +170,6 @@ export default function EditProductPage() {
 
     try {
       // In a real app, you would send this data to your API
-      console.log('Submitting product update:', formData);
       
       // Mock successful API call
       await new Promise(resolve => setTimeout(resolve, 1000));

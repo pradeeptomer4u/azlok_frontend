@@ -100,7 +100,6 @@ export default function AdminDashboard() {
           console.log('Revenue API not implemented yet:', revenueErr);
         }
       } catch (err) {
-        console.error('Error fetching dashboard data:', err);
         setError('Failed to load dashboard data. Please try again.');
       } finally {
         setIsLoading(false);

@@ -57,7 +57,6 @@ const orderService = {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Error fetching orders:', error);
       return [];
     }
   },
@@ -74,7 +73,6 @@ const orderService = {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error(`Error fetching order with ID ${id}:`, error);
       return null;
     }
   },
@@ -114,7 +112,6 @@ const orderService = {
         error: `Order #${orderIdentifier} not found. Please check your order number and try again.` 
       };
     } catch (error: any) {
-      console.error(`Error tracking order ${orderIdentifier}:`, error);
       return { 
         success: false, 
         error: 'An error occurred while tracking your order. Please try again later.' 
@@ -131,7 +128,6 @@ const orderService = {
       
       return response.ok;
     } catch (error) {
-      console.error(`Error cancelling order with ID ${id}:`, error);
       return false;
     }
   },
@@ -154,7 +150,6 @@ const orderService = {
       
       return response.ok;
     } catch (error) {
-      console.error(`Error updating payment status for order with ID ${id}:`, error);
       return false;
     }
   }

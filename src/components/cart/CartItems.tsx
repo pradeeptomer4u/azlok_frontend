@@ -11,7 +11,6 @@ const CartItems = () => {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
 
   const handleQuantityChange = (id: number, newQuantity: number) => {
-    console.log(`Changing quantity for item ${id} to ${newQuantity}`);
     if (newQuantity >= 1) {
       try {
         // Force the event to be processed in the next tick to avoid React state update conflicts
@@ -25,7 +24,6 @@ const CartItems = () => {
   };
 
   const handleRemoveItem = async (id: number) => {
-    console.log(`Removing item ${id}`);
     try {
       setIsRemoving(id);
       // Simulate API call delay
@@ -35,7 +33,6 @@ const CartItems = () => {
       setTimeout(async () => {
         try {
           await removeItem(id);
-          console.log(`Item ${id} removed successfully`);
         } catch (innerError) {
           console.error('Error in removeItem:', innerError);
         } finally {
@@ -43,7 +40,6 @@ const CartItems = () => {
         }
       }, 0);
     } catch (error) {
-      console.error('Error in handleRemoveItem:', error);
       setIsRemoving(null);
     }
   };

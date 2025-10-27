@@ -9,6 +9,7 @@ import { calculateProductTax, TaxCalculationRequest, TaxCalculationResponse, for
 import productService, { Product as ApiProduct } from '../../services/productService';
 import ProductFAQSection from '../../app/products/[slug]/ProductFAQSection';
 import ProductDetailedContent from './ProductDetailedContent';
+import NutritionalDetails from './NutritionalDetails';
 import LanguageToggle from '../ui/LanguageToggle';
 import { BlogPostingSchema } from '../SEO';
 
@@ -622,9 +623,16 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
             <ProductDetailedContent productSlug={slug} showLanguageToggle={false} />
             
           </div>
-      <div className="mb-6 sm:mb-8">
-        <ProductFAQSection slug={product?.slug} />
-      </div>
+          <div className="mb-6 sm:mb-8">
+            <ProductFAQSection slug={product?.slug} />
+          </div>
+      
+      {/* Nutritional Details Section - Only for spice category */}
+      {product?.category?.toLowerCase().includes('spice') && (
+        <div className="mb-8">
+          <NutritionalDetails slug={product.slug} className="mt-6" />
+        </div>
+      )}
       
       {/* Specifications Section */}
           <div className="mb-8">

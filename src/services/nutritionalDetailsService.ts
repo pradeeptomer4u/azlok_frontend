@@ -105,7 +105,30 @@ const nutritionalDetailsService = {
   getNutritionalDetails: async (slug: string): Promise<NutritionalDetails | null> => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/products/by-slug/${slug}/nutritional-details`);
-      return response.data;
+      const data = response.data;
+      
+      // Parse string values to numbers
+      if (data) {
+        const numericFields = [
+          'calories', 'protein', 'carbohydrates', 'total_fat', 'fiber',
+          'sugar', 'sodium', 'potassium', 'calcium', 'iron', 'magnesium',
+          'phosphorus', 'zinc', 'vitamin_a', 'vitamin_c', 'vitamin_d',
+          'vitamin_e', 'vitamin_k', 'thiamin', 'riboflavin', 'niacin',
+          'vitamin_b6', 'folate', 'vitamin_b12', 'glycemic_index',
+          'saturated_fat', 'monounsaturated_fat', 'polyunsaturated_fat',
+          'trans_fat', 'cholesterol', 'dietary_fiber', 'soluble_fiber',
+          'insoluble_fiber'
+        ];
+        
+        numericFields.forEach(field => {
+          if (field in data && data[field] !== null && data[field] !== undefined) {
+            // Convert string to number
+            data[field] = parseFloat(data[field]);
+          }
+        });
+      }
+      
+      return data;
     } catch (error) {
       console.error('Error fetching nutritional details:', error);
       return null;

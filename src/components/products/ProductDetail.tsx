@@ -623,7 +623,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
       
       {/* Nutritional Details Section - Only for spice category or specific spice products */}
       {(() => {
-        const spiceTerms = ['turmeric', 'haldi', 'coriander', 'dhaniya', 'cumin', 'jeera', 'cardamom', 'cinnamon', 'clove', 'pepper'];
+        const spiceTerms = ['kali', 'saunf', 'fennel', 'laung', 'cloves', 'badi', 'pepper', 'mirch', 'dal', 'chini', 'cinnamon', 'cardamom', 'elaichi', 'patta', 'turmeric', 'haldi', 'coriander', 'dhaniya', 'cumin', 'jeera', 'cardamom', 'cinnamon', 'clove', 'pepper'];
         const exclusionTerms = ['alum', 'fitkari', 'soap', 'detergent', 'cleaner', 'chemical'];
         
         const isSpiceProduct = 

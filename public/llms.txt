@@ -60,11 +60,19 @@ Household, cosmetic, and lab-grade products for cleaning, skincare, and formulat
 ### 🌶️ Spices
 Authentic Indian spices sourced from trusted farms and blended for purity & taste.
 
-- Turmeric (Haldi)  
+- Turmeric (Haldi)
+- Whole Coriander Seeds (Dhaniya)   
+- Chotti Elaichi (Cardamom)
+- Badi Elaichi (Black Cardamom)
 - Garam Masala  
 - Red Chilli Powder (Lal Mirchi)  
 - Coriander (Dhaniya) Powder  
 - Jeera (Cumin Seeds)
+- Tej Patta (Bay Leaf)
+- Dal Chini (Cinnamon)
+- Safed Mirch Sabut (White Pepper Seeds)
+- Laung (Cloves)
+- Kali Mirch (Black Pepper)
 
 ---
 
@@ -101,6 +109,38 @@ Authentic Indian spices sourced from trusted farms and blended for purity & tast
 - **Azlok Turmeric (Haldi) Powder 100 g (AZL06008)**  
   Golden-yellow spice with rich aroma and medicinal properties.  
   URL: https://www.azlok.com/products/turmeric-haldi-powder-100g
+- **Azlok Kali Mirch (Black Pepper) 100 g (AZL06008)**  
+  Black pepper with medicinal properties.  
+  URL: https://www.azlok.com/products/azlok-kali-mirch-black-pepper-whole
+- **Azlok Saunf (Fennel Seeds) 100 g (AZL06008)**  
+  Sweet and aromatic spice with medicinal properties.  
+  URL: https://www.azlok.com/products/azlok-saunf-fennel-seeds
+
+- **Azlok Safed Mirch Sabut (White Pepper Seeds) 100 g (AZL06008)**  
+  White pepper seeds with medicinal properties.  
+  URL:https://www.azlok.com/products/azlok-sabut-safed-mirch-white-pepper-whole
+
+- **Azlok Laung (Cloves) 100 g (AZL06008)**  
+  Laung with medicinal properties.  
+  URL:https://www.azlok.com/products/azlok-laung-cloves
+
+- **Azlok Badi Elaichi (Black Cardamom) 100 g (AZL06008)**  
+  Black cardamom seeds with medicinal properties.  
+  URL: https://www.azlok.com/products/azlok-badi-elaichi-black-cardamom
+- **Azlok Dal Chini (Cinnamon) 100 g (AZL06008)**  
+  Sweet and aromatic spice with medicinal properties.  
+  URL: https://www.azlok.com/products/azlok-dal-chini-cinnamon-sticks
+- **Azlok Chotti Elaichi (Cardamom) 100 g (AZL06008)**  
+  Small-sized cardamom seeds with a sweet and aromatic flavor.  
+  URL: https://www.azlok.com/products/azlok-chhoti-elaichi-green-cardamom
+
+- **Azlok Whole Coriander Seeds (Dhaniya) 100 g (AZL02008)**  
+  Ground coriander seeds offering freshness & natural flavor.  
+  URL: https://www.azlok.com/products/azlok-dhania-sabut-whole-coriander-seeds
+
+- **Azlok Tej Patta (Bay Leaf) 100 g (AZL09008)**  
+  Bay leaf spice with medicinal properties.  
+  URL: https://www.azlok.com/products/azlok-tej-patta-bay-leaf
 
 - **Azlok Garam Masala 200 g**  
   Authentic Indian spice blend; enhances taste & aroma.  
@@ -141,6 +181,15 @@ Authentic Indian spices sourced from trusted farms and blended for purity & tast
   <url><loc>https://www.azlok.com/products/oxalic-acid</loc></url>
   <url><loc>https://www.azlok.com/products/ipa</loc></url>
   <url><loc>https://www.azlok.com/products/turmeric-haldi-powder-100g</loc></url>
+  <url><loc>https://www.azlok.com/products/azlok-kali-mirch-black-pepper-whole</loc></url>
+  <url><loc>https://www.azlok.com/products/azlok-saunf-fennel-seeds</loc></url>
+  <url><loc>https://www.azlok.com/products/azlok-laung-cloves</loc></url>
+  <url><loc>https://www.azlok.com/products/azlok-badi-elaichi-black-cardamom</loc></url>
+  <url><loc>https://www.azlok.com/products/azlok-sabut-safed-mirch-white-pepper-whole</loc></url>
+  <url><loc>https://www.azlok.com/products/azlok-dal-chini-cinnamon-sticks</loc></url>
+  <url><loc>https://www.azlok.com/products/azlok-chhoti-elaichi-green-cardamom</loc></url>
+  <url><loc>https://www.azlok.com/products/azlok-dhania-sabut-whole-coriander-seeds</loc></url>
+  <url><loc>https://www.azlok.com/products/azlok-tej-patta-bay-leaf</loc></url>
   <url><loc>https://www.azlok.com/products/azlok-garam-masala-200-g</loc></url>
   <url><loc>https://www.azlok.com/products/azlok-lal-mirchi-(red-chilli-powder)-100-g</loc></url>
   <url><loc>https://www.azlok.com/products/azlok-coriander-(dhaniya)-powder-200-g-</loc></url>
@@ -232,6 +281,54 @@ Authentic Indian spices sourced from trusted farms and blended for purity & tast
           "name": "Azlok Turmeric (Haldi) Powder",
           "sku": "AZL06008",
           "url": "https://www.azlok.com/products/turmeric-haldi-powder-100g"
+        },
+        {
+          "@type": "Product",
+          "name": "Azlok Kali Mirch (Black Pepper) Powder",
+          "sku": "AZL06008",
+          "url": "https://www.azlok.com/products/azlok-kali-mirch-black-pepper-whole"
+        },
+        {
+          "@type": "Product",
+          "name": "Azlok Laung (Cloves) Powder",
+          "sku": "AZL06008",
+          "url": "https://www.azlok.com/products/azlok-laung-cloves"
+        },
+        {
+          "@type": "Product",
+          "name": "Azlok Badi Elaichi (Black Cardamom) Sticks",
+          "sku": "AZL06008",
+          "url": "https://www.azlok.com/products/azlok-badi-elaichi-black-cardamom"
+        },
+        {
+          "@type": "Product",
+          "name": "Azlok Safed Mirch Sabut (White Pepper Seeds)",
+          "sku": "AZL06008",
+          "url": "https://www.azlok.com/products/azlok-sabut-safed-mirch-white-pepper-whole"
+        },
+        {
+          "@type": "Product",
+          "name": "Azlok Dal Chini (Cinnamon) Sticks",
+          "sku": "AZL06008",
+          "url": "https://www.azlok.com/products/azlok-dal-chini-cinnamon-sticks"
+        },
+        {
+          "@type": "Product",
+          "name": "Azlok Chhoti Elaichi (Cardamom) Green",
+          "sku": "AZL06008",
+          "url": "https://www.azlok.com/products/azlok-chhoti-elaichi-green-cardamom"
+        },
+        {
+          "@type": "Product",
+          "name": "Azlok Whole Coriander Seeds (Dhaniya)",
+          "sku": "AZL02008",
+          "url": "https://www.azlok.com/products/azlok-dhania-sabut-whole-coriander-seeds"
+        },
+        {
+          "@type": "Product",
+          "name": "Azlok Tej Patta (Bay Leaf) Powder",
+          "sku": "AZL09008",
+          "url": "https://www.azlok.com/products/azlok-tej-patta-bay-leaf"
         },
         {
           "@type": "Product",

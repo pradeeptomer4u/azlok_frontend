@@ -210,7 +210,7 @@ export default async function ProductPage(props: PageProps<'/products/[slug]'>) 
   // Fetch nutritional details if product is in spice category
   let nutritionalData = null;
   // Check if product is STRICTLY in spice category - only include nutrition for actual spices
-  const spiceTerms = ['turmeric', 'haldi', 'coriander', 'dhaniya', 'cumin', 'jeera', 'cardamom', 'cinnamon', 'clove', 'pepper'];
+  const spiceTerms = ['kali', 'saunf', 'fennel', 'laung', 'cloves', 'badi', 'pepper', 'mirch', 'dal', 'chini', 'cinnamon', 'cardamom', 'elaichi', 'patta', 'turmeric', 'haldi', 'coriander', 'dhaniya', 'cumin', 'jeera', 'cardamom', 'cinnamon', 'clove', 'pepper'];
   
   // Products that should never have nutrition data
   const exclusionTerms = ['alum', 'fitkari', 'soap', 'detergent', 'cleaner', 'chemical'];

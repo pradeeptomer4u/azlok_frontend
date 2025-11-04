@@ -73,27 +73,27 @@ export default function ReturnsPage() {
                   <ul className="text-gray-700 space-y-2">
                     <li className="flex items-center">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
-                      Clothing and accessories
+                      Sealed household and cosmetic chemicals (e.g., Stearic Acid, Borax Powder, Glycerine)
                     </li>
                     <li className="flex items-center">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
-                      Electronics (unopened)
+                      Unopened lab-grade solvents and reagents like Isopropyl Alcohol (IPA)
                     </li>
                     <li className="flex items-center">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
-                      Home decor items
+                      Packaged whole spices (Turmeric, Coriander Seeds, Elaichi, Tej Patta, etc.)
                     </li>
                     <li className="flex items-center">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
-                      Books and media
+                      Packaged ground spice powders (Red Chilli, Coriander Powder, Garam Masala)
                     </li>
                     <li className="flex items-center">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
-                      Beauty products (unopened)
+                      Sealed spice blends and combo packs in original condition
                     </li>
                     <li className="flex items-center">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
-                      Sports and fitness equipment
+                      Unopened mineral salts such as Alum (Fitkari)
                     </li>
                   </ul>
                 </div>
@@ -107,27 +107,27 @@ export default function ReturnsPage() {
                   <ul className="text-gray-700 space-y-2">
                     <li className="flex items-center">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
-                      Personalized/custom items
+                      Opened or partially used chemicals, solvents, or cosmetic bases
                     </li>
                     <li className="flex items-center">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
-                      Perishable goods
+                      Custom-blended or repackaged chemical orders
                     </li>
                     <li className="flex items-center">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
-                      Intimate apparel
+                      Opened spice packets or products with broken seals
                     </li>
                     <li className="flex items-center">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
-                      Opened beauty products
+                      Moisture-sensitive or perishable items exposed to air
                     </li>
                     <li className="flex items-center">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
-                      Digital downloads
+                      Products past their stated shelf life or without original packaging
                     </li>
                     <li className="flex items-center">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
-                      Gift cards
+                      Free gifts, samples, or promotional add-ons
                     </li>
                   </ul>
                 </div>

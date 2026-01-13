@@ -145,10 +145,21 @@ export default function RootLayout({
               padding-top: 1rem;
               padding-bottom: 1rem;
             }
+            /* Optimize mobile rendering */
+            body {
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+            }
+            /* Reduce layout shift */
+            img {
+              max-width: 100%;
+              height: auto;
+            }
           }
         `}} />
         
-        {/* Preload critical images - only for desktop */}
+        {/* Preload critical images from CDN */}
+        <link rel="preload" as="image" href="https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/hero-side-bg.jpg" fetchPriority="high" />
         {/* Organization Schema is now added in the body */}
       </head>
       <body

@@ -12,7 +12,7 @@ import { CanonicalUrl } from "../components/SEO";
 import { ArrowRight, BadgeCheck } from 'lucide-react';
 
 // Lazy load below-fold components for better LCP
-const CategoryCarousel = dynamic(() => import("../components/home/CategoryCarousel"), { ssr: false });
+const CategoryCarousel = dynamic(() => import("../components/home/CategoryCarousel"), { ssr: true });
 const FeaturedProducts = dynamic(() => import("../components/home/FeaturedProducts"), { ssr: false });
 const TrendingProducts = dynamic(() => import("../components/home/TrendingProducts"), { ssr: false });
 const TestimonialSection = dynamic(() => import("../components/home/TestimonialSection"), { ssr: false });
@@ -66,10 +66,10 @@ export default function Home() {
         <div className="absolute inset-0 opacity-10">
         </div>
         
-        <div className="container mx-auto px-4 py-4 md:py-12 relative z-10">
+        <div className="container mx-auto px-4 py-8 md:py-12 relative z-10">
           <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-4 md:mb-0 md:pr-12">
-              <h1 className="text-2xl md:text-5xl lg:text-6xl font-bold text-white mb-2 md:mb-6 leading-tight font-['Playfair_Display',serif]">
+            <div className="md:w-1/2 mb-3 md:mb-0 md:pr-12">
+              <h1 className="text-xl md:text-5xl lg:text-6xl font-bold text-white mb-2 md:mb-6 leading-tight font-['Playfair_Display',serif]">
                 <span className="block drop-shadow-sm">100% Natural Products <span className="hidden md:inline"><br /></span><span className="md:hidden">from </span><span className="text-yellow-400 font-extrabold">Farmers</span></span>
               </h1>
               <p className="hidden md:block text-xl text-green-100 mb-8 max-w-lg font-['Montserrat',sans-serif] font-light leading-relaxed">
@@ -103,17 +103,29 @@ export default function Home() {
             </div>
             
             <div className="md:w-1/2 relative">
-              {/* Mobile version - CSS only for fastest LCP */}
-              <div className="block md:hidden relative h-32 w-full rounded-lg overflow-hidden shadow-lg bg-gradient-to-br from-green-600 via-green-700 to-green-800">
-                <div className="absolute inset-0 opacity-20" style={{
-                  backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)',
-                }}></div>
+              {/* Mobile version - optimized image for LCP */}
+              <div className="block md:hidden relative h-36 w-full rounded-lg overflow-hidden shadow-lg">
+                <Image 
+                  src="https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/hero-side-bg.jpg" 
+                  alt="Natural Organic Products" 
+                  width={480}
+                  height={144}
+                  style={{objectFit: 'cover', width: '100%', height: '100%'}}
+                  className="rounded-lg"
+                  priority
+                  fetchPriority="high"
+                  quality={40}
+                  sizes="100vw"
+                  loading="eager"
+                  placeholder="blur"
+                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAB//2Q=="
+                />
               </div>
               
               {/* Desktop version with Next.js Image */}
               <div className="hidden md:block relative h-96 w-full rounded-lg overflow-hidden shadow-2xl transform md:translate-x-8">
                 <Image 
-                  src="/images/hero-side-bg.jpg" 
+                  src="https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/hero-side-bg.jpg" 
                   alt="Natural Organic Products" 
                   fill 
                   style={{objectFit: 'cover'}} 
@@ -157,30 +169,15 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
             <div className="relative">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: '40%' }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="absolute -bottom-2 left-0 h-1 bg-gradient-to-r from-green-400 to-green-600 rounded-full"
-              />
-              <motion.h2 
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="text-3xl md:text-4xl font-['Playfair_Display',serif] font-bold text-gray-900 mb-3"
-              >
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-800 via-green-700 to-green-800 animate-shimmer bg-[length:200%_100%]">
+              <div className="absolute -bottom-2 left-0 h-1 bg-gradient-to-r from-green-400 to-green-600 rounded-full w-0 md:w-[40%] md:animate-[width_0.8s_0.2s_forwards]" />
+              <h2 className="text-3xl md:text-4xl font-['Playfair_Display',serif] font-bold text-gray-900 mb-3">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-800 via-green-700 to-green-800 md:animate-shimmer bg-[length:200%_100%]">
                   Categories
                 </span>
-              </motion.h2>
-              <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide leading-relaxed max-w-2xl"
-              >
+              </h2>
+              <p className="text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide leading-relaxed max-w-2xl">
                 Explore our range of <span className="font-medium italic">100% natural products</span> sourced directly from farmers & manufacturers
-              </motion.p>
+              </p>
             </div>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}

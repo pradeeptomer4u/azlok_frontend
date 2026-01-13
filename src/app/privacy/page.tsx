@@ -55,17 +55,17 @@ export default function PrivacyPolicyPage() {
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">1. Introduction</h2>
               <p className="text-gray-700 mb-4">
-                Welcome to Azlok. We protect your privacy. We protect your personal information. This Privacy Policy explains our practices. We tell you how we collect your information. We tell you how we use it. We tell you how we safeguard it. This applies to our website azlok.com. It applies to our mobile apps. It applies to all our platforms.
+                Welcome to Azlok. We protect privacy. We protect information. This policy explains. We collect data. We use data. We safeguard data. Applies to website. Applies to apps. All platforms.
               </p>
               <p className="text-gray-700 mb-4">
-                Please read this policy carefully. Do you disagree with these terms? Then please do not use our site.
+                Read carefully. Disagree? Do not use.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">2. Information We Collect</h2>
               
               <h3 className="text-xl font-semibold text-gray-800 mt-5 mb-3 font-['Playfair_Display',serif]">2.1 Personal Information</h3>
               <p className="text-gray-700 mb-4">
-                We collect personal information you provide. You give us this when you register. You give us this when you contact us. You give us this when you use our site. The information we collect may include:
+                We collect information. You provide it. When registering. When contacting. When using site. We collect:
               </p>
               <ul className="list-none pl-6 mb-4 text-gray-700">
                 <li className="mb-2 flex items-center">
@@ -100,7 +100,7 @@ export default function PrivacyPolicyPage() {
 
               <h3 className="text-xl font-semibold text-gray-800 mt-5 mb-3 font-['Playfair_Display',serif]">2.2 Automatically Collected Information</h3>
               <p className="text-gray-700 mb-4">
-                We collect some information automatically. This happens when you visit our site. We collect device information. We collect browser information. We collect your IP address. We collect your time zone. We collect cookie data. We also track your browsing. We see which pages you view. We see how you found us. We see how you interact with our site.
+                We collect automatically. When visiting. Device info. Browser info. IP address. Time zone. Cookie data. Track browsing. Pages viewed. How found. Interactions.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">3. How We Use Your Information</h2>
@@ -150,21 +150,21 @@ export default function PrivacyPolicyPage() {
               <div className="bg-gradient-to-r from-green-50 to-green-100/70 p-6 rounded-lg mb-6 border border-green-200/50 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-green-200/20 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <p className="text-gray-700 mb-4 relative z-10">
-                  We use cookies. We use similar tracking technologies. Cookies track your activity. They hold certain information. Cookies are small data files. They may include a unique identifier. Your browser receives them from our website. They are stored on your device.
+                  We use cookies. Track activity. Hold information. Small files. Unique identifier. Browser receives. Stored on device.
                 </p>
                 <p className="text-gray-700 mb-0 relative z-10">
-                  You can refuse cookies. You can set your browser to block them. You can set it to alert you. However, some features need cookies. Without cookies, some parts may not work.
+                  Refuse cookies? Set browser. Block them. Get alerts. Some features need cookies. May not work.
                 </p>
               </div>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">5. Third-Party Services</h2>
               <p className="text-gray-700 mb-4">
-                We use third-party service providers. They help us run our business. They help us run our site. They send newsletters. They send surveys. We share your information with them. We only share for these specific purposes.
+                Third-party providers. Help business. Help site. Send newsletters. Send surveys. Share information. Specific purposes only.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">6. Data Security</h2>
               <p className="text-gray-700 mb-4">
-                We protect your information. We use technical security measures. We use organizational security measures. We work hard to keep your data safe. However, no system is perfect. Internet transmission is not 100% secure. Storage technology is not 100% secure. We cannot guarantee complete security.
+                We protect information. Technical security. Organizational security. Keep data safe. No system perfect. Internet not secure. Storage not secure. Cannot guarantee.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">7. Your Privacy Rights</h2>
@@ -200,7 +200,7 @@ export default function PrivacyPolicyPage() {
               
               <h3 className="text-xl font-semibold text-gray-800 mt-5 mb-3 font-['Playfair_Display',serif]">7.1 Account Deletion</h3>
               <p className="text-gray-700 mb-4">
-                You can delete your account. You can delete your personal data. Here is how:
+                Delete account? Delete data? Here's how:
               </p>
               <ul className="list-none pl-6 mb-4 text-gray-700">
                 <li className="mb-2 flex items-center">
@@ -217,20 +217,20 @@ export default function PrivacyPolicyPage() {
                 </li>
               </ul>
               <p className="text-gray-700 mb-4">
-                We receive your request. We verify your identity. We process your deletion within 30 days. You get a confirmation email. We complete the process. Note: Some information may stay. Law may require this. Business purposes may require this.
+                Receive request. Verify identity. Process deletion. Within 30 days. Confirmation email. Process complete. Some info stays. Law requires. Business requires.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">8. Children&quot;s Privacy</h2>
               <p className="text-gray-700 mb-4">
-                Our site is not for children under 13. We do not collect data from children under 13. Are you a parent? Did your child give us information? Please contact us.
+                Not for children. Under 13. No data collection. Parent? Child gave info? Contact us.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">9. Changes to This Privacy Policy</h2>
               <p className="text-gray-700 mb-4">
-                We may update this policy. We will post changes here. We will update the date at the top.
+                May update policy. Post changes. Update date.
               </p>
               <p className="text-gray-700 mb-4">
-                Please check this policy regularly. Look for changes. Changes take effect when posted.
+                Check regularly. Look for changes. Effective when posted.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">10. Contact Us</h2>

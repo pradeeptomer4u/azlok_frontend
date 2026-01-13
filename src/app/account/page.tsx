@@ -126,7 +126,7 @@ const AccountDashboard = () => {
               </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">My Profile</h3>
-            <p className="text-sm text-gray-500 mb-4">Update your personal information and preferences</p>
+            <p className="text-sm text-gray-500 mb-4">Update your information. Change your preferences.</p>
             <Link 
               href="/account/profile" 
               className="text-sm font-medium text-blue-600 hover:text-blue-500"
@@ -144,7 +144,7 @@ const AccountDashboard = () => {
               </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">Payment Methods</h3>
-            <p className="text-sm text-gray-500 mb-4">Manage your payment methods and transactions</p>
+            <p className="text-sm text-gray-500 mb-4">Manage payment methods. View transactions.</p>
             <Link 
               href="/account/payments" 
               className="text-sm font-medium text-blue-600 hover:text-blue-500"
@@ -163,7 +163,7 @@ const AccountDashboard = () => {
               </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">My Addresses</h3>
-            <p className="text-sm text-gray-500 mb-4">Manage your shipping and billing addresses</p>
+            <p className="text-sm text-gray-500 mb-4">Manage shipping addresses. Manage billing addresses.</p>
             <Link 
               href="/account/addresses" 
               className="text-sm font-medium text-blue-600 hover:text-blue-500"

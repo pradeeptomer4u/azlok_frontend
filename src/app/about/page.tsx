@@ -56,21 +56,21 @@ export default function AboutPage() {
               
               <h2 className="text-2xl font-semibold text-gray-800 mb-4 font-['Playfair_Display',serif] relative z-10">Redefining Online Shopping</h2>
               <p className="text-gray-700 text-lg leading-relaxed relative z-10">
-                At Azlok, we believe shopping should be more than just a transaction—it should be an experience. 
-                We&apos;re committed to bringing you premium products, exceptional service, and a seamless shopping journey 
-                that exceeds your expectations every time.
+                At Azlok, shopping is more than a transaction. It is an experience. 
+                We bring you premium products. We provide exceptional service. We create a seamless shopping journey. 
+                We exceed your expectations every time.
               </p>
             </div>
 
             <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">Our Story</h2>
             <p className="text-gray-700 mb-4">
-              Founded with a vision to transform the e-commerce landscape in India, Azlok started as a small team 
-              passionate about connecting customers with quality products from trusted sellers. What began as a 
-              simple idea has grown into a comprehensive platform serving thousands of satisfied customers across the country.
+              We started with a vision. We wanted to transform e-commerce in India. Azlok began as a small team. 
+              We connected customers with quality products. We worked with trusted sellers. Our simple idea grew. 
+              Now we serve thousands of happy customers across the country.
             </p>
             <p className="text-gray-700 mb-6">
-              Our journey has been driven by one core belief: every customer deserves access to premium products, 
-              reliable service, and a shopping experience that brings joy and convenience to their lives.
+              One belief drives us. Every customer deserves premium products. Every customer deserves reliable service. 
+              Every customer deserves joy and convenience.
             </p>
 
             <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">Our Mission</h2>
@@ -94,8 +94,8 @@ export default function AboutPage() {
                   Trust & Security
                 </h3>
                 <p className="text-gray-700 relative z-10">
-                  We prioritize your security with industry-standard encryption, secure payment processing, 
-                  and transparent policies that protect your personal information.
+                  We prioritize your security. We use industry-standard encryption. We process payments securely. 
+                  Our policies are transparent. We protect your personal information.
                 </p>
               </div>
               
@@ -106,8 +106,8 @@ export default function AboutPage() {
                   Quality First
                 </h3>
                 <p className="text-gray-700 relative z-10">
-                  Every product undergoes rigorous quality checks. We partner only with verified sellers 
-                  who share our commitment to excellence.
+                  Every product passes quality checks. We partner with verified sellers only. 
+                  They share our commitment to excellence.
                 </p>
               </div>
               
@@ -118,8 +118,8 @@ export default function AboutPage() {
                   Innovation
                 </h3>
                 <p className="text-gray-700 relative z-10">
-                  We continuously evolve our platform with cutting-edge technology to provide you with 
-                  the most intuitive and efficient shopping experience.
+                  We evolve our platform continuously. We use cutting-edge technology. 
+                  We provide an intuitive shopping experience. We make it efficient.
                 </p>
               </div>
               
@@ -130,8 +130,8 @@ export default function AboutPage() {
                   Customer-Centric
                 </h3>
                 <p className="text-gray-700 relative z-10">
-                  Your satisfaction is our success. We listen to your feedback and constantly improve 
-                  our services to better serve your needs.
+                  Your satisfaction is our success. We listen to your feedback. We improve constantly. 
+                  We serve your needs better.
                 </p>
               </div>
             </div>
@@ -173,7 +173,7 @@ export default function AboutPage() {
 
             <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">Our Commitment to Sustainability</h2>
             <p className="text-gray-700 mb-4">
-              We believe in responsible business practices that benefit not just our customers, but our planet too. 
+              We believe in responsible business. We benefit our customers. We benefit our planet too. 
               Our sustainability initiatives include:
             </p>
             <ul className="list-disc pl-6 mb-6 text-gray-700">
@@ -206,13 +206,12 @@ export default function AboutPage() {
 
             <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">Looking Ahead</h2>
             <p className="text-gray-700 mb-4">
-              As we continue to grow, our focus remains unchanged: providing you with the best online shopping 
-              experience possible. We&apos;re constantly working on new features, expanding our product range, 
-              and improving our services based on your valuable feedback.
+              We continue to grow. Our focus stays the same. We provide the best online shopping experience. 
+              We work on new features constantly. We expand our product range. We improve based on your feedback.
             </p>
             <p className="text-gray-700 mb-6">
-              Our roadmap includes expanding to international markets, introducing more sustainable products, 
-              and leveraging AI technology to personalize your shopping experience even further.
+              Our roadmap is clear. We will expand to international markets. We will introduce more sustainable products. 
+              We will use AI technology. We will personalize your shopping experience further.
             </p>
 
             <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">Get in Touch</h2>

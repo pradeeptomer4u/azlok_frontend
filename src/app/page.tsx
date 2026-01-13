@@ -73,7 +73,7 @@ export default function Home() {
                 <span className="block drop-shadow-sm">100% Natural Products <span className="hidden md:inline"><br /></span><span className="md:hidden">from </span><span className="text-yellow-400 font-extrabold">Farmers</span></span>
               </h1>
               <p className="hidden md:block text-xl text-green-100 mb-8 max-w-lg font-['Montserrat',sans-serif] font-light leading-relaxed">
-                <span className="font-medium italic">We manufacture authentic products</span> with ingredients sourced directly from farmers. <span className="font-medium">No artificial colors or additives</span> - just pure, natural goodness.
+                We make authentic products. Our ingredients come directly from farmers. We use no artificial colors. We add no additives. Just pure, natural goodness.
               </p>
               
               {/* Search Bar with Autocomplete - Hidden on mobile for better LCP */}

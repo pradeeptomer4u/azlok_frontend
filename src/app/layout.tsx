@@ -94,19 +94,61 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-      <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       <link rel="sitemap" type="application/xml" href="https://www.azlok.com/sitemap.xml" />
       {/* Hreflang tags */}
-      <link rel="alternate" hrefLang="en" href="https://www.azlok.com" />
-      <link rel="alternate" hrefLang="en-us" href="https://www.azlok.com" />
       <link rel="alternate" hrefLang="en-in" href="https://www.azlok.com" />
       <link rel="alternate" hrefLang="x-default" href="https://www.azlok.com" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="robots" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1" />
         <meta name="google-site-verification" content="your-google-site-verification-code" />
+        
+        {/* DNS Prefetch and Preconnect for critical resources */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* Preload critical fonts with font-display swap for faster LCP */}
+        <link 
+          rel="stylesheet" 
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" 
+          media="print" 
+        />
+        <script dangerouslySetInnerHTML={{__html: `
+          (function() {
+            var link = document.querySelector('link[media="print"]');
+            if (link) {
+              link.addEventListener('load', function() {
+                this.media = 'all';
+              });
+            }
+          })();
+        `}} />
+        <noscript>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" />
+        </noscript>
+        <style dangerouslySetInnerHTML={{__html: `
+          @font-face {
+            font-family: 'Playfair Display';
+            font-display: swap;
+          }
+          @font-face {
+            font-family: 'Montserrat';
+            font-display: swap;
+          }
+          /* Critical CSS for hero section - improves LCP */
+          .hero-section { 
+            min-height: auto;
+            background: linear-gradient(to right, #15803d, #14532d);
+          }
+          @media (max-width: 768px) {
+            .hero-section { 
+              padding-top: 1rem;
+              padding-bottom: 1rem;
+            }
+          }
+        `}} />
+        
+        {/* Preload critical images - only for desktop */}
         {/* Organization Schema is now added in the body */}
       </head>
       <body

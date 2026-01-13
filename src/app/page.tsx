@@ -2,21 +2,22 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import SearchAutocomplete from "../components/search/SearchAutocomplete";
-import CategoryCarousel from "../components/home/CategoryCarousel";
-import FeaturedProducts from "../components/home/FeaturedProducts";
-import TrendingProducts from "../components/home/TrendingProducts";
-import SellerShowcase from "../components/home/SellerShowcase";
-import TestimonialSection from "../components/home/TestimonialSection";
-import WhyChooseUs from "../components/home/WhyChooseUs";
-import NatureGoodnessCTA from "../components/home/NatureGoodnessCTA";
 import MetaTags from "../components/SEO/MetaTags";
 import { OrganizationStructuredData } from "../components/SEO/StructuredData";
-import AIOverviewOptimized from "../components/SEO/AIOverviewOptimized";
 import FAQStructuredData from "../components/SEO/FAQStructuredData";
 import { CanonicalUrl } from "../components/SEO";
-import { ArrowRight, ShoppingBag, Truck, BadgeCheck, Clock, Star } from 'lucide-react';
+import { ArrowRight, BadgeCheck } from 'lucide-react';
+
+// Lazy load below-fold components for better LCP
+const CategoryCarousel = dynamic(() => import("../components/home/CategoryCarousel"), { ssr: false });
+const FeaturedProducts = dynamic(() => import("../components/home/FeaturedProducts"), { ssr: false });
+const TrendingProducts = dynamic(() => import("../components/home/TrendingProducts"), { ssr: false });
+const TestimonialSection = dynamic(() => import("../components/home/TestimonialSection"), { ssr: false });
+const WhyChooseUs = dynamic(() => import("../components/home/WhyChooseUs"), { ssr: false });
+const NatureGoodnessCTA = dynamic(() => import("../components/home/NatureGoodnessCTA"), { ssr: false });
 
 export default function Home() {
   return (
@@ -63,44 +64,36 @@ export default function Home() {
       {/* Hero Banner with Search - Modern Style */}
       <section className="relative bg-gradient-to-r from-green-700 to-green-900 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <Image 
-            src="/images/farm-pattern-bg.jpg" 
-            alt="Natural Farm Background" 
-            fill 
-            style={{objectFit: 'cover'}} 
-            priority
-          />
         </div>
         
-        <div className="container mx-auto px-4 py-11 md:py-12 relative z-10">
+        <div className="container mx-auto px-4 py-4 md:py-12 relative z-10">
           <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-8 md:mb-0 md:pr-12">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight font-['Playfair_Display',serif]">
-                <span className="block drop-shadow-sm">100% Natural Products</span>
-                <span className="block">Direct from <span className="text-yellow-400 font-extrabold">Farmers</span></span>
+            <div className="md:w-1/2 mb-4 md:mb-0 md:pr-12">
+              <h1 className="text-2xl md:text-5xl lg:text-6xl font-bold text-white mb-2 md:mb-6 leading-tight font-['Playfair_Display',serif]">
+                <span className="block drop-shadow-sm">100% Natural Products <span className="hidden md:inline"><br /></span><span className="md:hidden">from </span><span className="text-yellow-400 font-extrabold">Farmers</span></span>
               </h1>
-              <p className="text-lg md:text-xl text-green-100 mb-8 max-w-lg font-['Montserrat',sans-serif] font-light tracking-wide leading-relaxed">
+              <p className="hidden md:block text-xl text-green-100 mb-8 max-w-lg font-['Montserrat',sans-serif] font-light leading-relaxed">
                 <span className="font-medium italic">We manufacture authentic products</span> with ingredients sourced directly from farmers. <span className="font-medium">No artificial colors or additives</span> - just pure, natural goodness.
               </p>
               
-              {/* Search Bar with Autocomplete */}
-              <div className="max-w-xl w-full">
+              {/* Search Bar with Autocomplete - Hidden on mobile for better LCP */}
+              <div className="hidden md:block max-w-xl w-full">
                 <SearchAutocomplete />
               </div>
               
-              {/* Trust Badges */}
-              <div className="flex flex-wrap gap-4 mt-8">
-                <div className="flex items-center text-white">
-                  <BadgeCheck className="h-5 w-5 mr-2" />
+              {/* Trust Badges - Single badge on mobile */}
+              <div className="flex flex-wrap gap-3 mt-2 md:mt-8">
+                <div className="flex items-center text-white text-xs md:text-base">
+                  <BadgeCheck className="h-4 w-4 md:h-5 md:w-5 mr-1 md:mr-2" />
                   <span>100% Natural</span>
                 </div>
-                <div className="flex items-center text-white">
+                <div className="hidden md:flex items-center text-white">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <span>Farm Direct</span>
                 </div>
-                <div className="flex items-center text-white">
+                <div className="hidden md:flex items-center text-white">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                   </svg>
@@ -110,17 +103,11 @@ export default function Home() {
             </div>
             
             <div className="md:w-1/2 relative">
-              {/* Mobile version with regular img tag */}
-              <div className="block md:hidden relative h-64 w-full rounded-lg overflow-hidden shadow-xl">
-                <img 
-                  src="/images/hero-side-bg.jpg" 
-                  alt="Natural Organic Products" 
-                  className="w-full h-full object-cover rounded-lg"
-                  onError={(e) => {
-                    console.error('Mobile hero image failed to load');
-                    e.currentTarget.src = '/globe.svg';
-                  }}
-                />
+              {/* Mobile version - CSS only for fastest LCP */}
+              <div className="block md:hidden relative h-32 w-full rounded-lg overflow-hidden shadow-lg bg-gradient-to-br from-green-600 via-green-700 to-green-800">
+                <div className="absolute inset-0 opacity-20" style={{
+                  backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)',
+                }}></div>
               </div>
               
               {/* Desktop version with Next.js Image */}
@@ -132,7 +119,10 @@ export default function Home() {
                   style={{objectFit: 'cover'}} 
                   className="rounded-lg"
                   priority
+                  fetchPriority="high"
+                  quality={75}
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  loading="eager"
                   onError={(e) => {
                     console.error('Desktop hero image failed to load:', e);
                     const imgElement = e.currentTarget as HTMLImageElement;

@@ -173,36 +173,7 @@ const NatureGoodnessCTA = () => {
       </div>
       
       {/* Decorative leaves */}
-      <motion.div 
-        className="absolute top-10 left-10 hidden md:block"
-        variants={leafVariants}
-        initial="hidden"
-        animate={controls}
-      >
-        <Image 
-          src="/images/leaf-decoration.png" 
-          alt="Decorative leaf" 
-          width={120} 
-          height={120}
-          className="opacity-20"
-        />
-      </motion.div>
       
-      <motion.div 
-        className="absolute bottom-10 right-10 hidden md:block"
-        variants={leafVariants}
-        initial="hidden"
-        animate={controls}
-        style={{ rotate: 180 }}
-      >
-        <Image 
-          src="/images/leaf-decoration.png" 
-          alt="Decorative leaf" 
-          width={100} 
-          height={100}
-          className="opacity-20"
-        />
-      </motion.div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center relative z-10">
         <motion.div

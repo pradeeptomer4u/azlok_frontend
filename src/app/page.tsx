@@ -176,7 +176,7 @@ export default function Home() {
                 </span>
               </h2>
               <p className="text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide leading-relaxed max-w-2xl">
-                Natural products. From farmers.
+                Explore our range of <span className="font-medium italic">100% natural products</span> sourced directly from farmers & manufacturers
               </p>
             </div>
             <motion.div
@@ -241,7 +241,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide leading-relaxed max-w-2xl"
               >
-                Handcrafted. From farmers.
+                <span className="italic">Handcrafted with care</span> using ingredients sourced directly from farmers
               </motion.p>
             </div>
             <motion.div

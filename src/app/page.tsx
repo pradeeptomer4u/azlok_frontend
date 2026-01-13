@@ -73,7 +73,7 @@ export default function Home() {
                 <span className="block drop-shadow-sm">100% Natural Products <span className="hidden md:inline"><br /></span><span className="md:hidden">from </span><span className="text-yellow-400 font-extrabold">Farmers</span></span>
               </h1>
               <p className="hidden md:block text-xl text-green-100 mb-8 max-w-lg font-['Montserrat',sans-serif] font-light leading-relaxed">
-                We make products. All natural. From farmers. No colors. No additives. Pure goodness.
+                Natural products. From farmers. No colors. No additives. Pure.
               </p>
               
               {/* Search Bar with Autocomplete - Hidden on mobile for better LCP */}
@@ -176,7 +176,7 @@ export default function Home() {
                 </span>
               </h2>
               <p className="text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide leading-relaxed max-w-2xl">
-                Explore our range. All natural. From farmers. From manufacturers.
+                Natural products. From farmers.
               </p>
             </div>
             <motion.div
@@ -241,7 +241,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide leading-relaxed max-w-2xl"
               >
-                Handcrafted with care. From farmers.
+                Handcrafted. From farmers.
               </motion.p>
             </div>
             <motion.div
@@ -312,7 +312,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="text-gray-600 font-['Montserrat',sans-serif] font-light tracking-wide leading-relaxed"
               >
-                Most loved products. Natural. Pure. Farm to home.
+                Popular products. Natural. Pure.
               </motion.p>
             </div>
             <motion.div

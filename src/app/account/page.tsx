@@ -126,7 +126,7 @@ const AccountDashboard = () => {
               </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">My Profile</h3>
-            <p className="text-sm text-gray-500 mb-4">Update info. Change preferences.</p>
+            <p className="text-sm text-gray-500 mb-4">Update info. Change settings.</p>
             <Link 
               href="/account/profile" 
               className="text-sm font-medium text-blue-600 hover:text-blue-500"
@@ -144,7 +144,7 @@ const AccountDashboard = () => {
               </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">Payment Methods</h3>
-            <p className="text-sm text-gray-500 mb-4">Manage payments. View transactions.</p>
+            <p className="text-sm text-gray-500 mb-4">Manage payments. View history.</p>
             <Link 
               href="/account/payments" 
               className="text-sm font-medium text-blue-600 hover:text-blue-500"

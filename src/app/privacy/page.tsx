@@ -55,17 +55,17 @@ export default function PrivacyPolicyPage() {
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">1. Introduction</h2>
               <p className="text-gray-700 mb-4">
-                Welcome to Azlok. We protect privacy. We protect information. This policy explains. We collect data. We use data. We safeguard data. Applies to website. Applies to apps. All platforms.
+                Welcome. Privacy protected. Information protected. Policy explains. Data collected. Data used. Data safe. Website. Apps. Platforms.
               </p>
               <p className="text-gray-700 mb-4">
-                Read carefully. Disagree? Do not use.
+                Read carefully. Disagree? Stop.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">2. Information We Collect</h2>
               
               <h3 className="text-xl font-semibold text-gray-800 mt-5 mb-3 font-['Playfair_Display',serif]">2.1 Personal Information</h3>
               <p className="text-gray-700 mb-4">
-                We collect information. You provide it. When registering. When contacting. When using site. We collect:
+                We collect. You provide. Registering. Contacting. Using site. Collect:
               </p>
               <ul className="list-none pl-6 mb-4 text-gray-700">
                 <li className="mb-2 flex items-center">
@@ -100,7 +100,7 @@ export default function PrivacyPolicyPage() {
 
               <h3 className="text-xl font-semibold text-gray-800 mt-5 mb-3 font-['Playfair_Display',serif]">2.2 Automatically Collected Information</h3>
               <p className="text-gray-700 mb-4">
-                We collect automatically. When visiting. Device info. Browser info. IP address. Time zone. Cookie data. Track browsing. Pages viewed. How found. Interactions.
+                Automatic collection. Visiting. Device. Browser. IP. Time zone. Cookies. Tracking. Pages. Source. Interactions.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">3. How We Use Your Information</h2>
@@ -150,21 +150,21 @@ export default function PrivacyPolicyPage() {
               <div className="bg-gradient-to-r from-green-50 to-green-100/70 p-6 rounded-lg mb-6 border border-green-200/50 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-green-200/20 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <p className="text-gray-700 mb-4 relative z-10">
-                  We use cookies. Track activity. Hold information. Small files. Unique identifier. Browser receives. Stored on device.
+                  Cookies used. Track activity. Store info. Small files. Unique ID. Browser. Device storage.
                 </p>
                 <p className="text-gray-700 mb-0 relative z-10">
-                  Refuse cookies? Set browser. Block them. Get alerts. Some features need cookies. May not work.
+                  Refuse cookies? Browser settings. Block. Alerts. Features need cookies. May fail.
                 </p>
               </div>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">5. Third-Party Services</h2>
               <p className="text-gray-700 mb-4">
-                Third-party providers. Help business. Help site. Send newsletters. Send surveys. Share information. Specific purposes only.
+                Third parties. Help business. Help site. Newsletters. Surveys. Share info. Limited use.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">6. Data Security</h2>
               <p className="text-gray-700 mb-4">
-                We protect information. Technical security. Organizational security. Keep data safe. No system perfect. Internet not secure. Storage not secure. Cannot guarantee.
+                Info protected. Technical security. Organizational security. Data safe. No perfection. Internet risk. Storage risk. No guarantee.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">7. Your Privacy Rights</h2>
@@ -200,7 +200,7 @@ export default function PrivacyPolicyPage() {
               
               <h3 className="text-xl font-semibold text-gray-800 mt-5 mb-3 font-['Playfair_Display',serif]">7.1 Account Deletion</h3>
               <p className="text-gray-700 mb-4">
-                Delete account? Delete data? Here's how:
+                Delete account? Delete data? How:
               </p>
               <ul className="list-none pl-6 mb-4 text-gray-700">
                 <li className="mb-2 flex items-center">
@@ -217,20 +217,20 @@ export default function PrivacyPolicyPage() {
                 </li>
               </ul>
               <p className="text-gray-700 mb-4">
-                Receive request. Verify identity. Process deletion. Within 30 days. Confirmation email. Process complete. Some info stays. Law requires. Business requires.
+                Request received. Identity verified. Deletion processed. 30 days. Email confirmation. Complete. Some data stays. Legal requirement. Business need.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">8. Children&quot;s Privacy</h2>
               <p className="text-gray-700 mb-4">
-                Not for children. Under 13. No data collection. Parent? Child gave info? Contact us.
+                No children. Under 13. No collection. Parent? Contact us.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">9. Changes to This Privacy Policy</h2>
               <p className="text-gray-700 mb-4">
-                May update policy. Post changes. Update date.
+                Updates possible. Changes posted. Date updated.
               </p>
               <p className="text-gray-700 mb-4">
-                Check regularly. Look for changes. Effective when posted.
+                Check regularly. Changes posted. Effective immediately.
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 font-['Playfair_Display',serif]">10. Contact Us</h2>

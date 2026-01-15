@@ -11,6 +11,7 @@ export default function RegisterPage() {
     name: '',
     username: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
     company: '',
@@ -100,6 +101,7 @@ export default function RegisterPage() {
       name: formData.name,
       username: formData.username,
       email: formData.email,
+      phone: formData.phone,
       password: formData.password,
       role: formData.role,
       company: formData.company,
@@ -220,6 +222,25 @@ export default function RegisterPage() {
                     onChange={handleChange}
                     className="relative w-full border border-green-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base bg-white/90 font-['Montserrat',sans-serif] font-light"
                     placeholder="you@example.com"
+                    required
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2 font-['Montserrat',sans-serif]">
+                  Phone Number
+                </label>
+                <div className="relative group/input">
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-green-400/30 via-green-500/30 to-green-600/30 rounded-md blur opacity-0 group-hover/input:opacity-100 transition-opacity duration-300"></div>
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="relative w-full border border-green-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base bg-white/90 font-['Montserrat',sans-serif] font-light"
+                    placeholder="+91 98765 43210"
                     required
                   />
                 </div>

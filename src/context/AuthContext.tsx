@@ -32,6 +32,7 @@ interface RegisterData {
   name: string;
   username: string;
   email: string;
+  phone: string;
   password: string;
   role: 'buyer' | 'seller';
   company?: string;
@@ -143,33 +144,29 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setError(null);
     
     try {
-      // In a real app, we would make an API call to register
-      // const response = await fetch('/api/auth/register', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(userData),
-      // });
-      // const data = await response.json();
-      // if (!response.ok) throw new Error(data.message || 'Registration failed');
+      // Make API call to register user
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: userData.name,
+          username: userData.username,
+          email: userData.email,
+          phone: userData.phone,
+          password: userData.password,
+          role: userData.role.toUpperCase(),
+          business_name: userData.company || '',
+        }),
+      });
       
-      // Mock registration for now
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const data = await response.json();
       
-      const newUser: User = {
-        id: Math.floor(Math.random() * 1000),
-        name: userData.name,
-        email: userData.email,
-        role: userData.role,
-        company: userData.company,
-        avatar: '/globe.svg'
-      };
+      if (!response.ok) {
+        throw new Error(data.detail || data.message || 'Registration failed');
+      }
       
-      // In a real implementation, we would send the username to the backend
-      
-      setUser(newUser);
-      setToken(`mock-jwt-token-${newUser.id}-${newUser.role}`);
-      localStorage.setItem('azlok-user', JSON.stringify(newUser));
-      router.push('/dashboard');
+      // After successful registration, log the user in
+      await login(userData.email, userData.password);
     } catch (err: Error | unknown) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred during registration';
       setError(errorMessage);

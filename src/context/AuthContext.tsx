@@ -35,7 +35,6 @@ interface RegisterData {
   phone: string;
   password: string;
   role: 'buyer' | 'seller';
-  company?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -155,7 +154,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           phone: userData.phone,
           password: userData.password,
           role: userData.role.toUpperCase(),
-          business_name: userData.company || '',
         }),
       });
       

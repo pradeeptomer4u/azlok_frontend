@@ -14,7 +14,6 @@ export default function RegisterPage() {
     phone: '',
     password: '',
     confirmPassword: '',
-    company: '',
     role: 'buyer' as 'buyer' | 'seller',
   });
   const [passwordError, setPasswordError] = useState('');
@@ -104,7 +103,6 @@ export default function RegisterPage() {
       phone: formData.phone,
       password: formData.password,
       role: formData.role,
-      company: formData.company,
     });
   };
 
@@ -242,24 +240,6 @@ export default function RegisterPage() {
                     className="relative w-full border border-green-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base bg-white/90 font-['Montserrat',sans-serif] font-light"
                     placeholder="+91 98765 43210"
                     required
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2 font-['Montserrat',sans-serif]">
-                  Company Name
-                </label>
-                <div className="relative group/input">
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-green-400/30 via-green-500/30 to-green-600/30 rounded-md blur opacity-0 group-hover/input:opacity-100 transition-opacity duration-300"></div>
-                  <input
-                    id="company"
-                    name="company"
-                    type="text"
-                    value={formData.company}
-                    onChange={handleChange}
-                    className="relative w-full border border-green-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base bg-white/90 font-['Montserrat',sans-serif] font-light"
-                    placeholder="Your Company Ltd."
                   />
                 </div>
               </div>

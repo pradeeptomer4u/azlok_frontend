@@ -1,19 +1,69 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
+import orderService, { Order } from '../../services/orderService';
 import Link from 'next/link';
+
+function getTimeAgo(date: Date): string {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 60) {
+    return diffMins <= 1 ? 'Just now' : `${diffMins} minutes ago`;
+  } else if (diffHours < 24) {
+    return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+  } else if (diffDays < 7) {
+    return diffDays === 1 ? 'Yesterday' : `${diffDays} days ago`;
+  } else {
+    return date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+  }
+}
 
 export default function Dashboard() {
   const { user, isLoading, isAuthenticated } = useAuth();
   const router = useRouter();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [stats, setStats] = useState({
+    ordersPlaced: 0,
+    activeOrders: 0,
+    savedProducts: 0
+  });
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       router.push('/login');
     }
   }, [isLoading, isAuthenticated, router]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!user) return;
+      
+      try {
+        const data = await orderService.getOrders();
+        setOrders(data);
+        
+        // Calculate stats
+        const activeStatuses = ['pending', 'processing', 'shipped'];
+        setStats({
+          ordersPlaced: data.length,
+          activeOrders: data.filter(order => activeStatuses.includes(order.status.toLowerCase())).length,
+          savedProducts: 0 // TODO: Implement saved products API
+        });
+      } catch (err) {
+        console.error('Failed to fetch orders:', err);
+      }
+    };
+
+    if (user) {
+      fetchOrders();
+    }
+  }, [user]);
 
   if (isLoading) {
     return (
@@ -55,15 +105,15 @@ export default function Dashboard() {
               <>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Orders Placed</span>
-                  <span className="font-medium">12</span>
+                  <span className="font-medium">{stats.ordersPlaced}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Active Orders</span>
-                  <span className="font-medium">3</span>
+                  <span className="font-medium">{stats.activeOrders}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Saved Products</span>
-                  <span className="font-medium">24</span>
+                  <span className="font-medium">{stats.savedProducts}</span>
                 </div>
               </>
             )}
@@ -90,18 +140,21 @@ export default function Dashboard() {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
           <div className="space-y-4">
-            <div className="border-l-4 border-primary pl-3 py-1">
-              <p className="text-sm font-medium">Order #12345 was shipped</p>
-              <p className="text-xs text-gray-500">2 hours ago</p>
-            </div>
-            <div className="border-l-4 border-gray-300 pl-3 py-1">
-              <p className="text-sm font-medium">Added new product to cart</p>
-              <p className="text-xs text-gray-500">Yesterday</p>
-            </div>
-            <div className="border-l-4 border-gray-300 pl-3 py-1">
-              <p className="text-sm font-medium">Updated account information</p>
-              <p className="text-xs text-gray-500">3 days ago</p>
-            </div>
+            {orders.length > 0 ? (
+              orders.slice(0, 3).map((order) => {
+                const timeAgo = getTimeAgo(new Date(order.created_at));
+                return (
+                  <div key={order.id} className="border-l-4 border-primary pl-3 py-1">
+                    <p className="text-sm font-medium">
+                      Order #{order.order_number} - {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                    </p>
+                    <p className="text-xs text-gray-500">{timeAgo}</p>
+                  </div>
+                );
+              })
+            ) : (
+              <p className="text-sm text-gray-500">No recent activity</p>
+            )}
           </div>
         </div>
 

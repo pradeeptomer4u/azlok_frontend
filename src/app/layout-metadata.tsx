@@ -1,13 +1,14 @@
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   title: "Azlok | Premium B2C Online Marketplace India",
   description: "Azlok is India's leading B2C marketplace connecting verified suppliers with businesses. Shop quality products including organic compounds, spices, chemicals, and industrial supplies with competitive pricing and fast delivery across India.".substring(0, 160),
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',

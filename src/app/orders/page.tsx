@@ -125,7 +125,7 @@ export default function OrdersPage() {
                     <div>
                       <p className="text-sm text-gray-600 font-['Montserrat',sans-serif]">Total Amount</p>
                       <p className="text-lg font-semibold text-gray-800 font-['Montserrat',sans-serif]">
-                        ₹{order.total_amount.toFixed(2)}
+                        ₹{(order.total_amount || 0).toFixed(2)}
                       </p>
                     </div>
                     <div>
@@ -148,11 +148,11 @@ export default function OrdersPage() {
                               className="w-12 h-12 object-cover rounded"
                             />
                             <div className="flex-1">
-                              <p className="text-sm font-medium text-gray-800 font-['Montserrat',sans-serif]">{item.product_name}</p>
-                              <p className="text-xs text-gray-600 font-['Montserrat',sans-serif]">Qty: {item.quantity}</p>
+                              <p className="text-sm font-medium text-gray-800 font-['Montserrat',sans-serif]">{item.product_name || 'Unknown Product'}</p>
+                              <p className="text-xs text-gray-600 font-['Montserrat',sans-serif]">Qty: {item.quantity || 0}</p>
                             </div>
                             <p className="text-sm font-semibold text-gray-800 font-['Montserrat',sans-serif]">
-                              ₹{item.total_price.toFixed(2)}
+                              ₹{(item.total_price || 0).toFixed(2)}
                             </p>
                           </div>
                         ))}

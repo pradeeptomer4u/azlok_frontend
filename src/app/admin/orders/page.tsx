@@ -59,121 +59,43 @@ export default function AdminOrdersPage() {
     const fetchOrders = async () => {
       setIsLoading(true);
       try {
-        // For now, use mock data
-        const mockOrders: Order[] = [
-          {
-            id: 1,
-            order_number: 'ORD-2023-001',
-            customer_name: 'John Doe',
-            customer_email: 'john.doe@example.com',
-            status: 'delivered',
-            payment_status: 'paid',
-            total_amount: 129.99,
-            shipping_address: {
-              street: '123 Main St',
-              city: 'Anytown',
-              state: 'CA',
-              zip: '12345',
-              country: 'USA',
-            },
-            items: [
-              {
-                id: 1,
-                product_name: 'Wireless Headphones',
-                product_image: '/globe.svg',
-                quantity: 1,
-                unit_price: 79.99,
-                total_price: 79.99,
-              },
-              {
-                id: 2,
-                product_name: 'Phone Case',
-                product_image: '/globe.svg',
-                quantity: 2,
-                unit_price: 25.00,
-                total_price: 50.00,
-              },
-            ],
-            created_at: '2023-07-15T10:30:00Z',
-            updated_at: '2023-07-15T15:45:00Z',
-          },
-          {
-            id: 2,
-            order_number: 'ORD-2023-002',
-            customer_name: 'Jane Smith',
-            customer_email: 'jane.smith@example.com',
-            status: 'processing',
-            payment_status: 'paid',
-            total_amount: 249.95,
-            shipping_address: {
-              street: '456 Oak Ave',
-              city: 'Somewhere',
-              state: 'NY',
-              zip: '67890',
-              country: 'USA',
-            },
-            items: [
-              {
-                id: 3,
-                product_name: 'Smart Watch',
-                product_image: '/globe.svg',
-                quantity: 1,
-                unit_price: 199.95,
-                total_price: 199.95,
-              },
-              {
-                id: 4,
-                product_name: 'Watch Band',
-                product_image: '/globe.svg',
-                quantity: 1,
-                unit_price: 50.00,
-                total_price: 50.00,
-              },
-            ],
-            created_at: '2023-07-16T09:15:00Z',
-            updated_at: '2023-07-16T09:15:00Z',
-          },
-          {
-            id: 3,
-            order_number: 'ORD-2023-003',
-            customer_name: 'Robert Johnson',
-            customer_email: 'robert.johnson@example.com',
-            status: 'pending',
-            payment_status: 'pending',
-            total_amount: 599.99,
-            shipping_address: {
-              street: '789 Pine Blvd',
-              city: 'Elsewhere',
-              state: 'TX',
-              zip: '54321',
-              country: 'USA',
-            },
-            items: [
-              {
-                id: 5,
-                product_name: 'Laptop',
-                product_image: '/globe.svg',
-                quantity: 1,
-                unit_price: 599.99,
-                total_price: 599.99,
-              },
-            ],
-            created_at: '2023-07-17T14:20:00Z',
-            updated_at: '2023-07-17T14:20:00Z',
-          },
-        ];
+        const token = localStorage.getItem('azlok-token');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders/all`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
         
-        setOrders(mockOrders);
-        
-        // When API is ready, uncomment this
-        /*
-        const response = await fetch('/api/admin/orders');
         if (!response.ok) {
           throw new Error('Failed to fetch orders');
         }
+        
         const data = await response.json();
-        setOrders(data);
-        */
+        
+        // Transform API data to match our interface
+        const transformedOrders: Order[] = data.map((order: any) => ({
+          id: order.id,
+          order_number: order.order_number,
+          customer_name: order.shipping_address?.full_name || order.user?.name || 'Unknown',
+          customer_email: order.user?.email || 'N/A',
+          status: order.status,
+          payment_status: order.payment_status || 'pending',
+          total_amount: order.total_amount || 0,
+          shipping_address: {
+            street: order.shipping_address?.address_line1 || '',
+            city: order.shipping_address?.city || '',
+            state: order.shipping_address?.state || '',
+            zip: order.shipping_address?.zip_code || '',
+            country: order.shipping_address?.country || '',
+          },
+          items: order.items || [],
+          created_at: order.created_at,
+          updated_at: order.updated_at,
+        }));
+        
+        setOrders(transformedOrders);
       } catch (err) {
         setError('Failed to load orders. Please try again.');
         console.error('Error fetching orders:', err);
@@ -182,12 +104,28 @@ export default function AdminOrdersPage() {
       }
     };
 
-    fetchOrders();
-  }, []);
+    if (user?.role === 'admin') {
+      fetchOrders();
+    }
+  }, [user]);
 
   const handleStatusChange = async (orderId: number, newStatus: string) => {
     try {
-      // Mock update - in real app, this would be an API call
+      const token = localStorage.getItem('azlok-token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update order status');
+      }
+      
+      // Update local state
       const updatedOrders = orders.map(order => 
         order.id === orderId ? { 
           ...order, 
@@ -206,29 +144,6 @@ export default function AdminOrdersPage() {
           updated_at: new Date().toISOString(),
         });
       }
-      
-      // When API is ready, uncomment this
-      /*
-      const response = await fetch(`/api/admin/orders/${orderId}/status`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to update order status');
-      }
-      
-      const updatedOrder = await response.json();
-      setOrders(orders.map(order => order.id === updatedOrder.id ? updatedOrder : order));
-      
-      // If the selected order is being updated, update it too
-      if (selectedOrder && selectedOrder.id === orderId) {
-        setSelectedOrder(updatedOrder);
-      }
-      */
     } catch (err) {
       console.error('Error updating order status:', err);
       alert('Failed to update order status. Please try again.');
@@ -237,7 +152,21 @@ export default function AdminOrdersPage() {
 
   const handlePaymentStatusChange = async (orderId: number, newStatus: string) => {
     try {
-      // Mock update - in real app, this would be an API call
+      const token = localStorage.getItem('azlok-token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ payment_status: newStatus }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update payment status');
+      }
+      
+      // Update local state
       const updatedOrders = orders.map(order => 
         order.id === orderId ? { 
           ...order, 
@@ -256,29 +185,6 @@ export default function AdminOrdersPage() {
           updated_at: new Date().toISOString(),
         });
       }
-      
-      // When API is ready, uncomment this
-      /*
-      const response = await fetch(`/api/admin/orders/${orderId}/payment-status`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ payment_status: newStatus }),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to update payment status');
-      }
-      
-      const updatedOrder = await response.json();
-      setOrders(orders.map(order => order.id === updatedOrder.id ? updatedOrder : order));
-      
-      // If the selected order is being updated, update it too
-      if (selectedOrder && selectedOrder.id === orderId) {
-        setSelectedOrder(updatedOrder);
-      }
-      */
     } catch (err) {
       console.error('Error updating payment status:', err);
       alert('Failed to update payment status. Please try again.');
@@ -305,9 +211,9 @@ export default function AdminOrdersPage() {
   });
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'INR',
     }).format(amount);
   };
 

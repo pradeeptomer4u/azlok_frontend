@@ -415,10 +415,13 @@ export default function UsersPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end space-x-2">
-                      <Link href={`/admin/users/${user.id}`} className="text-primary hover:text-primary-dark">
+                      <Link href={`/admin/users/${user.id}`} prefetch={false} className="text-primary hover:text-primary-dark">
                         View
                       </Link>
-                      <Link href={`/admin/users/edit/${user.id}`} className="text-indigo-600 hover:text-indigo-900">
+                      <Link href={`/admin/users/${user.id}/permissions`} prefetch={false} className="text-purple-600 hover:text-purple-900">
+                        Permissions
+                      </Link>
+                      <Link href={`/admin/users/edit/${user.id}`} prefetch={false} className="text-indigo-600 hover:text-indigo-900">
                         Edit
                       </Link>
                       <button className="text-red-600 hover:text-red-900">

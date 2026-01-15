@@ -173,53 +173,61 @@ export default function UserDetailPage() {
       
       {/* User Status Badge */}
       <div className="mb-6">
-        <span className={`px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full 
-          ${user.status === 'active' ? 'bg-green-100 text-green-800' : 
-            user.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-            'bg-gray-100 text-gray-800'}`}>
-          {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
-        </span>
-        <span className="ml-2 px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full 
-          ${user.role === 'buyer' ? 'bg-blue-100 text-blue-800' : 
-            user.role === 'seller' ? 'bg-purple-100 text-purple-800' : 
-            'bg-green-100 text-green-800'}">
-          {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-        </span>
+        {user.status && (
+          <span className={`px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full 
+            ${user.status === 'active' ? 'bg-green-100 text-green-800' : 
+              user.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+              'bg-gray-100 text-gray-800'}`}>
+            {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+          </span>
+        )}
+        {user.role && (
+          <span className="ml-2 px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full 
+            ${user.role === 'buyer' ? 'bg-blue-100 text-blue-800' : 
+              user.role === 'seller' ? 'bg-purple-100 text-purple-800' : 
+              'bg-green-100 text-green-800'}">
+            {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+          </span>
+        )}
       </div>
       
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-blue-500">
-          <p className="text-sm font-medium text-gray-500">Member Since</p>
-          <p className="text-xl font-bold mt-1">{formatDate(user.joinDate)}</p>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-green-500">
-          <p className="text-sm font-medium text-gray-500">Last Login</p>
-          <p className="text-xl font-bold mt-1">{formatDate(user.lastLogin)}</p>
-        </div>
-        {user.role === 'buyer' ? (
+        {user.joinDate && (
+          <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-blue-500">
+            <p className="text-sm font-medium text-gray-500">Member Since</p>
+            <p className="text-xl font-bold mt-1">{formatDate(user.joinDate)}</p>
+          </div>
+        )}
+        {user.lastLogin && (
+          <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-green-500">
+            <p className="text-sm font-medium text-gray-500">Last Login</p>
+            <p className="text-xl font-bold mt-1">{formatDate(user.lastLogin)}</p>
+          </div>
+        )}
+        {user.activity && user.role === 'buyer' && (user.activity as BuyerActivity).ordersCount !== undefined ? (
           <>
             <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-purple-500">
               <p className="text-sm font-medium text-gray-500">Total Orders</p>
-              <p className="text-xl font-bold mt-1">{(user.activity as BuyerActivity).ordersCount}</p>
+              <p className="text-xl font-bold mt-1">{(user.activity as BuyerActivity).ordersCount || 0}</p>
             </div>
             <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-yellow-500">
               <p className="text-sm font-medium text-gray-500">Total Spent</p>
-              <p className="text-xl font-bold mt-1">{formatCurrency((user.activity as BuyerActivity).totalSpent)}</p>
+              <p className="text-xl font-bold mt-1">{formatCurrency((user.activity as BuyerActivity).totalSpent || 0)}</p>
             </div>
           </>
-        ) : (
+        ) : user.activity && user.role === 'seller' && (user.activity as SellerActivity).productsCount !== undefined ? (
           <>
             <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-purple-500">
               <p className="text-sm font-medium text-gray-500">Products</p>
-              <p className="text-xl font-bold mt-1">{(user.activity as SellerActivity).productsCount}</p>
+              <p className="text-xl font-bold mt-1">{(user.activity as SellerActivity).productsCount || 0}</p>
             </div>
             <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-yellow-500">
               <p className="text-sm font-medium text-gray-500">Total Sales</p>
-              <p className="text-xl font-bold mt-1">{(user.activity as SellerActivity).salesCount}</p>
+              <p className="text-xl font-bold mt-1">{(user.activity as SellerActivity).salesCount || 0}</p>
             </div>
           </>
-        )}
+        ) : null}
       </div>
       
       {/* Tabs */}
@@ -268,15 +276,16 @@ export default function UserDetailPage() {
               <div className="md:col-span-1">
                 <div className="flex flex-col items-center">
                   <div className="h-40 w-40 relative mb-4">
-                    <Image
-                      src={user.avatar}
-                      alt={user.name}
+                    {user.avatar && <Image
+                      src={user.avatar || '/default-avatar.png'}
+                      alt={user.name || 'User'}
                       fill
                       className="object-cover rounded-full"
-                    />
+                    />}
+                    
                   </div>
-                  <h3 className="text-lg font-medium text-gray-900">{user.name}</h3>
-                  <p className="text-gray-500">{user.company}</p>
+                  <h3 className="text-lg font-medium text-gray-900">{user.name || 'Unknown'}</h3>
+                  {user.company && <p className="text-gray-500">{user.company}</p>}
                   <div className="mt-4 flex space-x-2">
                     <button className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                       Message
@@ -324,14 +333,16 @@ export default function UserDetailPage() {
                   </div>
                 </div>
                 
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Address</h3>
-                  <div className="bg-gray-50 rounded-md p-4">
-                    <p>{user.address.street}</p>
-                    <p>{user.address.city}, {user.address.state} {user.address.postalCode}</p>
-                    <p>{user.address.country}</p>
+                {user.address && (
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Address</h3>
+                    <div className="bg-gray-50 rounded-md p-4">
+                      {user.address.street && <p>{user.address.street}</p>}
+                      <p>{user.address.city || ''}{user.address.city && user.address.state ? ', ' : ''}{user.address.state || ''} {user.address.postalCode || ''}</p>
+                      {user.address.country && <p>{user.address.country}</p>}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
@@ -473,36 +484,52 @@ export default function UserDetailPage() {
         {/* Billing Tab */}
         {activeTab === 'billing' && (
           <div className="p-6">
-            <div className="mb-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Billing Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm font-medium text-gray-500">GSTIN</p>
-                  <p className="mt-1">{user.billingInfo.gstin}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">PAN Number</p>
-                  <p className="mt-1">{user.billingInfo.panNumber}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Bank Name</p>
-                  <p className="mt-1">{user.billingInfo.bankName}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Account Number</p>
-                  <p className="mt-1">{user.billingInfo.accountNumber}</p>
+            {user.billingInfo ? (
+              <div className="mb-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Billing Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {user.billingInfo.gstin && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">GSTIN</p>
+                      <p className="mt-1">{user.billingInfo.gstin}</p>
+                    </div>
+                  )}
+                  {user.billingInfo.panNumber && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">PAN Number</p>
+                      <p className="mt-1">{user.billingInfo.panNumber}</p>
+                    </div>
+                  )}
+                  {user.billingInfo.bankName && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Bank Name</p>
+                      <p className="mt-1">{user.billingInfo.bankName}</p>
+                    </div>
+                  )}
+                  {user.billingInfo.accountNumber && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Account Number</p>
+                      <p className="mt-1">{user.billingInfo.accountNumber}</p>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="mb-6">
+                <p className="text-gray-500">No billing information available</p>
+              </div>
+            )}
             
-            <div className="mb-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Billing Address</h3>
-              <div className="bg-gray-50 rounded-md p-4">
-                <p>{user.address.street}</p>
-                <p>{user.address.city}, {user.address.state} {user.address.postalCode}</p>
-                <p>{user.address.country}</p>
+            {user.address && (
+              <div className="mb-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Billing Address</h3>
+                <div className="bg-gray-50 rounded-md p-4">
+                  {user.address.street && <p>{user.address.street}</p>}
+                  <p>{user.address.city || ''}{user.address.city && user.address.state ? ', ' : ''}{user.address.state || ''} {user.address.postalCode || ''}</p>
+                  {user.address.country && <p>{user.address.country}</p>}
+                </div>
               </div>
-            </div>
+            )}
             
             <div className="flex space-x-2">
               <button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">

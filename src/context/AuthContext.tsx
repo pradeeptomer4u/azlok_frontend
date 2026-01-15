@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import { UserPermissions } from '../types/permissions';
+import permissionService from '../services/permissionService';
 
 export interface User {
   id: number;
@@ -10,6 +12,7 @@ export interface User {
   role: 'buyer' | 'seller' | 'admin';
   company?: string;
   avatar?: string;
+  permissions?: UserPermissions;
 }
 
 interface AuthContextType {
@@ -22,6 +25,8 @@ interface AuthContextType {
   isAuthenticated: boolean;
   token: string | null;
   userRole: string | null;
+  permissions: UserPermissions | null;
+  refreshPermissions: () => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -44,7 +49,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [permissions, setPermissions] = useState<UserPermissions | null>(null);
   const router = useRouter();
+
+  // Refresh permissions
+  const refreshPermissions = async () => {
+    if (!user) return;
+    
+    try {
+      const userPermissions = await permissionService.getMyPermissions();
+      if (userPermissions) {
+        setPermissions(userPermissions);
+        // Update user object with permissions
+        setUser(prev => prev ? { ...prev, permissions: userPermissions } : null);
+      }
+    } catch (err) {
+      console.error('Error refreshing permissions:', err);
+    }
+  };
 
   // Check if user is already logged in
   useEffect(() => {
@@ -52,16 +74,30 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setIsLoading(true);
       try {
         const storedUser = localStorage.getItem('azlok-user');
-        if (storedUser) {
-          // In a real app, we would validate the token with the server
+        const storedToken = localStorage.getItem('azlok-token');
+        
+        if (storedUser && storedToken) {
           const parsedUser = JSON.parse(storedUser);
           setUser(parsedUser);
-          // Set mock token for API calls
-          setToken(`mock-jwt-token-${parsedUser.id}-${parsedUser.role}`);
+          setToken(storedToken);
+          
+          // Fetch permissions for all users (they might have specific permissions granted)
+          try {
+            const userPermissions = await permissionService.getMyPermissions();
+            if (userPermissions) {
+              setPermissions(userPermissions);
+              parsedUser.permissions = userPermissions;
+              setUser(parsedUser);
+            }
+          } catch (permErr) {
+            console.error('Error fetching permissions:', permErr);
+            // Not a critical error, user can still use the app
+          }
         }
       } catch (err: unknown) {
         console.error('Authentication error:', err);
         localStorage.removeItem('azlok-user');
+        localStorage.removeItem('azlok-token');
       } finally {
         setIsLoading(false);
       }
@@ -115,11 +151,25 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         avatar: '/globe.svg' // Default avatar
       };
       
-      // Store user data and token
-      setUser(userData);
+      // Store token first so it's available for permission API calls
       setToken(data.access_token);
-      localStorage.setItem('azlok-user', JSON.stringify(userData));
       localStorage.setItem('azlok-token', data.access_token);
+      
+      // Fetch permissions for all users (they might have specific permissions granted)
+      try {
+        const userPermissions = await permissionService.getMyPermissions();
+        if (userPermissions) {
+          setPermissions(userPermissions);
+          userData.permissions = userPermissions;
+        }
+      } catch (permErr) {
+        console.error('Error fetching permissions:', permErr);
+        // Not a critical error, user can still use the app
+      }
+      
+      // Store user data
+      setUser(userData);
+      localStorage.setItem('azlok-user', JSON.stringify(userData));
       
       // Redirect based on role
       if (userData.role === 'seller') {
@@ -177,7 +227,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const logout = () => {
     setUser(null);
     setToken(null);
+    setPermissions(null);
     localStorage.removeItem('azlok-user');
+    localStorage.removeItem('azlok-token');
     router.push('/');
   };
 
@@ -190,7 +242,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     logout,
     isAuthenticated: !!user,
     token,
-    userRole: user?.role || null
+    userRole: user?.role || null,
+    permissions,
+    refreshPermissions
   };
 
   return (

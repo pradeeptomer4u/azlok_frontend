@@ -66,10 +66,10 @@ export default function OrderSummarySection({
         if (response.ok) {
           const data = await response.json();
           setCartSummary({
-            subtotal: data.subtotal || calculatedSubtotal,
-            shipping: data.shipping || 0,
-            tax: data.tax || 0,
-            total: data.total || calculatedSubtotal
+            subtotal: data.subtotal_amount || data.subtotal || calculatedSubtotal,
+            shipping: data.shipping_cost || data.shipping || 0,
+            tax: data.tax_amount || data.tax || 0,
+            total: data.total_amount || data.total || calculatedSubtotal
           });
           setError(null);
         } else {

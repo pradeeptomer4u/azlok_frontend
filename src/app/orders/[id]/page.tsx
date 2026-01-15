@@ -152,23 +152,27 @@ export default function OrderDetailPage() {
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-4 font-['Playfair_Display',serif]">Order Items</h2>
         <div className="space-y-4">
-          {order.items.map((item) => (
-            <div key={item.id} className="flex items-center space-x-4 border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
-              <img
-                src={item.product_image || '/placeholder.png'}
-                alt={item.product_name}
-                className="w-20 h-20 object-cover rounded"
-              />
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-800 font-['Montserrat',sans-serif]">{item.product_name}</h3>
-                <p className="text-sm text-gray-600 font-['Montserrat',sans-serif]">Quantity: {item.quantity}</p>
-                <p className="text-sm text-gray-600 font-['Montserrat',sans-serif]">Price: ₹{item.price.toFixed(2)}</p>
+          {order.items && order.items.length > 0 ? (
+            order.items.map((item) => (
+              <div key={item.id} className="flex items-center space-x-4 border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+                <img
+                  src={item.product_image || '/placeholder.png'}
+                  alt={item.product_name}
+                  className="w-20 h-20 object-cover rounded"
+                />
+                <div className="flex-1">
+                  <h3 className="font-medium text-gray-800 font-['Montserrat',sans-serif]">{item.product_name || 'Unknown Product'}</h3>
+                  <p className="text-sm text-gray-600 font-['Montserrat',sans-serif]">Quantity: {item.quantity || 0}</p>
+                  <p className="text-sm text-gray-600 font-['Montserrat',sans-serif]">Price: ₹{(item.price || 0).toFixed(2)}</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-semibold text-gray-800 font-['Montserrat',sans-serif]">₹{(item.total_price || 0).toFixed(2)}</p>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="font-semibold text-gray-800 font-['Montserrat',sans-serif]">₹{item.total_price.toFixed(2)}</p>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-gray-500 text-center py-4">No items found for this order</p>
+          )}
         </div>
       </div>
 
@@ -177,17 +181,17 @@ export default function OrderDetailPage() {
         <div className="space-y-2">
           <div className="flex justify-between text-gray-600 font-['Montserrat',sans-serif]">
             <span>Subtotal</span>
-            <span>₹{order.subtotal.toFixed(2)}</span>
+            <span>₹{(order.subtotal || 0).toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-gray-600 font-['Montserrat',sans-serif]">
             <span>Tax</span>
-            <span>₹{order.tax_amount.toFixed(2)}</span>
+            <span>₹{(order.tax_amount || 0).toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-gray-600 font-['Montserrat',sans-serif]">
             <span>Shipping</span>
-            <span>₹{order.shipping_cost.toFixed(2)}</span>
+            <span>₹{(order.shipping_cost || 0).toFixed(2)}</span>
           </div>
-          {order.discount_amount > 0 && (
+          {order.discount_amount && order.discount_amount > 0 && (
             <div className="flex justify-between text-green-600 font-['Montserrat',sans-serif]">
               <span>Discount</span>
               <span>-₹{order.discount_amount.toFixed(2)}</span>
@@ -195,7 +199,7 @@ export default function OrderDetailPage() {
           )}
           <div className="flex justify-between text-lg font-semibold text-gray-800 border-t border-gray-200 pt-2 font-['Montserrat',sans-serif]">
             <span>Total</span>
-            <span>₹{order.total_amount.toFixed(2)}</span>
+            <span>₹{(order.total_amount || 0).toFixed(2)}</span>
           </div>
         </div>
       </div>

@@ -93,10 +93,23 @@ const CartSummary = () => {
 
   const handleCheckout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    e.stopPropagation();
+    
+    console.log('Checkout button clicked');
+    console.log('Items in cart:', items.length);
+    console.log('Router:', router);
+    
     setIsProcessing(true);
     
-    // Redirect to checkout page
-    router.push('/checkout');
+    try {
+      // Redirect to checkout page
+      console.log('Attempting to navigate to /checkout');
+      router.push('/checkout');
+      console.log('Navigation called');
+    } catch (error) {
+      console.error('Error navigating to checkout:', error);
+      setIsProcessing(false);
+    }
   };
 
   return (

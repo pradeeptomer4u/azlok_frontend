@@ -91,7 +91,8 @@ const CartSummary = () => {
     }, 1000);
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setIsProcessing(true);
     
     // Redirect to checkout page

@@ -20,7 +20,7 @@ export function middleware(request: NextRequest) {
   if (process.env.NODE_ENV === 'production') {
     response.headers.set(
       'Content-Security-Policy',
-      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://www.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://api.azlok.com https://www.google-analytics.com; img-src 'self' data: https://res.cloudinary.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://checkout.razorpay.com;"
+      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://www.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://api.azlok.com https://www.google-analytics.com https://api.razorpay.com https://lumberjack.razorpay.com; img-src 'self' data: https://res.cloudinary.com https://cdn.razorpay.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com;"
     );
   }
 

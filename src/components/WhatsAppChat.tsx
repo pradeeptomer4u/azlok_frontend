@@ -51,9 +51,10 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
   };
 
   // Position classes for floating button
+  // Add extra bottom spacing on mobile to avoid overlapping with bottom nav
   const positionClasses = {
-    'bottom-right': 'bottom-6 right-6',
-    'bottom-left': 'bottom-6 left-6',
+    'bottom-right': 'bottom-20 md:bottom-6 right-6',
+    'bottom-left': 'bottom-20 md:bottom-6 left-6',
     'top-right': 'top-6 right-6',
     'top-left': 'top-6 left-6',
   };

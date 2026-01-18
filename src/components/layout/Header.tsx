@@ -87,7 +87,7 @@ const Header = () => {
   }, [isUserMenuOpen]);
 
   return (
-    <header className="bg-gradient-to-r from-green-50 via-green-100 to-green-50 shadow-xl sticky top-0 z-[100] backdrop-blur-md border-b border-green-200/40 font-['Poppins',sans-serif]">
+    <header className="bg-gradient-to-r from-green-50 via-green-100 to-green-50 shadow-xl sticky top-0 z-[9999] backdrop-blur-md border-b border-green-200/40 font-['Poppins',sans-serif]">
       {/* Fixed position portal container for dropdown menus */}
       <div id="dropdown-portal" className="fixed inset-0 pointer-events-none z-[99999]"></div>
       
@@ -129,20 +129,20 @@ const Header = () => {
 
           {/* Navigation - Desktop */}
           <nav className="hidden md:flex items-center space-x-3">
-            <Link href="/products" className="text-green-800 hover:text-green-600 font-medium tracking-wide transition-all duration-200 relative group px-2 py-1 overflow-hidden">
-              <span className="font-medium tracking-wide relative z-10 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-green-600 group-hover:text-green-700 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
-                Products
-              </span>
-            </Link>
             <Link href="/categories" className="text-green-800 hover:text-green-600 font-medium tracking-wide transition-all duration-200 relative group px-2 py-1 overflow-hidden">
               <span className="font-medium tracking-wide relative z-10 flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-green-600 group-hover:text-green-700 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
                 Categories
+              </span>
+            </Link>
+            <Link href="/products" className="text-green-800 hover:text-green-600 font-medium tracking-wide transition-all duration-200 relative group px-2 py-1 overflow-hidden">
+              <span className="font-medium tracking-wide relative z-10 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-green-600 group-hover:text-green-700 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                Products
               </span>
             </Link>
             <Link href="/track" className="text-green-800 hover:text-green-600 font-medium tracking-wide transition-all duration-200 relative group px-2 py-1 overflow-hidden">
@@ -152,6 +152,20 @@ const Header = () => {
                 </svg>
                 Track Order
               </span>
+            </Link>
+            
+            {/* Cart icon */}
+            <Link href="/cart" className="relative group">
+              <div className="relative bg-white/10 p-2 rounded-full overflow-hidden transition-all duration-300 group-hover:shadow-md group-hover:shadow-green-200/50">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-800 group-hover:text-green-600 relative z-10 transition-all duration-300 transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                {itemCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-medium animate-pulse shadow-md shadow-green-300/50 border border-white/80 transform transition-all duration-300 group-hover:scale-110 z-20">
+                    {itemCount}
+                  </span>
+                )}
+              </div>
             </Link>
             
             {/* Account dropdown */}
@@ -276,20 +290,6 @@ const Header = () => {
                 portalContainer
               )}
             </div>
-            
-            {/* Cart icon */}
-            <Link href="/cart" className="relative group">
-              <div className="relative bg-white/10 p-2 rounded-full overflow-hidden transition-all duration-300 group-hover:shadow-md group-hover:shadow-green-200/50">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-800 group-hover:text-green-600 relative z-10 transition-all duration-300 transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
-                {itemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-medium animate-pulse shadow-md shadow-green-300/50 border border-white/80 transform transition-all duration-300 group-hover:scale-110 z-20">
-                    {itemCount}
-                  </span>
-                )}
-              </div>
-            </Link>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -460,7 +460,7 @@ const Header = () => {
       </div>
 
       {/* Enhanced Contact Info Bar with advanced graphics */}
-      <div className="bg-gradient-to-r from-green-700 via-green-800 to-green-700 text-white py-0.5 px-2 shadow-inner relative overflow-hidden z-[90]">
+      <div className="bg-gradient-to-r from-green-700 via-green-800 to-green-700 text-white py-0.5 px-2 shadow-inner relative overflow-hidden z-[9998]">
         <div className="container-custom mx-auto flex flex-col md:flex-row justify-between items-center text-base relative py-0">
           {/* Call us section */}
           <div className="flex items-center justify-center w-full md:w-auto mb-0 md:mb-0 relative z-10 group">

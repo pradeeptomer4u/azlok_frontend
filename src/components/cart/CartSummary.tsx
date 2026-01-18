@@ -102,8 +102,75 @@ const CartSummary = () => {
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-gray-100 sticky top-24">
+    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100 lg:sticky lg:top-24">
+      {/* Order Summary Header */}
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 font-['Playfair_Display',serif]">
+        Order Summary
+      </h2>
 
+      {/* Price Breakdown */}
+      <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+        <div className="flex justify-between items-center text-sm sm:text-base">
+          <span className="text-gray-600">Subtotal:</span>
+          <span className="font-medium text-gray-900">{formatCurrency(subtotal)}</span>
+        </div>
+        
+        {taxAmount > 0 && (
+          <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-600">Tax Amount:</span>
+              <span className="font-medium text-gray-900">{formatCurrency(taxAmount)}</span>
+            </div>
+            
+            {cgstAmount > 0 && (
+              <div className="flex justify-between items-center text-xs text-gray-500">
+                <span>CGST:</span>
+                <span>{formatCurrency(cgstAmount)}</span>
+              </div>
+            )}
+            
+            {sgstAmount > 0 && (
+              <div className="flex justify-between items-center text-xs text-gray-500">
+                <span>SGST:</span>
+                <span>{formatCurrency(sgstAmount)}</span>
+              </div>
+            )}
+            
+            {igstAmount > 0 && (
+              <div className="flex justify-between items-center text-xs text-gray-500">
+                <span>IGST:</span>
+                <span>{formatCurrency(igstAmount)}</span>
+              </div>
+            )}
+          </div>
+        )}
+        
+        <div className="flex justify-between items-center text-sm sm:text-base">
+          <span className="text-gray-600">Shipping:</span>
+          <span className="font-medium text-gray-900">{formatCurrency(shipping)}</span>
+        </div>
+        
+        {shippingTaxAmount > 0 && (
+          <div className="flex justify-between items-center text-xs text-gray-500">
+            <span>Shipping Tax:</span>
+            <span>{formatCurrency(shippingTaxAmount)}</span>
+          </div>
+        )}
+        
+        {couponDiscount > 0 && (
+          <div className="flex justify-between items-center text-sm text-green-600">
+            <span>Coupon Discount:</span>
+            <span>-{formatCurrency(couponDiscount)}</span>
+          </div>
+        )}
+        
+        <div className="pt-3 sm:pt-4 border-t border-gray-200">
+          <div className="flex justify-between items-center">
+            <span className="text-base sm:text-lg font-semibold text-gray-800">Total:</span>
+            <span className="text-xl sm:text-2xl font-bold text-[#2c7a4c]">{formatCurrency(total)}</span>
+          </div>
+        </div>
+      </div>
       
       {/* Coupon Section */}
       <div className="mt-6">
@@ -126,8 +193,9 @@ const CartSummary = () => {
                 disabled={isProcessing}
               />
               <button
+                type="button"
                 onClick={handleApplyCoupon}
-                className="bg-gradient-to-r from-[#2c7a4c] to-[#1d6fb8] text-white px-4 py-2 rounded-lg hover:shadow-md transition-all disabled:opacity-50 text-sm font-medium"
+                className="bg-gradient-to-r from-[#2c7a4c] to-[#1d6fb8] text-white px-4 py-2 rounded-lg hover:shadow-md transition-all disabled:opacity-50 text-sm font-medium touch-manipulation"
                 disabled={isProcessing}
               >
                 {isProcessing ? (
@@ -150,8 +218,9 @@ const CartSummary = () => {
       {/* Action Buttons */}
       <div className="mt-6 space-y-3">
         <button
+          type="button"
           onClick={handleCheckout}
-          className="w-full bg-gradient-to-r from-[#2c7a4c] to-[#1d6fb8] text-white py-3 px-4 rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none font-medium"
+          className="w-full bg-gradient-to-r from-[#2c7a4c] to-[#1d6fb8] text-white py-3 px-4 rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none font-medium touch-manipulation active:scale-95"
           disabled={items.length === 0 || isProcessing}
         >
           {isProcessing ? (
@@ -173,8 +242,9 @@ const CartSummary = () => {
         </button>
         
         <button
+          type="button"
           onClick={clearCart}
-          className="w-full bg-white text-gray-600 border border-gray-200 py-3 px-4 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 font-medium"
+          className="w-full bg-white text-gray-600 border border-gray-200 py-3 px-4 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 font-medium touch-manipulation active:scale-95"
           disabled={items.length === 0 || isProcessing}
         >
           Clear Cart

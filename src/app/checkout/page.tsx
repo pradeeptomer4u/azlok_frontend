@@ -255,8 +255,22 @@ export default function CheckoutPage() {
       // Step 2: Order created successfully
       const orderId = orderResponse.orderId;
       
-      // Always use Razorpay regardless of selected payment method
-      // This ensures Razorpay is always called after order creation
+      // Check if the selected payment method is COD
+      const selectedPaymentMethod = paymentMethods.find(pm => pm.id === selectedPaymentMethodId);
+      const isCOD = selectedPaymentMethod?.method_type.toLowerCase() === 'cod';
+      
+      // If COD, skip Razorpay and show success directly
+      if (isCOD) {
+        setPaymentSuccess(true);
+        setPaymentId(`COD-${orderId}`);
+        setShowPaymentModal(true);
+        clearCart();
+        setPlacingOrder(false);
+        return;
+      }
+      
+      // For non-COD payments, use Razorpay
+      // This ensures Razorpay is called after order creation for online payments
       
       // Only proceed if SDK is loaded
       if (!isSDKLoaded) {
@@ -430,13 +444,20 @@ export default function CheckoutPage() {
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2 font-['Playfair_Display',serif]">
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-400">
-                      Payment Successful!
+                      {paymentId?.startsWith('COD-') ? 'Order Placed Successfully!' : 'Payment Successful!'}
                     </span>
                   </h3>
-                  <p className="text-gray-600 mb-6">Your payment has been processed successfully.</p>
+                  <p className="text-gray-600 mb-6">
+                    {paymentId?.startsWith('COD-') 
+                      ? 'Your order has been placed. Pay with cash when your order is delivered.' 
+                      : 'Your payment has been processed successfully.'}
+                  </p>
                   {paymentId && (
                     <div className="bg-gray-50 rounded-lg p-3 mb-6">
-                      <p className="text-sm text-gray-500">Payment ID: <span className="font-mono font-medium">{paymentId}</span></p>
+                      <p className="text-sm text-gray-500">
+                        {paymentId?.startsWith('COD-') ? 'Order ID: ' : 'Payment ID: '}
+                        <span className="font-mono font-medium">{paymentId}</span>
+                      </p>
                     </div>
                   )}
                 </>

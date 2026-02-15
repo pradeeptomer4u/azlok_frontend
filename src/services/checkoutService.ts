@@ -316,6 +316,12 @@ const checkoutService = {
         // Return mock payment methods if API fails
         const mockPaymentMethods: PaymentMethod[] = [
           {
+            id: 1,
+            method_type: 'cod',
+            provider: 'Cash on Delivery',
+            is_default: false
+          },
+          {
             id: 2,
             method_type: 'razorpay',
             provider: 'Razorpay',
@@ -328,13 +334,26 @@ const checkoutService = {
       
       const data = await response.json();
       
+      // Check if COD payment method exists in the response
+      const hasCOD = data.some((method: PaymentMethod) => method.method_type.toLowerCase() === 'cod');
+      
+      // If COD is not in the response, add it
+      if (!hasCOD) {
+        data.push({
+          id: data.length + 1,
+          method_type: 'cod',
+          provider: 'Cash on Delivery',
+          is_default: false
+        });
+      }
+      
       // Check if Razorpay payment method exists in the response
       const hasRazorpay = data.some((method: PaymentMethod) => method.method_type.toLowerCase() === 'razorpay');
       
       // If Razorpay is not in the response, add it
       if (!hasRazorpay) {
         data.push({
-          id: data.length + 1,
+          id: data.length + 2,
           method_type: 'razorpay',
           provider: 'Razorpay',
           is_default: false
@@ -347,6 +366,12 @@ const checkoutService = {
       
       // Return mock payment methods if API fails
       const mockPaymentMethods: PaymentMethod[] = [
+        {
+          id: 1,
+          method_type: 'cod',
+          provider: 'Cash on Delivery',
+          is_default: false
+        },
         {
           id: 2,
           method_type: 'razorpay',

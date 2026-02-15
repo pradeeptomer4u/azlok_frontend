@@ -27,6 +27,8 @@ export default function PaymentMethodSection({
         return 'W';
       case 'razorpay':
         return 'RZ';
+      case 'cod':
+        return 'cash';
       default:
         return 'P';
     }
@@ -43,6 +45,8 @@ export default function PaymentMethodSection({
         return `${method.wallet_provider || method.provider}`;
       case 'razorpay':
         return 'Pay securely with Razorpay';
+      case 'cod':
+        return 'Pay with cash when your order is delivered';
       default:
         return method.provider;
     }

@@ -298,7 +298,7 @@ export default function CheckoutPage() {
         
         // Step 4: Configure Razorpay options
         const options: RazorpayOptions = {
-          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_placeholder',
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_SGPt4X2kAL4DhN',
           amount: razorpayOrderResponse.amount,
           currency: razorpayOrderResponse.currency,
           name: 'Azlok',

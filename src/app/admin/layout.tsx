@@ -256,7 +256,7 @@ export default function AdminLayout({
             </>
           )}
           
-          {canAccess('seo') && (
+          {(user?.role === 'admin' || canAccess('seo')) && (
             <>
               <p className="text-xs font-semibold text-gray-400 mt-6 mb-2">SEO</p>
               <Link

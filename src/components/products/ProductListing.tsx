@@ -115,8 +115,7 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
   // Calculate pagination
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  // Use products with tax if available, otherwise use original products
-  const displayProducts = productsWithTax.length > 0 ? productsWithTax : products;
+  const displayProducts = products;
   const currentProducts = displayProducts.slice(indexOfFirstProduct, indexOfLastProduct);
   const totalPages = Math.ceil(displayProducts.length / productsPerPage);
 

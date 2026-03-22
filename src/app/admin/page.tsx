@@ -9,11 +9,9 @@ interface DashboardStats {
   total_users: number;
   total_products: number;
   total_categories: number;
-  totalOrders?: number;
-  totalRevenue?: number;
-  pendingApprovals?: number;
+  total_orders: number;
+  total_revenue: number;
   pending_products: number;
-  activeUsers?: number;
   user_stats: UserStats
 }
 
@@ -217,7 +215,7 @@ export default function AdminDashboard() {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Orders</p>
-              <h3 className="text-2xl font-bold mt-1">{stats.totalOrders}</h3>
+              <h3 className="text-2xl font-bold mt-1">{stats.total_orders ?? 0}</h3>
             </div>
             <div className="p-2 bg-purple-50 rounded-md">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -240,7 +238,7 @@ export default function AdminDashboard() {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-              <h3 className="text-2xl font-bold mt-1">{stats?.totalRevenue && formatCurrency(stats.totalRevenue)}</h3>
+              <h3 className="text-2xl font-bold mt-1">{formatCurrency(stats.total_revenue ?? 0)}</h3>
             </div>
             <div className="p-2 bg-yellow-50 rounded-md">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -268,7 +266,7 @@ export default function AdminDashboard() {
               <h3 className="font-bold text-lg">Pending Approvals</h3>
               <p className="text-gray-500 text-sm">Products waiting for review</p>
             </div>
-            <span className="text-2xl font-bold text-yellow-500">{stats.pendingApprovals}</span>
+            <span className="text-2xl font-bold text-yellow-500">{stats.pending_products ?? 0}</span>
           </div>
           <div className="mt-4">
             <Link href="/admin/products/approvals" className="text-sm text-primary hover:text-primary-dark font-medium">
@@ -283,7 +281,7 @@ export default function AdminDashboard() {
               <h3 className="font-bold text-lg">Active Users</h3>
               <p className="text-gray-500 text-sm">Users active in last 30 days</p>
             </div>
-            <span className="text-2xl font-bold text-green-500">{stats.activeUsers}</span>
+            <span className="text-2xl font-bold text-green-500">{stats.total_users ?? 0}</span>
           </div>
           <div className="mt-4">
             <Link href="/admin/users" className="text-sm text-primary hover:text-primary-dark font-medium">

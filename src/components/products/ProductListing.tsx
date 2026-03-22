@@ -144,17 +144,6 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
     );
   }
   
-  // Show a smaller loading indicator when fetching tax information
-  const TaxLoadingIndicator = () => {
-    if (!isTaxLoading) return null;
-    
-    return (
-      <div className="fixed bottom-4 right-4 bg-white shadow-lg rounded-lg px-4 py-2 flex items-center z-50">
-        <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-primary mr-2"></div>
-        <span className="text-sm text-gray-600">Calculating taxes...</span>
-      </div>
-    );
-  };
 
   return (
     <div className="product-listing">

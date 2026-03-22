@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/products/ProductCard';
 import type { Product as ProductCardProduct } from '@/components/products/ProductCard';
-import { calculateProductTax, TaxCalculationRequest } from '../../utils/taxService';
 import productService, { Product as ApiProduct, ProductFilters } from '../../services/productService';
 import ProductListSchema from '../SEO/ProductListSchema';
 
@@ -20,12 +19,9 @@ interface ProductListingProps {
 const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
-  const [productsWithTax, setProductsWithTax] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isTaxLoading, setIsTaxLoading] = useState(false);
   const [sortBy, setSortBy] = useState('relevance');
   const [currentPage, setCurrentPage] = useState(1);
-  const [buyerState, setBuyerState] = useState('MH'); // Default to Maharashtra
   const productsPerPage = 8;
 
   // Fetch products from the API with filters

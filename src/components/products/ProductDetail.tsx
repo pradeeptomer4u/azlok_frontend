@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '../../context/CartContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { calculateProductTax, TaxCalculationRequest, TaxCalculationResponse, formatCurrency, formatTaxPercentage } from '../../utils/taxService';
+import { formatCurrency } from '../../utils/taxService';
 import { trackProductView, trackAddToCart } from '../../utils/analytics';
 import productService, { Product as ApiProduct } from '../../services/productService';
 import ProductFAQSection from '../../app/products/[slug]/ProductFAQSection';
@@ -112,12 +112,6 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
     message: ''
   });
   
-  // Tax calculation states
-  const [taxInfo, setTaxInfo] = useState<TaxCalculationResponse | null>(null);
-  const [taxLoading, setTaxLoading] = useState(false);
-  const [taxError, setTaxError] = useState<string | null>(null);
-  const [buyerState, setBuyerState] = useState<string>('MH'); // Default to Maharashtra
-  const [sellerState, setSellerState] = useState<string>('MH'); // Default to Maharashtra
 
   // Fetch product data from the API
   useEffect(() => {
@@ -303,46 +297,6 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
     fetchProduct();
   }, [slug]);
   
-  // Calculate tax when product, quantity, or states change
-  useEffect(() => {
-    if (product && product.id) {
-      calculateTax();
-    }
-  }, [product, quantity, buyerState, sellerState]);
-  
-  // Function to calculate tax for the product
-  const calculateTax = async () => {
-    if (!product) return;
-    
-    setTaxLoading(true);
-    setTaxError(null);
-    
-    try {
-      const request: TaxCalculationRequest = {
-        product_id: product.id,
-        quantity: quantity,
-        buyer_state: buyerState,
-        seller_state: sellerState
-      };
-      
-      const response = await calculateProductTax(request);
-      setTaxInfo(response);
-    } catch (error) {
-      console.error('Error calculating tax:', error);
-      setTaxError('Failed to calculate tax information');
-    } finally {
-      setTaxLoading(false);
-    }
-  };
-  
-  // Handle state selection for tax calculation
-  const handleBuyerStateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setBuyerState(e.target.value);
-  };
-  
-  const handleSellerStateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSellerState(e.target.value);
-  };
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
@@ -552,9 +506,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                         price: product.price,
                         image: product.image || '/globe.svg',
                         quantity: quantity,
-                        seller: product.seller?.name || 'Azlok',
-                        is_tax_inclusive: taxInfo?.is_tax_inclusive,
-                        hsn_code: taxInfo?.hsn_code
+                        seller: product.seller?.name || 'Azlok'
                       });
                       trackAddToCart({
                         id: product.id,

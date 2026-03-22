@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useCart } from '../../context/CartContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { calculateProductTax, TaxCalculationRequest, TaxCalculationResponse, formatCurrency, formatTaxPercentage } from '../../utils/taxService';
+import { trackProductView, trackAddToCart } from '../../utils/analytics';
 import productService, { Product as ApiProduct } from '../../services/productService';
 import ProductFAQSection from '../../app/products/[slug]/ProductFAQSection';
 import ProductDetailedContent from './ProductDetailedContent';
@@ -213,6 +214,12 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
           };
           
           setProduct(detailedProduct);
+          trackProductView({
+            id: detailedProduct.id,
+            name: detailedProduct.name,
+            price: detailedProduct.price,
+            category: detailedProduct.category,
+          });
         } else {
           // If no product found, create a default product with the slug as name
           const defaultProduct: DetailedProduct = {
@@ -548,6 +555,13 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                         seller: product.seller?.name || 'Azlok',
                         is_tax_inclusive: taxInfo?.is_tax_inclusive,
                         hsn_code: taxInfo?.hsn_code
+                      });
+                      trackAddToCart({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        quantity: quantity,
+                        category: product.category,
                       });
                       setAddedToCart(true);
                       setTimeout(() => setAddedToCart(false), 3000);

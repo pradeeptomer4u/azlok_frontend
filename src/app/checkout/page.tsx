@@ -20,6 +20,7 @@ import ShippingMethodSection from '../../components/checkout/ShippingMethodSecti
 import OrderSummarySection from '../../components/checkout/OrderSummarySection';
 import razorpayService, { RazorpayOptions, RazorpaySuccessResponse } from '../../services/razorpayService';
 import { createPayment } from '../../services/paymentService';
+import { trackBeginCheckout, trackPurchase } from '../../utils/analytics';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -135,6 +136,7 @@ export default function CheckoutPage() {
         setError('Please sign in to proceed with checkout.');
         router.push('/login?redirect=/checkout');
       }
+      trackBeginCheckout(subtotal, items.length);
     } catch (err) {
       setError('Failed to load checkout information. Please try again.');
     } finally {
@@ -264,6 +266,7 @@ export default function CheckoutPage() {
         setPaymentSuccess(true);
         setPaymentId(`COD-${orderId}`);
         setShowPaymentModal(true);
+        trackPurchase(orderId, summary?.total ?? 0, summary?.tax ?? 0);
         clearCart();
         setPlacingOrder(false);
         return;
@@ -350,6 +353,7 @@ export default function CheckoutPage() {
                 
 
                 // Clear cart
+                trackPurchase(orderId, amount, summary?.tax ?? 0);
                 clearCart();
               } catch (err) {
                 // Update modal to show error

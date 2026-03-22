@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { useRouter } from 'next/navigation';
 import { UserPermissions } from '../types/permissions';
 import permissionService from '../services/permissionService';
+import { trackLogin } from '../utils/analytics';
 
 export interface User {
   id: number;
@@ -170,7 +171,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // Store user data
       setUser(userData);
       localStorage.setItem('azlok-user', JSON.stringify(userData));
-      
+      trackLogin('email');
+
       // Redirect based on role
       if (userData.role === 'seller') {
         router.push('/seller/dashboard');

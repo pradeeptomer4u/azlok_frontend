@@ -100,13 +100,8 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
         })) as Product[];
         
         setSortBy(sort);
-        setBuyerState(state);
-        
         setProducts(transformedProducts);
         setIsLoading(false);
-        
-        // After setting products, fetch tax information
-        fetchTaxInformation(transformedProducts, state, taxInclusiveOnly || false, maxTaxRate || undefined);
       } catch (error) {
         console.error('Error fetching products:', error);
         setIsLoading(false);

@@ -155,7 +155,7 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
           listName={categorySlug ? `${categorySlug.replace(/-/g, ' ')} Products` : 'Product Listing'}
         />
       )}
-      <TaxLoadingIndicator />
+
       
       <div className="relative bg-gradient-to-r from-[#dbf9e1]/80 to-[#dbf9e1]/40 rounded-lg p-4 sm:p-5 mb-6 sm:mb-8 shadow-sm overflow-hidden">
         {/* Decorative elements */}

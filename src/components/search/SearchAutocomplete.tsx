@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -77,6 +78,30 @@ const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({ onSelect }) => 
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
+  const [mounted, setMounted] = useState(false);
+
+  // Track client mount for portal
+  useEffect(() => { setMounted(true); }, []);
+
+  // Recompute dropdown position whenever it opens or on scroll/resize
+  useEffect(() => {
+    const updatePos = () => {
+      if (inputRef.current) {
+        const rect = inputRef.current.getBoundingClientRect();
+        setDropdownPos({ top: rect.bottom + 8, left: rect.left, width: rect.width });
+      }
+    };
+    if (showSuggestions) {
+      updatePos();
+      window.addEventListener('scroll', updatePos, true);
+      window.addEventListener('resize', updatePos);
+      return () => {
+        window.removeEventListener('scroll', updatePos, true);
+        window.removeEventListener('resize', updatePos);
+      };
+    }
+  }, [showSuggestions]);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -220,7 +245,7 @@ const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({ onSelect }) => 
   };
 
   return (
-    <div className="relative w-full" style={{ zIndex: 99 }}>
+    <div className="relative w-full">
       <div className="relative">
         {/* Input field with light green background */}
         <input
@@ -258,22 +283,20 @@ const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({ onSelect }) => 
         </button>
       </div>
 
-      {/* Suggestions dropdown - rendered directly */}
-      {showSuggestions && query.trim().length >= 2 && (
-        <div 
+      {/* Suggestions dropdown - rendered via portal to escape stacking contexts */}
+      {mounted && showSuggestions && query.trim().length >= 2 && createPortal(
+        <div
           ref={suggestionsRef}
-          className="fixed z-[99] bg-white rounded-lg shadow-xl max-h-96 overflow-y-auto border border-gray-100"
+          className="bg-white rounded-lg border border-gray-100"
           style={{
-            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-            animation: 'fadeIn 0.2s ease-out',
             position: 'fixed',
-            width: inputRef.current ? inputRef.current.offsetWidth : 'auto',
-            top: inputRef.current ? inputRef.current.getBoundingClientRect().bottom + 8 : 0,
-            left: inputRef.current ? inputRef.current.getBoundingClientRect().left : 0,
+            top: dropdownPos.top,
+            left: dropdownPos.left,
+            width: dropdownPos.width,
             maxHeight: '400px',
             overflowY: 'auto',
-            pointerEvents: 'auto',
-            zIndex: 999999
+            zIndex: 999999,
+            boxShadow: '0 10px 25px -5px rgba(0,0,0,0.15), 0 4px 6px -2px rgba(0,0,0,0.05)',
           }}
         >
           {isLoading ? (
@@ -337,7 +360,8 @@ const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({ onSelect }) => 
               </div>
             </div>
           ) : null}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

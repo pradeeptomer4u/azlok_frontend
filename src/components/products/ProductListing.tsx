@@ -33,11 +33,8 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
         const category = searchParams?.get('category') ?? null;
         const minPrice = searchParams?.get('minPrice') ?? null;
         const maxPrice = searchParams?.get('maxPrice') ?? null;
-        const taxInclusiveOnly = searchParams?.get('taxInclusive') === 'true';
-        const maxTaxRate = searchParams?.get('maxTaxRate') ?? null;
         const searchQuery = searchParams?.get('q') ?? null;
         const sort = searchParams?.get('sort') ?? sortBy;
-        const state = searchParams?.get('state') ?? buyerState;
         
         // Build API filters
         const filters: ProductFilters = {

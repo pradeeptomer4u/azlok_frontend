@@ -35,43 +35,42 @@ export const permissionService = {
       }
 
       const data = await response.json();
-      
-      // Backend returns flat array of permission strings: ['view_blogs', 'manage_blogs']
-      // Frontend expects: [{ module: "blogs", actions: ["manage", "view"] }]
-      
+
+      // Backend returns array of permission objects: [{id, permission: "manage_blogs", is_active, ...}]
+      // OR flat strings: ["manage_blogs", ...] — handle both formats
       if (Array.isArray(data)) {
         const permissionMap = new Map<string, Set<string>>();
-        
-        data.forEach((permString: any) => {
-          if (typeof permString === 'string') {
-            // Split "manage_blogs" into ["manage", "blogs"]
+
+        data.forEach((item: any) => {
+          // Extract the permission string from either format
+          const permString: string | undefined = typeof item === 'string' ? item : item?.permission;
+          const isActive: boolean = typeof item === 'string' ? true : (item?.is_active !== false);
+
+          if (permString && isActive) {
             const parts = permString.split('_');
             if (parts.length >= 2) {
-              const action = parts[0];
-              const module = parts.slice(1).join('_'); // Handle modules with underscores
-              
-              if (!permissionMap.has(module)) {
-                permissionMap.set(module, new Set());
-              }
+              const action = parts[0]; // "manage" or "view"
+              const module = parts.slice(1).join('_'); // "blogs", "tax_rates", etc.
+              if (!permissionMap.has(module)) permissionMap.set(module, new Set());
               permissionMap.get(module)?.add(action);
             }
           }
         });
-        
+
         const transformedPermissions: Permission[] = Array.from(permissionMap.entries()).map(
           ([module, actions]) => ({
             module: module as PermissionModule,
             actions: Array.from(actions) as PermissionAction[],
           })
         );
-        
+
         return {
-          user_id: data[0]?.user_id || userId,
-          is_super_admin: data[0]?.is_super_admin || false,
+          user_id: userId,
+          is_super_admin: false,
           permissions: transformedPermissions,
         };
       }
-      
+
       return {
         user_id: userId,
         is_super_admin: false,

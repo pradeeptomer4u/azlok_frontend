@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../context/AuthContext';
 import Image from 'next/image';
+import Pagination from '../../../components/admin/Pagination';
 
 interface OrderItem {
   id: number;
@@ -42,6 +43,9 @@ export default function AdminOrdersPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 20;
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
 
@@ -60,19 +64,32 @@ export default function AdminOrdersPage() {
       setIsLoading(true);
       try {
         const token = localStorage.getItem('azlok-token');
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+        const skip = (currentPage - 1) * itemsPerPage;
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/orders?skip=${skip}&limit=${itemsPerPage}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
           }
-        });
+        );
         
         if (!response.ok) {
           throw new Error('Failed to fetch orders');
         }
         
         const data = await response.json();
+
+        // Support both array and paginated object responses: { items: [], total: N }
+        const rawOrders = Array.isArray(data) ? data : (data.items || data.orders || []);
+        const serverTotal = data.total ?? rawOrders.length;
+        setTotalItems(prev => {
+          // If response is plain array and smaller than a full page, we know the total
+          if (Array.isArray(data)) return (currentPage - 1) * itemsPerPage + rawOrders.length;
+          return serverTotal;
+        });
 
         // Parse shipping_address which comes as a Python dict string e.g. "{'full_name': 'Anita', ...}"
         const parseAddress = (addrStr: any): Record<string, string> => {
@@ -92,7 +109,7 @@ export default function AdminOrdersPage() {
         };
 
         // Transform API data to match our interface
-        const transformedOrders: Order[] = data.map((order: any) => {
+        const transformedOrders: Order[] = rawOrders.map((order: any) => {
           const addr = parseAddress(order.shipping_address);
           return {
             id: order.id,
@@ -134,7 +151,7 @@ export default function AdminOrdersPage() {
     if (user?.role === 'admin') {
       fetchOrders();
     }
-  }, [user]);
+  }, [user, currentPage]);
 
   const handleStatusChange = async (orderId: number, newStatus: string) => {
     try {
@@ -219,12 +236,7 @@ export default function AdminOrdersPage() {
   };
 
   const filteredOrders = orders.filter(order => {
-    // Filter by status
-    if (statusFilter !== 'all' && order.status !== statusFilter) {
-      return false;
-    }
-    
-    // Filter by search term
+    if (statusFilter !== 'all' && order.status !== statusFilter) return false;
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
       return (
@@ -233,9 +245,13 @@ export default function AdminOrdersPage() {
         order.customer_email.toLowerCase().includes(searchLower)
       );
     }
-    
     return true;
   });
+
+  // For server-side pagination, display the current page's orders as-is (already filtered server-side)
+  // Client-side status/search filter still applied on top of current page data
+  const totalPages = Math.ceil(Math.max(totalItems, filteredOrders.length) / itemsPerPage);
+  const paginatedOrders = filteredOrders; // server already returns one page
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -302,7 +318,7 @@ export default function AdminOrdersPage() {
             <select
               id="status-filter"
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
               className="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             >
               <option value="all">All Orders</option>
@@ -323,7 +339,7 @@ export default function AdminOrdersPage() {
               id="search"
               placeholder="Search by order #, name, or email"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
               className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             />
           </div>
@@ -371,7 +387,7 @@ export default function AdminOrdersPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredOrders.map((order) => (
+              {paginatedOrders.map((order) => (
                 <tr key={order.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{order.order_number}</div>
@@ -428,6 +444,13 @@ export default function AdminOrdersPage() {
               ))}
             </tbody>
           </table>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={Math.max(totalItems, filteredOrders.length)}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+          />
         </div>
       )}
 

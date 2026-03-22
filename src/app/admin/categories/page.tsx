@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../context/AuthContext';
+import Pagination from '../../../components/admin/Pagination';
 
 interface Category {
   id: number;
@@ -27,6 +28,8 @@ export default function AdminCategoriesPage() {
   });
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
 
@@ -214,7 +217,7 @@ export default function AdminCategoriesPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {categories.map((category) => (
+              {categories.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((category) => (
                 <tr key={category.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{category.id}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -252,6 +255,13 @@ export default function AdminCategoriesPage() {
               ))}
             </tbody>
           </table>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(categories.length / itemsPerPage)}
+            totalItems={categories.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+          />
         </div>
       )}
 

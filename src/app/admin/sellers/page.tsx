@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../context/AuthContext';
 import Image from 'next/image';
+import Pagination from '../../../components/admin/Pagination';
 
 interface Seller {
   id: number;
@@ -25,6 +26,8 @@ export default function AdminSellersPage() {
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSeller, setEditingSeller] = useState<Seller | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
 
@@ -202,7 +205,7 @@ export default function AdminSellersPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {sellers.map((seller) => (
+              {sellers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((seller) => (
                 <tr key={seller.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -274,6 +277,13 @@ export default function AdminSellersPage() {
               ))}
             </tbody>
           </table>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(sellers.length / itemsPerPage)}
+            totalItems={sellers.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+          />
         </div>
       )}
 

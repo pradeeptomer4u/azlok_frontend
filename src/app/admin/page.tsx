@@ -73,31 +73,57 @@ export default function AdminDashboard() {
         const dashboardStats = await apiRequest<DashboardStats>('/api/admin/dashboard');
         setStats(dashboardStats);
         
-        // Set default values for data that might not be available yet
-        setRecentOrders([]);
-        setTopProducts([]);
         setRevenueByMonth([]);
-        
-        // Try to fetch additional data if available
+
+        // Fetch recent orders using the real orders endpoint
         try {
-          const orders = await apiRequest<Order[]>('/api/admin/orders/recent?limit=5');
-          if (orders) setRecentOrders(orders);
+          const token = localStorage.getItem('azlok-token');
+          const ordersRes = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/orders?skip=0&limit=5`,
+            { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
+          );
+          if (ordersRes.ok) {
+            const ordersData = await ordersRes.json();
+            const raw: any[] = Array.isArray(ordersData) ? ordersData : (ordersData.items || []);
+            const parseAddr = (s: any) => {
+              if (!s) return {};
+              if (typeof s === 'object') return s;
+              try { return JSON.parse(s.replace(/'/g, '"').replace(/\bNone\b/g,'null')); } catch { return {}; }
+            };
+            setRecentOrders(raw.map((o: any) => {
+              const addr = parseAddr(o.shipping_address);
+              return {
+                id: o.order_number || String(o.id),
+                customer: addr.full_name || o.user?.name || 'Unknown',
+                date: new Date(o.created_at).toLocaleDateString('en-IN'),
+                total: o.total_amount || 0,
+                status: o.status || 'pending',
+              };
+            }));
+          }
         } catch (orderErr) {
-          console.log('Orders API not implemented yet:', orderErr);
+          console.log('Could not load recent orders:', orderErr);
+          setRecentOrders([]);
         }
-        
+
+        // Fetch top products using the real products endpoint
         try {
-          const products = await apiRequest<Product[]>('/api/admin/products/top?limit=4');
-          if (products) setTopProducts(products);
+          const productsRes = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/products/?size=5`
+          );
+          if (productsRes.ok) {
+            const productsData = await productsRes.json();
+            const raw: any[] = Array.isArray(productsData) ? productsData : (productsData.items || []);
+            setTopProducts(raw.slice(0, 5).map((p: any) => ({
+              id: p.id,
+              name: p.name,
+              sales: p.total_sold ?? 0,
+              revenue: (p.price ?? 0) * (p.total_sold ?? 0),
+            })));
+          }
         } catch (productErr) {
-          console.log('Top products API not implemented yet:', productErr);
-        }
-        
-        try {
-          const revenue = await apiRequest<RevenueData[]>(`/api/admin/revenue?timeRange=${timeRange}`);
-          if (revenue) setRevenueByMonth(revenue);
-        } catch (revenueErr) {
-          console.log('Revenue API not implemented yet:', revenueErr);
+          console.log('Could not load top products:', productErr);
+          setTopProducts([]);
         }
       } catch (err) {
         setError('Failed to load dashboard data. Please try again.');
@@ -280,14 +306,14 @@ export default function AdminDashboard() {
             <Link href="/admin/products/add" className="text-sm bg-gray-100 hover:bg-gray-200 p-2 rounded text-center">
               Add Product
             </Link>
-            <Link href="/admin/categories/add" className="text-sm bg-gray-100 hover:bg-gray-200 p-2 rounded text-center">
-              Add Category
+            <Link href="/admin/categories" className="text-sm bg-gray-100 hover:bg-gray-200 p-2 rounded text-center">
+              Categories
             </Link>
-            <Link href="/admin/users/add" className="text-sm bg-gray-100 hover:bg-gray-200 p-2 rounded text-center">
-              Add User
+            <Link href="/admin/users" className="text-sm bg-gray-100 hover:bg-gray-200 p-2 rounded text-center">
+              Users
             </Link>
-            <Link href="/admin/reports" className="text-sm bg-gray-100 hover:bg-gray-200 p-2 rounded text-center">
-              View Reports
+            <Link href="/admin/orders" className="text-sm bg-gray-100 hover:bg-gray-200 p-2 rounded text-center">
+              Orders
             </Link>
           </div>
         </div>

@@ -60,7 +60,7 @@ export default function AdminOrdersPage() {
       setIsLoading(true);
       try {
         const token = localStorage.getItem('azlok-token');
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders/all`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -73,27 +73,54 @@ export default function AdminOrdersPage() {
         }
         
         const data = await response.json();
-        
+
+        // Parse shipping_address which comes as a Python dict string e.g. "{'full_name': 'Anita', ...}"
+        const parseAddress = (addrStr: any): Record<string, string> => {
+          if (!addrStr) return {};
+          if (typeof addrStr === 'object') return addrStr;
+          try {
+            // Replace Python-style single quotes and None/True/False literals
+            const json = addrStr
+              .replace(/'/g, '"')
+              .replace(/\bNone\b/g, 'null')
+              .replace(/\bTrue\b/g, 'true')
+              .replace(/\bFalse\b/g, 'false');
+            return JSON.parse(json);
+          } catch {
+            return {};
+          }
+        };
+
         // Transform API data to match our interface
-        const transformedOrders: Order[] = data.map((order: any) => ({
-          id: order.id,
-          order_number: order.order_number,
-          customer_name: order.shipping_address?.full_name || order.user?.name || 'Unknown',
-          customer_email: order.user?.email || 'N/A',
-          status: order.status,
-          payment_status: order.payment_status || 'pending',
-          total_amount: order.total_amount || 0,
-          shipping_address: {
-            street: order.shipping_address?.address_line1 || '',
-            city: order.shipping_address?.city || '',
-            state: order.shipping_address?.state || '',
-            zip: order.shipping_address?.zip_code || '',
-            country: order.shipping_address?.country || '',
-          },
-          items: order.items || [],
-          created_at: order.created_at,
-          updated_at: order.updated_at,
-        }));
+        const transformedOrders: Order[] = data.map((order: any) => {
+          const addr = parseAddress(order.shipping_address);
+          return {
+            id: order.id,
+            order_number: order.order_number,
+            customer_name: addr.full_name || order.user?.name || 'Unknown',
+            customer_email: addr.email || order.user?.email || 'N/A',
+            status: order.status,
+            payment_status: order.payment_status || 'pending',
+            total_amount: order.total_amount || 0,
+            shipping_address: {
+              street: addr.address_line1 || addr.street || '',
+              city: addr.city || '',
+              state: addr.state || '',
+              zip: addr.zip_code || addr.zip || addr.postal_code || '',
+              country: addr.country || '',
+            },
+            items: (order.order_items || order.items || []).map((item: any) => ({
+              id: item.id,
+              product_name: item.product_name || item.product?.name || '',
+              product_image: item.product_image || item.product?.image_urls?.[0] || '/globe.svg',
+              quantity: item.quantity,
+              unit_price: item.unit_price || item.price || 0,
+              total_price: item.total_price || (item.quantity * (item.unit_price || item.price || 0)),
+            })),
+            created_at: order.created_at,
+            updated_at: order.updated_at,
+          };
+        });
         
         setOrders(transformedOrders);
       } catch (err) {

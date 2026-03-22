@@ -77,7 +77,7 @@ export default function AdminDashboard() {
         try {
           const token = localStorage.getItem('azlok-token');
           const ordersRes = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/orders?skip=0&limit=5`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/orders/all?skip=0&limit=5`,
             { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
           );
           if (ordersRes.ok) {

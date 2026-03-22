@@ -66,7 +66,7 @@ export default function AdminOrdersPage() {
         const token = localStorage.getItem('azlok-token');
         const skip = (currentPage - 1) * itemsPerPage;
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/orders?skip=${skip}&limit=${itemsPerPage}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/orders/all?skip=${skip}&limit=${itemsPerPage}`,
           {
             method: 'GET',
             headers: {

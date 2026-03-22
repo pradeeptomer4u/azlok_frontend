@@ -120,8 +120,11 @@ const productService = {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      // Backend returns array directly, not wrapped in items
-      return { items: data || [], total: data?.length || 0, page, size, pages: 1 };
+      // Backend returns array directly (not wrapped). Support both array and paginated object.
+      const items = Array.isArray(data) ? data : (data.items || []);
+      const total = data.total ?? items.length;
+      const pages = Math.ceil(total / size) || 1;
+      return { items, total, page, size, pages };
     } catch (error) {
       console.error('Error fetching products:', error);
       return { items: [], total: 0, page, size, pages: 0 };

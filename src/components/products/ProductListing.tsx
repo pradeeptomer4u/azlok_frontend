@@ -196,66 +196,6 @@ const ProductListing = ({ categorySlug }: ProductListingProps = {}) => {
             </div>
           </div>
           
-          <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-3 relative">
-            {/* State selection for tax calculation */}
-            <div className="relative group/select">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-[#5dc285]/20 via-[#5dc285]/20 to-[#5dc285]/20 rounded-md blur opacity-0 group-hover/select:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative">
-                <label htmlFor="state" className="block text-[#2c7a4c] text-xs font-medium mb-1 font-['Montserrat',sans-serif]">Your State</label>
-                <select
-                  id="state"
-                  value={buyerState}
-                  onChange={(e) => {
-                    setBuyerState(e.target.value);
-                    // Re-fetch tax information when state changes
-                    const taxInclusiveParam = searchParams?.get('taxInclusive') === 'true';
-                    const maxTaxRateParam = searchParams?.get('maxTaxRate') ?? undefined;
-                    fetchTaxInformation(products, e.target.value, taxInclusiveParam, maxTaxRateParam);
-                  }}
-                  className="border border-[#5dc285]/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#5dc285] bg-white/90 w-full sm:w-auto appearance-none pr-8 relative z-10"
-                  aria-label="Select your state for tax calculation"
-                  style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%235dc285%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')", backgroundRepeat: "no-repeat", backgroundPosition: "right 0.5rem center", backgroundSize: "0.6em auto" }}
-                >
-                  <option value="AP">Andhra Pradesh</option>
-                  <option value="AR">Arunachal Pradesh</option>
-                  <option value="AS">Assam</option>
-                  <option value="BR">Bihar</option>
-                  <option value="CG">Chhattisgarh</option>
-                  <option value="GA">Goa</option>
-                  <option value="GJ">Gujarat</option>
-                  <option value="HR">Haryana</option>
-                  <option value="HP">Himachal Pradesh</option>
-                  <option value="JH">Jharkhand</option>
-                  <option value="KA">Karnataka</option>
-                  <option value="KL">Kerala</option>
-                  <option value="MP">Madhya Pradesh</option>
-                  <option value="MH">Maharashtra</option>
-                  <option value="MN">Manipur</option>
-                  <option value="ML">Meghalaya</option>
-                  <option value="MZ">Mizoram</option>
-                  <option value="NL">Nagaland</option>
-                  <option value="OD">Odisha</option>
-                  <option value="PB">Punjab</option>
-                  <option value="RJ">Rajasthan</option>
-                  <option value="SK">Sikkim</option>
-                  <option value="TN">Tamil Nadu</option>
-                  <option value="TS">Telangana</option>
-                  <option value="TR">Tripura</option>
-                  <option value="UK">Uttarakhand</option>
-                  <option value="UP">Uttar Pradesh</option>
-                  <option value="WB">West Bengal</option>
-                  <option value="AN">Andaman and Nicobar Islands</option>
-                  <option value="CH">Chandigarh</option>
-                  <option value="DN">Dadra and Nagar Haveli and Daman and Diu</option>
-                  <option value="DL">Delhi</option>
-                  <option value="JK">Jammu and Kashmir</option>
-                  <option value="LA">Ladakh</option>
-                  <option value="LD">Lakshadweep</option>
-                  <option value="PY">Puducherry</option>
-                </select>
-              </div>
-          </div>
-          </div>
           
           <div className="flex items-center">
             <label htmlFor="sort" className="mr-2 text-gray-700 text-sm">Sort by:</label>

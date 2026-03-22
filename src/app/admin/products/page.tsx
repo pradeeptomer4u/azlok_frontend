@@ -13,11 +13,11 @@ interface Category {
 }
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [selectedStatus, setSelectedStatus] = useState('all');
@@ -25,9 +25,7 @@ export default function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
   const [isSelectAll, setIsSelectAll] = useState(false);
-  const [totalItems, setTotalItems] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
-  
+
   const itemsPerPage = 10;
   
   // Format currency
@@ -39,53 +37,19 @@ export default function ProductsPage() {
     }).format(amount);
   };
   
-  // Fetch products and categories
+  // Fetch all products and categories once; filtering/sorting/pagination done client-side
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        // Fetch categories
         const categoriesResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.azlok.com'}/api/categories`);
-        if (!categoriesResponse.ok) {
-          throw new Error('Failed to fetch categories');
+        if (categoriesResponse.ok) {
+          setCategories(await categoriesResponse.json());
         }
-        const categoriesData = await categoriesResponse.json();
-        setCategories(categoriesData);
-        
-        // Prepare filters for products
-        const filters: ProductFilters = {
-          page: currentPage,
-          size: itemsPerPage
-        };
-        
-        if (searchTerm) {
-          filters.search = searchTerm;
-        }
-        
-        if (selectedCategory) {
-          filters.category_id = selectedCategory;
-        }
-        
-        // Map sort options to API parameters
-        if (sortBy === 'name') {
-          filters.sort_by = 'name';
-          filters.sort_order = 'asc';
-        } else if (sortBy === 'price_asc') {
-          filters.sort_by = 'price';
-          filters.sort_order = 'asc';
-        } else if (sortBy === 'price_desc') {
-          filters.sort_by = 'price';
-          filters.sort_order = 'desc';
-        } else if (sortBy === 'stock') {
-          filters.sort_by = 'stock_quantity';
-          filters.sort_order = 'desc';
-        }
-        
-        // Fetch products with filters
-        const response = await productService.getProducts(filters, currentPage, itemsPerPage);
-        setProducts(response.items);
-        setTotalItems(response.total);
-        setTotalPages(response.pages);
+
+        // Fetch all products (large size to get everything)
+        const response = await productService.getProducts({}, 1, 1000);
+        setAllProducts(response.items);
       } catch (err) {
         console.error('Error fetching data:', err);
         setError('Failed to load products. Please try again.');
@@ -93,9 +57,32 @@ export default function ProductsPage() {
         setIsLoading(false);
       }
     };
-    
+
     fetchData();
-  }, [searchTerm, selectedCategory, selectedStatus, sortBy, currentPage]);
+  }, []);
+
+  // Reset to page 1 whenever filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory, selectedStatus, sortBy]);
+
+  // Client-side filter + sort + paginate
+  const filteredProducts = allProducts
+    .filter((p) => {
+      if (searchTerm && !p.name.toLowerCase().includes(searchTerm.toLowerCase()) && !p.sku?.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+      if (selectedCategory && !p.categories?.some((c: any) => c.id === selectedCategory)) return false;
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'price_asc') return (a.price ?? 0) - (b.price ?? 0);
+      if (sortBy === 'price_desc') return (b.price ?? 0) - (a.price ?? 0);
+      if (sortBy === 'stock') return (b.stock_quantity ?? 0) - (a.stock_quantity ?? 0);
+      return a.name.localeCompare(b.name); // default: name asc
+    });
+
+  const totalItems = filteredProducts.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const products = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   
   // Handle select all
   const handleSelectAll = () => {
@@ -123,19 +110,12 @@ export default function ProductsPage() {
     try {
       if (action === 'delete') {
         if (window.confirm(`Are you sure you want to delete ${selectedProducts.length} products? This action cannot be undone.`)) {
-          // Delete each selected product
           for (const id of selectedProducts) {
             await productService.deleteProduct(id);
           }
-          
-          // Refresh products list
-          const filters: ProductFilters = { page: currentPage, size: itemsPerPage };
-          const response = await productService.getProducts(filters, currentPage, itemsPerPage);
-          setProducts(response.items);
-          setTotalItems(response.total);
-          setTotalPages(response.pages);
-          
-          // Reset selection
+          // Refresh all products
+          const response = await productService.getProducts({}, 1, 1000);
+          setAllProducts(response.items);
           setSelectedProducts([]);
           setIsSelectAll(false);
         }
@@ -147,7 +127,7 @@ export default function ProductsPage() {
   };
 
   // Loading state
-  if (isLoading && products.length === 0) {
+  if (isLoading && allProducts.length === 0) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>

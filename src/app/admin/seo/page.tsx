@@ -40,7 +40,7 @@ interface SelectOption { value: string; label: string }
 
 export default function AdminSeoPage() {
   const router = useRouter();
-  const { permissions, isLoading: authLoading } = useAuth();
+  const { user, permissions, isLoading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<SeoPageType>('homepage');
   const [form, setForm] = useState<SeoSettings>(emptyForm());
   const [saving, setSaving] = useState(false);
@@ -145,9 +145,9 @@ export default function AdminSeoPage() {
     </span>
   );
 
-  // Permission gate — only super_admin or users with 'seo' module access
-  const canAccess = !authLoading && permissions &&
-    (permissions.is_super_admin || hasModuleAccess(permissions, 'seo'));
+  // Permission gate — admin role, super_admin, or explicit 'seo' module permission
+  const canAccess = !authLoading &&
+    (user?.role === 'admin' || (permissions && (permissions.is_super_admin || hasModuleAccess(permissions, 'seo'))));
 
   if (!authLoading && !canAccess) {
     return (

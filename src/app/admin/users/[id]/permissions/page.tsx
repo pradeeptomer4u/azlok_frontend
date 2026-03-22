@@ -31,6 +31,7 @@ const AVAILABLE_MODULES: PermissionModule[] = [
   'users',
   'companies',
   'sellers',
+  'seo',
 ];
 
 const AVAILABLE_ACTIONS: PermissionAction[] = [

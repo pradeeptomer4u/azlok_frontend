@@ -10,6 +10,7 @@ import { ErrorAlert } from '../../../components/ui/ErrorAlert';
 import blogService, { Blog } from '../../../services/blogService';
 import productService, { Product } from '../../../services/productService';
 import MetaTags from '../../../components/SEO/MetaTags';
+import seoService, { SeoSettings } from '../../../services/seoService';
 
 export default function BlogDetailPage() {
   const params = useParams();
@@ -18,6 +19,7 @@ export default function BlogDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
+  const [adminSeo, setAdminSeo] = useState<SeoSettings | null>(null);
 
   const slug = params && typeof params.slug === 'string' ? params.slug : '';
 
@@ -31,7 +33,11 @@ export default function BlogDetailPage() {
       }
 
       try {
-        const blogData = await blogService.getBlogBySlug(slug);
+        const [blogData, seoData] = await Promise.all([
+          blogService.getBlogBySlug(slug),
+          seoService.get('blog', slug),
+        ]);
+        if (seoData) setAdminSeo(seoData);
         if (blogData) {
           setBlog(blogData);
           
@@ -136,12 +142,13 @@ export default function BlogDetailPage() {
   return (
     <>
       <MetaTags
-        title={`${blog.title} - Azlok Blog`}
-        description={blog.excerpt || `Read about ${blog.title} on the Azlok blog.`}
+        title={adminSeo?.title || `${blog.title} - Azlok Blog`}
+        description={adminSeo?.description || blog.excerpt || `Read about ${blog.title} on the Azlok blog.`}
+        keywords={adminSeo?.keywords}
         ogType="article"
         ogUrl={`/blog/${blog.slug}`}
-        ogImage={blog.featured_image || '/images/blog/blog-banner.jpg'}
-        canonicalUrl={`/blog/${blog.slug}`}
+        ogImage={adminSeo?.og_image || blog.featured_image || '/images/blog/blog-banner.jpg'}
+        canonicalUrl={adminSeo?.canonical_url || `/blog/${blog.slug}`}
       />
       
       <div className="min-h-screen py-8 bg-[#dbf9e1]/50 relative overflow-hidden">

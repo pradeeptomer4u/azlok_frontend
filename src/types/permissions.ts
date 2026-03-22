@@ -1,6 +1,6 @@
 // Permission types for role-based access control (RBAC)
 
-export type PermissionModule = 
+export type PermissionModule =
   | 'blogs'
   | 'orders'
   | 'inventory'
@@ -9,7 +9,8 @@ export type PermissionModule =
   | 'categories'
   | 'users'
   | 'companies'
-  | 'sellers';
+  | 'sellers'
+  | 'seo';
 
 export type PermissionAction = 'view' | 'manage';
 
@@ -108,6 +109,7 @@ export const PERMISSION_MODULE_LABELS: Record<PermissionModule, string> = {
   users: 'User Management',
   companies: 'Company Management',
   sellers: 'Seller Management',
+  seo: 'SEO Management',
 };
 
 // Permission action labels for UI

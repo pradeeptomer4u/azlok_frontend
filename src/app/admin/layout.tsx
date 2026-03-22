@@ -33,7 +33,8 @@ export default function AdminLayout({
     hasModuleAccess(permissions, 'inventory') ||
     hasModuleAccess(permissions, 'tax_rates') ||
     hasModuleAccess(permissions, 'companies') ||
-    hasModuleAccess(permissions, 'sellers')
+    hasModuleAccess(permissions, 'sellers') ||
+    hasModuleAccess(permissions, 'seo')
   );
 
   useEffect(() => {
@@ -255,6 +256,21 @@ export default function AdminLayout({
             </>
           )}
           
+          {canAccess('seo') && (
+            <>
+              <p className="text-xs font-semibold text-gray-400 mt-6 mb-2">SEO</p>
+              <Link
+                href="/admin/seo"
+                className="flex items-center py-2 px-3 mb-1 rounded-md hover:bg-gray-100"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z" />
+                </svg>
+                SEO Settings
+              </Link>
+            </>
+          )}
+
           {(canAccess('tax_rates') || canAccess('settings')) && (
             <>
               <p className="text-xs font-semibold text-gray-400 mt-6 mb-2">SETTINGS</p>

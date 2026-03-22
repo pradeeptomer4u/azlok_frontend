@@ -3,9 +3,11 @@ import productService from '@/services/productService';
 import nutritionalDetailsService from '@/services/nutritionalDetailsService';
 import { ProductSchema, BreadcrumbSchema } from '@/components/SEO';
 import ProductFAQSection from './ProductFAQSection';
+import seoService from '@/services/seoService';
 
 export async function generateMetadata({ params }: PageProps<'/products/[slug]'>) {
   const { slug } = await params;
+  const adminSeo = await seoService.getServerSide('product', slug);
   
   // Format the product name from slug for use in both main and fallback paths
   const formattedProductName = slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
@@ -114,22 +116,26 @@ export async function generateMetadata({ params }: PageProps<'/products/[slug]'>
         console.error('Error formatting price:', error);
       }
       
-      // Use real product data for metadata
+      // Use real product data for metadata, merged with admin SEO overrides
+      const baseTitle = `${product.name} | Azlok`;
+      const baseDescription = (product.description ? product.description.substring(0, 160) : 'View detailed product specifications, pricing, and supplier information').substring(0, 160);
+      const baseOgImage = adminSeo?.og_image || productImage;
       return {
-        title: `${product.name} | Azlok`,
-        description: (product.description ? product.description.substring(0, 160) : 'View detailed product specifications, pricing, and supplier information').substring(0, 160),
-        keywords: uniqueKeywords,
+        title: adminSeo?.title || baseTitle,
+        description: adminSeo?.description || baseDescription,
+        keywords: adminSeo?.keywords || uniqueKeywords,
+        robots: adminSeo?.robots,
         alternates: {
-          canonical: `/products/${slug}`,
+          canonical: adminSeo?.canonical_url || `/products/${slug}`,
         },
         openGraph: {
-          title: product.name || formattedProductName,
-          description: ((product.description || 'View detailed product specifications, pricing, and supplier information').substring(0, 160)),
+          title: adminSeo?.og_title || adminSeo?.title || product.name || formattedProductName,
+          description: adminSeo?.og_description || adminSeo?.description || ((product.description || 'View detailed product specifications, pricing, and supplier information').substring(0, 160)),
           url: `/products/${slug}`,
           siteName: 'Azlok',
           images: [
             {
-              url: productImage,
+              url: baseOgImage,
               width: 1200,
               height: 630,
               alt: product.name || formattedProductName,
@@ -139,9 +145,9 @@ export async function generateMetadata({ params }: PageProps<'/products/[slug]'>
         },
         twitter: {
           card: 'summary_large_image',
-          title: product.name || formattedProductName,
-          description: ((product.description || 'View detailed product specifications, pricing, and supplier information').substring(0, 160)),
-          images: [productImage],
+          title: adminSeo?.og_title || adminSeo?.title || product.name || formattedProductName,
+          description: adminSeo?.og_description || adminSeo?.description || ((product.description || 'View detailed product specifications, pricing, and supplier information').substring(0, 160)),
+          images: [baseOgImage],
           creator: '@azlok',
           site: '@azlok',
         },
@@ -155,11 +161,12 @@ export async function generateMetadata({ params }: PageProps<'/products/[slug]'>
   
   // Fallback metadata if product not found or error occurs
   return {
-    title: `${formattedProductName} | Azlok`,
-    description: 'View detailed product specifications, pricing, and supplier information'.substring(0, 160),
-    keywords: `${slug.replace(/-/g, ' ')}, product, Azlok, marketplace`,
+    title: adminSeo?.title || `${formattedProductName} | Azlok`,
+    description: adminSeo?.description || 'View detailed product specifications, pricing, and supplier information'.substring(0, 160),
+    keywords: adminSeo?.keywords || `${slug.replace(/-/g, ' ')}, product, Azlok, marketplace`,
+    robots: adminSeo?.robots,
     alternates: {
-      canonical: `/products/${slug}`,
+      canonical: adminSeo?.canonical_url || `/products/${slug}`,
     },
     openGraph: {
       title: `${formattedProductName} | Azlok`,

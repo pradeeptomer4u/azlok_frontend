@@ -5,10 +5,12 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import SearchAutocomplete from "../components/search/SearchAutocomplete";
+import { useState, useEffect } from "react";
 import MetaTags from "../components/SEO/MetaTags";
 import { OrganizationStructuredData } from "../components/SEO/StructuredData";
 import FAQStructuredData from "../components/SEO/FAQStructuredData";
 import { CanonicalUrl } from "../components/SEO";
+import seoService from "../services/seoService";
 import { ArrowRight, BadgeCheck } from 'lucide-react';
 
 // Lazy load below-fold components for better LCP
@@ -19,17 +21,39 @@ const TestimonialSection = dynamic(() => import("../components/home/TestimonialS
 const WhyChooseUs = dynamic(() => import("../components/home/WhyChooseUs"), { ssr: false });
 const NatureGoodnessCTA = dynamic(() => import("../components/home/NatureGoodnessCTA"), { ssr: false });
 
+const DEFAULT_SEO = {
+  title: "Azlok - Farm-to-Consumer Natural Products | Direct from Manufacturers",
+  description: "Discover 100% natural products directly from manufacturers with farmer connections. No artificial colors or additives. Organic spices, natural ingredients, and authentic products at wholesale prices.",
+  keywords: "natural products India, organic spices, direct from farmers, no artificial colors, manufacturer direct, farm to consumer, authentic spices, organic ingredients, natural food products",
+  ogImage: "/home_page_banner.png",
+};
+
 export default function Home() {
+  const [seo, setSeo] = useState(DEFAULT_SEO);
+
+  useEffect(() => {
+    seoService.get('homepage').then((data) => {
+      if (data) {
+        setSeo({
+          title: data.title || DEFAULT_SEO.title,
+          description: data.description || DEFAULT_SEO.description,
+          keywords: data.keywords || DEFAULT_SEO.keywords,
+          ogImage: data.og_image || DEFAULT_SEO.ogImage,
+        });
+      }
+    });
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* SEO Meta Tags */}
       <MetaTags
-        title="Azlok - Farm-to-Consumer Natural Products | Direct from Manufacturers"
-        description="Discover 100% natural products directly from manufacturers with farmer connections. No artificial colors or additives. Organic spices, natural ingredients, and authentic products at wholesale prices."
-        keywords="natural products India, organic spices, direct from farmers, no artificial colors, manufacturer direct, farm to consumer, authentic spices, organic ingredients, natural food products"
+        title={seo.title}
+        description={seo.description}
+        keywords={seo.keywords}
         ogType="website"
         ogUrl="/"
-        ogImage="/home_page_banner.png"
+        ogImage={seo.ogImage}
         canonicalUrl="/"
       />
       

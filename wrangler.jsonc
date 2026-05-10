@@ -8,6 +8,14 @@
     "binding": "ASSETS",
     "directory": ".open-next/assets"
   },
+  // Workers Images binding — OpenNext uses this to transform `_next/image`
+  // requests at Cloudflare's edge instead of running its own sharp/wasm
+  // resizer in the Worker. Without it, OpenNext logs
+  // "env.IMAGES binding is not defined" on every image request.
+  // Free tier: 5,000 transformations/month per account.
+  "images": {
+    "binding": "IMAGES"
+  },
   "observability": {
     "enabled": true
   }

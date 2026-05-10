@@ -8,7 +8,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "Azlok | Premium B2C Online Marketplace India",
-  description: "Azlok is India's leading B2C marketplace connecting verified suppliers with businesses. Shop quality products including organic compounds, spices, chemicals, and industrial supplies with competitive pricing and fast delivery across India.".substring(0, 160),
+  description: "Shop verified Indian suppliers on Azlok — organic compounds, spices, essential oils & industrial chemicals. GST-compliant pricing, free shipping, fast delivery.",
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 
   openGraph: {
     title: "Azlok | Premium B2C Online Marketplace India",
-    description: "India's leading B2C marketplace connecting verified suppliers with businesses. Quality products, competitive pricing, fast delivery.".substring(0, 160),
+    description: "Shop verified Indian suppliers — organic compounds, spices, essential oils & industrial chemicals. GST-compliant, free shipping, fast delivery.",
     url: 'https://www.azlok.com',
     siteName: 'Azlok',
     images: [
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: "Azlok | Premium B2C Online Marketplace India",
-    description: "India's leading B2C marketplace for verified suppliers and quality products.".substring(0, 160),
+    description: "India's leading B2C marketplace for verified suppliers and quality products.",
     images: ['/home_page_banner.png'],
     creator: '@azlok',
     site: '@azlok',

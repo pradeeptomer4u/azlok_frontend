@@ -101,8 +101,7 @@ export default function RootLayout({
       <link rel="alternate" hrefLang="en-in" href="https://www.azlok.com" />
       <link rel="alternate" hrefLang="x-default" href="https://www.azlok.com" />
         <meta name="robots" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1" />
-        <meta name="google-site-verification" content="your-google-site-verification-code" />
-        
+
         {/* DNS Prefetch and Preconnect for critical resources */}
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />

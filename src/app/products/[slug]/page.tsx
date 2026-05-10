@@ -323,7 +323,7 @@ export default async function ProductPage(props: PageProps<'/products/[slug]'>) 
           </noscript>
         )}
 
-        <ProductDetail slug={slug} />
+        <ProductDetail slug={slug} initialProduct={productData ?? null} />
 
         {/* Add ProductSchema for SEO */}
         {schemaData && (

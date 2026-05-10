@@ -52,9 +52,14 @@ interface EnhancedProduct {
 
 interface ProductDetailProps {
   slug: string;
+  // When passed, the component skips its own fetch on mount and uses this
+  // server-fetched data as the initial product. Lets SSR render real product
+  // data so crawlers (Googlebot URL Inspection) don't see the empty/default
+  // state when their JS render budget runs out before our API call returns.
+  initialProduct?: ApiProduct | null;
 }
 
-const ProductDetail = ({ slug }: ProductDetailProps) => {
+const ProductDetail = ({ slug, initialProduct }: ProductDetailProps) => {
   const { language } = useLanguage();
   interface DetailedProduct {
     id: number;
@@ -97,8 +102,67 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
     };
   }
 
-  const [product, setProduct] = useState<DetailedProduct | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // Shared transform: API product → UI DetailedProduct. Used both for the
+  // server-seeded initial state and the client-side fetch path.
+  const toDetailed = (apiProduct: ApiProduct): DetailedProduct => {
+    const imageUrls: string[] = (() => {
+      const raw = (apiProduct as { image_urls?: unknown }).image_urls;
+      if (Array.isArray(raw)) return raw.filter((u): u is string => typeof u === 'string');
+      if (typeof raw === 'string' && raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) return parsed.filter((u): u is string => typeof u === 'string');
+        } catch { /* ignore */ }
+      }
+      return [];
+    })();
+    const primaryImage = imageUrls[0] || apiProduct.image_url || '/globe.svg';
+    return {
+      id: apiProduct.id,
+      name: apiProduct.name,
+      image: primaryImage,
+      slug,
+      price: apiProduct.price,
+      minOrder: 1,
+      seller: {
+        id: apiProduct.seller?.id || 1,
+        name: apiProduct.seller?.business_name || apiProduct.seller?.full_name || 'Azlok',
+        logo: '/logo.png',
+        location: apiProduct.seller?.region || 'Mumbai, India',
+        memberSince: '2020',
+        responseRate: 98,
+        responseTime: '< 24 hours',
+        verified: true,
+        rating: apiProduct.rating || 4.5,
+      },
+      location: apiProduct.seller?.region || 'Mumbai, India',
+      category: apiProduct.categories && apiProduct.categories.length > 0 ? apiProduct.categories[0].name : 'Uncategorized',
+      subcategory: 'General',
+      rating: apiProduct.rating || 4.5,
+      isVerified: true,
+      description: apiProduct.description || 'No description available',
+      description_hi: apiProduct.description_hi,
+      specifications: [
+        { name: 'SKU', value: apiProduct.sku || 'N/A' },
+        { name: 'Weight', value: apiProduct.weight ? `${apiProduct.weight} kg` : 'N/A' },
+        { name: 'Dimensions', value: apiProduct.dimensions || 'N/A' },
+        { name: 'HSN Code', value: apiProduct.hsn_code || 'N/A' },
+        { name: 'Country of Origin', value: 'India' },
+        { name: 'Brand', value: apiProduct.brand || 'Azlok' },
+      ],
+      images: imageUrls.length > 0 ? imageUrls : ['/globe.svg', '/globe.svg', '/globe.svg'],
+      features: ['Premium quality', 'Durable construction', 'Reliable performance', 'Industry standard compliance', 'Competitive pricing'],
+      applications: ['Commercial use', 'Industrial applications', 'Residential projects', 'Institutional settings', 'General purpose'],
+      packaging: 'Standard export packaging',
+      leadTime: '7-10 days',
+      paymentTerms: 'T/T, L/C, Western Union, PayPal',
+    };
+  };
+
+  const initialDetailed = initialProduct ? toDetailed(initialProduct) : null;
+
+  const [product, setProduct] = useState<DetailedProduct | null>(initialDetailed);
+  const [isLoading, setIsLoading] = useState(!initialDetailed);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showContactForm, setShowContactForm] = useState(false);
@@ -115,6 +179,9 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
 
   // Fetch product data from the API
   useEffect(() => {
+    // If parent passed server-fetched product, skip the client fetch entirely.
+    // SSR HTML already shows real data; refetching would just cause a flicker.
+    if (initialProduct) return;
     const fetchProduct = async () => {
       setIsLoading(true);
       try {
@@ -141,72 +208,7 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
         }
         
         if (apiProduct) {
-          
-          // Transform API product to detailed product with UI-specific fields
-          const detailedProduct: DetailedProduct = {
-            id: apiProduct.id,
-            name: apiProduct.name,
-            image: apiProduct.image_urls && Array.isArray(apiProduct.image_urls) ? 
-              apiProduct.image_urls[0] : 
-              apiProduct.image_urls ? 
-                JSON.parse(apiProduct.image_urls)[0] : 
-                apiProduct.image_url || '/globe.svg',
-            slug: slug, // Use the slug from props
-            price: apiProduct.price,
-            minOrder: 1, // Default minimum order
-            seller: {
-              id: apiProduct.seller?.id || 1,
-              name: apiProduct.seller?.business_name || apiProduct.seller?.full_name || 'Azlok',
-              logo: '/logo.png',
-              location: apiProduct.seller?.region || 'Mumbai, India',
-              memberSince: '2020',
-              responseRate: 98,
-              responseTime: '< 24 hours',
-              verified: true,
-              rating: apiProduct.rating || 4.5
-            },
-            location: apiProduct.seller?.region || 'Mumbai, India',
-            category: apiProduct.categories && apiProduct.categories.length > 0 ? 
-              apiProduct.categories[0].name : 'Uncategorized',
-            subcategory: 'General',
-            rating: apiProduct.rating || 4.5,
-            isVerified: true,
-            description: apiProduct.description || 'No description available',
-            description_hi: apiProduct.description_hi,
-            // Generate specifications from available data
-            specifications: [
-              { name: 'SKU', value: apiProduct.sku || 'N/A' },
-              { name: 'Weight', value: apiProduct.weight ? `${apiProduct.weight} kg` : 'N/A' },
-              { name: 'Dimensions', value: apiProduct.dimensions || 'N/A' },
-              { name: 'HSN Code', value: apiProduct.hsn_code || 'N/A' },
-              { name: 'Country of Origin', value: 'India' },
-              { name: 'Brand', value: apiProduct.brand || 'Azlok' }
-            ],
-            // Parse image URLs from API response
-            images: apiProduct.image_urls && Array.isArray(apiProduct.image_urls) ? 
-              apiProduct.image_urls : 
-              apiProduct.image_urls ? 
-                JSON.parse(apiProduct.image_urls) : 
-                ['/globe.svg', '/globe.svg', '/globe.svg'],
-            features: [
-              'Premium quality',
-              'Durable construction',
-              'Reliable performance',
-              'Industry standard compliance',
-              'Competitive pricing'
-            ],
-            applications: [
-              'Commercial use',
-              'Industrial applications',
-              'Residential projects',
-              'Institutional settings',
-              'General purpose'
-            ],
-            packaging: 'Standard export packaging',
-            leadTime: '7-10 days',
-            paymentTerms: 'T/T, L/C, Western Union, PayPal'
-          };
-          
+          const detailedProduct = toDetailed(apiProduct);
           setProduct(detailedProduct);
           trackProductView({
             id: detailedProduct.id,

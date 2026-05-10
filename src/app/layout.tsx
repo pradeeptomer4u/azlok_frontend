@@ -164,20 +164,20 @@ export default function RootLayout({
         <link rel="preload" as="image" href="https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/hero-side-bg.jpg" fetchPriority="high" />
         {/* Organization Schema is now added in the body */}
       </head>
-      {/* Google Analytics 4 */}
+      {/* Google Analytics 4 — deferred until idle so it doesn't block LCP */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-9FL9G75MJK"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
-      <Script id="ga4-init" strategy="afterInteractive">{`
+      <Script id="ga4-init" strategy="lazyOnload">{`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-9FL9G75MJK');
       `}</Script>
 
-      {/* Meta Pixel */}
-      <Script id="meta-pixel" strategy="afterInteractive">{`
+      {/* Meta Pixel — deferred until idle */}
+      <Script id="meta-pixel" strategy="lazyOnload">{`
         !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
         if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';

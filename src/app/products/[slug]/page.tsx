@@ -239,6 +239,24 @@ export default async function ProductPage(props: PageProps<'/products/[slug]'>) 
     }
   }
 
+  // Pick a real image: prefer image_url, then image_urls (array or JSON string).
+  // Many products only populate image_urls — falling back to '/globe.svg' was leaking
+  // a placeholder into the Product JSON-LD and breaking Merchant Listings rich results.
+  const pickImage = (p: typeof productData): string => {
+    if (!p) return '/globe.svg';
+    if (p.image_url) return p.image_url;
+    const raw = (p as { image_urls?: unknown }).image_urls;
+    if (Array.isArray(raw) && raw.length > 0 && typeof raw[0] === 'string') return raw[0];
+    if (typeof raw === 'string' && raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === 'string') return parsed[0];
+      } catch { /* fall through */ }
+    }
+    return '/globe.svg';
+  };
+  const schemaImage = pickImage(productData);
+
   // Prepare product schema data if product was found
   const schemaData = productData ? {
     id: productData.id,
@@ -246,7 +264,7 @@ export default async function ProductPage(props: PageProps<'/products/[slug]'>) 
     description: productData.description || `Azlok ${productData.name} - Premium quality product`,
     price: productData.price,
     currency: 'INR',
-    image: productData.image_url || '/globe.svg',
+    image: schemaImage,
     url: `/products/${slug}`,
     sku: productData.sku || `AZL-${productData.id}`,
     brand: 'Azlok',
@@ -290,13 +308,28 @@ export default async function ProductPage(props: PageProps<'/products/[slug]'>) 
       </div>
       
       <div className="container-custom mx-auto relative z-10">
+        {/* SSR-only fallback for crawlers that don't execute JS (Googlebot
+            sometimes terminates JS render before our client fetch resolves).
+            Hidden once the client component hydrates — see ProductDetail. */}
+        {productData && (
+          <noscript>
+            <article>
+              <h1>{productData.name}</h1>
+              <img src={schemaImage} alt={productData.name} width={600} height={600} />
+              <p>Category: {productData.category_name || 'General'}</p>
+              <p>Price: ₹{productData.price?.toFixed(2)} (incl. GST)</p>
+              <p>{productData.description}</p>
+            </article>
+          </noscript>
+        )}
+
         <ProductDetail slug={slug} />
-        
+
         {/* Add ProductSchema for SEO */}
         {schemaData && (
           <>
             <ProductSchema product={schemaData} />
-            <BreadcrumbSchema 
+            <BreadcrumbSchema
               items={[
                 { name: 'Home', item: '/', position: 1 },
                 { name: 'Products', item: '/products', position: 2 },

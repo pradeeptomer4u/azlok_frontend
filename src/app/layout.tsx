@@ -160,8 +160,11 @@ export default function RootLayout({
           }
         `}} />
         
-        {/* Preload critical images from CDN */}
-        <link rel="preload" as="image" href="https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/hero-side-bg.jpg" fetchPriority="high" />
+        {/* Hero image preload is handled by next/image with priority on the
+            actual <Image> component — that preloads the *optimized* variant
+            sized for the viewport. A manual preload of the raw R2 URL fetches
+            the full 158 KB original and competes with the optimized download
+            on slow networks, hurting LCP. */}
         {/* Organization Schema is now added in the body */}
       </head>
       {/* Google Analytics 4 — deferred until idle so it doesn't block LCP */}

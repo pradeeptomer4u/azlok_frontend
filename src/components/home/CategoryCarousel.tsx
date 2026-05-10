@@ -140,7 +140,7 @@ const CategoryCarousel = () => {
                     const imgElement = e.currentTarget as HTMLImageElement;
                     imgElement.src = '/images/category-placeholder.svg';
                   }}
-                  loading="eager"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-green-900/50 to-transparent"></div>
               </div>

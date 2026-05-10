@@ -127,47 +127,25 @@ export default function Home() {
             </div>
             
             <div className="md:w-1/2 relative">
-              {/* Mobile version - optimized image for LCP.
-                  sizes="(max-width: 480px) 480px, 640px" caps the candidate URL
-                  widths the browser picks from — without this, srcset includes
-                  w=3840 variants and slow-4G clients sometimes pick the largest
-                  to "be safe", causing a 10s+ LCP. */}
-              <div className="block md:hidden relative h-36 w-full rounded-lg overflow-hidden shadow-lg">
+              {/* Single responsive hero image. Previously two <Image priority>
+                  components were rendered (one for mobile, one for desktop)
+                  with CSS hiding the off-viewport one — but Next.js still
+                  preloaded BOTH, doubling the LCP cost on slow networks.
+                  One <Image fill> with proper sizes lets the browser pick
+                  exactly one variant for the active viewport. */}
+              <div className="relative h-36 md:h-96 w-full rounded-lg overflow-hidden shadow-lg md:shadow-2xl md:translate-x-8">
                 <Image
                   src="https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/hero-side-bg.jpg"
                   alt="Natural Organic Products"
-                  width={480}
-                  height={144}
-                  style={{objectFit: 'cover', width: '100%', height: '100%'}}
+                  fill
+                  style={{objectFit: 'cover'}}
                   className="rounded-lg"
                   priority
                   fetchPriority="high"
-                  quality={40}
-                  sizes="(max-width: 480px) 480px, 640px"
-                  loading="eager"
+                  quality={50}
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   placeholder="blur"
                   blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAB//2Q=="
-                />
-              </div>
-              
-              {/* Desktop version with Next.js Image */}
-              <div className="hidden md:block relative h-96 w-full rounded-lg overflow-hidden shadow-2xl transform md:translate-x-8">
-                <Image 
-                  src="https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/hero-side-bg.jpg" 
-                  alt="Natural Organic Products" 
-                  fill 
-                  style={{objectFit: 'cover'}} 
-                  className="rounded-lg"
-                  priority
-                  fetchPriority="high"
-                  quality={75}
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  loading="eager"
-                  onError={(e) => {
-                    console.error('Desktop hero image failed to load:', e);
-                    const imgElement = e.currentTarget as HTMLImageElement;
-                    imgElement.src = '/globe.svg';
-                  }}
                 />
               </div>
               <div className="absolute -bottom-4 -left-4 bg-yellow-500 text-green-900 font-bold py-2 px-4 rounded-lg shadow-lg">

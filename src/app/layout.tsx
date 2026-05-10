@@ -102,11 +102,12 @@ export default function RootLayout({
       <link rel="alternate" hrefLang="x-default" href="https://www.azlok.com" />
         <meta name="robots" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1" />
 
-        {/* DNS Prefetch and Preconnect for critical resources */}
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        {/* Preconnect only the truly critical origin (font CSS).
+            fonts.gstatic.com is reached AFTER the CSS is parsed, so dns-prefetch
+            is enough — preconnect for it would hold an idle TCP slot.
+            Lighthouse warns when >4 preconnects are present. */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
         {/* Preload critical fonts with font-display swap for faster LCP */}
         <link 

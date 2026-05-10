@@ -127,11 +127,15 @@ export default function Home() {
             </div>
             
             <div className="md:w-1/2 relative">
-              {/* Mobile version - optimized image for LCP */}
+              {/* Mobile version - optimized image for LCP.
+                  sizes="(max-width: 480px) 480px, 640px" caps the candidate URL
+                  widths the browser picks from — without this, srcset includes
+                  w=3840 variants and slow-4G clients sometimes pick the largest
+                  to "be safe", causing a 10s+ LCP. */}
               <div className="block md:hidden relative h-36 w-full rounded-lg overflow-hidden shadow-lg">
-                <Image 
-                  src="https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/hero-side-bg.jpg" 
-                  alt="Natural Organic Products" 
+                <Image
+                  src="https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/hero-side-bg.jpg"
+                  alt="Natural Organic Products"
                   width={480}
                   height={144}
                   style={{objectFit: 'cover', width: '100%', height: '100%'}}
@@ -139,7 +143,7 @@ export default function Home() {
                   priority
                   fetchPriority="high"
                   quality={40}
-                  sizes="100vw"
+                  sizes="(max-width: 480px) 480px, 640px"
                   loading="eager"
                   placeholder="blur"
                   blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAB//2Q=="

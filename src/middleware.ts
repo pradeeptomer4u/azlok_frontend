@@ -25,11 +25,15 @@ export function middleware(request: NextRequest) {
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   
-  // Add Content-Security-Policy header for production
+  // Add Content-Security-Policy header for production.
+  // img-src must include all origins of inline <img> tags in blog/product
+  // content (R2 bucket, Unsplash). Next.js <Image> goes through /_next/image
+  // (same-origin), so it doesn't need its source origin allowlisted — but
+  // raw <img> tags embedded in blog HTML do.
   if (process.env.NODE_ENV === 'production') {
     response.headers.set(
       'Content-Security-Policy',
-      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://www.google-analytics.com https://www.googletagmanager.com https://static.cloudflareinsights.com https://connect.facebook.net; connect-src 'self' https://api.azlok.com https://www.google-analytics.com https://api.razorpay.com https://lumberjack.razorpay.com https://cloudflareinsights.com https://www.facebook.com; img-src 'self' data: https://res.cloudinary.com https://cdn.razorpay.com https://www.facebook.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com;"
+      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://www.google-analytics.com https://www.googletagmanager.com https://static.cloudflareinsights.com https://connect.facebook.net; connect-src 'self' https://api.azlok.com https://www.google-analytics.com https://api.razorpay.com https://lumberjack.razorpay.com https://cloudflareinsights.com https://www.facebook.com; img-src 'self' data: blob: https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev https://images.unsplash.com https://res.cloudinary.com https://cdn.razorpay.com https://www.facebook.com https://www.google-analytics.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com;"
     );
   }
 

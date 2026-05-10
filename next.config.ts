@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Next.js 15+ rejects quality values not in this list with HTTP 400.
+    // Default is [75] only — adding lower values lets us serve smaller files
+    // for non-critical images (LCP hero stays at 75 for visual fidelity).
+    qualities: [40, 50, 60, 75],
     minimumCacheTTL: 31536000,
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',

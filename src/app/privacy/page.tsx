@@ -26,7 +26,6 @@ export default function PrivacyPolicyPage() {
       {/* Advanced background graphics */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Subtle pattern overlay */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/leaf-pattern.png')] opacity-5 bg-repeat mix-blend-overlay"></div>
         
         {/* Animated gradient orbs */}
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-gradient-to-br from-green-300/25 to-green-400/15 rounded-full blur-3xl animate-pulse-slow"></div>

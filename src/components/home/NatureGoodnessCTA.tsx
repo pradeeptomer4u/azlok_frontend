@@ -102,7 +102,6 @@ const NatureGoodnessCTA = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-green-900/90 via-green-800/90 to-green-900/90"></div>
         
         {/* Subtle pattern overlay */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/leaf-pattern.png')] opacity-10 bg-repeat mix-blend-overlay"></div>
         
         {/* Animated particles */}
         <motion.div 

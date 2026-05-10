@@ -61,7 +61,6 @@ export default function BlogListClient({ initialBlogs, initialTotalPages }: Blog
         <div className="absolute inset-0 bg-gradient-to-br from-green-50/80 via-green-100/90 to-green-50/80"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-200/5 via-transparent to-transparent"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-blue-100/5 via-transparent to-transparent"></div>
-        <div className="absolute top-0 left-0 w-full h-full bg-[#f0fff4] bg-[url('/images/leaf-pattern.png')] opacity-5 bg-repeat mix-blend-overlay"></div>
         <div className="absolute -top-16 -right-16 w-72 h-72 bg-gradient-to-br from-green-300/30 to-green-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
         <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-gradient-to-tr from-green-400/20 to-blue-300/10 rounded-full blur-3xl animate-float1"></div>
         <div className="absolute top-1/2 left-1/4 w-56 h-56 bg-gradient-to-r from-orange-300/10 to-yellow-200/10 rounded-full blur-3xl animate-float2"></div>

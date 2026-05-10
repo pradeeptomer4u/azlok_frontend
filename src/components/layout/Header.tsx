@@ -99,7 +99,6 @@ const Header = () => {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-blue-100/5 via-transparent to-transparent"></div>
         
         {/* Subtle pattern overlay with fallback color */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[#f0fff4] bg-[url('/images/leaf-pattern.png')] opacity-5 bg-repeat mix-blend-overlay"></div>
       </div>
       
       <div className="container-custom mx-auto relative overflow-hidden">

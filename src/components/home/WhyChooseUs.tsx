@@ -79,7 +79,6 @@ const WhyChooseUs = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-[#defce8]/90 via-white/80 to-[#defce8]/90"></div>
         
         {/* Subtle pattern overlay */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/leaf-pattern.png')] opacity-5 bg-repeat mix-blend-overlay"></div>
         
         {/* Animated gradient orbs */}
         <div className="absolute -top-12 -right-12 w-64 h-64 bg-gradient-to-br from-green-300/10 to-green-500/5 rounded-full blur-3xl animate-pulse-slow"></div>

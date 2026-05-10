@@ -12,7 +12,6 @@ import MobileBottomNav from "../components/layout/MobileBottomNav";
 import { CartProvider } from "../context/CartContext";
 import { AuthProvider } from "../context/AuthContext";
 import { LanguageProvider } from "../context/LanguageContext";
-import KeepAliveInitializer from "../components/utils/KeepAliveInitializer";
 import ErrorBoundary from "../components/utils/ErrorBoundary";
 import WhatsAppChat from "../components/WhatsAppChat";
 import { WebsiteSchema, OrganizationSchema } from "../components/SEO";
@@ -205,9 +204,6 @@ export default function RootLayout({
                 <Footer />
                 <MobileBottomNav />
               </div>
-              {/* Keep-alive service to prevent Render from spinning down due to inactivity */}
-              <KeepAliveInitializer />
-              
               {/* WhatsApp Chat Widget */}
               <WhatsAppChat 
                 phoneNumber="918800412138"

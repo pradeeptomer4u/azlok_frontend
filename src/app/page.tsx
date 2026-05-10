@@ -161,7 +161,6 @@ export default function Home() {
         {/* Advanced background graphics */}
         <div className="absolute inset-0 overflow-hidden">
           {/* Subtle pattern overlay */}
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/leaf-pattern.png')] opacity-3 bg-repeat mix-blend-overlay"></div>
           
           {/* Decorative elements */}
           <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-green-100/20 to-green-200/10 rounded-full blur-3xl"></div>
@@ -211,7 +210,6 @@ export default function Home() {
         {/* Advanced background graphics */}
         <div className="absolute inset-0 overflow-hidden">
           {/* Subtle pattern overlay */}
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/leaf-pattern.png')] opacity-3 bg-repeat mix-blend-overlay"></div>
           
           {/* Animated gradient orbs */}
           <div className="absolute top-20 -right-32 w-96 h-96 bg-gradient-to-br from-green-200/10 to-green-300/5 rounded-full blur-3xl animate-pulse-slow"></div>
@@ -371,7 +369,6 @@ export default function Home() {
         {/* Advanced background graphics */}
         <div className="absolute inset-0 overflow-hidden">
           {/* Subtle pattern overlay */}
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/leaf-pattern.png')] opacity-3 bg-repeat mix-blend-overlay"></div>
           
           {/* Animated gradient orbs */}
           <motion.div 

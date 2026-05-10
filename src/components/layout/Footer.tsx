@@ -103,7 +103,6 @@ const Footer = () => {
         ></motion.div>
         
         {/* Subtle pattern overlay */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/leaf-pattern.png')] opacity-3 bg-repeat mix-blend-overlay"></div>
         
         {/* Decorative geometric shapes */}
         <motion.div 

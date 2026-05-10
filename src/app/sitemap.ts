@@ -17,7 +17,10 @@ async function fetchSlugs(path: string): Promise<ApiSlug[]> {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
+  // YYYY-MM-DD — universally accepted by sitemap validators. Date objects
+  // serialize via Date.toISOString() which includes milliseconds (e.g.
+  // "2026-05-10T12:26:41.730Z") and some strict validators reject that.
+  const now = new Date().toISOString().slice(0, 10);
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },

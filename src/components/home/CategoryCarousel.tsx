@@ -14,8 +14,19 @@ interface UICategory {
   productCount: number;
 }
 
+// Seed state with the live category list so SSR HTML always carries real
+// category data — crawlers (Googlebot URL Inspection, AI bots) see the right
+// names and images even when their JS render budget cuts off our API call.
+// The useEffect still re-fetches client-side to refresh product counts.
+const SEED_CATEGORIES: UICategory[] = [
+  { id: 6, name: 'Spices',              image: 'https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/spices.jpg',                                 slug: 'spices',              productCount: 0 },
+  { id: 1, name: 'Inorganic Compounds', image: 'https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/da9d11c3-d13d-45eb-a82a-43aed2483d10.jpg', slug: 'inorganic-compunds',  productCount: 0 },
+  { id: 2, name: 'Essential Oils',      image: 'https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/Essential-oils.jpg',                         slug: 'essential-oils',      productCount: 0 },
+  { id: 8, name: 'Organic Compounds',   image: 'https://pub-4f4e78fc0ec74271a702caabd7e4e13d.r2.dev/images/Organic-Compounds.jpg',                      slug: 'organic-compounds',   productCount: 0 },
+];
+
 const CategoryCarousel = () => {
-  const [categories, setCategories] = useState<UICategory[]>([]);
+  const [categories, setCategories] = useState<UICategory[]>(SEED_CATEGORIES);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -38,39 +49,10 @@ const CategoryCarousel = () => {
           productCount: category.product_count || 0
         }));
         
-        // If no categories are returned, add some fallback categories
+        // If no categories are returned, keep the seed list rather than overwriting
+        // with stale hardcoded names ("Organic Cereals", "Indian Masalas") that don't
+        // exist in the live catalog.
         if (transformedCategories.length === 0) {
-          const fallbackCategories: UICategory[] = [
-            {
-              id: 1,
-              name: 'Spices',
-              image: '/images/categories/spices.jpg',
-              slug: 'spices',
-              productCount: 5
-            },
-            {
-              id: 2,
-              name: 'Organic Cereals',
-              image: '/images/categories/cereals.jpg',
-              slug: 'organic-cereals',
-              productCount: 4
-            },
-            {
-              id: 3,
-              name: 'Indian Masalas',
-              image: '/images/categories/masalas.jpg',
-              slug: 'indian-masalas',
-              productCount: 2
-            },
-            {
-              id: 4,
-              name: 'Essential Oils',
-              image: '/images/categories/oils.jpg',
-              slug: 'essential-oils',
-              productCount: 1
-            }
-          ];
-          setCategories(fallbackCategories);
           return;
         }
         

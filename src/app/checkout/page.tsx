@@ -123,10 +123,11 @@ export default function CheckoutPage() {
         } else {
           setShippingMethods(shippingMethodsResponse.data);
           setShippingMethodError(null);
-          // Set default shipping method
+          // Set default shipping method — prefer the free option, otherwise first.
           if (shippingMethodsResponse.data.length > 0) {
-            setSelectedShippingMethodId(shippingMethodsResponse.data[0].id);
-            
+            const free = shippingMethodsResponse.data.find((m) => m.price === 0);
+            setSelectedShippingMethodId((free ?? shippingMethodsResponse.data[0]).id);
+
             // Call checkout summary
             await updateCheckoutSummary();
           }

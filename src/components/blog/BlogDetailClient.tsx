@@ -15,19 +15,25 @@ interface BlogDetailClientProps {
   // SSR HTML carries real content (image, title, body) — crawlers (Googlebot
   // URL Inspection) see the article instead of an empty "loading" shell.
   initialBlog?: Blog | null;
+  // Server-fetched trending products fallback (when the blog itself has no
+  // featured_products). Without this, the sidebar shows "No products to
+  // display" in crawler renders.
+  initialTrendingProducts?: Product[];
 }
 
-export default function BlogDetailClient({ slug, initialBlog }: BlogDetailClientProps) {
+export default function BlogDetailClient({ slug, initialBlog, initialTrendingProducts }: BlogDetailClientProps) {
   const [blog, setBlog] = useState<Blog | null>(initialBlog ?? null);
   const [loading, setLoading] = useState<boolean>(!initialBlog);
   const [error, setError] = useState<string | null>(null);
-  const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
+  const [trendingProducts, setTrendingProducts] = useState<Product[]>(initialTrendingProducts ?? []);
   const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
 
   useEffect(() => {
     // SSR seeded the data — fetch trending products if needed and exit.
     if (initialBlog) {
-      if (!initialBlog.featured_products || initialBlog.featured_products.length === 0) {
+      const hasFeatured = !!initialBlog.featured_products && initialBlog.featured_products.length > 0;
+      const haveSeededTrending = !!initialTrendingProducts && initialTrendingProducts.length > 0;
+      if (!hasFeatured && !haveSeededTrending) {
         fetchTrendingProducts();
       }
       return;

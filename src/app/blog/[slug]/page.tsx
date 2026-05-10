@@ -1,4 +1,5 @@
 import blogService from '../../../services/blogService';
+import productService from '../../../services/productService';
 import seoService from '../../../services/seoService';
 import BlogDetailClient from '../../../components/blog/BlogDetailClient';
 
@@ -50,5 +51,20 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   // and title — generateMetadata also fetches it; both calls share the
   // request-level cache so this is a single network request.
   const blog = await blogService.getBlogBySlug(slug).catch(() => null);
-  return <BlogDetailClient slug={slug} initialBlog={blog} />;
+
+  // If the blog has no featured products, fetch trending products server-side
+  // so the sidebar renders real items in SSR HTML (was showing "No products
+  // to display" to crawlers because the fallback fetch only ran on client).
+  const needsTrending = !blog?.featured_products || blog.featured_products.length === 0;
+  const initialTrendingProducts = needsTrending
+    ? await productService.getBestsellers(5).catch(() => [])
+    : [];
+
+  return (
+    <BlogDetailClient
+      slug={slug}
+      initialBlog={blog}
+      initialTrendingProducts={initialTrendingProducts}
+    />
+  );
 }

@@ -11,16 +11,28 @@ import productService, { Product } from '../../services/productService';
 
 interface BlogDetailClientProps {
   slug: string;
+  // Server-fetched blog. When passed, the component skips its own fetch so
+  // SSR HTML carries real content (image, title, body) — crawlers (Googlebot
+  // URL Inspection) see the article instead of an empty "loading" shell.
+  initialBlog?: Blog | null;
 }
 
-export default function BlogDetailClient({ slug }: BlogDetailClientProps) {
-  const [blog, setBlog] = useState<Blog | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+export default function BlogDetailClient({ slug, initialBlog }: BlogDetailClientProps) {
+  const [blog, setBlog] = useState<Blog | null>(initialBlog ?? null);
+  const [loading, setLoading] = useState<boolean>(!initialBlog);
   const [error, setError] = useState<string | null>(null);
   const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
 
   useEffect(() => {
+    // SSR seeded the data — fetch trending products if needed and exit.
+    if (initialBlog) {
+      if (!initialBlog.featured_products || initialBlog.featured_products.length === 0) {
+        fetchTrendingProducts();
+      }
+      return;
+    }
+
     const fetchBlog = async () => {
       if (!slug) {
         setError('Invalid blog slug');

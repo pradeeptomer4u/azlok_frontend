@@ -46,5 +46,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  return <BlogDetailClient slug={slug} />;
+  // Server-fetch the blog so the SSR HTML carries the article body, image,
+  // and title — generateMetadata also fetches it; both calls share the
+  // request-level cache so this is a single network request.
+  const blog = await blogService.getBlogBySlug(slug).catch(() => null);
+  return <BlogDetailClient slug={slug} initialBlog={blog} />;
 }

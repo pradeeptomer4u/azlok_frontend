@@ -43,7 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((p) => p.slug)
     .map((p) => ({
       url: `${BASE_URL}/products/${p.slug}`,
-      lastModified: p.updated_at ? new Date(p.updated_at) : (p.created_at ? new Date(p.created_at) : now),
+      lastModified: now,
       changeFrequency: 'daily',
       priority: 0.8,
     }));
@@ -52,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((c) => c.slug)
     .map((c) => ({
       url: `${BASE_URL}/categories/${c.slug}`,
-      lastModified: c.updated_at ? new Date(c.updated_at) : (c.created_at ? new Date(c.created_at) : now),
+      lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.7,
     }));

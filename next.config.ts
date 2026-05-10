@@ -64,20 +64,6 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      // Headers for sitemap-index.xml
-      {
-        source: '/sitemap-index.xml',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'application/xml',
-          },
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600',
-          },
-        ],
-      },
       // Headers for robots.txt
       {
         source: '/robots.txt',

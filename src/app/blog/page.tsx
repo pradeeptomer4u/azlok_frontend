@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     description: 'Latest news, insights, and updates from Azlok.',
     url: '/blog',
     siteName: 'Azlok',
-    images: [{ url: '/images/blog/blog-banner.jpg', width: 1200, height: 630, alt: 'Azlok Blog' }],
+    images: [{ url: '/home_page_banner.png', width: 1200, height: 630, alt: 'Azlok Blog' }],
     type: 'website',
   },
 };

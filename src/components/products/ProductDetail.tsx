@@ -484,7 +484,7 @@ const ProductDetail = ({ slug, initialProduct }: ProductDetailProps) => {
             {/* WhatsApp and Add to Cart buttons in a single row - Adjusted height */}
             <div className="flex flex-row gap-3 mt-2">
               <a 
-                href={`https://wa.me/8800412138?text=Hi, I'm interested in ${encodeURIComponent(product.name)}`}
+                href={`https://wa.me/918800412138?text=${encodeURIComponent(`Hi, I'm interested in ${product.name}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 bg-green-100 hover:bg-green-200 text-green-800 py-2.5 rounded-full transition-all duration-300 flex items-center justify-center text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 shadow-sm hover:shadow font-['Montserrat',sans-serif] font-medium"

@@ -337,7 +337,7 @@ export default function BlogDetailClient({ slug, initialBlog, initialTrendingPro
                   <div className="mt-6 relative z-10">
                     <div className="flex space-x-2">
                       <a
-                        href={`https://wa.me/918800412138?text=Hi, I'm interested in ${encodeURIComponent(sidebarProducts[0]?.name || 'your products')}`}
+                        href={`https://wa.me/918800412138?text=${encodeURIComponent(`Hi, I'm interested in ${sidebarProducts[0]?.name || 'your products'}`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex-1 bg-gradient-to-r from-green-500/80 to-green-600/80 text-white py-2 px-4 rounded-md hover:from-green-600/90 hover:to-green-700/90 transition-all duration-300 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-sm hover:shadow-md flex items-center justify-center group/btn"

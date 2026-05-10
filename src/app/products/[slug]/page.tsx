@@ -332,7 +332,7 @@ export default async function ProductPage(props: PageProps<'/products/[slug]'>) 
               items={[
                 { name: 'Home', item: '/', position: 1 },
                 { name: 'Products', item: '/products', position: 2 },
-                { name: productData?.category_name || 'Category', item: `/products?category=${productData?.category_name?.toLowerCase() || 'all'}`, position: 3 },
+                { name: productData?.category_name || 'Category', item: `/products?category=${encodeURIComponent(productData?.category_name?.toLowerCase() || 'all')}`, position: 3 },
                 { name: productData?.name || slug.replace(/-/g, ' '), item: `/products/${slug}`, position: 4 }
               ]}
             />

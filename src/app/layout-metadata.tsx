@@ -12,7 +12,9 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    // Apple touch icon falls back to the logo PNG until a dedicated 180x180
+    // file is added to /public. Avoids the prior 404 on every page.
+    apple: '/logo.png',
   },
   keywords: [
     "B2C marketplace India", "wholesale suppliers", "bulk products", "organic compounds", 

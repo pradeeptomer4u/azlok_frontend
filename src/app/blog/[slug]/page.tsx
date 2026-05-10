@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   const defaultTitle = blog ? `${blog.title} - Azlok Blog` : `${slug.replace(/-/g, ' ')} - Azlok Blog`;
   const defaultDescription = blog?.excerpt || (blog ? `Read about ${blog.title} on the Azlok blog.` : 'Read this article on the Azlok blog.');
-  const defaultImage = (typeof blog?.featured_image === 'string' ? blog.featured_image : null) || '/images/blog/blog-banner.jpg';
+  const defaultImage = (typeof blog?.featured_image === 'string' ? blog.featured_image : null) || '/home_page_banner.png';
   const canonicalPath = adminSeo?.canonical_url || `/blog/${slug}`;
   const ogImage = adminSeo?.og_image || defaultImage;
 

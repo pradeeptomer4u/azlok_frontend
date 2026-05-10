@@ -311,17 +311,21 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu - Drawer style */}
-      <div 
-        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        onClick={() => setIsMenuOpen(false)}
-        style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} /* Fallback solid background */
-      >
-        <div 
-          className={`absolute top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-2xl transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
-          onClick={(e) => e.stopPropagation()}
-          style={{ backgroundColor: '#ffffff' }} /* Solid white background */
+      {/* Mobile Menu - Drawer style.
+          Portaled to <body> so it escapes the sticky <header>'s stacking
+          context (otherwise the header's call-us bar at z-[9998] can render
+          on top of the drawer despite a lower z-index). */}
+      {typeof document !== 'undefined' && createPortal(
+        <div
+          className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[100000] transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          onClick={() => setIsMenuOpen(false)}
+          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
         >
+          <div
+            className={`absolute top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-[100001] ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+            onClick={(e) => e.stopPropagation()}
+            style={{ backgroundColor: '#ffffff' }}
+          >
           {/* Menu Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white" style={{ backgroundColor: '#ffffff' }}>
             <div className="flex items-center">
@@ -457,7 +461,9 @@ const Header = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>,
+      document.body
+      )}
 
       {/* Enhanced Contact Info Bar with advanced graphics */}
       <div className="bg-gradient-to-r from-green-700 via-green-800 to-green-700 text-white py-0.5 px-2 shadow-inner relative overflow-hidden z-[9998]">

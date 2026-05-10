@@ -2,6 +2,15 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
+  // Apex → www: send azlok.com (and any non-www host) to www.azlok.com so the site
+  // only serves on the canonical host.
+  const host = request.headers.get('host') || '';
+  if (host === 'azlok.com') {
+    const url = new URL(request.url);
+    url.host = 'www.azlok.com';
+    return NextResponse.redirect(url, 308);
+  }
+
   // Clone the response
   const response = NextResponse.next();
 

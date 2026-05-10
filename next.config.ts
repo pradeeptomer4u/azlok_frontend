@@ -42,9 +42,6 @@ const nextConfig: NextConfig = {
     memoryBasedWorkersCount: true,
   },
   
-  // Output in standalone mode for better compatibility with Cloudflare Pages
-  output: 'standalone',
-  
   // Disable source maps in production to reduce file sizes
   productionBrowserSourceMaps: false,
   
@@ -127,3 +124,7 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+// OpenNext Cloudflare dev hook — gives `next dev` access to bindings via getCloudflareContext()
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+initOpenNextCloudflareForDev();

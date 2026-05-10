@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/azlok.iml" filepath="$PROJECT_DIR$/.idea/azlok.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../dd/azlok_backend/.idea/azlok_backend.iml" filepath="$PROJECT_DIR$/../dd/azlok_backend/.idea/azlok_backend.iml" />
     </modules>
   </component>
 </project>
